@@ -1,0 +1,11 @@
+*.sw[po]
+.idea
+tags
+CMakeFiles
+Makefile
+cmake_install.cmake
+CMakeCache.txt
+install_manifest.txt
+CMakeCache.txt
+CTestTestfile.cmake
+CMakeScripts
