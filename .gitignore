@@ -9,3 +9,7 @@ install_manifest.txt
 CMakeCache.txt
 CTestTestfile.cmake
 CMakeScripts
+
+src/qt/ui_*
+src/qt/*_automoc.cpp
+src/qt/example
