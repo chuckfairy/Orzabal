@@ -6,6 +6,11 @@
 #include "InstrumentOption.h"
 #include "InstrumentDropdown.h"
 
+
+/**
+ * Constructor test
+ *
+ */
 InstrumentDropdown::InstrumentDropdown() {
 
     InstrumentOption TestOption { "Test" };

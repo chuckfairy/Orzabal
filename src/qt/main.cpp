@@ -1,12 +1,12 @@
-
-//  the iostream header contains cout among other things
+/**
+ * Start 
+ *
+ */
 #include <iostream>
 
-#include <QtWidgets>
+#include <QApplication>
 #include "MainWindow.h"
 
-//  this declaration lets us leave of the "std::" when using things in the standard libraries
-//  without it, we'd have to type "std::cout", not we can just type "cout"
 using namespace std;
 
 
