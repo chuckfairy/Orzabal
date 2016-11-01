@@ -4,14 +4,14 @@
  */
 #pragma once
 
-#include <list>
+#include <map>
 
 #include <QtCore>
 #include <QComboBox>
 
 #include "InstrumentOption.h"
 
-using std::list;
+using std::map;
 
 
 /**
@@ -22,11 +22,16 @@ class InstrumentDropdown : public QComboBox {
 
     private:
 
-        list<InstrumentOption> Instruments;
+        /**
+         * Instrument struct list
+         *
+         */
+        map<const char*, const InstrumentOption*> Instruments;
 
 
     public:
 
+        InstrumentDropdown( QWidget * parent );
         InstrumentDropdown();
 
         void setupUI();
@@ -44,9 +49,23 @@ class InstrumentDropdown : public QComboBox {
          * @return list<InstrumentOption*>
          *
          */
-        list<InstrumentOption>* getInstruments() {
+        map<const char*, const InstrumentOption*>* getInstruments() {
 
             return &Instruments;
+
+        };
+
+
+        /**
+         * Add instrument append order
+         *
+         * @param InstrumentOption instrument To be added
+         *
+         * @return bool
+         */
+        bool addInstrument( InstrumentOption *instrument ) {
+
+            return addInstrument( instrument, -1 );
 
         };
 
@@ -60,7 +79,7 @@ class InstrumentDropdown : public QComboBox {
          *
          * @return bool
          */
-        bool addInstrument( InstrumentOption instrument, const int order );
+        bool addInstrument( InstrumentOption *instrument, const int order );
 
 
         /**

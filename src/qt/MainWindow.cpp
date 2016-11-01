@@ -1,19 +1,16 @@
 /**
  *
  */
+#include <QHBoxLayout>
 #include "MainWindow.h"
 
 //  note that we call the superclass constructor here and pass on the arguments
-MainWindow::MainWindow(QWidget * parent, Qt::WindowFlags flags) : QMainWindow(parent, flags) {
+MainWindow::MainWindow( QWidget * parent, Qt::WindowFlags flags ) : QMainWindow( parent, flags ) {
 
     UI.setupUi(this);
 
-    //QObject::connect(_ui.button, &QPushButton::clicked, this, &MainWindow::buttonClicked);
+    dropdown = new InstrumentDropdown();
+
+    UI.horizontalLayout_3->addWidget( dropdown );
 
 }
-
-//void MainWindow::buttonClicked() {
-    ////QString text = _ui.textField->text();
-    ////_ui.listWidget->addItem(text);
-//}
-

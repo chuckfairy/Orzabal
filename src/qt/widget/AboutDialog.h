@@ -3,6 +3,7 @@
  *
  */
 #include <QtCore>
+#include <QDialog>
 
 class AboutDialog : public QDialog {
 
@@ -15,4 +16,4 @@ class AboutDialog : public QDialog {
 
         void setupInfo();
 
-}
+};

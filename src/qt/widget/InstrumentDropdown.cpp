@@ -3,9 +3,11 @@
  * Instrument dropdown
  *
  */
+#include <QtCore>
+#include <QComboBox>
+
 #include "InstrumentOption.h"
 #include "InstrumentDropdown.h"
-
 
 /**
  * Constructor test
@@ -16,8 +18,16 @@ InstrumentDropdown::InstrumentDropdown() {
     InstrumentOption TestOption { "Test" };
     InstrumentOption TestOption2 { "Test2" };
 
-    addInstrument( TestOption );
-    addInstrument( TestOption2 );
+    addInstrument( &TestOption );
+    addInstrument( &TestOption2 );
+
+}
+
+/**
+ * Constructor test
+ *
+ */
+InstrumentDropdown::InstrumentDropdown( QWidget * parent ) : QComboBox( parent ) {
 
 }
 
@@ -27,10 +37,12 @@ InstrumentDropdown::InstrumentDropdown() {
  * Will use list iterator
  *
  */
-bool InstrumentDropdown::addInstrument( InstrumentOption instrument, const int order ) {
+bool InstrumentDropdown::addInstrument( InstrumentOption *instrument, const int order ) {
 
-    addItem( instrument.name );
+    addItem( instrument->name );
 
-    Instrument.insert( instrument );
+    //Instruments.insert( instrument );
+
+    return true;
 
 }
