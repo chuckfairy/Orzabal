@@ -17,7 +17,13 @@ qt5_wrap_ui(example_UIS ${example_UIS})
 include_directories(${CMAKE_CURRENT_BINARY_DIR} )
 
 # tell CMake to compile every .cpp file in this directory and add it to an executable named `example`
-file(GLOB example_SRC *.cpp widget/*.cpp)
+file(
+    GLOB
+    example_SRC
+    *.cpp
+    widget/*.cpp
+)
+
 add_executable(example ${example_SRC} ${example_UIS})
 
 # this tells CMake where the header files and dynamic libraries are that we need

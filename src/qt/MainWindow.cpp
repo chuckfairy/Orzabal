@@ -1,16 +1,24 @@
 /**
+ * Outer window
  *
  */
 #include <QHBoxLayout>
 #include "MainWindow.h"
+#include "widget/EffectsList.h"
 
-//  note that we call the superclass constructor here and pass on the arguments
+/**
+ * Window construct
+ *
+ * @Override
+ */
 MainWindow::MainWindow( QWidget * parent, Qt::WindowFlags flags ) : QMainWindow( parent, flags ) {
 
     UI.setupUi(this);
 
     dropdown = new InstrumentDropdown();
 
-    UI.horizontalLayout_3->addWidget( dropdown );
+    effects = new EffectsList();
+
+    UI.horizontalLayout_4->insertWidget( 0, dropdown );
 
 }
