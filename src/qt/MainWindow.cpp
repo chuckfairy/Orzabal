@@ -20,5 +20,6 @@ MainWindow::MainWindow( QWidget * parent, Qt::WindowFlags flags ) : QMainWindow(
     effects = new EffectsList();
 
     UI.horizontalLayout_4->insertWidget( 0, dropdown );
+    UI.horizontalLayout_3->addWidget( effects );
 
 }

@@ -12,7 +12,9 @@ set( GABRIELO_ROOT_PATH "${PROJECT_SOURCE_DIR}" )
 
 set( GABRIELO_LIB_PATH "${CMAKE_MODULE_PATH}" "${PROJECT_SOURCE_DIR}/lib" )
 
-add_subdirectory( src )
+#add_subdirectory( src )
+
+add_subdirectory( src/common )
 
 add_subdirectory( src/gui )
 
