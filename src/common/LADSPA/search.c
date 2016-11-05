@@ -87,8 +87,10 @@ LADSPADirectoryPluginSearch
   }
 }
 
-/*****************************************************************************/
-
+/**
+ *
+ *
+ */
 void
 LADSPAPluginSearch(LADSPAPluginSearchCallbackFunction fCallbackFunction) {
 

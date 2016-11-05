@@ -14,15 +14,15 @@ file( GLOB
 
 ## Building
 # create gabrielo-gui library
-add_library(gabrielo-common-lib SHARED ${GABRIELO_COMMON_INCLUDE_FILES} )
+add_library(gabrielo-common SHARED ${GABRIELO_COMMON_INCLUDE_FILES} )
 
-set_target_properties(gabrielo-common-lib PROPERTIES LINKER_LANGUAGE CXX)
+set_target_properties(gabrielo-common PROPERTIES LINKER_LANGUAGE CXX)
 
 
 ## Installing
 # add installation for target farweller
 
-install(TARGETS gabrielo-common-lib
+install(TARGETS gabrielo-common
     DESTINATION "${GABRIELO_LIB_PATH}"
 )
 
@@ -38,3 +38,5 @@ install(TARGETS gabrielo-common-lib
     #NAMESPACE sample::
     #DESTINATION lib/cmake/gabrielo-common_lib
     #)
+
+#
