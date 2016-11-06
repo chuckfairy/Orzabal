@@ -29,3 +29,5 @@ add_subdirectory( src/common/LADSPA )
 add_subdirectory( src/gui )
 
 add_subdirectory( src/qt )
+
+add_subdirectory( test )

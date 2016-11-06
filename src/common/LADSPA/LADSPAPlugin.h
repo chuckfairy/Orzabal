@@ -45,21 +45,15 @@ class LADSPAPlugin {
 
         LADSPAPlugin( const LADSPA_Descriptor * des );
 
+        char name[250];
+
 
         /**
          * Set descriptor
          *
          */
 
-        void setDescriptor( const LADSPA_Descriptor * des ) {
-
-            _descriptor = des;
-
-            setPorts();
-
-        };
-
-
+        void setDescriptor( const LADSPA_Descriptor * des );
 
 
         /**
@@ -107,6 +101,7 @@ class LADSPAPlugin {
 
         const char * getName() {
 
+            //return "TEST";
             return _descriptor->Name;
 
         };

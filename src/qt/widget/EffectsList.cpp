@@ -24,9 +24,9 @@ EffectsList::EffectsList() {
 
     for( vector<LADSPAPlugin>::iterator it= plugins.begin(); it != plugins.end(); ++it ) {
 
-        Effect opt { it->getName() };
+        //Effect opt { it->getName() };
 
-        addEffect( &opt );
+        //addEffect( &opt );
 
     }
 

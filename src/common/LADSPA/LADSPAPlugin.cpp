@@ -2,6 +2,9 @@
  * Plugin class
  *
  */
+#include <stdio.h>
+#include <string.h>
+
 #include "ladspa.h"
 
 #include "LADSPAPlugin.h"
@@ -15,6 +18,16 @@
 LADSPAPlugin::LADSPAPlugin( const LADSPA_Descriptor * des ) {
 
 	setDescriptor( des );
+
+};
+
+void LADSPAPlugin::setDescriptor( const LADSPA_Descriptor * des ) {
+
+    _descriptor = des;
+
+    strcpy( name, des->Name );
+
+    setPorts();
 
 };
 
@@ -96,6 +109,8 @@ void LADSPAPlugin::setPort( long index, LADSPAPort port ) {
     //Main map
 
     _ports[ index ] = port;
+
+    return; //@TODO fix after this
 
 
     //Set io

@@ -22,7 +22,7 @@ file( GLOB
 # create gabrielo-gui library
 add_library( gabrielo-common SHARED ${GABRIELO_COMMON_INCLUDE_FILES} )
 
-target_link_libraries( gabrielo-common PUBLIC dl )
+target_link_libraries( gabrielo-common dl )
 
 set_target_properties(gabrielo-common PROPERTIES LINKER_LANGUAGE CXX)
 

@@ -86,7 +86,14 @@ vector<LADSPAPlugin> LADSPASearch::DirectoryPluginSearch( const char * pcDirecto
 
     //Loop thru dir
 
-    while( ( psDirectoryEntry = readdir( psDirectory ) ) ) {
+    while( 1 ) {
+
+        psDirectoryEntry = readdir(psDirectory);
+
+        if (!psDirectoryEntry) {
+            closedir(psDirectory);
+            return pluginList;
+        }
 
         pcFilename = (char*) malloc(lDirLength
                 + strlen(psDirectoryEntry->d_name)
@@ -111,31 +118,26 @@ vector<LADSPAPlugin> LADSPASearch::DirectoryPluginSearch( const char * pcDirecto
 
         dlerror();
 
-        fDescriptorFunction =
-            (LADSPA_Descriptor_Function)dlsym(pvPluginHandle, "ladspa_descriptor");
+        fDescriptorFunction = (LADSPA_Descriptor_Function)dlsym(pvPluginHandle, "ladspa_descriptor");
 
 
         // We've successfully found a ladspa_descriptor function.
 
         if( dlerror() == NULL && fDescriptorFunction ) {
 
-            //fCallbackFunction(pcFilename,
-                    //pvPluginHandle,
-                    //fDescriptorFunction);
-
             const LADSPA_Descriptor * desc;
             long i, j;
 
-            //printf("%s:\n", fn);
+            ////printf("%s:\n", fn);
             for (i = 0; (desc = fDescriptorFunction(i)) != NULL; i++) {
 
+                //LADSPAPlugin * pluginToAdd = new LADSPAPlugin( desc );
                 LADSPAPlugin pluginToAdd( desc );
                 pluginList.push_back( pluginToAdd );
 
             }
 
             dlclose( pvPluginHandle );
-
             free(pcFilename);
 
         } else {
@@ -176,7 +178,9 @@ vector<LADSPAPlugin> LADSPASearch::PluginSearch() {
 
     while( std::getline(ss, item, ':') ) {
 
-        vector<LADSPAPlugin> dirVec = DirectoryPluginSearch( item.c_str() );
+        const char * itemC = item.c_str();
+
+        vector<LADSPAPlugin> dirVec = DirectoryPluginSearch( itemC );
 
         for( vector<LADSPAPlugin>::iterator itVec = dirVec.begin(); itVec != dirVec.end(); ++itVec ) {
 
@@ -209,50 +213,3 @@ vector<LADSPAPlugin> LADSPASearch::PluginSearch() {
     return dirVecs;
 
 };
-
-
-//static void describePluginLibrary(const char * fn, void * handle, LADSPA_Descriptor_Function descFunc) {
-
-//const LADSPA_Descriptor * desc;
-
-//long i, j;
-
-////printf("%s:\n", fn);
-//for (i = 0; (desc = descFunc(i)) != NULL; i++) {
-//printf("# %lu %s\n", desc->UniqueID, desc->Name);
-////        printf("# %lu %s -- %s\n", desc->UniqueID, desc->Name, desc->Maker);
-////        printf("# %lu %s  <%s>\n", desc->UniqueID, desc->Name, desc->Label);
-
-//for(j = 0; j < desc->PortCount; j++) {
-//LADSPA_PortRangeHintDescriptor hint = desc->PortRangeHints[j].HintDescriptor;
-
-//if(LADSPA_IS_PORT_INPUT(desc->PortDescriptors[j])) {
-//printf(">");
-//} else if(LADSPA_IS_PORT_OUTPUT(desc->PortDescriptors[j])) {
-//printf("<");
-//}
-
-//if(LADSPA_IS_PORT_CONTROL(desc->PortDescriptors[j]))
-//printf(" k:");
-//else if(LADSPA_IS_PORT_AUDIO(desc->PortDescriptors[j]))
-//printf(" a:");
-
-//printf(" %s",desc->PortNames[j]);
-
-//if(LADSPA_IS_HINT_BOUNDED_BELOW(hint) || LADSPA_IS_HINT_BOUNDED_ABOVE(hint)) {
-//if(LADSPA_IS_HINT_BOUNDED_BELOW(hint))
-//printf(" (%g", desc->PortRangeHints[j].LowerBound);
-//else
-//printf(" (...");
-//printf(" to ");
-//if(LADSPA_IS_HINT_BOUNDED_ABOVE(hint))
-//printf("%g)", desc->PortRangeHints[j].UpperBound);
-//else
-//printf("...)");
-//}
-//printf("\n");
-//}
-//printf("\n");
-//}
-//dlclose(handle);
-//};
