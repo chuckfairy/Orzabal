@@ -5,6 +5,7 @@ set(CMAKE_AUTOMOC ON)
 
 # find the location of Qt header files and libraries
 find_package(Qt5Widgets REQUIRED)
+find_package(Qt5Core REQUIRED)
 
 
 # later on, we'll use Qt Creator to build out our UI
@@ -13,8 +14,13 @@ find_package(Qt5Widgets REQUIRED)
 # we add the binary output directory as an include directory so that we can include the .h file later on
 file(GLOB example_UIS *.ui)
 
-qt5_wrap_ui(example_UIS ${example_UIS})
-include_directories(${CMAKE_CURRENT_BINARY_DIR} )
+file(GLOB common-ladspa ../common/LADSPA/*.cpp)
+
+qt5_wrap_ui(example_UIS ${example_UIS} )
+
+#links
+include_directories(${CMAKE_CURRENT_BINARY_DIR} ../common)
+
 
 # tell CMake to compile every .cpp file in this directory and add it to an executable named `example`
 file(
@@ -24,7 +30,15 @@ file(
     widget/*.cpp
 )
 
-add_executable(example ${example_SRC} ${example_UIS})
+add_executable(example ${example_SRC} ${example_UIS} ${common-ladspa})
+
+target_link_libraries( example dl )
+#target_link_libraries( example dl Qt5::Widget Qt5::Core )
+
+
+#target_link_libraries(example gabrielo-common)
+
+#target_link_libraries(example PUBLIC gabrielo-common qtwidget qtcore)
 
 # this tells CMake where the header files and dynamic libraries are that we need
 qt5_use_modules(example Widgets Core)

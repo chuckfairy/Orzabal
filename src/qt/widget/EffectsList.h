@@ -9,6 +9,8 @@
 #include <QtCore>
 #include <QListWidget>
 
+#include <LADSPA/LADSPASearch.h>
+
 #include "Effect.h"
 
 using std::map;
@@ -16,6 +18,8 @@ using std::map;
 class EffectsList : public QListWidget {
 
     private:
+
+        LADSPASearch * searcher;
 
         /**
          * Effect struct list

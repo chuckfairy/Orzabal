@@ -18,12 +18,19 @@
    License along with this library; if not, write to the Free Software
    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
    USA. */
-#pragma once
+
+#ifndef LADSPA_INCLUDED
+#define LADSPA_INCLUDED
 
 #define LADSPA_VERSION "1.1"
 #define LADSPA_VERSION_MAJOR 1
 #define LADSPA_VERSION_MINOR 1
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+/*****************************************************************************/
 
 /* Overview:
 
@@ -584,3 +591,13 @@ const LADSPA_Descriptor * ladspa_descriptor(unsigned long Index);
 /* Datatype corresponding to the ladspa_descriptor() function. */
 typedef const LADSPA_Descriptor *
 (*LADSPA_Descriptor_Function)(unsigned long Index);
+
+/**********************************************************************/
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* LADSPA_INCLUDED */
+
+/* EOF */

@@ -1,6 +1,6 @@
 # Jack cmake
 
-#project(gabrielo-common CXX)
+project(gabrielo-all CXX)
 
 cmake_minimum_required( VERSION 2.7 )
 
@@ -13,6 +13,12 @@ set( CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH}" "${PROJECT_SOURCE_DIR}/CMake" )
 set( GABRIELO_ROOT_PATH "${PROJECT_SOURCE_DIR}" )
 
 set( GABRIELO_LIB_PATH "${CMAKE_MODULE_PATH}" "${PROJECT_SOURCE_DIR}/lib" )
+
+FIND_PACKAGE(Boost)
+IF (Boost_FOUND)
+    INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIR})
+    ADD_DEFINITIONS( "-DHAS_BOOST" )
+ENDIF()
 
 #add_subdirectory( src )
 
