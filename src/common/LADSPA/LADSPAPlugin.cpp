@@ -110,8 +110,6 @@ void LADSPAPlugin::setPort( long index, LADSPAPort port ) {
 
     _ports[ index ] = port;
 
-    return; //@TODO fix after this
-
 
     //Set io
 
@@ -119,15 +117,15 @@ void LADSPAPlugin::setPort( long index, LADSPAPort port ) {
 
         if( port.isInput ) {
 
-            _inputs->push_back( index );
+            _inputs.push_back( index );
 
         } else if( port.isOutput ) {
 
-            _outputs->push_back( index );
+            _outputs.push_back( index );
 
         }
 
-        _audioPorts->push_back( index );
+        _audioPorts.push_back( index );
 
     }
 
@@ -136,7 +134,7 @@ void LADSPAPlugin::setPort( long index, LADSPAPort port ) {
 
     if( port.isControl ) {
 
-        _controlPorts->push_back( index );
+        _controlPorts.push_back( index );
 
     }
 

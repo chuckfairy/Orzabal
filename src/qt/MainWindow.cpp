@@ -13,7 +13,7 @@
  */
 MainWindow::MainWindow( QWidget * parent, Qt::WindowFlags flags ) : QMainWindow( parent, flags ) {
 
-    UI.setupUi(this);
+    UI.setupUi( this );
 
     dropdown = new InstrumentDropdown();
 

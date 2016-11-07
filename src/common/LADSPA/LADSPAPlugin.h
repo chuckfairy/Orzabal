@@ -31,21 +31,20 @@ class LADSPAPlugin {
 
         map<long, LADSPAPort> _ports;
 
-        vector<long>* _audioPorts;
+        vector<long> _audioPorts;
 
-        vector<long>* _inputs;
+        vector<long> _inputs;
 
-        vector<long>* _outputs;
+        vector<long> _outputs;
 
-        vector<long>* _controlPorts;
+        vector<long> _controlPorts;
 
+        char name[250];
 
 
     public:
 
         LADSPAPlugin( const LADSPA_Descriptor * des );
-
-        char name[250];
 
 
         /**
@@ -76,7 +75,7 @@ class LADSPAPlugin {
 
         vector<long> * getInputs() {
 
-            return _inputs;
+            return &_inputs;
 
         };
 
@@ -88,7 +87,7 @@ class LADSPAPlugin {
 
         vector<long> * getOutputs() {
 
-            return _outputs;
+            return &_outputs;
 
         };
 
@@ -102,7 +101,7 @@ class LADSPAPlugin {
         const char * getName() {
 
             //return "TEST";
-            return _descriptor->Name;
+            return name;
 
         };
 
@@ -123,6 +122,7 @@ class LADSPAPlugin {
          * Set ports from Descriptor
          *
          */
+
         void setPorts();
 
 
@@ -130,6 +130,7 @@ class LADSPAPlugin {
          * Map and set port
          *
          */
+
         void setPort( long index, LADSPAPort port );
 
 
@@ -137,6 +138,7 @@ class LADSPAPlugin {
          * Create a port
          *
          */
+
         LADSPAPort createPort( long portNum );
 
 };

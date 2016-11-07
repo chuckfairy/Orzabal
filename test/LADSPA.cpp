@@ -18,8 +18,7 @@ int main() {
 
     for( it = plugins.begin(); it != plugins.end(); ++it ) {
 
-        //printf( "# %s", it->getName() );
-        cout << it->name << "\n";
+        cout << it->getName() << "\n";
 
     }
 
