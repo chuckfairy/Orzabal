@@ -6,7 +6,6 @@
 #include <dlfcn.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 #include <sys/types.h>
 #include <unistd.h>
 #include <vector>
@@ -14,7 +13,6 @@
 #include <sstream>
 
 #include "ladspa.h"
-//#include "utils.h"
 
 #include "LADSPASearch.h"
 #include "LADSPAPlugin.h"
@@ -35,7 +33,7 @@ LADSPASearch::LADSPASearch() {
 
     pcLADSPAPath = getenv("LADSPA_PATH");
 
-    if (!pcLADSPAPath) {
+    if( ! pcLADSPAPath ) {
 
 #ifdef __APPLE__
         pcLADSPAPath = "/Library/Audio/Plug-Ins/LADSPA";
@@ -88,9 +86,9 @@ vector<LADSPAPlugin> LADSPASearch::DirectoryPluginSearch( const char * pcDirecto
 
     while( 1 ) {
 
-        psDirectoryEntry = readdir(psDirectory);
+        psDirectoryEntry = readdir( psDirectory );
 
-        if (!psDirectoryEntry) {
+        if( ! psDirectoryEntry ) {
             closedir(psDirectory);
             return pluginList;
         }
@@ -126,9 +124,8 @@ vector<LADSPAPlugin> LADSPASearch::DirectoryPluginSearch( const char * pcDirecto
         if( dlerror() == NULL && fDescriptorFunction ) {
 
             const LADSPA_Descriptor * desc;
-            long i, j;
+            long i;
 
-            ////printf("%s:\n", fn);
             for (i = 0; (desc = fDescriptorFunction(i)) != NULL; i++) {
 
                 //LADSPAPlugin * pluginToAdd = new LADSPAPlugin( desc );
@@ -166,7 +163,6 @@ vector<LADSPAPlugin> LADSPASearch::PluginSearch() {
 
     char * pcBuffer;
     const char * pcEnd;
-    //const char * pcLADSPAPath;
     const char * pcStart;
 
     vector<LADSPAPlugin> dirVecs;
@@ -176,7 +172,7 @@ vector<LADSPAPlugin> LADSPASearch::PluginSearch() {
 
     string item;
 
-    while( std::getline(ss, item, ':') ) {
+    while( std::getline( ss, item, ':' ) ) {
 
         const char * itemC = item.c_str();
 
@@ -189,26 +185,6 @@ vector<LADSPAPlugin> LADSPASearch::PluginSearch() {
         }
 
     }
-
-    //vector<string> directoryLines;
-
-    //bost::split( directoryLines, pcLADSPAPath, boost::is_any_of(":") );
-
-    //for(
-    //vector<string>::iterator it = directoryLines.begin();
-    //it != directoryLines.end();
-    //++it
-    //) {
-
-    //vector<LADSPAPlugin> dirVec = DirectoryPluginSearch( *it );
-
-    //for( vector<string>::iterator itVec = dirVec.begin(); itVec != dirVec.end(); ++itVec ) {
-
-    ////dirVecs;
-
-    //}
-
-    //}
 
     return dirVecs;
 

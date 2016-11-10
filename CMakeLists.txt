@@ -24,6 +24,8 @@ ENDIF()
 
 add_subdirectory( src/common )
 
+add_subdirectory( src/common/Audio )
+
 add_subdirectory( src/common/LADSPA )
 
 add_subdirectory( src/common/LV2 )
