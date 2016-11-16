@@ -8,6 +8,7 @@
 
 #include <vector>
 #include <map>
+#include <inttypes.h>
 
 using std::vector;
 using std::map;
@@ -26,7 +27,9 @@ class Plugin {
 
         bool ACTIVE = false;
 
-        virtual char[10] TYPE = 0;
+        char TYPE[10];
+
+        uint32_t _portsNum;
 
         map<long, Port> _ports;
 
@@ -48,9 +51,9 @@ class Plugin {
          *
          */
 
-        char[10] * getType() {
+        const char * getType() {
 
-            return &TYPE;
+            return TYPE;
 
         };
 

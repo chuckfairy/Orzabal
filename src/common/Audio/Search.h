@@ -17,6 +17,6 @@ class Search {
          * Search All
          *
          */
-        virtual findAll();
+        virtual void findAll();
 
 }

@@ -4,8 +4,7 @@
 project(gabrielo-tests CXX)
 
 
-## Installing
-# add installation for target farweller
+## LADSPA
 
 add_executable( ladspalist LADSPA.cpp )
 
@@ -18,6 +17,26 @@ target_include_directories( ladspalist PUBLIC "../src/common" )
 
 install( TARGETS
    ladspalist
+
+   RUNTIME DESTINATION bin
+   LIBRARY DESTINATION lib
+   ARCHIVE DESTINATION lib
+)
+
+
+## LV2
+
+add_executable( lv2list LV2.cpp )
+
+# We have to link
+target_link_libraries( lv2list
+    PUBLIC gabrielo-common
+)
+
+target_include_directories( lv2list PUBLIC "../src/common" )
+
+install( TARGETS
+   lv2list
 
    RUNTIME DESTINATION bin
    LIBRARY DESTINATION lib

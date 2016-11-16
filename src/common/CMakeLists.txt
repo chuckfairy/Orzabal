@@ -15,6 +15,12 @@ file( GLOB
     "LADSPA/LADSPASearch.cpp"
     "LADSPA/LADSPASearch.h"
     "LADSPA/LADSPAPort.h"
+
+    #"LV2/Plugin.cpp"
+    #"LV2/Plugin.h"
+    #"LV2/Search.cpp"
+    #"LV2/Search.h"
+    #"LV2/Port.h"
 )
 
 
@@ -23,6 +29,10 @@ file( GLOB
 add_library( gabrielo-common SHARED ${GABRIELO_COMMON_INCLUDE_FILES} )
 
 target_link_libraries( gabrielo-common dl )
+
+add_subdirectory( LV2 )
+
+target_include_directories( gabrielo-common PUBLIC LV2 )
 
 set_target_properties(gabrielo-common PROPERTIES LINKER_LANGUAGE CXX)
 
