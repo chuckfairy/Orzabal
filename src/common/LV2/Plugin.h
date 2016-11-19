@@ -4,17 +4,18 @@
  */
 #pragma once
 
-#include <Plugin.h>
-
 #include <string.h>
 
 #include <lilv/lilv.h>
+
+#include <Audio/Plugin.h>
+
 
 class LV2Plugin : public Plugin {
 
     protected:
 
-        char[10] TYPE = "LV2";
+        //const char * TYPE = "LV2";
 
         const LilvPlugin * _lilvPlugin;
 
@@ -22,5 +23,7 @@ class LV2Plugin : public Plugin {
     public:
 
         LV2Plugin();
+
+        //void setPorts();
 
 };

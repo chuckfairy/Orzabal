@@ -16,11 +16,11 @@ file( GLOB
     "LADSPA/LADSPASearch.h"
     "LADSPA/LADSPAPort.h"
 
-    #"LV2/Plugin.cpp"
-    #"LV2/Plugin.h"
-    #"LV2/Search.cpp"
-    #"LV2/Search.h"
-    #"LV2/Port.h"
+    "Audio/Plugin.cpp"
+    "Audio/Plugin.h"
+    "Audio/Search.cpp"
+    "Audio/Search.h"
+    "Audio/Port.h"
 )
 
 
@@ -32,7 +32,13 @@ target_link_libraries( gabrielo-common dl )
 
 add_subdirectory( LV2 )
 
-target_include_directories( gabrielo-common PUBLIC LV2 )
+#target_include_directories( gabrielo-common PUBLIC LV2 )
+
+target_link_libraries( gabrielo-common
+    "/usr/local/lib/liblilv-0.so"
+)
+
+target_include_directories( gabrielo-common PUBLIC "/usr/local/include/lilv-0" )
 
 set_target_properties(gabrielo-common PROPERTIES LINKER_LANGUAGE CXX)
 

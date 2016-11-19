@@ -32,6 +32,7 @@ file( GLOB
     GABRIELO_LV2_INCLUDE_FILES
     "Plugin.h"
     "Search.h"
+    "Search.cpp"
 )
 
 
@@ -53,7 +54,7 @@ target_link_libraries( gabrielo-common-lv2
     "/usr/local/lib/liblilv-0.so"
 )
 
-target_include_directories( gabrielo-common-lv2 PUBLIC "/usr/local/include/lilv-0" "../Audio" )
+target_include_directories( gabrielo-common-lv2 PUBLIC "/usr/local/include/lilv-0" ".." )
 
 
 # copy public include files

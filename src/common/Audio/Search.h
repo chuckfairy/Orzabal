@@ -4,6 +4,13 @@
  */
 #pragma once
 
+#include <vector>
+
+#include "Plugin.h"
+
+using std::vector;
+
+
 class Search {
 
     protected:
@@ -13,10 +20,19 @@ class Search {
 
     public:
 
+        Search() {};
+        ~Search() {};
+
         /**
          * Search All
          *
          */
-        virtual void findAll();
+        virtual vector<Plugin> findAll() {
 
-}
+            vector<Plugin> pluginList;
+
+            return pluginList;
+
+        };
+
+};

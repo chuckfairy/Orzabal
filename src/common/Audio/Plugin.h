@@ -4,26 +4,24 @@
  */
 #pragma once
 
-#include "Port.h"
-
 #include <vector>
 #include <map>
 #include <inttypes.h>
+
+#include "Port.h"
 
 using std::vector;
 using std::map;
 
 
 /**
- * LADSPA plugin class
+ * Base plugin class
  *
  */
 
 class Plugin {
 
     protected:
-
-        Plugin();
 
         bool ACTIVE = false;
 
@@ -45,6 +43,11 @@ class Plugin {
 
 
     public:
+
+        Plugin() {};
+
+        ~Plugin() {};
+
 
         /**
          * Get type
@@ -112,7 +115,7 @@ class Plugin {
          *
          */
 
-        virtual void setPorts();
+        virtual void setPorts() {};
 
 
         /**
@@ -128,6 +131,12 @@ class Plugin {
          *
          */
 
-        virtual Port createPort( long portNum );
+        virtual Port createPort( long portNum ) {
+
+            Port p;
+
+            return p;
+
+        };
 
 };
