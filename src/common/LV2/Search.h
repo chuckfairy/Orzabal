@@ -30,7 +30,15 @@ class LV2Search : public Search {
 
             const LilvPlugins* plugins = lilv_world_get_all_plugins(world);
 
-            //list_plugins(plugins, show_names);
+            LILV_FOREACH(plugins, i, plugins) {
+
+                const LilvPlugin* p = lilv_plugins_get(plugins, i);
+
+                LilvNode* n = lilv_plugin_get_name(p);
+                //printf("%s\n", lilv_node_as_string(n));
+                lilv_node_free(n);
+
+            }
 
             lilv_world_free(world);
 
