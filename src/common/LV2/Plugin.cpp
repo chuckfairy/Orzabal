@@ -8,10 +8,28 @@
 
 #include <lilv/lilv.h>
 
-#include "LV2Plugin.h"
+#include <lilv/lilv.h>
 
-LV2Plugin::LV2Plugin() {
+#include "Plugin.h"
 
+
+/**
+ * default
+ *
+ */
+
+LV2Plugin::LV2Plugin() {};
+
+
+/**
+ * Lilv plugin instance place
+ */
+
+LV2Plugin::LV2Plugin( const LilvPlugin* p ) {
+
+    _lilvPlugin = p;
+
+    setPorts();
 
 };
 
@@ -26,15 +44,15 @@ void LV2Plugin::setPorts() {
 
     long i;
 
-    _portsNum
+    //_portsNum
 
-    numPorts = lilv_plugin_get_num_ports( _lilvPlugin );
+    auto numPorts = lilv_plugin_get_num_ports( _lilvPlugin );
 
-    for( i = 0; i < _descriptor->PortCount; i++ ) {
+    for( int i = 0; i < numPorts; i++ ) {
 
-        Port port = createPort( i );
-
-        setPort( i, port );
+//        Port port = createPort( i );
+//
+//        setPort( i, port );
 
     }
 
@@ -58,6 +76,7 @@ Port LV2Plugin::createPort( long portNum ) {
 
     //init struct
 
-    return Port portReturn {};
+    Port portReturn {};
+    return portReturn;
 
 };

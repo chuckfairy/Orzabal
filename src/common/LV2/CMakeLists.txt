@@ -31,6 +31,7 @@ project(gabrielo-common-lv2 CXX)
 file( GLOB
     GABRIELO_LV2_INCLUDE_FILES
     "Plugin.h"
+    "Plugin.cpp"
     "Search.h"
     "Search.cpp"
 )

@@ -13,7 +13,7 @@
 
 #include <lilv/lilv.h>
 
-#include "lilv_config.h"
+#include "Plugin.h"
 
 class LV2Search : public Search {
 
@@ -34,9 +34,14 @@ class LV2Search : public Search {
 
                 const LilvPlugin* p = lilv_plugins_get(plugins, i);
 
-                LilvNode* n = lilv_plugin_get_name(p);
+                //Plugin * _p = new LV2Plugin( p );
+                LV2Plugin d( p );
+
+                pluginList.push_back( d );
+
+                //LilvNode* n = lilv_plugin_get_name( p );
                 //printf("%s\n", lilv_node_as_string(n));
-                lilv_node_free(n);
+                //lilv_node_free(n);
 
             }
 

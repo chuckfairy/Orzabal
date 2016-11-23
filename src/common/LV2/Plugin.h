@@ -17,13 +17,18 @@ class LV2Plugin : public Plugin {
 
         //const char * TYPE = "LV2";
 
-        const LilvPlugin * _lilvPlugin;
+        const LilvPlugin *  _lilvPlugin;
 
 
     public:
 
         LV2Plugin();
 
-        //void setPorts();
+        LV2Plugin( const LilvPlugin* p );
+        //LV2Plugin( LilvPluginImpl const* p ) {};
+
+        Port createPort( long portNum );
+
+        void setPorts();
 
 };

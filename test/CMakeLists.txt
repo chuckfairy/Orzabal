@@ -30,7 +30,8 @@ add_executable( lv2list LV2.cpp )
 
 # We have to link
 target_link_libraries( lv2list
-    PUBLIC gabrielo-common-lv2 gabrielo-common
+    PUBLIC gabrielo-common-lv2 gabrielo-common 
+    "/usr/local/lib/liblilv-0.so"
 )
 
 target_include_directories( lv2list PUBLIC "../src/common" )

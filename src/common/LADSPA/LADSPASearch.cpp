@@ -70,8 +70,8 @@ vector<LADSPAPlugin> LADSPASearch::DirectoryPluginSearch( const char * pcDirecto
     }
 
     iNeedSlash = (pcDirectory[lDirLength - 1] == '/')
-        ?  iNeedSlash = false
-        : iNeedSlash = true;
+        ?  false
+        : true;
 
     psDirectory = opendir(pcDirectory);
 
