@@ -10,6 +10,7 @@ CMakeCache.txt
 CTestTestfile.cmake
 CMakeScripts
 
+src/include
 src/qt/ui_*
 src/qt/*_automoc.cpp
 src/qt/example

@@ -13,7 +13,9 @@
 #include "Search.h"
 
 
-LV2Search::LV2Search() { };
+LV2Search::LV2Search() {
+
+};
 
 //void LV2Search::listPlugins(const LilvPlugins* list, bool show_names)
 //{

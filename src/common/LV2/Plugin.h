@@ -13,11 +13,15 @@
 
 class LV2Plugin : public Plugin {
 
-    protected:
-
-        //const char * TYPE = "LV2";
+    private:
 
         const LilvPlugin *  _lilvPlugin;
+
+        void setLilvPlugin();
+
+    protected:
+
+        const char * TYPE = "LV2";
 
 
     public:
@@ -25,10 +29,13 @@ class LV2Plugin : public Plugin {
         LV2Plugin();
 
         LV2Plugin( const LilvPlugin* p );
+
         //LV2Plugin( LilvPluginImpl const* p ) {};
 
         Port createPort( long portNum );
 
         void setPorts();
+
+        void setLilvPlugin( const LilvPlugin* p );
 
 };

@@ -4,6 +4,7 @@
  */
 #pragma once
 
+#include <string.h>
 #include <vector>
 #include <map>
 #include <inttypes.h>
@@ -12,6 +13,7 @@
 
 using std::vector;
 using std::map;
+using std::string;
 
 
 /**
@@ -91,7 +93,7 @@ class Plugin {
          *
          */
 
-        const char * getName() {
+        char * getName() {
 
             return name;
 
@@ -106,6 +108,17 @@ class Plugin {
         bool isActive() {
 
             return ACTIVE;
+
+        };
+
+
+        /**
+         * Set name copy str
+         */
+
+        void setName( const char * s ) {
+
+            strcpy( name, s );
 
         };
 

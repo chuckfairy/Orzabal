@@ -9,6 +9,8 @@
 #include <QtCore>
 #include <QComboBox>
 
+#include <LV2/Search.h>
+
 #include "InstrumentOption.h"
 
 using std::map;
@@ -28,6 +30,12 @@ class InstrumentDropdown : public QComboBox {
          */
         map<const char*, const InstrumentOption*> Instruments;
 
+
+        /**
+         * LV2 searcher pointer
+         */
+
+        LV2Search * Searcher;
 
     public:
 

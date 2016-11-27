@@ -19,11 +19,17 @@ int main() {
 
    vector<Plugin>::iterator it;
 
-   for( it = plugins.begin(); it != plugins.end(); ++it ) {
+   for( int i = 0; i < 10; i ++ ) {
 
-       cout << it->getName() << "\n";
+       cout << plugins[i].getName() << "\n";
 
    }
+
+//   for( it = plugins.begin(); it != plugins.end(); ++it ) {
+//
+//       cout << it->getName() << "\n";
+//
+//   }
 
    return 0;
 
