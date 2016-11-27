@@ -6,39 +6,154 @@
 
 #include "JackServer.h"
 
+
+/**
+ * Construct
+ *
+ */
+
+JackServer::JackServer() {
+
+};
+
+
+/**
+ * Jack C server api start
+ *
+ */
+
 bool JackServer::start() {
 
-	/* open a client connection to the JACK server */
+	// open a client connection to the JACK server
 
-	client = jack_client_open (client_name, options, &JACK_STATUS, server_name);
-	if (client == NULL) {
-		fprintf (stderr, "jack_client_open() failed, "
-			 "status = 0x%2.0x\n", status);
-		if (status & JackServerFailed) {
-			fprintf (stderr, "Unable to connect to JACK server\n");
-		}
-		exit (1);
-	}
-	if (status & JackServerStarted) {
-		fprintf (stderr, "JACK server started\n");
-	}
-	if (status & JackNameNotUnique) {
-		client_name = jack_get_client_name(client);
-		fprintf (stderr, "unique name `%s' assigned\n", client_name);
-	}
+	_client = jack_client_open( _clientName, JACK_OPTIONS, &JACK_STATUS, _name );
 
-	/* tell the JACK server to call `process()' whenever
-	   there is work to be done.
-	*/
+    if ( _client == NULL ) {
 
-	jack_set_process_callback (client, process, 0);
+        return false;
+
+    }
 
 
-	/* tell the JACK server to call `jack_shutdown()' if
-	   it ever shuts down, either entirely, or if it
-	   just decides to stop calling us.
-	*/
+    // tell the JACK server to call `process()'
 
-	jack_on_shutdown (client, jack_shutdown, 0);
+    jack_set_process_callback( _client, JackServer::JackProcess, 0 );
 
-}
+
+    // tell the JACK server to call `jack_shutdown()' if it ever shuts down
+
+    jack_on_shutdown( _client, JackServer::JackOnShutdown, 0 );
+
+    return true;
+
+};
+
+
+/**
+ * Jack C server stop
+ *
+ */
+
+bool JackServer::stop() {
+
+};
+
+
+/**
+ * Jack C server connection
+ *
+ */
+
+bool JackServer::connect() {
+
+};
+
+
+/**
+ * Jack register ports input output
+ *
+ */
+
+void JackServer::JackRegisterPorts() {
+
+    _inputPort = jack_port_register(
+        _client,
+        "input",
+        JACK_DEFAULT_AUDIO_TYPE,
+        JackPortIsInput,
+        0
+    );
+
+    _outputPort = jack_port_register(
+        _client,
+        "output",
+        JACK_DEFAULT_AUDIO_TYPE,
+        JackPortIsOutput,
+        0
+    );
+
+};
+
+
+/**
+ * Get jack input and ports
+ *
+ */
+
+void JackServer::getPorts() {
+
+    const char **ports;
+
+    ports = jack_get_ports( _client, NULL, NULL, JackPortIsPhysical|JackPortIsOutput );
+
+    if( ports == NULL ) {
+        fprintf(stderr, "no physical capture ports\n");
+    }
+
+    if( jack_connect( _client, ports[0], jack_port_name( _inputPort ) ) ) {
+
+        fprintf(stderr, "cannot connect input ports\n");
+
+    }
+
+    free( ports );
+
+    ports = jack_get_ports( _client, NULL, NULL, JackPortIsPhysical|JackPortIsInput );
+
+    if( ports == NULL ) {
+
+        fprintf(stderr, "no physical playback ports\n");
+
+    }
+
+    if( jack_connect( _client, jack_port_name( _outputPort ), ports[0] ) ) {
+
+        fprintf(stderr, "cannot connect output ports\n");
+
+    }
+
+    free( ports );
+
+};
+
+
+/**
+ * Jack server proccess callback
+ *
+ */
+
+int JackServer::JackProcess( jack_nframes_t nframes, void *o ) {
+
+    return 0;
+
+};
+
+
+/**
+ * Jack server shutdown callback
+ *
+ */
+
+void JackServer::JackOnShutdown( void *o ) {
+
+};

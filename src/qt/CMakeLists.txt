@@ -1,7 +1,9 @@
 # Find includes in corresponding build directories
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
+
 # Instruct CMake to run moc automatically when needed.
 set(CMAKE_AUTOMOC ON)
+set( AUTOGEN_TARGET_DEPENDS ON )
 
 # find the location of Qt header files and libraries
 find_package(Qt5Widgets REQUIRED)
@@ -26,7 +28,9 @@ include_directories(${CMAKE_CURRENT_BINARY_DIR} ../common  )
 file(
     GLOB
     example_SRC
-    *.cpp
+    MainWindow.cpp
+    main.cpp
+    ui_MainWindow.h
     widget/*.cpp
 )
 
@@ -36,14 +40,5 @@ target_link_libraries( example
     dl
     gabrielo-common-lv2 gabrielo-common
     "/usr/local/lib/liblilv-0.so"
+    Qt5::Widgets Qt5::Core
 )
-
-#target_link_libraries( example dl Qt5::Widget Qt5::Core )
-
-
-#target_link_libraries(example gabrielo-common)
-
-#target_link_libraries(example PUBLIC gabrielo-common qtwidget qtcore)
-
-# this tells CMake where the header files and dynamic libraries are that we need
-qt5_use_modules(example Widgets Core)

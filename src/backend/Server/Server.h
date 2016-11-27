@@ -2,9 +2,8 @@
  * Abstract server
  *
  */
-#include <map>
-#include <vector>
-#include <string>
+#pragma once
+
 
 class Server {
 
@@ -13,7 +12,8 @@ class Server {
         Server() {};
         ~Server() {};
 
-        const char * name;
+        const char * _name;
+        const char * _clientName;
 
     public:
 

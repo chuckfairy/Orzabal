@@ -43,3 +43,26 @@ install( TARGETS
    LIBRARY DESTINATION lib
    ARCHIVE DESTINATION lib
 )
+
+
+## Jack backend
+
+add_executable( jacktest Jack.cpp )
+
+# We have to link
+target_link_libraries( jacktest
+    PUBLIC gabrielo-backend-server jack
+)
+
+
+target_include_directories( jacktest PUBLIC ${JACK_INCLUDE_DIRS} )
+
+target_include_directories( jacktest PUBLIC "../src/backend" )
+
+install( TARGETS
+   jacktest
+
+   RUNTIME DESTINATION bin
+   LIBRARY DESTINATION lib
+   ARCHIVE DESTINATION lib
+)

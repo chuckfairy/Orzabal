@@ -37,7 +37,7 @@
        <bool>false</bool>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>2</number>
       </property>
       <property name="tabBarAutoHide">
        <bool>false</bool>
@@ -75,8 +75,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>720</width>
-             <height>381</height>
+             <width>714</width>
+             <height>380</height>
             </rect>
            </property>
           </widget>
@@ -88,7 +88,6 @@
        <attribute name="title">
         <string>Effects</string>
        </attribute>
-
        <layout class="QGridLayout" name="gridLayout_3">
         <item row="0" column="0" colspan="2">
          <layout class="QGridLayout" name="gridLayout">
@@ -121,12 +120,9 @@
           </item>
          </layout>
         </item>
-
         <item row="1" column="0" colspan="2">
-         <layout class="QHBoxLayout" name="horizontalLayout_3">
-         </layout>
+         <layout class="QHBoxLayout" name="horizontalLayout_3"/>
         </item>
-
         <item row="2" column="0">
          <widget class="QLabel" name="label_2">
           <property name="text">
@@ -134,9 +130,12 @@
           </property>
          </widget>
         </item>
-
        </layout>
-
+      </widget>
+      <widget class="QWidget" name="tab_2">
+       <attribute name="title">
+        <string>Settings</string>
+       </attribute>
       </widget>
      </widget>
     </item>
