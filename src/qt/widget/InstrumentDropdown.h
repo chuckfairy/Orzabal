@@ -5,15 +5,19 @@
 #pragma once
 
 #include <map>
+#include <vector>
+#include <iostream>
 
 #include <QtCore>
+#include <QtGui>
 #include <QComboBox>
+#include <QMessageBox>
 
 #include <LV2/Search.h>
 
 #include "InstrumentOption.h"
 
-using std::map;
+using std::vector;
 
 
 /**
@@ -22,13 +26,15 @@ using std::map;
  */
 class InstrumentDropdown : public QComboBox {
 
+    Q_OBJECT
+
     private:
 
         /**
          * Instrument struct list
          *
          */
-        map<const char*, const InstrumentOption*> Instruments;
+        vector<const InstrumentOption*> Instruments;
 
 
         /**
@@ -37,10 +43,20 @@ class InstrumentDropdown : public QComboBox {
 
         LV2Search * Searcher;
 
+
+        /**
+         * Default select something
+         *
+         */
+
+        InstrumentOption _placeholder { "-- Select Instrument --" };
+
+
     public:
 
         InstrumentDropdown( QWidget * parent );
         InstrumentDropdown();
+        ~InstrumentDropdown() {};
 
         void setupUI();
 
@@ -57,7 +73,7 @@ class InstrumentDropdown : public QComboBox {
          * @return list<InstrumentOption*>
          *
          */
-        map<const char*, const InstrumentOption*>* getInstruments() {
+        vector<const InstrumentOption*>* getInstruments() {
 
             return &Instruments;
 
@@ -69,7 +85,6 @@ class InstrumentDropdown : public QComboBox {
          *
          * @param InstrumentOption instrument To be added
          *
-         * @return bool
          */
         bool addInstrument( InstrumentOption *instrument ) {
 
@@ -85,7 +100,6 @@ class InstrumentDropdown : public QComboBox {
          * @param InstrumentOption instrument To be added
          * @param int order Position to be added
          *
-         * @return bool
          */
         bool addInstrument( InstrumentOption *instrument, const int order );
 
@@ -93,8 +107,26 @@ class InstrumentDropdown : public QComboBox {
         /**
          * has instrument
          *
-         * @return bool
          */
         bool hasInstrument( InstrumentOption instrument );
+
+    public slots:
+
+
+        /**
+         * Change event
+         *
+         */
+
+        void handleSelectionChanged( int index ) {
+
+            if( index == 0 ) { return; }
+
+            QMessageBox* msg = new QMessageBox();
+            msg->setWindowTitle("Hello !");
+            msg->setText( currentText() );
+            msg->show();
+
+        };
 
 };

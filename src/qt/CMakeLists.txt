@@ -12,7 +12,7 @@ find_package(Qt5Core REQUIRED)
 # Qt Creator creates .ui files which will be preprocessed for us (that's what qt5_wrap_ui does)
 # After preprocessing, a .h and .cpp file are produced for each .ui file
 # we add the binary output directory as an include directory so that we can include the .h file later on
-file(GLOB example_UIS *.ui)
+file(GLOB example_UIS MainWindow.ui)
 
 file(GLOB common-ladspa ../common/LADSPA/*.cpp)
 
@@ -30,7 +30,7 @@ file(
     widget/*.cpp
 )
 
-add_executable(example ${example_SRC} ${example_UIS} ${common-ladspa})
+add_executable(example ${example_SRC} ${common-ladspa})
 
 target_link_libraries( example
     dl

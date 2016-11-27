@@ -17,11 +17,9 @@ InstrumentDropdown::InstrumentDropdown() {
 
     Searcher = new LV2Search();
 
-    InstrumentOption TestOption { "Test" };
-    InstrumentOption TestOption2 { "Test2" };
+    connect( this, SIGNAL( currentIndexChanged( int ) ), this, SLOT( handleSelectionChanged( int ) ) );
 
-    addInstrument( &TestOption );
-    addInstrument( &TestOption2 );
+    addInstrument( &_placeholder );
 
     vector<Plugin> plugins = Searcher->findAll();
 
@@ -35,7 +33,7 @@ InstrumentDropdown::InstrumentDropdown() {
 
     }
 
-}
+};
 
 /**
  * Constructor test
@@ -43,7 +41,7 @@ InstrumentDropdown::InstrumentDropdown() {
  */
 InstrumentDropdown::InstrumentDropdown( QWidget * parent ) : QComboBox( parent ) {
 
-}
+};
 
 
 /**
@@ -55,8 +53,8 @@ bool InstrumentDropdown::addInstrument( InstrumentOption *instrument, const int 
 
     addItem( instrument->name );
 
-    //Instruments.insert( instrument );
+    Instruments.push_back( instrument );
 
     return true;
 
-}
+};
