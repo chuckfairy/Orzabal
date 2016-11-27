@@ -2,6 +2,8 @@
  * Jack server
  *
  */
+#pragma once
+
 #include "Server.h"
 
 #include <stdio.h>
@@ -24,8 +26,18 @@ class JackServer : public Server {
 
         jack_status_t JACK_STATUS;
 
+
+    protected:
+
+        const char * name = 'gabrielo';
+
+
     public:
 
-        const char *name = NULL;
+        bool start();
+
+        bool stop();
+
+        bool connect();
 
 }

@@ -53,15 +53,6 @@ static void device_list(void)
 	} while (card >= 0);
 }
 
-static void *my_malloc(size_t size)
-{
-	void *p = malloc(size);
-	if (!p) {
-		exit(EXIT_FAILURE);
-	}
-	return p;
-}
-
 static int is_input(snd_ctl_t *ctl, int card, int device, int sub)
 {
 	snd_rawmidi_info_t *info;
