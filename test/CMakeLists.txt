@@ -30,7 +30,7 @@ add_executable( lv2list LV2.cpp )
 
 # We have to link
 target_link_libraries( lv2list
-    PUBLIC gabrielo-common-lv2 gabrielo-common 
+    PUBLIC gabrielo-common-lv2 gabrielo-common
     "/usr/local/lib/liblilv-0.so"
 )
 
@@ -51,7 +51,7 @@ add_executable( jacktest Jack.cpp )
 
 # We have to link
 target_link_libraries( jacktest
-    PUBLIC gabrielo-backend-server jack
+    PUBLIC gabrielo-backend-server gabrielo-backend-midi jack asound sndfile
 )
 
 

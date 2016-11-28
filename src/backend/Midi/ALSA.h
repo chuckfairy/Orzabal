@@ -5,6 +5,9 @@
 #pragma once
 
 #include <vector>
+#include <alsa/asoundlib.h>
+#include <alsa/control.h>
+#include <sndfile.h>
 
 #include "Host.h"
 #include "Plugin.h"
@@ -27,6 +30,15 @@ class ALSA : public Host {
 
         vector<Plugin> setDevices();
 
+        int isInput( snd_ctl_t *ctl, int card, int device, int sub );
+
+        int isOutput( snd_ctl_t *ctl, int card, int device, int sub );
+
+        void listDevice( snd_ctl_t *ctl, int card, int device );
+
+        void listCardDevices( int card );
+
+        void deviceList();
 
 };
 

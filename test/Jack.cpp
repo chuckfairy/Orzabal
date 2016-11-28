@@ -4,11 +4,20 @@
  */
 #include <Server/JackServer.h>
 
+#include <Midi/ALSA.h>
+
 int main() {
 
-    JackServer * server = new JackServer();
+    //JackServer * server = new JackServer();
+    Midi::ALSA * aser = new Midi::ALSA();
 
-    server->start();
+    aser->deviceList();
+
+    //server->start();
+
+    //server->getPorts();
+
+//sleep(-1);
 
     return 0;
 

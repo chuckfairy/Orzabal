@@ -24,7 +24,7 @@ class JackServer : public Server {
 
     private:
 
-        jack_options_t JACK_OPTIONS = JackNullOption;
+        jack_options_t JACK_OPTIONS = JackUseExactName;
 
         jack_status_t JACK_STATUS;
 

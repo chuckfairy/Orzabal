@@ -2,6 +2,7 @@
  * Jack client server
  *
  */
+#include <iostream>
 #include <jack/jack.h>
 
 #include "JackServer.h"
@@ -26,9 +27,11 @@ bool JackServer::start() {
 
 	// open a client connection to the JACK server
 
-	_client = jack_client_open( _clientName, JACK_OPTIONS, &JACK_STATUS, _name );
+    _client = jack_client_open( _clientName, JACK_OPTIONS, &JACK_STATUS, _name );
 
-    if ( _client == NULL ) {
+    if( _client == NULL ) {
+
+        printf( "NOT CLIENT OPEN" );
 
         return false;
 
@@ -43,6 +46,8 @@ bool JackServer::start() {
     // tell the JACK server to call `jack_shutdown()' if it ever shuts down
 
     jack_on_shutdown( _client, JackServer::JackOnShutdown, 0 );
+
+    JackRegisterPorts();
 
     return true;
 
@@ -144,6 +149,8 @@ void JackServer::getPorts() {
 
 int JackServer::JackProcess( jack_nframes_t nframes, void *o ) {
 
+    std::cout << o;
+
     return 0;
 
 };
@@ -155,5 +162,7 @@ int JackServer::JackProcess( jack_nframes_t nframes, void *o ) {
  */
 
 void JackServer::JackOnShutdown( void *o ) {
+
+    printf( "JACK HAS SHUTDOWN" );
 
 };

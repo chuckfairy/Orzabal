@@ -28,6 +28,8 @@ add_subdirectory( src/common/Audio )
 
 add_subdirectory( src/common/LADSPA )
 
+add_subdirectory( src/backend )
+
 #add_subdirectory( src/common/LV2 )
 
 add_subdirectory( src/gui )
