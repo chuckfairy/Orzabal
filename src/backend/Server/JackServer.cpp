@@ -27,7 +27,7 @@ bool JackServer::start() {
 
 	// open a client connection to the JACK server
 
-    _client = jack_client_open( _clientName, JACK_OPTIONS, &JACK_STATUS, _name );
+    _client = jack_client_open( _clientName, JACK_OPTIONS, &JACK_STATUS );
 
     if( _client == NULL ) {
 

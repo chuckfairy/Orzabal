@@ -13,6 +13,8 @@
 #include <string.h>
 
 #include <jack/jack.h>
+#include <jack/jslist.h>
+#include <jack/control.h>
 
 
 /**
@@ -24,7 +26,7 @@ class JackServer : public Server {
 
     private:
 
-        jack_options_t JACK_OPTIONS = JackUseExactName;
+        jack_options_t JACK_OPTIONS = JackNullOption;
 
         jack_status_t JACK_STATUS;
 
@@ -49,6 +51,7 @@ class JackServer : public Server {
 
         jack_client_t * _client;
 
+        jackctl_server_t * _jackServer;
 
 
 
@@ -116,7 +119,8 @@ class JackServer : public Server {
 
 
         /**
-         * Jack process
+         * Jack process functionsc
+         *
          */
 
         static int JackProcess( jack_nframes_t nframes, void *o );
