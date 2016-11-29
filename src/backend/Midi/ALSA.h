@@ -9,6 +9,8 @@
 #include <alsa/control.h>
 #include <sndfile.h>
 
+#include <Midi/Device.h>
+
 #include "Host.h"
 #include "Plugin.h"
 
@@ -34,11 +36,11 @@ class ALSA : public Host {
 
         int isOutput( snd_ctl_t *ctl, int card, int device, int sub );
 
-        void listDevice( snd_ctl_t *ctl, int card, int device );
+        Device getDeviceFromCard( snd_ctl_t *ctl, int card, int device );
 
-        void listCardDevices( int card );
+        vector<Device> getCardDevices( int card );
 
-        void deviceList();
+        vector<Device> getDevices();
 
 };
 

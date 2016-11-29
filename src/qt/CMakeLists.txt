@@ -32,6 +32,7 @@ file(
     main.cpp
     ui_MainWindow.h
     widget/*.cpp
+    Settings/*.cpp
 )
 
 add_executable(example ${example_SRC} ${common-ladspa})

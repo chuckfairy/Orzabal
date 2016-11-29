@@ -15,7 +15,7 @@ file( GLOB
 # create gabrielo-backend-common library
 add_library( gabrielo-backend-midi SHARED ${GABRIELO_MIDI_INCLUDE_FILES} )
 
-target_link_libraries( gabrielo-backend-midi PUBLIC asound )
+target_link_libraries( gabrielo-backend-midi PUBLIC asound gabrielo-common )
 
 install(TARGETS gabrielo-backend-midi EXPORT gabrielo-backend-midi-export
     RUNTIME DESTINATION bin

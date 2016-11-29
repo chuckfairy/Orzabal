@@ -19,15 +19,20 @@
 #include <alsa/control.h>
 #include <sndfile.h>
 
+#include <vector>
+
 #include "ALSA.h"
 
+using std::vector;
 
-//const char *port_name = "default";
-//char *send_file_name;
-//snd_rawmidi_t *input, **inputp;
-//snd_rawmidi_t *output, **outputp;
 
 namespace Midi {
+
+
+/**
+ * Construct
+ *
+ */
 
 ALSA::ALSA() {};
 
@@ -73,7 +78,15 @@ int ALSA::isOutput( snd_ctl_t *ctl, int card, int device, int sub ) {
 
 };
 
-void ALSA::listDevice(snd_ctl_t *ctl, int card, int device) {
+
+/**
+ * Get midi device from card and device ints
+ *
+ */
+
+Device ALSA::getDeviceFromCard(snd_ctl_t *ctl, int card, int device) {
+
+    Device device;
 
     snd_rawmidi_info_t *info;
     const char *name;
@@ -98,7 +111,7 @@ void ALSA::listDevice(snd_ctl_t *ctl, int card, int device) {
     if ((err = isOutput(ctl, card, device, sub)) < 0) {
         //error("cannot get rawmidi information %d:%d: %s",
         //card, device, snd_strerror(err));
-        return;
+        return device;
     } else if (err)
         out = 1;
 
@@ -106,7 +119,7 @@ void ALSA::listDevice(snd_ctl_t *ctl, int card, int device) {
         if ((err = isInput(ctl, card, device, sub)) < 0) {
             //error("cannot get rawmidi information %d:%d: %s",
             //card, device, snd_strerror(err));
-            return;
+            return device;
         }
     } else if (err)
         in = 1;
@@ -157,7 +170,13 @@ void ALSA::listDevice(snd_ctl_t *ctl, int card, int device) {
     }
 };
 
-void ALSA::listCardDevices( int card ) {
+
+/**
+ * Get midi devices via card snd
+ *
+ */
+
+vector<Device> ALSA::getCardDevices( int card ) {
 
     snd_ctl_t *ctl;
     char name[32];
@@ -181,28 +200,54 @@ void ALSA::listCardDevices( int card ) {
 
 };
 
-void ALSA::deviceList() {
+
+/**
+ * Get al cards snd
+ *
+ */
+
+vector<Device> ALSA::getDevices() {
+
+    vector<Device> devices;
 
     int card, err;
 
     card = -1;
 
     if ((err = snd_card_next(&card)) < 0) {
+
         //error("cannot determine card number: %s", snd_strerror(err));
-        return;
-    }
-    if (card < 0) {
+        return devices;
+
+    } else if (card < 0) {
+
         //error("no sound card found");
-        return;
+        return devices;
+
     }
-    puts("Dir Device    Name");
-    do {
-        listCardDevices(card);
-        if ((err = snd_card_next(&card)) < 0) {
-            break;
+
+    //puts("Dir Device    Name");
+
+    while( card >= 0 ) {
+
+        vector<Device> cardDevices = getCardDevices(card);
+
+        for( vector<Device>::iterator itVec = cardDevices.begin(); itVec != cardDevices.end(); ++itVec ) {
+
+            devices.push_back( *itVec );
+
         }
-    } while (card >= 0);
+
+        if ( ( err = snd_card_next( &card ) ) < 0 ) {
+
+            break;
+
+        }
+
+    }
+
+    return devices;
 
 };
 
-}
+};

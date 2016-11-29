@@ -21,6 +21,8 @@ file( GLOB
     "Audio/Search.cpp"
     "Audio/Search.h"
     "Audio/Port.h"
+
+    "Midi/*.h"
 )
 
 
