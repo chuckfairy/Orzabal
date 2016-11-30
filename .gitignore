@@ -17,4 +17,4 @@ src/qt/example
 *.so
 *.user
 *.bak
-*.a
+*.[ao]

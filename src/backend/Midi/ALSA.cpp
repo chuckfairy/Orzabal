@@ -84,9 +84,9 @@ int ALSA::isOutput( snd_ctl_t *ctl, int card, int device, int sub ) {
  *
  */
 
-Device ALSA::getDeviceFromCard(snd_ctl_t *ctl, int card, int device) {
+vector<Device> ALSA::getDevicesFromCard(snd_ctl_t *ctl, int card, int device) {
 
-    Device device;
+    vector<Device> deviceReturn;
 
     snd_rawmidi_info_t *info;
     const char *name;
@@ -111,7 +111,7 @@ Device ALSA::getDeviceFromCard(snd_ctl_t *ctl, int card, int device) {
     if ((err = isOutput(ctl, card, device, sub)) < 0) {
         //error("cannot get rawmidi information %d:%d: %s",
         //card, device, snd_strerror(err));
-        return device;
+        return deviceReturn;
     } else if (err)
         out = 1;
 
@@ -119,38 +119,68 @@ Device ALSA::getDeviceFromCard(snd_ctl_t *ctl, int card, int device) {
         if ((err = isInput(ctl, card, device, sub)) < 0) {
             //error("cannot get rawmidi information %d:%d: %s",
             //card, device, snd_strerror(err));
-            return device;
+            return deviceReturn;
         }
     } else if (err)
         in = 1;
 
     if (err == 0)
-        return;
+        return deviceReturn;
 
     name = snd_rawmidi_info_get_name(info);
+
     sub_name = snd_rawmidi_info_get_subdevice_name(info);
+
     if (sub_name[0] == '\0') {
+
         if (subs == 1) {
             printf("%c%c  hw:%d,%d    %s\n",
                     in ? 'I' : ' ', out ? 'O' : ' ',
                     card, device, name);
-        } else
+        } else {
             printf("%c%c  hw:%d,%d    %s (%d subdevices)\n",
                     in ? 'I' : ' ', out ? 'O' : ' ',
                     card, device, name, subs);
-    } else {
-        sub = 0;
-        for (;;) {
-            printf("%c%c  hw:%d,%d,%d  %s\n",
-                    in ? 'I' : ' ', out ? 'O' : ' ',
-                    card, device, sub, sub_name);
-            if (++sub >= subs)
-                break;
+        }
 
-            in = isInput(ctl, card, device, sub);
-            out = isOutput(ctl, card, device, sub);
+        Device subDevice {
+            name,
+                card,
+                device,
+                0,
+                (bool) in,
+                (bool) out
+        };
+
+        deviceReturn.push_back( subDevice );
+
+    } else {
+
+        sub = 0;
+
+        for (;;) {
+
+            //Create and append devices
+            //printf("%c%c  hw:%d,%d,%d  %s\n",
+                    //in ? 'I' : ' ', out ? 'O' : ' ',
+                    //card, device, sub, sub_name);
+
+            Device subDevice {
+                strdup( sub_name ),
+                card,
+                device,
+                sub,
+                isInput( ctl, card, device, sub ),
+                isOutput( ctl, card, device, sub )
+            };
+
+            deviceReturn.push_back( subDevice );
+
+            if( ++sub >= subs ) { break; }
+
             snd_rawmidi_info_set_subdevice(info, sub);
-            if (out) {
+
+            if( subDevice.isOutput ) {
                 snd_rawmidi_info_set_stream(info, SND_RAWMIDI_STREAM_OUTPUT);
                 if ((err = snd_ctl_rawmidi_info(ctl, info)) < 0) {
                     //error("cannot get rawmidi information %d:%d:%d: %s",
@@ -168,6 +198,9 @@ Device ALSA::getDeviceFromCard(snd_ctl_t *ctl, int card, int device) {
             sub_name = snd_rawmidi_info_get_subdevice_name(info);
         }
     }
+
+    return deviceReturn;
+
 };
 
 
@@ -178,25 +211,48 @@ Device ALSA::getDeviceFromCard(snd_ctl_t *ctl, int card, int device) {
 
 vector<Device> ALSA::getCardDevices( int card ) {
 
+    vector<Device> devices;
+
     snd_ctl_t *ctl;
     char name[32];
     int device;
     int err;
 
     sprintf(name, "hw:%d", card);
+
     if ((err = snd_ctl_open(&ctl, name, 0)) < 0) {
-        return;
+
+        return devices;
+
     }
+
     device = -1;
+
     for (;;) {
-        if ((err = snd_ctl_rawmidi_next_device(ctl, &device)) < 0) {
+
+        if( ( err = snd_ctl_rawmidi_next_device( ctl, &device ) ) < 0 ) {
+
             break;
+
+        } else if( device < 0 ) {
+
+            break;
+
         }
-        if (device < 0)
-            break;
-        listDevice(ctl, card, device);
+
+        vector<Device> cardDevices = getDevicesFromCard(ctl, card, device);
+
+        for( vector<Device>::iterator itVec = cardDevices.begin(); itVec != cardDevices.end(); ++itVec ) {
+
+            devices.push_back( *itVec );
+
+        }
+
     }
+
     snd_ctl_close(ctl);
+
+    return devices;
 
 };
 

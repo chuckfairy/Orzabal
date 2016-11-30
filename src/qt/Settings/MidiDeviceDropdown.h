@@ -5,6 +5,7 @@
 #pragma once
 
 #include <Midi/Device.h>
+#include <Midi/ALSA.h>
 
 #include <QtCore>
 #include <QComboBox>

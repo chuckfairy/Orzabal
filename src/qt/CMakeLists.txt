@@ -21,7 +21,7 @@ file(GLOB common-ladspa ../common/LADSPA/*.cpp)
 qt5_wrap_ui(example_UIS ${example_UIS} )
 
 #links
-include_directories(${CMAKE_CURRENT_BINARY_DIR} ../common  )
+include_directories(${CMAKE_CURRENT_BINARY_DIR} ../common ../backend  )
 
 
 # tell CMake to compile every .cpp file in this directory and add it to an executable named `example`
@@ -40,6 +40,7 @@ add_executable(example ${example_SRC} ${common-ladspa})
 target_link_libraries( example
     dl
     gabrielo-common-lv2 gabrielo-common
+    gabrielo-backend-midi
     "/usr/local/lib/liblilv-0.so"
     Qt5::Widgets Qt5::Core
 )

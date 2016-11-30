@@ -22,13 +22,13 @@ file( GLOB
     "Audio/Search.h"
     "Audio/Port.h"
 
-    "Midi/*.h"
+    "Midi/Device.h"
 )
 
 
 ## Building
 # create gabrielo-gui library
-add_library( gabrielo-common SHARED ${GABRIELO_COMMON_INCLUDE_FILES} )
+add_library( gabrielo-common ${GABRIELO_COMMON_INCLUDE_FILES} )
 
 target_link_libraries( gabrielo-common dl )
 

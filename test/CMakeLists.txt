@@ -34,7 +34,7 @@ target_link_libraries( lv2list
     "/usr/local/lib/liblilv-0.so"
 )
 
-target_include_directories( lv2list PUBLIC "../src/common" )
+target_include_directories( lv2list PUBLIC ../../src/common )
 
 install( TARGETS
    lv2list

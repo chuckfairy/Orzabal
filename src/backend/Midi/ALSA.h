@@ -36,7 +36,7 @@ class ALSA : public Host {
 
         int isOutput( snd_ctl_t *ctl, int card, int device, int sub );
 
-        Device getDeviceFromCard( snd_ctl_t *ctl, int card, int device );
+        vector<Device> getDevicesFromCard( snd_ctl_t *ctl, int card, int device );
 
         vector<Device> getCardDevices( int card );
 
