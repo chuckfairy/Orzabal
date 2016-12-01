@@ -5,6 +5,7 @@
 #include <QHBoxLayout>
 #include "MainWindow.h"
 #include "widget/EffectsList.h"
+#include "Settings/MidiDeviceDropdown.h"
 
 /**
  * Window construct
@@ -19,7 +20,10 @@ MainWindow::MainWindow( QWidget * parent, Qt::WindowFlags flags ) : QMainWindow(
 
     effects = new EffectsList();
 
+    midiDevices = new MidiDeviceDropdown();
+
     UI.horizontalLayout_4->insertWidget( 0, dropdown );
     UI.horizontalLayout_3->addWidget( effects );
+    UI.horizontalLayout_6->addWidget( midiDevices );
 
-}
+};

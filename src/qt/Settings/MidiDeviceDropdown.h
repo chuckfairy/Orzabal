@@ -22,6 +22,8 @@ class MidiDeviceDropdown : public QComboBox {
 
     private:
 
+        Midi::ALSA * midiDriver;
+
 
     public:
 
@@ -35,7 +37,7 @@ class MidiDeviceDropdown : public QComboBox {
          *
          * @return bool
          */
-        bool addMidiDevice( Device *device ) {
+        void addMidiDevice( Device device ) {
 
             return addMidiDevice( device, -1 );
 
@@ -51,7 +53,7 @@ class MidiDeviceDropdown : public QComboBox {
          *
          * @return bool
          */
-        bool addMidiDevice( Device *device, const int order );
+        void addMidiDevice( Device device, const int order );
 
 
         /**

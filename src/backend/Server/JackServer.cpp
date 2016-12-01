@@ -49,6 +49,8 @@ bool JackServer::start() {
 
     JackRegisterPorts();
 
+    jack_activate( _client );
+
     return true;
 
 };
@@ -60,6 +62,10 @@ bool JackServer::start() {
  */
 
 bool JackServer::stop() {
+
+    jack_deactivate( _client );
+
+    jack_client_close( _client );
 
 };
 
@@ -149,7 +155,7 @@ void JackServer::getPorts() {
 
 int JackServer::JackProcess( jack_nframes_t nframes, void *o ) {
 
-    std::cout << o;
+    std::cout << &o;
 
     return 0;
 

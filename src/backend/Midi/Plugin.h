@@ -4,4 +4,12 @@
  */
 #pragma once
 
-struct Plugin {};
+namespace Midi {
+
+struct Plugin {
+
+    const char * name;
+
+};
+
+};

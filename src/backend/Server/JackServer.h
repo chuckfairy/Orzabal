@@ -13,8 +13,6 @@
 #include <string.h>
 
 #include <jack/jack.h>
-#include <jack/jslist.h>
-#include <jack/control.h>
 
 
 /**
@@ -50,9 +48,6 @@ class JackServer : public Server {
          */
 
         jack_client_t * _client;
-
-        jackctl_server_t * _jackServer;
-
 
 
     protected:

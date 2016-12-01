@@ -228,7 +228,7 @@ vector<Device> ALSA::getCardDevices( int card ) {
 
     device = -1;
 
-    for (;;) {
+    for(;;) {
 
         if( ( err = snd_ctl_rawmidi_next_device( ctl, &device ) ) < 0 ) {
 
@@ -250,7 +250,7 @@ vector<Device> ALSA::getCardDevices( int card ) {
 
     }
 
-    snd_ctl_close(ctl);
+    snd_ctl_close( ctl );
 
     return devices;
 

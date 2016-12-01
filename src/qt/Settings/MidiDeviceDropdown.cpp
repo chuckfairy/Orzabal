@@ -2,32 +2,29 @@
  * Midi device drop down impl
  *
  */
+#include <vector>
+
 #include "MidiDeviceDropdown.h"
+
+using std::vector;
 
 
 /**
  * Constructor test
  *
  */
+
 MidiDeviceDropdown::MidiDeviceDropdown() {
 
-    //Searcher = new LV2Search();
+    midiDriver = new Midi::ALSA();
 
-    //connect( this, SIGNAL( currentIndexChanged( int ) ), this, SLOT( handleSelectionChanged( int ) ) );
+    vector<Midi::Device> devices = midiDriver->getDevices();
 
-    //addMidiDevice( &_placeholder );
+    for( vector<Midi::Device>::iterator itVec = devices.begin(); itVec != devices.end(); ++itVec ) {
 
-    //vector<Plugin> plugins = Searcher->findAll();
+        addMidiDevice( *itVec );
 
-    //vector<Plugin>::iterator it;
-
-    //for( it = plugins.begin(); it != plugins.end(); ++it ) {
-
-        //MidiDevice opt = { it->getName() };
-
-        //addMidiDevice( &opt );
-
-    //}
+    }
 
 };
 
@@ -45,12 +42,10 @@ MidiDeviceDropdown::MidiDeviceDropdown( QWidget * parent ) : QComboBox( parent )
  * Will use list iterator
  *
  */
-bool MidiDeviceDropdown::addMidiDevice( Device *device, const int order ) {
+void MidiDeviceDropdown::addMidiDevice( Device device, const int order ) {
 
-    addItem( device->name );
+    addItem( device.name );
 
     //MidiDevices.push_back( device );
-
-    return true;
 
 };

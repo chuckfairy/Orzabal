@@ -26,6 +26,10 @@ namespace Midi {
 
 class ALSA : public Host {
 
+    private:
+
+        vector<int> _cards;
+
     public:
 
         ALSA();

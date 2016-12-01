@@ -8,6 +8,7 @@
 #include "ui_MainWindow.h"
 #include "widget/InstrumentDropdown.h"
 #include "widget/EffectsList.h"
+#include "Settings/MidiDeviceDropdown.h"
 
 
 class MainWindow : public QMainWindow {
@@ -30,10 +31,18 @@ class MainWindow : public QMainWindow {
          */
         InstrumentDropdown *dropdown;
 
+
         /**
          * Effect dropdown
          *
          */
         EffectsList *effects;
+
+
+        /**
+         * Midi keyboard device dropdown
+         *
+         */
+        MidiDeviceDropdown *midiDevices;
 
 };
