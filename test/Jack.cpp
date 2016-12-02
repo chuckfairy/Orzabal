@@ -14,6 +14,10 @@ int main() {
 
     //JackServer * server = new JackServer();
 
+    ALSA * aser = new ALSA();
+
+    aser->getSeqData();
+
     //vector<Midi::Device> a = aser->getDevices();
 
     //for( vector<Midi::Device>::iterator itVec = a.begin(); itVec != a.end(); ++itVec ) {
@@ -23,13 +27,13 @@ int main() {
     //}
 
 
-    JackServer * server = new JackServer();
+    //JackServer * server = new JackServer();
 
-    server->start();
+    //server->start();
 
-    sleep( 50 );
+    //sleep( 50 );
 
-    server->stop();
+    //server->stop();
 
     //server->getPorts();
 

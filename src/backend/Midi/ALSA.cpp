@@ -3,7 +3,9 @@
  *
  */
 #include <stdio.h>
+#include <iostream>
 #include <stdlib.h>
+#include <string>
 #include <stdarg.h>
 #include <string.h>
 #include <ctype.h>
@@ -303,6 +305,89 @@ vector<Device> ALSA::getDevices() {
     }
 
     return devices;
+
+};
+
+
+void ALSA::getSeqData() {
+
+    snd_seq_t *pAlsaSeq;
+
+    snd_seq_open(&pAlsaSeq, "hw", SND_SEQ_OPEN_DUPLEX, 0);
+    snd_seq_set_client_name(pAlsaSeq, "ALSA Sequencer Demo");
+
+	snd_seq_client_info_t *pClientInfo;
+	snd_seq_port_info_t   *pPortInfo;
+
+	snd_seq_client_info_alloca(&pClientInfo);
+	snd_seq_port_info_alloca(&pPortInfo);
+	snd_seq_client_info_set_client(pClientInfo, -1);
+
+    unsigned int counter = 0;
+
+	int i = snd_seq_query_next_client(pAlsaSeq, pClientInfo);
+
+    std::cout << i << "\n";
+
+    const int iAlsaClient = snd_seq_client_info_get_client(pClientInfo);
+
+    if (iAlsaClient > 0) {
+
+        std::cout << "HERE";
+        return;
+
+        //qjackctlAlsaClient *pClient = findClient(iAlsaClient);
+
+        snd_seq_port_info_set_client(pPortInfo, iAlsaClient);
+        snd_seq_port_info_set_port(pPortInfo, -1);
+
+        const char * sClientName;
+
+        while (snd_seq_query_next_port(pAlsaSeq, pPortInfo) >= 0) {
+
+            const unsigned int uiPortCapability = snd_seq_port_info_get_capability(pPortInfo);
+
+            if ( SND_SEQ_PORT_CAP_NO_EXPORT ) {
+
+                snd_seq_client_info_get_name(pClientInfo);
+                printf("%c:", iAlsaClient);
+                int * pPort = 0;
+                const int iAlsaPort = snd_seq_port_info_get_port(pPortInfo);
+                if (counter == 0) {
+                    //pClient = new qjackctlAlsaClient(this, iAlsaClient);
+                    //pClient->setClientName(sClientName);
+                    counter++;
+                } else {
+                    //pPort = pClient->findPort(iAlsaPort);
+                    //if (sClientName != pClient->clientName()) {
+                    //pClient->setClientName(sClientName);
+                    counter++;
+                    //}
+                }
+
+                char * sPortName;
+                sprintf(
+                        sPortName,
+                        "%d:%s",
+                        iAlsaPort,
+                        snd_seq_port_info_get_name( pPortInfo )
+                       );
+                std::cout << sPortName;
+                if (pPort == 0) {
+                    //pPort = new qjackctlAlsaPort(pClient, iAlsaPort);
+                    //pPort->setPortName(sPortName);
+                    counter++;
+                }
+
+                if (pPort) {
+                    //pPort->markClientPort(1);
+                }
+
+            }
+
+        }
+
+    }
 
 };
 

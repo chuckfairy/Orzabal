@@ -9,10 +9,12 @@
 #include "InstrumentOption.h"
 #include "InstrumentDropdown.h"
 
+
 /**
  * Constructor test
  *
  */
+
 InstrumentDropdown::InstrumentDropdown() {
 
     Searcher = new LV2Search();
@@ -34,6 +36,7 @@ InstrumentDropdown::InstrumentDropdown() {
     }
 
 };
+
 
 /**
  * Constructor test

@@ -28,6 +28,7 @@ MidiDeviceDropdown::MidiDeviceDropdown() {
 
 };
 
+
 /**
  * Constructor test
  *

@@ -30,6 +30,7 @@ class MidiDeviceDropdown : public QComboBox {
         MidiDeviceDropdown( QWidget * parent );
         MidiDeviceDropdown();
 
+
         /**
          * Add Device append order
          *

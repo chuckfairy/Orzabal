@@ -46,6 +46,8 @@ class ALSA : public Host {
 
         vector<Device> getDevices();
 
+        void getSeqData();
+
 };
 
 };
