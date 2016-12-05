@@ -30,9 +30,20 @@ class ALSA : public Host {
 
         vector<int> _cards;
 
+        snd_seq_t * _seqHandle;
+
+        int _inputPort;
+
+        int _outputPort;
+
+        const char * _name = "gabrielo-midi";
+
+
     public:
 
         ALSA();
+
+        void start();
 
         vector<Plugin> setDevices();
 
@@ -47,6 +58,8 @@ class ALSA : public Host {
         vector<Device> getDevices();
 
         void getSeqData();
+
+        void createPorts();
 
 };
 

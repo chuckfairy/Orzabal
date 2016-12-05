@@ -197,8 +197,11 @@ vector<Device> ALSA::getDevicesFromCard(snd_ctl_t *ctl, int card, int device) {
                     break;
                 }
             }
+
             sub_name = snd_rawmidi_info_get_subdevice_name(info);
+
         }
+
     }
 
     return deviceReturn;
@@ -331,10 +334,9 @@ void ALSA::getSeqData() {
 
     const int iAlsaClient = snd_seq_client_info_get_client(pClientInfo);
 
-    if (iAlsaClient > 0) {
+    if( iAlsaClient > 0 ) {
 
         std::cout << "HERE";
-        return;
 
         //qjackctlAlsaClient *pClient = findClient(iAlsaClient);
 
@@ -388,6 +390,47 @@ void ALSA::getSeqData() {
         }
 
     }
+
+};
+
+
+/**
+ * Start midi seq asound
+ *
+ */
+
+void ALSA::start() {
+
+    int result = snd_seq_open(&_seqHandle, "hw", SND_SEQ_OPEN_DUPLEX, 0);
+
+    if( result < 0 ) {
+
+        fprintf(stderr, "Error opening ALSA sequencer.\n");
+
+        return;
+
+    }
+
+    snd_seq_set_client_name( _seqHandle, _name );
+
+};
+
+
+/**
+ * Create ports for routing
+ *
+ */
+
+void ALSA::createPorts() {
+
+    start();
+
+    _inputPort = snd_seq_create_simple_port(
+        _seqHandle,
+        _name,
+        SND_SEQ_PORT_CAP_WRITE | SND_SEQ_PORT_CAP_SUBS_WRITE,
+        SND_SEQ_PORT_TYPE_APPLICATION
+    );
 
 };
 
