@@ -155,7 +155,7 @@ void JackServer::getPorts() {
 
 int JackServer::JackProcess( jack_nframes_t nframes, void *o ) {
 
-    std::cout << &o;
+    //std::cout << &o;
 
     return 0;
 

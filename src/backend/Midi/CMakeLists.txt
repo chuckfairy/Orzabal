@@ -16,7 +16,7 @@ file( GLOB
 # create gabrielo-backend-common library
 add_library( gabrielo-backend-midi SHARED ${GABRIELO_MIDI_INCLUDE_FILES} )
 
-target_link_libraries( gabrielo-backend-midi PUBLIC asound gabrielo-common )
+target_link_libraries( gabrielo-backend-midi PUBLIC asound gabrielo-common jack )
 target_include_directories( gabrielo-backend-midi PUBLIC "../../common" )
 
 set_target_properties( gabrielo-backend-midi PROPERTIES LINKER_LANGUAGE CXX )

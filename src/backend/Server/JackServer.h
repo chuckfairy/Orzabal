@@ -80,6 +80,17 @@ class JackServer : public Server {
 
         };
 
+        /**
+         * Get jack client pointer
+         *
+         */
+
+        jack_client_t * getJackClient() {
+
+            return _client;
+
+        };
+
 
         /**
          * Get status type

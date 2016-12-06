@@ -9,7 +9,6 @@
 #include <vector>
 #include <jack/jack.h>
 #include <jack/midiport.h>
-#include <sndfile.h>
 
 #include <Midi/Device.h>
 
@@ -32,13 +31,18 @@ class Jack : public Host {
 
         vector<int> _cards;
 
-        snd_seq_t * _seqHandle;
-
         int _inputPort;
 
         int _outputPort;
 
         const char * _name = "gabrielo-midi-jack";
+
+
+        /**
+         * Jack client pointer
+         */
+
+        jack_client_t * _jackClient;
 
 
     public:
@@ -48,6 +52,21 @@ class Jack : public Host {
         void start();
 
         void createPorts();
+
+        void getPorts();
+
+
+        /**
+         *
+         */
+
+        void setJackClient( jack_client_t * j ) {
+
+            _jackClient = j;
+
+        };
+
+
 
 };
 
