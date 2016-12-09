@@ -1,24 +1,96 @@
 /**
- * Jack midi impl
- *
-//if (jack_connect (client, "alsa_pcm:capture_1", jack_port_name (input_port))) {
+ * Jack audio mod
  *
  */
+#include <vector>
 #include <iostream>
 #include <string>
+
 
 #include "Jack.h"
 
 using std::string;
+using std::vector;
 
 
-namespace Midi {
+/**
+ * Midi Alsa extended class
+ *
+ */
+
+namespace Audio {
+
 
 Jack::Jack() {};
 
 
-//* automation_port = jack_port_register(client, "Automation MIDI In", JACK_DEFAULT_MIDI_TYPE, JackPortIsInput, 0);
-//
+/**
+ * Create with jack
+ *
+ */
+
+Jack::Jack( jack_client_t * j ) {
+
+    setJackClient( j );
+
+};
+
+
+/**
+ *
+ */
+
+void Jack::start() {
+
+};
+
+
+/**
+ * Jack register and create ports
+ *
+ */
+
+void Jack::createPorts() {
+
+    _inputLeft = jack_port_register(
+        _jackClient,
+        _inputLeftName,
+        JACK_DEFAULT_AUDIO_TYPE,
+        JackPortIsInput,
+        0
+    );
+
+    _inputRight = jack_port_register(
+        _jackClient,
+        _inputRightName,
+        JACK_DEFAULT_AUDIO_TYPE,
+        JackPortIsInput,
+        0
+    );
+
+    _outputLeft = jack_port_register(
+        _jackClient,
+        _outputLeftName,
+        JACK_DEFAULT_AUDIO_TYPE,
+        JackPortIsOutput,
+        0
+    );
+
+    _outputRight = jack_port_register(
+        _jackClient,
+        _outputRightName,
+        JACK_DEFAULT_AUDIO_TYPE,
+        JackPortIsOutput,
+        0
+    );
+
+};
+
+
+/**
+ * Get global jack ports
+ *
+ */
 
 vector<Port> Jack::getPorts() {
 
@@ -30,14 +102,6 @@ vector<Port> Jack::getPorts() {
         JACK_DEFAULT_AUDIO_TYPE,
         JackPortIsInput
     );
-    //: JackPortIsInput
-
-    if( ! ppszClientPorts) {
-
-        return ports;
-
-    }
-
 
     int iClientPort = 0;
 
@@ -86,8 +150,6 @@ vector<Port> Jack::getPorts() {
         iClientPort++;
 
     }
-
-    free(ppszClientPorts);
 
     return ports;
 

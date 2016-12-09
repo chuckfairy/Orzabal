@@ -11,6 +11,7 @@
 #include <jack/midiport.h>
 
 #include <Midi/Device.h>
+#include <Midi/Port.h>
 
 #include "Host.h"
 #include "Plugin.h"
@@ -53,7 +54,7 @@ class Jack : public Host {
 
         void createPorts();
 
-        void getPorts();
+        vector<Port> getPorts();
 
 
         /**
