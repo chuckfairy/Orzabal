@@ -156,6 +156,25 @@ bool Jack::connectOutputTo( const char * inLeft, const char * inRight ) {
 
 
 /**
+ * Connect input output redirect
+ */
+
+void Jack::connectRedirect() {
+
+    connectJackPort(
+        getPortFullName( _outputLeftName ),
+        getPortFullName( _inputLeftName )
+    );
+
+    connectJackPort(
+        getPortFullName( _outputRightName ),
+        getPortFullName( _inputRightName )
+    );
+
+};
+
+
+/**
  * Get global jack ports
  *
  */

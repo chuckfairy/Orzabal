@@ -137,6 +137,8 @@ class Jack : public Host {
          *
          */
 
+        void connectRedirect();
+
         bool connectInputTo( const char * );
 
         bool connectInputTo( const char *, const char * );

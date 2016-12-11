@@ -176,4 +176,6 @@ void JackServer::connectDefault() {
 
     _Audio->connectOutputTo( ports[0].name, ports[1].name );
 
+    _Audio->connectRedirect();
+
 };
