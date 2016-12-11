@@ -28,7 +28,7 @@ vector<Port> Jack::getPorts() {
         _jackClient,
         0,
         JACK_DEFAULT_AUDIO_TYPE,
-        JackPortIsInput
+        JackPortIsOutput
     );
     //: JackPortIsInput
 
@@ -41,7 +41,7 @@ vector<Port> Jack::getPorts() {
 
     int iClientPort = 0;
 
-    while (ppszClientPorts[iClientPort]) {
+    while( ppszClientPorts[iClientPort] ) {
 
         string clientName( ppszClientPorts[iClientPort] );
 

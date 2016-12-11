@@ -6,6 +6,8 @@
 
 #include "Server.h"
 
+#include <Audio/Jack.h>
+
 #include <stdio.h>
 #include <errno.h>
 #include <unistd.h>
@@ -50,6 +52,14 @@ class JackServer : public Server {
         jack_client_t * _client;
 
 
+        /**
+         * Audio module
+         *
+         */
+
+        Audio::Jack * _Audio;
+
+
     protected:
 
         const char * _name = "gabrielo";
@@ -67,6 +77,8 @@ class JackServer : public Server {
         bool connect();
 
         void getPorts();
+
+        void connectDefault();
 
 
         /**

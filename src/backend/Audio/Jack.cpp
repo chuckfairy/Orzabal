@@ -88,6 +88,74 @@ void Jack::createPorts() {
 
 
 /**
+ * Jack back connection to private client
+ *
+ */
+
+int Jack::connectJackPort( const char * source, const char * destination ) {
+
+    return jack_connect( _jackClient, source, destination );
+
+};
+
+
+/**
+ * Connection to mono
+ */
+
+bool Jack::connectInputTo( const char * out ) {
+
+    connectJackPort( _inputLeftName, out );
+    connectJackPort( _inputRightName, out );
+
+    return true;
+
+};
+
+
+/**
+ * Connection to stereo
+ */
+
+bool Jack::connectInputTo( const char * outLeft, const char * outRight ) {
+
+    connectJackPort( _inputLeftName, outLeft );
+    connectJackPort( _inputRightName, outRight );
+
+    return true;
+
+};
+
+
+/**
+ * Connection to mono
+ */
+
+bool Jack::connectOutputTo( const char * input ) {
+
+    connectJackPort( getPortFullName( _outputLeftName ), input );
+    connectJackPort( getPortFullName( _outputRightName ), input );
+
+    return true;
+
+};
+
+
+/**
+ * Connection to stereo
+ */
+
+bool Jack::connectOutputTo( const char * inLeft, const char * inRight ) {
+
+    connectJackPort( getPortFullName( _outputLeftName ), inLeft );
+    connectJackPort( getPortFullName( _outputRightName ), inRight );
+
+    return true;
+
+};
+
+
+/**
  * Get global jack ports
  *
  */
@@ -96,7 +164,7 @@ vector<Port> Jack::getPorts() {
 
     vector<Port> ports;
 
-    const char **ppszClientPorts = jack_get_ports(
+    const char ** globalPorts = jack_get_ports(
         _jackClient,
         0,
         JACK_DEFAULT_AUDIO_TYPE,
@@ -105,25 +173,25 @@ vector<Port> Jack::getPorts() {
 
     int iClientPort = 0;
 
-    while (ppszClientPorts[iClientPort]) {
+    while( globalPorts[iClientPort] ) {
 
-        string clientName( ppszClientPorts[iClientPort] );
+        string clientName( globalPorts[iClientPort] );
 
         Port p {
-            ppszClientPorts[iClientPort]
+            globalPorts[iClientPort]
         };
+
+        ports.push_back( p );
 
         int *pClient = 0;
         int *pPort   = 0;
         jack_port_t *pJackPort = jack_port_by_name(_jackClient, clientName.c_str() );
         int iColon = clientName.find(':');
 
-        std::cout << clientName << "\n";
-
         if (pJackPort && iColon >= 0) {
 
-            //QString sClientName = sClientPort.left(iColon);
-            //QString sPortName   = sClientPort.right(sClientPort.length() - iColon - 1);
+            //QString sClientName = left
+            //QString sPortName   = right
             //pClient = static_cast<qjackctlJackClient *> (findClient(sClientName));
 
             //if (pClient)

@@ -38,9 +38,9 @@ class Jack : public Host {
 
         jack_port_t * _outputRight;
 
-        const char * _outputLeftName = "input-l";
+        const char * _outputLeftName = "output-L";
 
-        const char * _outputRightName = "input-r";
+        const char * _outputRightName = "output-R";
 
 
         /**
@@ -51,9 +51,9 @@ class Jack : public Host {
 
         jack_port_t * _inputRight;
 
-        const char * _inputLeftName = "input-l";
+        const char * _inputLeftName = "input-L";
 
-        const char * _inputRightName = "input-r";
+        const char * _inputRightName = "input-R";
 
 
         /**
@@ -63,26 +63,87 @@ class Jack : public Host {
         jack_client_t * _jackClient;
 
 
-
     public:
+
+        /**
+         * Constructs
+         *
+         */
 
         Jack();
 
         Jack( jack_client_t * j );
 
+
+        /**
+         * Default start
+         *
+         */
+
         void start();
+
+
+        /**
+         * main jack client from server
+         */
 
         void setJackClient( jack_client_t * j ) {
 
             _jackClient = j;
 
-            createPorts();
+        };
+
+
+        /**
+         * Get specific ports
+         */
+
+        vector<Port> getPorts();
+
+
+        /**
+         * Get port name
+         */
+
+        const char * getPortFullName( const char * name ) {
+
+            char * c = (char*) malloc(80);
+
+            sprintf( c, "gabrielo-client:%s", name );
+
+            return c;
 
         };
 
+
+        /**
+         * Default ports
+         *
+         */
+
         void createPorts();
 
-        vector<Port> getPorts();
+
+        /**
+         * Abstract jack port connection method
+         *
+         */
+
+        int connectJackPort( const char *, const char * );
+
+
+        /**
+         * Jack Connection port methods
+         *
+         */
+
+        bool connectInputTo( const char * );
+
+        bool connectInputTo( const char *, const char * );
+
+        bool connectOutputTo( const char * );
+
+        bool connectOutputTo( const char *, const char * );
 
 };
 

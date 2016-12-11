@@ -5,6 +5,8 @@
 #include <iostream>
 #include <jack/jack.h>
 
+#include <Audio/Port.h>
+
 #include "JackServer.h"
 
 
@@ -14,6 +16,8 @@
  */
 
 JackServer::JackServer() {
+
+    _Audio = new Audio::Jack();
 
 };
 
@@ -87,21 +91,9 @@ bool JackServer::connect() {
 
 void JackServer::JackRegisterPorts() {
 
-    _inputPort = jack_port_register(
-        _client,
-        "input",
-        JACK_DEFAULT_AUDIO_TYPE,
-        JackPortIsInput,
-        0
-    );
+    _Audio->setJackClient( _client );
 
-    _outputPort = jack_port_register(
-        _client,
-        "output",
-        JACK_DEFAULT_AUDIO_TYPE,
-        JackPortIsOutput,
-        0
-    );
+    _Audio->createPorts();
 
 };
 
@@ -170,5 +162,18 @@ int JackServer::JackProcess( jack_nframes_t nframes, void *o ) {
 void JackServer::JackOnShutdown( void *o ) {
 
     printf( "JACK HAS SHUTDOWN" );
+
+};
+
+
+/**
+ * Connect default audio
+ */
+
+void JackServer::connectDefault() {
+
+    vector<Port> ports = _Audio->getPorts();
+
+    _Audio->connectOutputTo( ports[0].name, ports[1].name );
 
 };

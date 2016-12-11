@@ -7,16 +7,31 @@
 #include <Server/JackServer.h>
 
 #include <Midi/ALSA.h>
+#include <Midi/Jack.h>
+
+#include <Audio/Jack.h>
 
 using namespace Midi;
 
 int main() {
 
-    //JackServer * server = new JackServer();
+    JackServer * server = new JackServer();
 
-    ALSA * aser = new ALSA();
+    //ALSA * aser = new ALSA();
 
-    aser->getSeqData();
+    //aser->createPorts();
+
+    server->start();
+
+    server->connectDefault();
+
+    sleep(50);
+
+    //Midi::Jack * j = new Midi::Jack();
+
+    //j->setJackClient( server->getJackClient() );
+
+    //j->getPorts();
 
     //vector<Midi::Device> a = aser->getDevices();
 
@@ -30,8 +45,6 @@ int main() {
     //JackServer * server = new JackServer();
 
     //server->start();
-
-    //sleep( 50 );
 
     //server->stop();
 
