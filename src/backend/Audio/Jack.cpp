@@ -21,6 +21,10 @@ using std::vector;
 namespace Audio {
 
 
+/**
+ * Constructs
+ */
+
 Jack::Jack() {};
 
 
@@ -179,7 +183,7 @@ void Jack::connectRedirect() {
  *
  */
 
-vector<Port> Jack::getPorts() {
+vector<Port> Jack::getPortsByType( enum JackPortFlags PORT_FLAG ) {
 
     vector<Port> ports;
 
@@ -187,7 +191,7 @@ vector<Port> Jack::getPorts() {
         _jackClient,
         0,
         JACK_DEFAULT_AUDIO_TYPE,
-        JackPortIsInput
+        PORT_FLAG
     );
 
     int iClientPort = 0;
@@ -232,6 +236,7 @@ vector<Port> Jack::getPorts() {
 
             //if (pPort)
             //pPort->markClientPort(1);
+
         }
 
         iClientPort++;
@@ -239,6 +244,28 @@ vector<Port> Jack::getPorts() {
     }
 
     return ports;
+
+};
+
+
+/**
+ * Get ports by input type JackPortIsInput
+ */
+
+vector<Port> Jack::getInputPorts() {
+
+    return getPortsByType( JackPortIsInput );
+
+};
+
+
+/**
+ * Get ports by input type JackPortIsOutput
+ */
+
+vector<Port> Jack::getOutputPorts() {
+
+    return getPortsByType( JackPortIsOutput );
 
 };
 

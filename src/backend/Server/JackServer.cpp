@@ -105,38 +105,6 @@ void JackServer::JackRegisterPorts() {
 
 void JackServer::getPorts() {
 
-    const char **ports;
-
-    ports = jack_get_ports( _client, NULL, NULL, JackPortIsPhysical|JackPortIsOutput );
-
-    if( ports == NULL ) {
-        fprintf(stderr, "no physical capture ports\n");
-    }
-
-    if( jack_connect( _client, ports[0], jack_port_name( _inputPort ) ) ) {
-
-        fprintf(stderr, "cannot connect input ports\n");
-
-    }
-
-    free( ports );
-
-    ports = jack_get_ports( _client, NULL, NULL, JackPortIsPhysical|JackPortIsInput );
-
-    if( ports == NULL ) {
-
-        fprintf(stderr, "no physical playback ports\n");
-
-    }
-
-    if( jack_connect( _client, jack_port_name( _outputPort ), ports[0] ) ) {
-
-        fprintf(stderr, "cannot connect output ports\n");
-
-    }
-
-    free( ports );
-
 };
 
 
@@ -172,7 +140,7 @@ void JackServer::JackOnShutdown( void *o ) {
 
 void JackServer::connectDefault() {
 
-    vector<Port> ports = _Audio->getPorts();
+    vector<Port> ports = _Audio->getInputPorts();
 
     _Audio->connectOutputTo( ports[0].name, ports[1].name );
 

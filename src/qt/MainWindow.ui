@@ -142,7 +142,7 @@
           <x>10</x>
           <y>10</y>
           <width>691</width>
-          <height>31</height>
+          <height>41</height>
          </rect>
         </property>
         <layout class="QHBoxLayout" name="horizontalLayout">
@@ -162,7 +162,7 @@
         <property name="geometry">
          <rect>
           <x>10</x>
-          <y>50</y>
+          <y>70</y>
           <width>691</width>
           <height>31</height>
          </rect>
@@ -181,7 +181,7 @@
         <property name="geometry">
          <rect>
           <x>10</x>
-          <y>90</y>
+          <y>110</y>
           <width>691</width>
           <height>31</height>
          </rect>
@@ -190,7 +190,7 @@
          <item>
           <widget class="QLabel" name="label_5">
            <property name="text">
-            <string>Sound Card</string>
+            <string>Output Device</string>
            </property>
           </widget>
          </item>
@@ -200,7 +200,7 @@
         <property name="geometry">
          <rect>
           <x>10</x>
-          <y>130</y>
+          <y>160</y>
           <width>691</width>
           <height>31</height>
          </rect>
@@ -215,6 +215,12 @@
          </item>
         </layout>
        </widget>
+       <zorder>horizontalLayoutWidget</zorder>
+       <zorder>horizontalLayoutWidget_2</zorder>
+       <zorder>horizontalLayoutWidget_3</zorder>
+       <zorder>horizontalLayoutWidget_4</zorder>
+       <zorder>label_7</zorder>
+       <zorder>label_5</zorder>
       </widget>
      </widget>
     </item>

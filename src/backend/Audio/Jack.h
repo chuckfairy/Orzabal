@@ -98,7 +98,21 @@ class Jack : public Host {
          * Get specific ports
          */
 
-        vector<Port> getPorts();
+        vector<Port> getPortsByType( enum JackPortFlags );
+
+
+        /**
+         * Get specific ports
+         */
+
+        vector<Port> getInputPorts();
+
+
+        /**
+         * Get specific ports
+         */
+
+        vector<Port> getOutputPorts();
 
 
         /**
