@@ -23,13 +23,13 @@ InstrumentDropdown::InstrumentDropdown() {
 
     addInstrument( &_placeholder );
 
-    vector<Plugin> plugins = Searcher->findAll();
+    vector<Plugin*> plugins = Searcher->findAll();
 
-    vector<Plugin>::iterator it;
+    vector<Plugin*>::iterator it;
 
     for( it = plugins.begin(); it != plugins.end(); ++it ) {
 
-        InstrumentOption opt = { it->getName() };
+        InstrumentOption opt = { (*it)->getName() };
 
         addInstrument( &opt );
 

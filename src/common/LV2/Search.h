@@ -22,9 +22,9 @@ class LV2Search : public Search {
 
         LV2Search();
 
-        vector<Plugin> findAll() {
+        vector<Plugin*> findAll() {
 
-            vector<Plugin> pluginList;
+            vector<Plugin*> pluginList;
 
             LilvWorld* world = lilv_world_new();
             lilv_world_load_all(world);
@@ -36,7 +36,7 @@ class LV2Search : public Search {
                 const LilvPlugin* p = lilv_plugins_get(plugins, i);
 
                 //Plugin * _p = new LV2Plugin( p );
-                LV2Plugin d( p );
+                Plugin * d = new LV2Plugin( p );
 
                 pluginList.push_back( d );
 
@@ -46,7 +46,7 @@ class LV2Search : public Search {
 
             }
 
-            lilv_world_free(world);
+            //lilv_world_free(world);
 
             return pluginList;
 

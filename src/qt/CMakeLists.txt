@@ -40,6 +40,8 @@ add_executable(example ${example_SRC} ${common-ladspa})
 target_link_libraries( example
     dl
     gabrielo-common-lv2 gabrielo-common
+    gabrielo-backend-server
+    gabrielo-backend-audio
     gabrielo-backend-midi
     "/usr/local/lib/liblilv-0.so"
     Qt5::Widgets Qt5::Core

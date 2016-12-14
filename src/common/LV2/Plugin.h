@@ -4,6 +4,7 @@
  */
 #pragma once
 
+#include <iostream>
 #include <string.h>
 
 #include <lilv/lilv.h>
@@ -19,6 +20,8 @@ class LV2Plugin : public Plugin {
 
         void setLilvPlugin();
 
+        char _lilvURI[500];
+
     protected:
 
         const char * TYPE = "LV2";
@@ -30,12 +33,12 @@ class LV2Plugin : public Plugin {
 
         LV2Plugin( const LilvPlugin* p );
 
-        //LV2Plugin( LilvPluginImpl const* p ) {};
-
         Port createPort( long portNum );
 
         void setPorts();
 
         void setLilvPlugin( const LilvPlugin* p );
+
+        void start();
 
 };

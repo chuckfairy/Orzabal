@@ -15,15 +15,17 @@ int main() {
 
     Search * searcher = new LV2Search();
 
-    vector<Plugin> plugins = searcher->findAll();
+    vector<Plugin*> plugins = searcher->findAll();
 
-    vector<Plugin>::iterator it;
+    plugins[0]->start();
 
-    for( int i = 0; i < 10; i ++ ) {
+    //vector<Plugin>::iterator it;
 
-        cout << plugins[i].getName() << "\n";
+    //for( int i = 0; i < 10; i ++ ) {
 
-    }
+    //cout << plugins[i].getName() << "\n";
+
+    //}
 
     //   for( it = plugins.begin(); it != plugins.end(); ++it ) {
     //

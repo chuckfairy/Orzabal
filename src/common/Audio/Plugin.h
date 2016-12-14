@@ -4,6 +4,7 @@
  */
 #pragma once
 
+#include <iostream>
 #include <string.h>
 #include <vector>
 #include <map>
@@ -151,5 +152,12 @@ class Plugin {
             return p;
 
         };
+
+
+        /**
+         * Start up for lv2
+         */
+
+        virtual void start() { std::cout << "TESTERES"; };
 
 };

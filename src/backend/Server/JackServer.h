@@ -92,6 +92,7 @@ class JackServer : public Server {
 
         };
 
+
         /**
          * Get jack client pointer
          *
@@ -102,6 +103,19 @@ class JackServer : public Server {
             return _client;
 
         };
+
+
+        /**
+         * Get Audio host
+         *
+         */
+
+        Audio::Jack * getAudio() {
+
+            return _Audio;
+
+        };
+
 
 
         /**
