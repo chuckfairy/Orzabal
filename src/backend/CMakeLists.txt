@@ -6,6 +6,7 @@ set_package_properties( JACK PROPERTIES TYPE REQUIRED PURPOSE "Enables JACK plug
 include_directories( ${JACK_INCLUDE_DIRS} )
 add_definitions( ${JACK_DEFINITIONS} )
 
+add_subdirectory( Plugin )
 add_subdirectory( Server )
 add_subdirectory( Audio )
 add_subdirectory( Midi )

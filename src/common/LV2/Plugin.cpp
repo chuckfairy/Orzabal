@@ -9,8 +9,6 @@
 
 #include <lilv/lilv.h>
 
-#include <lilv/lilv.h>
-
 #include "Plugin.h"
 
 using std::string;

@@ -9,6 +9,7 @@ install_manifest.txt
 CMakeCache.txt
 CTestTestfile.cmake
 CMakeScripts
+compile_commands.json
 
 src/include
 src/qt/ui_*

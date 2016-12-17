@@ -4,6 +4,7 @@
  */
 #pragma once
 
+#include <vector>
 #include <stdio.h>
 #include <string.h>
 #include <iostream>
@@ -15,6 +16,8 @@
 #include <lilv/lilv.h>
 
 #include "Plugin.h"
+
+using std::vector;
 
 class LV2Search : public Search {
 

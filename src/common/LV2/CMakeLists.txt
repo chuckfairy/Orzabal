@@ -51,11 +51,15 @@ install(TARGETS gabrielo-common-lv2
     DESTINATION "${GABRIELO_LIB_PATH}"
 )
 
+include_directories( "/usr/local/lib" )
+
 target_link_libraries( gabrielo-common-lv2
-    "/usr/local/lib/liblilv-0.so"
+    lilv-0 suil-0
 )
 
-target_include_directories( gabrielo-common-lv2 PUBLIC "/usr/local/include/lilv-0" ".." )
+target_include_directories( gabrielo-common-lv2
+    PUBLIC "/usr/local/include/lilv-0" "/usr/local/include/suil-0" ".."
+)
 
 
 # copy public include files
