@@ -13,7 +13,7 @@ using namespace std;
 
 int main() {
 
-    Audio::Search * searcher = new LV2Search();
+    Audio::Search * searcher = new LV2::Search();
 
     vector<Audio::Plugin*> plugins = searcher->findAll();
 

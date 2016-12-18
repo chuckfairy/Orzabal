@@ -16,6 +16,10 @@ file( GLOB
     "Plugin.cpp"
     "Search.h"
     "Search.cpp"
+    "include/symap.h"
+    "include/symap.c"
+    "UI.h"
+    "UI.cpp"
 )
 
 
@@ -40,7 +44,7 @@ target_link_libraries( gabrielo-common-lv2
 )
 
 target_include_directories( gabrielo-common-lv2
-    PUBLIC "/usr/local/include/lilv-0" "/usr/local/include/suil-0" ".."
+    PUBLIC "/usr/local/include/lilv-0" "/usr/include/suil-0" ".."
 )
 
 install( TARGETS

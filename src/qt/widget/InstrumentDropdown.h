@@ -42,7 +42,7 @@ class InstrumentDropdown : public QComboBox {
          * LV2 searcher pointer
          */
 
-        LV2Search * Searcher;
+        LV2::Search * Searcher;
 
 
         /**

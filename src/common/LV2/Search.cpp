@@ -13,26 +13,46 @@
 #include "Search.h"
 
 
-LV2Search::LV2Search() {
+namespace LV2  {
+
+
+/**
+ * Construct
+ */
+
+Search::Search() {
 
 };
 
-//void LV2Search::listPlugins(const LilvPlugins* list, bool show_names)
-//{
-//	LILV_FOREACH(plugins, i, list) {
-//		const LilvPlugin* p = lilv_plugins_get(list, i);
-//		if (show_names) {
-//			LilvNode* n = lilv_plugin_get_name(p);
-//			printf("%s\n", lilv_node_as_string(n));
-//			lilv_node_free(n);
-//		} else {
-//			printf("%s\n", lilv_node_as_uri(lilv_plugin_get_uri(p)));
-//		}
-//	}
-//}
-//
 
+/**
+ * Search via lilv world
+ */
 
-//vector<Plugin> LV2Search::findAll() {
-//
-//}
+vector<Audio::Plugin*> Search::findAll() {
+
+    vector<Audio::Plugin*> pluginList;
+
+    LilvWorld * world = lilv_world_new();
+    lilv_world_load_all(world);
+
+    const LilvPlugins* plugins = lilv_world_get_all_plugins(world);
+
+    LILV_FOREACH(plugins, i, plugins) {
+
+        const LilvPlugin* p = lilv_plugins_get(plugins, i);
+
+        //Plugin * _p = new Plugin( p );
+        Audio::Plugin * d = new Plugin( p, world );
+
+        pluginList.push_back( d );
+
+    }
+
+    //lilv_world_free(world);
+
+    return pluginList;
+
+};
+
+};

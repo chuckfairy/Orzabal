@@ -19,7 +19,7 @@ using Audio::Plugin;
 
 InstrumentDropdown::InstrumentDropdown() {
 
-    Searcher = new LV2Search();
+    Searcher = new LV2::Search();
 
     connect( this, SIGNAL( currentIndexChanged( int ) ), this, SLOT( handleSelectionChanged( int ) ) );
 

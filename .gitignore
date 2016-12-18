@@ -1,5 +1,3 @@
-*.sw[po]
-.idea
 tags
 CMakeFiles
 Makefile
@@ -11,10 +9,15 @@ CTestTestfile.cmake
 CMakeScripts
 compile_commands.json
 
+doc/
+
 src/include
 src/qt/ui_*
 src/qt/*_automoc.cpp
 src/qt/example
+
+*.sw[po]
+.idea
 *.so
 *.user
 *.bak
