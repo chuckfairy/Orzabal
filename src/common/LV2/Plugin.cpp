@@ -5,60 +5,16 @@
 #include <string.h>
 #include <iostream>
 
-#include <Audio/Port.h>
+//#include <Audio/Port.h>
 
 #include <lilv/lilv.h>
 
+#include <jack/jack.h>
+
 #include "Plugin.h"
+#include "Port.h"
 
 using std::string;
-
-typedef struct {
-	char** uris;
-	size_t n_uris;
-} URITable;
-
-static void
-uri_table_init(URITable* table)
-{
-	table->uris   = NULL;
-	table->n_uris = 0;
-}
-
-static void
-uri_table_destroy(URITable* table)
-{
-	free(table->uris);
-}
-
-static LV2_URID
-uri_table_map(LV2_URID_Map_Handle handle,
-              const char*         uri)
-{
-	URITable* table = (URITable*)handle;
-	for (size_t i = 0; i < table->n_uris; ++i) {
-		if (!strcmp(table->uris[i], uri)) {
-			return i + 1;
-		}
-	}
-
-	const size_t len = strlen(uri);
-	table->uris = (char**)realloc(table->uris, ++table->n_uris * sizeof(char*));
-	table->uris[table->n_uris - 1] = (char*)malloc(len + 1);
-	memcpy(table->uris[table->n_uris - 1], uri, len + 1);
-	return table->n_uris;
-}
-
-static const char*
-uri_table_unmap(LV2_URID_Map_Handle handle,
-                LV2_URID            urid)
-{
-	URITable* table = (URITable*)handle;
-	if (urid > 0 && urid <= table->n_uris) {
-		return table->uris[urid - 1];
-	}
-	return NULL;
-}
 
 
 /**
@@ -94,11 +50,12 @@ void LV2Plugin::setPorts() {
 
     for( int long i = 0; i < numPorts; i++ ) {
 
-        Port port = createPort( i );
+        Audio::Port port = createPort( i );
 
-        //setPort( i, port );
+        //setAudio::Port( i, port );
 
     }
+
 
 };
 
@@ -133,9 +90,9 @@ void LV2Plugin::setLilvPlugin( const LilvPlugin * p ) {
  *
  */
 
-Port LV2Plugin::createPort( int long portNum ) {
+Audio::Port LV2Plugin::createPort( int long portNum ) {
 
-    //    const LilvPort * port = lilv_plugin_get_port_by_index( _lilvPlugin, portNum );
+    //    const LilvAudio::Port * port = lilv_plugin_get_port_by_index( _lilvPlugin, portNum );
     //
     //    const LilvPlugin* p = lilv_plugins_get(list, i);
     //
@@ -145,7 +102,75 @@ Port LV2Plugin::createPort( int long portNum ) {
 
     //init struct
 
-    Port portReturn;
+	//struct LV2::Port* const port = &_ports[portNum];
+
+//	const LilvNode* sym = lilv_port_get_symbol(_lilvPlugin, port->lilv_port);
+//
+//	/* Connect unsupported ports to NULL (known to be optional by this point) */
+//	if (port->flow == FLOW_UNKNOWN || port->type == TYPE_UNKNOWN) {
+//		lilv_instance_connect_port(jalv->instance, port_index, NULL);
+//		return;
+//	}
+//
+//	/* Build Jack flags for port */
+//	enum JackAudio::PortFlags jack_flags = (port->flow == FLOW_INPUT)
+//		? JackAudio::PortIsInput
+//		: JackAudio::PortIsOutput;
+//
+//	/* Connect the port based on its type */
+//	switch (port->type) {
+//	case TYPE_CONTROL:
+//		print_control_value(jalv, port, port->control);
+//		lilv_instance_connect_port(jalv->instance, port_index, &port->control);
+//		break;
+//	case TYPE_AUDIO:
+//		port->jack_port = jack_port_register(
+//			jalv->jack_client, lilv_node_as_string(sym),
+//			JACK_DEFAULT_AUDIO_TYPE, jack_flags, 0);
+//		break;
+//#ifdef HAVE_JACK_METADATA
+//	case TYPE_CV:
+//		port->jack_port = jack_port_register(
+//			jalv->jack_client, lilv_node_as_string(sym),
+//			JACK_DEFAULT_AUDIO_TYPE, jack_flags, 0);
+//		if (port->jack_port) {
+//			jack_set_property(jalv->jack_client, jack_port_uuid(port->jack_port),
+//			                  "http://jackaudio.org/metadata/signal-type", "CV",
+//			                  "text/plain");
+//		}
+//		break;
+//#endif
+//	case TYPE_EVENT:
+//		if (lilv_port_supports_event(
+//			    jalv->plugin, port->lilv_port, jalv->nodes.midi_MidiEvent)) {
+//			port->jack_port = jack_port_register(
+//				jalv->jack_client, lilv_node_as_string(sym),
+//				JACK_DEFAULT_MIDI_TYPE, jack_flags, 0);
+//		}
+//		break;
+//	default:
+//		break;
+//	}
+//
+//#ifdef HAVE_JACK_METADATA
+//	if (port->jack_port) {
+//		// Set port order to index
+//		char index_str[16];
+//		snprintf(index_str, sizeof(index_str), "%d", port_index);
+//		jack_set_property(jalv->jack_client, jack_port_uuid(port->jack_port),
+//		                  "http://jackaudio.org/metadata/order", index_str,
+//		                  "http://www.w3.org/2001/XMLSchema#integer");
+//
+//		// Set port pretty name to label
+//		LilvNode* name = lilv_port_get_name(jalv->plugin, port->lilv_port);
+//		jack_set_property(jalv->jack_client, jack_port_uuid(port->jack_port),
+//		                  JACK_METADATA_PRETTY_NAME, lilv_node_as_string(name),
+//		                  "text/plain");
+//		lilv_node_free(name);
+//	}
+//#endif
+
+    Audio::Port portReturn;
     return portReturn;
 
 };
@@ -161,43 +186,25 @@ void LV2Plugin::start() {
 
     int block_size = 512;
 
-    float* const buf = (float*)calloc(512 * 2, sizeof(float));
+	/* Build options array to pass to plugin */
 
-	URITable uri_table;
-    uri_table_init(&uri_table);
+	//const LV2_Options_Option options[] = {
+		//{ LV2_OPTIONS_INSTANCE, 0, jalv.urids.param_sampleRate,
+		  //sizeof(float), jalv.urids.atom_Float, &jalv.sample_rate },
+		//{ LV2_OPTIONS_INSTANCE, 0, jalv.urids.bufsz_minBlockLength,
+		  //sizeof(int32_t), jalv.urids.atom_Int, &jalv.block_length },
+		//{ LV2_OPTIONS_INSTANCE, 0, jalv.urids.bufsz_maxBlockLength,
+		  //sizeof(int32_t), jalv.urids.atom_Int, &jalv.block_length },
+		//{ LV2_OPTIONS_INSTANCE, 0, jalv.urids.bufsz_sequenceSize,
+		  //sizeof(int32_t), jalv.urids.atom_Int, &jalv.midi_buf_size },
+		//{ LV2_OPTIONS_INSTANCE, 0, jalv.urids.ui_updateRate,
+		  //sizeof(float), jalv.urids.atom_Float, &jalv.ui_update_hz },
+		//{ LV2_OPTIONS_INSTANCE, 0, 0, 0, 0, NULL }
 
-    static LilvNode* urid_map        = NULL;
+	//};
 
-    LV2_URID_Map       map           = { &uri_table, uri_table_map };
-    LV2_Feature        map_feature   = { LV2_URID_MAP_URI, &map };
-    LV2_URID_Unmap     unmap         = { &uri_table, uri_table_unmap };
-    LV2_Feature        unmap_feature = { LV2_URID_UNMAP_URI, &unmap };
-    const LV2_Feature* features[]    = { &map_feature, &unmap_feature, NULL };
-
-	float* const in  = buf;
-	float* const out = buf + block_size;
-	if (!buf) {
-		fprintf(stderr, "Out of memory\n");
-		return;
-	}
-
-    //LilvNodes* required = lilv_plugin_get_required_features(_lilvPlugin);
-	//LILV_FOREACH(nodes, i, required) {
-		//const LilvNode* feature = lilv_nodes_get(required, i);
-		//if (!lilv_node_equals(feature, urid_map)) {
-			//fprintf(stderr, "<%s> requires feature <%s>, skipping\n",
-					//_lilvURI, lilv_node_as_uri(feature));
-			//free(buf);
-			//return;
-		//}
-	//}
-
-    LilvInstance* instance = lilv_plugin_instantiate( _lilvPlugin, 48000.0, features );
-
-    if (!instance) {
-        fprintf(stderr, "Failed to instantiate <%s>\n",
-                lilv_node_as_uri(lilv_plugin_get_uri(_lilvPlugin)));
-        free(buf);
-    }
+     //Instantiate the plugin 
+	//jalv.instance = lilv_plugin_instantiate(
+		//jalv.plugin, jalv.sample_rate, features);
 
 };

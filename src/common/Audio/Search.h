@@ -11,6 +11,14 @@
 using std::vector;
 
 
+namespace Audio {
+
+
+/**
+ * Search base impl
+ *
+ */
+
 class Search {
 
     protected:
@@ -34,5 +42,7 @@ class Search {
             return pluginList;
 
         };
+
+};
 
 };

@@ -14,6 +14,7 @@
 #include <QMessageBox>
 
 #include <LV2/Search.h>
+#include <Audio/Plugin.h>
 
 #include "InstrumentOption.h"
 

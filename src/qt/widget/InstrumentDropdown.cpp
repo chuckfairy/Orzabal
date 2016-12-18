@@ -9,6 +9,8 @@
 #include "InstrumentOption.h"
 #include "InstrumentDropdown.h"
 
+using Audio::Plugin;
+
 
 /**
  * Constructor test
@@ -42,6 +44,7 @@ InstrumentDropdown::InstrumentDropdown() {
  * Constructor test
  *
  */
+
 InstrumentDropdown::InstrumentDropdown( QWidget * parent ) : QComboBox( parent ) {
 
 };
@@ -52,6 +55,7 @@ InstrumentDropdown::InstrumentDropdown( QWidget * parent ) : QComboBox( parent )
  * Will use list iterator
  *
  */
+
 bool InstrumentDropdown::addInstrument( InstrumentOption *instrument, const int order ) {
 
     addItem( instrument->name );

@@ -4,9 +4,14 @@
  */
 #include <vector>
 
+#include <Audio/Port.h>
+
 #include "OutputDropdown.h"
 
+
 using std::vector;
+
+using Audio::Port;
 
 
 /**

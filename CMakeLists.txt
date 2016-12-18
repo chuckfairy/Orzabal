@@ -4,6 +4,8 @@ project(gabrielo-all CXX)
 
 cmake_minimum_required( VERSION 2.7 )
 
+set(CMAKE_EXPORT_COMPILE_COMMANDS "ON")
+
 set( CMAKE_CXX_STANDARD 11 )
 
 project(gabrielo)
@@ -30,10 +32,12 @@ add_subdirectory( src/common/LADSPA )
 
 add_subdirectory( src/backend )
 
-#add_subdirectory( src/common/LV2 )
+add_subdirectory( src/common/LV2 )
 
 add_subdirectory( src/gui )
 
 add_subdirectory( src/qt )
+
+add_subdirectory( src/include/jalv )
 
 add_subdirectory( test )

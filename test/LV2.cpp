@@ -13,9 +13,9 @@ using namespace std;
 
 int main() {
 
-    Search * searcher = new LV2Search();
+    Audio::Search * searcher = new LV2Search();
 
-    vector<Plugin*> plugins = searcher->findAll();
+    vector<Audio::Plugin*> plugins = searcher->findAll();
 
     plugins[0]->start();
 

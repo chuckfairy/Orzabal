@@ -9,6 +9,8 @@
 
 #include "JackServer.h"
 
+using Audio::Port;
+
 
 /**
  * Construct

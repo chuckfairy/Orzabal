@@ -17,6 +17,9 @@ using std::map;
 using std::string;
 
 
+namespace Audio {
+
+
 /**
  * Base plugin class
  *
@@ -159,5 +162,7 @@ class Plugin {
          */
 
         virtual void start() { std::cout << "TESTERES"; };
+
+};
 
 };

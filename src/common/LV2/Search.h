@@ -19,15 +19,15 @@
 
 using std::vector;
 
-class LV2Search : public Search {
+class LV2Search : public Audio::Search {
 
     public:
 
         LV2Search();
 
-        vector<Plugin*> findAll() {
+        vector<Audio::Plugin*> findAll() {
 
-            vector<Plugin*> pluginList;
+            vector<Audio::Plugin*> pluginList;
 
             LilvWorld* world = lilv_world_new();
             lilv_world_load_all(world);
@@ -39,7 +39,7 @@ class LV2Search : public Search {
                 const LilvPlugin* p = lilv_plugins_get(plugins, i);
 
                 //Plugin * _p = new LV2Plugin( p );
-                Plugin * d = new LV2Plugin( p );
+                Audio::Plugin * d = new LV2Plugin( p );
 
                 pluginList.push_back( d );
 

@@ -32,8 +32,6 @@ add_library( gabrielo-common ${GABRIELO_COMMON_INCLUDE_FILES} )
 
 target_link_libraries( gabrielo-common dl )
 
-add_subdirectory( LV2 )
-
 #target_include_directories( gabrielo-common PUBLIC LV2 )
 
 target_link_libraries( gabrielo-common
