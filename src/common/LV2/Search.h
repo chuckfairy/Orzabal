@@ -15,6 +15,8 @@
 
 #include <lilv/lilv.h>
 
+#include "Host.h"
+
 #include "Plugin.h"
 
 using std::vector;
@@ -23,9 +25,13 @@ namespace LV2 {
 
 class Search : public Audio::Search {
 
+    private:
+
+        Host * _Host;
+
     public:
 
-        Search();
+        Search( Host * );
 
         vector<Audio::Plugin*> findAll();
 

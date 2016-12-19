@@ -40,7 +40,7 @@ install(TARGETS gabrielo-common-lv2
 include_directories( "/usr/local/lib" )
 
 target_link_libraries( gabrielo-common-lv2
-    lilv-0 suil-0 jack
+    lilv-0 suil-0 jack gabrielo-common-jack
 )
 
 target_include_directories( gabrielo-common-lv2

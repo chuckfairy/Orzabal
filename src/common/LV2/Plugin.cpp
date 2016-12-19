@@ -225,6 +225,13 @@ void Plugin::start() {
     //jalv.urids.time_speed           = symap_map(symap, LV2_TIME__speed);
     LV2_URID ui_updateRate = symap_map(symap, LV2_UI__updateRate);
 
+    block_length = jack_get_buffer_size( jack_client);
+
+    jalv.midi_buf_size = jack_port_type_get_buffer_size( jack_client, JACK_DEFAULT_MIDI_TYPE );
+
+    int sample_rate = jack_get_sample_rate( jack_client );
+
+
 
     /* Build options array to pass to plugin */
     const LV2_Options_Option options[] = {
@@ -310,8 +317,10 @@ void Plugin::start() {
         //activate_port(&jalv, i);
     //}
 
+
     /* Activate plugin */
-    lilv_instance_activate(jalv.instance);
+
+    lilv_instance_activate( _lilvInstance );
 
     /* Activate Jack */
     jack_activate(jalv.jack_client);

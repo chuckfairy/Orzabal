@@ -20,7 +20,9 @@ namespace LV2  {
  * Construct
  */
 
-Search::Search() {
+Search::Search( Host * h ) {
+
+    _Host = h;
 
 };
 
@@ -33,8 +35,6 @@ vector<Audio::Plugin*> Search::findAll() {
 
     vector<Audio::Plugin*> pluginList;
 
-    LilvWorld * world = lilv_world_new();
-    lilv_world_load_all(world);
 
     const LilvPlugins* plugins = lilv_world_get_all_plugins(world);
 
@@ -43,7 +43,7 @@ vector<Audio::Plugin*> Search::findAll() {
         const LilvPlugin* p = lilv_plugins_get(plugins, i);
 
         //Plugin * _p = new Plugin( p );
-        Audio::Plugin * d = new Plugin( p, world );
+        Audio::Plugin * d = new Plugin( p, _Host );
 
         pluginList.push_back( d );
 

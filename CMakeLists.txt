@@ -30,6 +30,8 @@ add_subdirectory( src/common/Audio )
 
 add_subdirectory( src/common/LADSPA )
 
+add_subdirectory( src/common/Jack )
+
 add_subdirectory( src/common/LV2 )
 
 add_subdirectory( src/backend )

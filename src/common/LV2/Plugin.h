@@ -31,6 +31,7 @@
 #include <Audio/Plugin.h>
 
 #include "include/types.h"
+#include "Host.h"
 
 #define NS_EXT "http://lv2plug.in/ns/ext/"
 
@@ -93,7 +94,7 @@ class Plugin : public Audio::Plugin {
 
     public:
 
-        Plugin( const LilvPlugin * p, LilvWorld * _lilvWorld );
+        Plugin( const LilvPlugin *, Host * );
 
         Audio::Port createPort( long portNum );
 

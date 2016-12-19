@@ -9,6 +9,17 @@ namespace Audio {
 
 class Host {
 
+    public:
+
+        Host() {};
+        ~Host() {};
+
+        virtual unsigned int getSampleRate() {
+
+            return 44100;
+
+        };
+
 };
 
 };
