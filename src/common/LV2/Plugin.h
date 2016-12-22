@@ -49,6 +49,10 @@ class Plugin : public Audio::Plugin {
 
     private:
 
+        /**
+         * lilv specific
+         */
+
         const LilvPlugin *  _lilvPlugin;
 
         LilvWorld * _lilvWorld;
@@ -58,6 +62,11 @@ class Plugin : public Audio::Plugin {
         const LV2_Descriptor * _lilvDescriptor;
 
         char _lilvURI[500];
+
+
+        /**
+         *  LV2 Feature options
+         */
 
         LV2_Feature uri_map_feature      = { NS_EXT "uri-map", NULL };
         LV2_Feature map_feature          = { LV2_URID__map, NULL };
@@ -69,8 +78,6 @@ class Plugin : public Audio::Plugin {
         LV2_Feature log_feature          = { LV2_LOG__log, NULL };
         LV2_Feature options_feature      = { LV2_OPTIONS__options, NULL };
         LV2_Feature def_state_feature    = { LV2_STATE__loadDefaultState, NULL };
-
-        //const LV2_URI_Map_Feature uri_map = { NULL, &uri_to_id };
 
         const LV2_Extension_Data_Feature ext_data = { NULL };
 
@@ -94,6 +101,11 @@ class Plugin : public Audio::Plugin {
             NULL
         };
 
+
+        /**
+         *  Instances
+         */
+
         Host * _Host;
 
         Symap * _symap;
@@ -111,6 +123,7 @@ class Plugin : public Audio::Plugin {
         float * _defaultValues;
 
         unsigned int buffer_size;
+
 
     protected:
 

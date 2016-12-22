@@ -12,7 +12,7 @@
 
 using namespace std;
 
-int main() {
+int main( int argc, char ** argv ) {
 
     JackServer * server = new JackServer();
 
@@ -24,7 +24,7 @@ int main() {
 
     vector<Audio::Plugin*> plugins = host->findAllPlugins();
 
-    plugins[100]->start();
+    plugins[200]->start();
 
     sleep(50);
 

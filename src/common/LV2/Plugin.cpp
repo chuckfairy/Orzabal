@@ -115,9 +115,11 @@ void Plugin::setLilvPlugin( const LilvPlugin * p ) {
 
 Audio::Port * Plugin::createPort( int long portNum ) {
 
-    LV2::Port * port = new LV2::Port();
+    Port * port = new LV2::Port();
 
     port->lilv_port = lilv_plugin_get_port_by_index( _lilvPlugin, portNum );
+
+    port->lilv_port;
 
 	port->jack_port = NULL;
     port->evbuf     = NULL;
@@ -128,7 +130,9 @@ Audio::Port * Plugin::createPort( int long portNum ) {
 
     const bool optional = portIsOptional( port );
 
+
 	/* Set the port flow (input or output) */
+
 	if( portIsInput( port ) ) {
 
 		port->flow = Audio::FLOW_INPUT;
@@ -371,7 +375,6 @@ void Plugin::stop() {
     //jalv_worker_finish(&jalv.worker);
 
     /* Deactivate JACK */
-    //jack_deactivate(jalv.jack_client);
     //for (uint32_t i = 0; i < numPorts; ++i) {
         //if (jalv.ports[i].evbuf) {
             //lv2_evbuf_free(jalv.ports[i].evbuf);
@@ -379,17 +382,13 @@ void Plugin::stop() {
     //}
 
     /* Deactivate plugin */
-    //suil_instance_free(jalv.ui_instance);
     lilv_instance_deactivate( _lilvInstance );
     lilv_instance_free( _lilvInstance );
 
     /* Clean up */
-//    free(jalv.ports);
 //    jack_ringbuffer_free(jalv.ui_events);
 //    jack_ringbuffer_free(jalv.plugin_events);
-    //for (LilvNode** n = (LilvNode**)&jalv.nodes; *n; ++n) {
-        //lilv_node_free(*n);
-    //}
+
     symap_free( _symap );
     zix_sem_destroy( &_symap_lock );
     sratom_free( _sratom );
@@ -398,13 +397,12 @@ void Plugin::stop() {
     zix_sem_destroy( &exit_sem );
 
     remove( _tempDir );
-    //free( _tempDir );
 
 };
 
 
 /**
- * Activations
+ * Port activations
  */
 
 void Plugin::activatePorts() {
@@ -423,11 +421,21 @@ void Plugin::activatePort( long portNum ) {
 
     const LilvNode* sym = lilv_port_get_symbol( _lilvPlugin, port->lilv_port );
 
+    char nameChar[25];
+
+    sprintf( nameChar, "%s:%s", name, lilv_node_as_string( sym ) );
+
+    string name( nameChar );
+
+    port->name = name.c_str();
+
+    std::cout << "TEST\n" << port->name;
+
 
 	/* Connect unsupported ports to NULL (known to be optional by this point) */
 
 	if (port->flow == Audio::FLOW_UNKNOWN || port->type == Audio::TYPE_UNKNOWN) {
-		lilv_instance_connect_port(_lilvInstance, portNum, NULL);
+        lilv_instance_connect_port( _lilvInstance, portNum, NULL );
 		return;
 	}
 
@@ -445,19 +453,18 @@ void Plugin::activatePort( long portNum ) {
     switch( port->type ) {
 
         case Audio::TYPE_CONTROL:
-            //print_control_value(port, port->control);
             lilv_instance_connect_port( _lilvInstance, portNum, &port->control);
             break;
 
         case Audio::TYPE_AUDIO:
             port->jack_port = jack_port_register(
-                    jack_client, lilv_node_as_string(sym),
+                    jack_client, port->name,
                     JACK_DEFAULT_AUDIO_TYPE, jack_flags, 0);
             break;
 
         case Audio::TYPE_CV:
             port->jack_port = jack_port_register(
-                    jack_client, lilv_node_as_string(sym),
+                    jack_client, port->name,
                     JACK_DEFAULT_AUDIO_TYPE, jack_flags, 0);
             if (port->jack_port) {
                 jack_set_property(jack_client, jack_port_uuid(port->jack_port),
@@ -470,12 +477,13 @@ void Plugin::activatePort( long portNum ) {
             if( lilv_port_supports_event(
                         _lilvPlugin, port->lilv_port, midi_MidiEvent ) ) {
                 port->jack_port = jack_port_register(
-                        jack_client, lilv_node_as_string(sym),
+                        jack_client, port->name,
                         JACK_DEFAULT_MIDI_TYPE, jack_flags, 0);
             }
             break;
 
-        default: case Audio::TYPE_UNKNOWN: break;
+        default: case Audio::TYPE_UNKNOWN:
+            break;
 
     }
 
