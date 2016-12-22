@@ -12,13 +12,11 @@ find_package( JACK )
 #set( GABRIELO_LV2_INCLUDE_FILES )
 file( GLOB
     GABRIELO_LV2_INCLUDE_FILES
-    "Plugin.h"
-    "Plugin.cpp"
-    "Search.h"
-    "Search.cpp"
-    "include/symap.h"
+    "include/*.h"
     "include/symap.c"
-    "UI.h"
+    "Plugin.cpp"
+    "Host.cpp"
+    "Search.cpp"
     "UI.cpp"
 )
 
@@ -40,11 +38,14 @@ install(TARGETS gabrielo-common-lv2
 include_directories( "/usr/local/lib" )
 
 target_link_libraries( gabrielo-common-lv2
-    lilv-0 suil-0 jack gabrielo-common-jack
+    lilv-0 suil-0 jack sratom-0 serd-0 sord-0
+    gabrielo-common-jack
 )
 
 target_include_directories( gabrielo-common-lv2
-    PUBLIC "/usr/local/include/lilv-0" "/usr/include/suil-0" ".."
+    PUBLIC "/usr/local/include/lilv-0" "/usr/include/suil-0" "/usr/local/include/sratom-0"
+    "/usr/local/include/serd-0" "/usr/include/sord-0"
+    ".."
 )
 
 install( TARGETS

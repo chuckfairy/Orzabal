@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <iostream>
 
+#include <Server/JackServer.h>
 #include <Audio/Search.h>
 #include <LV2/Plugin.h>
 #include <LV2/Search.h>
@@ -13,11 +14,19 @@ using namespace std;
 
 int main() {
 
-    Audio::Search * searcher = new LV2::Search();
+    JackServer * server = new JackServer();
 
-    vector<Audio::Plugin*> plugins = searcher->findAll();
+    server->start();
 
-    plugins[0]->start();
+    server->connectDefault();
+
+    LV2::Host * host = new LV2::Host( server->getJackClient() );
+
+    vector<Audio::Plugin*> plugins = host->findAllPlugins();
+
+    plugins[100]->start();
+
+    sleep(50);
 
     //vector<Plugin>::iterator it;
 

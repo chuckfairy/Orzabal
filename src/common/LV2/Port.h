@@ -17,19 +17,21 @@ namespace LV2 {
 
 struct Port : public Audio::Port {
 
-    const LilvPort* lilv_port;
+    const LilvPort * lilv_port;
 
-    jack_port_t*    jack_port;
+    jack_port_t * jack_port;
 
     //LV2_Evbuf*      evbuf;      ///< For MIDI ports, otherwise NULL
 
-    void*           widget;     ///< Control widget, if applicable
+    void * widget;
 
-    size_t          buf_size;   ///< Custom buffer size, or 0
+    size_t buf_size;
 
-    uint32_t        index;      ///< Port index
+    uint32_t index;
 
-    bool            old_api;    ///< True for event, false for atom
+    void * evbuf;
+
+    int old_api;
 
 };
 

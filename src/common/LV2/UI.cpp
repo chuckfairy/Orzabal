@@ -111,6 +111,11 @@ void UI::start() {
 
 void UI::stop() {
 
+    suil_host_free( _uiSuil );
+    sratom_free( _uiSratom );
+    lilv_uis_free( _lilvUIS );
+    free( _uiEventBuf );
+
 };
 
 

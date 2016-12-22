@@ -4,9 +4,15 @@
  */
 #pragma once
 
-#include <Jack/Host.h>
+#include <vector>
 
-#include "Search.h"
+#include <lilv/lilv.h>
+
+#include <Jack/Host.h>
+#include <Audio/Plugin.h>
+
+
+using std::vector;
 
 
 namespace LV2 {
@@ -22,11 +28,30 @@ class Host : public Jack::Host {
 
         LilvWorld * _lilvWorld;
 
-        Search * _Search;
-
     public:
 
-        Host( jack_client_t * c ) : Jack::Host( c );
+        Host( jack_client_t * c );
+
+
+        /**
+         * Lilv specific
+         */
+
+        LilvWorld * getLilvWorld() {
+
+            return  _lilvWorld;
+
+        };
+
+
+        /**
+         * Search methods
+         */
+
+        void setSearch();
+
+        vector<Audio::Plugin*> findAllPlugins();
+
 
 };
 

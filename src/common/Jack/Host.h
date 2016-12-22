@@ -21,6 +21,7 @@ class Host : public Audio::Host {
 
         jack_client_t * _JackClient;
 
+
     public:
 
         Host( jack_client_t * );
@@ -57,6 +58,12 @@ class Host : public Audio::Host {
         void setJackClient( jack_client_t * c ) {
 
             _JackClient = c;
+
+        };
+
+        jack_client_t * getJackClient() {
+
+            return _JackClient;
 
         };
 

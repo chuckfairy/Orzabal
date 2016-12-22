@@ -38,8 +38,8 @@ add_subdirectory( src/backend )
 
 add_subdirectory( src/gui )
 
-add_subdirectory( src/qt )
+#add_subdirectory( src/qt )
 
-add_subdirectory( src/include/jalv )
+#add_subdirectory( src/include/jalv )
 
 add_subdirectory( test )

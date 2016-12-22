@@ -11,6 +11,7 @@
 #include <Audio/Plugin.h>
 
 #include "Search.h"
+#include "Plugin.h"
 
 
 namespace LV2  {
@@ -24,6 +25,8 @@ Search::Search( Host * h ) {
 
     _Host = h;
 
+    setLilvWorld( _Host->getLilvWorld() );
+
 };
 
 
@@ -35,10 +38,9 @@ vector<Audio::Plugin*> Search::findAll() {
 
     vector<Audio::Plugin*> pluginList;
 
+    const LilvPlugins* plugins = lilv_world_get_all_plugins( _lilvWorld );
 
-    const LilvPlugins* plugins = lilv_world_get_all_plugins(world);
-
-    LILV_FOREACH(plugins, i, plugins) {
+    LILV_FOREACH( plugins, i, plugins ) {
 
         const LilvPlugin* p = lilv_plugins_get(plugins, i);
 

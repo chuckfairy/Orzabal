@@ -19,5 +19,4 @@ Host::Host( jack_client_t * c ) {
 
 };
 
-
 };

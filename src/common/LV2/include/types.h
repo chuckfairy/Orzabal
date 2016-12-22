@@ -22,41 +22,39 @@
 */
 #define N_BUFFER_CYCLES 16
 
-ZixSem exit_sem;  /**< Exit semaphore */
+  /**< Exit semaphore */
 
-static LV2_URID
-map_uri(LV2_URID_Map_Handle handle,
-        const char*         uri)
-{
-	Jalv* jalv = (Jalv*)handle;
-	zix_sem_wait(&jalv->symap_lock);
-	const LV2_URID id = symap_map(jalv->symap, uri);
-	zix_sem_post(&jalv->symap_lock);
-	return id;
-}
+//static LV2_URID map_uri(
+    //LV2_URID_Map_Handle handle,
+    //const char * uri
+//) {
+	//zix_sem_wait(&jalv->symap_lock);
+	//const LV2_URID id = symap_map(jalv->symap, uri);
+	//zix_sem_post(&jalv->symap_lock);
+	//return id;
+//}
 
-static const char*
-unmap_uri(LV2_URID_Unmap_Handle handle,
-          LV2_URID              urid)
-{
-	Jalv* jalv = (Jalv*)handle;
-	zix_sem_wait(&jalv->symap_lock);
-	const char* uri = symap_unmap(jalv->symap, urid);
-	zix_sem_post(&jalv->symap_lock);
-	return uri;
-}
+//static const char*
+//unmap_uri(LV2_URID_Unmap_Handle handle,
+          //LV2_URID              urid)
+//{
+	//Jalv* jalv = (Jalv*)handle;
+	//zix_sem_wait(&jalv->symap_lock);
+	//const char* uri = symap_unmap(jalv->symap, urid);
+	//zix_sem_post(&jalv->symap_lock);
+	//return uri;
+//}
 
 /**
    Map function for URI map extension.
 */
-static uint32_t
-uri_to_id(LV2_URI_Map_Callback_Data callback_data,
-          const char*               map,
-          const char*               uri)
-{
-	Jalv* jalv = (Jalv*)callback_data;
-	zix_sem_wait(&jalv->symap_lock);
-	const LV2_URID id = symap_map(jalv->symap, uri);
-	zix_sem_post(&jalv->symap_lock);
-	return id;
-}
+//static uint32_t uri_to_id(LV2_URI_Map_Callback_Data callback_data,
+          //const char*               map,
+          //const char*               uri)
+//{
+//	Jalv* jalv = (Jalv*)callback_data;
+	//zix_sem_wait(&jalv->symap_lock);
+	//const LV2_URID id = symap_map(symap, uri);
+	//zix_sem_post(&jalv->symap_lock);
+	//return id;
+//}

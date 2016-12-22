@@ -8,32 +8,48 @@
 #include <stdio.h>
 #include <string.h>
 #include <iostream>
-
-#include <Audio/Plugin.h>
-
-#include <Audio/Search.h>
-
 #include <lilv/lilv.h>
 
-#include "Host.h"
+#include <Audio/Host.h>
+#include <Audio/Plugin.h>
+#include <Audio/Search.h>
 
 #include "Plugin.h"
 
 using std::vector;
 
+
 namespace LV2 {
+
+
+/**
+ * Search extension
+ */
 
 class Search : public Audio::Search {
 
     private:
 
-        Host * _Host;
+        LV2::Host * _Host;
+
+        LilvWorld * _lilvWorld;
 
     public:
 
-        Search( Host * );
+        Search( Host * h );
 
         vector<Audio::Plugin*> findAll();
+
+
+        /**
+         * Lilv host specific
+         */
+
+        void setLilvWorld( LilvWorld * w ) {
+
+            _lilvWorld = w;
+
+        };
 
 };
 

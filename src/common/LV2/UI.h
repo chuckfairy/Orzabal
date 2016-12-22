@@ -5,6 +5,8 @@
 #pragma once
 
 #include <lilv/lilv.h>
+#include <suil/suil.h>
+#include <sratom/sratom.h>
 
 #include <Audio/UI.h>
 
@@ -21,7 +23,7 @@ class UI : public Audio::UI {
 
     private:
 
-        const LilvUIs * _lilvUIS;
+        LilvUIs * _lilvUIS;
 
         const LilvUI * _lilvUI;
 
@@ -32,6 +34,12 @@ class UI : public Audio::UI {
         LilvNode * getExternalKX();
 
         LilvNode * getExternalLV2();
+
+        SuilHost * _uiSuil;
+
+        Sratom * _uiSratom;
+
+        void * _uiEventBuf;
 
     protected:
 

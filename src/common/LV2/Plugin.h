@@ -8,30 +8,37 @@
 #include <string.h>
 
 #include <lv2/lv2plug.in/ns/ext/atom/atom.h>
+#include <lv2/lv2plug.in/ns/ext/atom/forge.h>
 #include <lv2/lv2plug.in/ns/ext/buf-size/buf-size.h>
 #include <lv2/lv2plug.in/ns/ext/data-access/data-access.h>
 #include <lv2/lv2plug.in/ns/ext/event/event.h>
+#include <lv2/lv2plug.in/ns/ext/log/log.h>
+#include <lv2/lv2plug.in/ns/ext/midi/midi.h>
 #include <lv2/lv2plug.in/ns/ext/options/options.h>
 #include <lv2/lv2plug.in/ns/ext/parameters/parameters.h>
 #include <lv2/lv2plug.in/ns/ext/patch/patch.h>
 #include <lv2/lv2plug.in/ns/ext/port-groups/port-groups.h>
 #include <lv2/lv2plug.in/ns/ext/port-props/port-props.h>
 #include <lv2/lv2plug.in/ns/ext/presets/presets.h>
+#include <lv2/lv2plug.in/ns/ext/resize-port/resize-port.h>
 #include <lv2/lv2plug.in/ns/ext/state/state.h>
 #include <lv2/lv2plug.in/ns/ext/time/time.h>
 #include <lv2/lv2plug.in/ns/ext/uri-map/uri-map.h>
 #include <lv2/lv2plug.in/ns/ext/urid/urid.h>
 #include <lv2/lv2plug.in/ns/ext/worker/worker.h>
 #include <lv2/lv2plug.in/ns/extensions/ui/ui.h>
-#include <lv2/lv2plug.in/ns/ext/log/log.h>
-
 
 #include <lilv/lilv.h>
+#include <suil/suil.h>
+#include <sratom/sratom.h>
 
 #include <Audio/Plugin.h>
 
 #include "include/types.h"
+#include "include/symap.h"
+#include "include/semaphone.h"
 #include "Host.h"
+#include "Port.h"
 
 #define NS_EXT "http://lv2plug.in/ns/ext/"
 
@@ -63,7 +70,7 @@ class Plugin : public Audio::Plugin {
         LV2_Feature options_feature      = { LV2_OPTIONS__options, NULL };
         LV2_Feature def_state_feature    = { LV2_STATE__loadDefaultState, NULL };
 
-        const LV2_URI_Map_Feature uri_map = { NULL, &uri_to_id };
+        //const LV2_URI_Map_Feature uri_map = { NULL, &uri_to_id };
 
         const LV2_Extension_Data_Feature ext_data = { NULL };
 
@@ -71,7 +78,8 @@ class Plugin : public Audio::Plugin {
         const LV2_Feature buf_size_features[3] = {
             { LV2_BUF_SIZE__powerOf2BlockLength, NULL },
             { LV2_BUF_SIZE__fixedBlockLength, NULL },
-            { LV2_BUF_SIZE__boundedBlockLength, NULL } };
+            { LV2_BUF_SIZE__boundedBlockLength, NULL }
+        };
 
         const LV2_Feature* features[12] = {
             &uri_map_feature, &map_feature, &unmap_feature,
@@ -86,6 +94,23 @@ class Plugin : public Audio::Plugin {
             NULL
         };
 
+        Host * _Host;
+
+        Symap * _symap;
+
+        ZixSem _symap_lock;
+
+        ZixSem exit_sem;
+
+        Sratom * _sratom;
+
+        const char * _tempDir = "/tmp/gabrielo-lv2";
+
+        size_t longest_sym;
+
+        float * _defaultValues;
+
+        unsigned int buffer_size;
 
     protected:
 
@@ -94,9 +119,7 @@ class Plugin : public Audio::Plugin {
 
     public:
 
-        Plugin( const LilvPlugin *, Host * );
-
-        Audio::Port createPort( long portNum );
+        Plugin( const LilvPlugin * p, Host * h );
 
 
         /**
@@ -107,6 +130,39 @@ class Plugin : public Audio::Plugin {
         void setPorts();
 
         void start();
+
+        void stop();
+
+
+        /**
+         * Port creation and actions
+         */
+
+        Audio::Port * createPort( long portNum );
+
+        void activatePorts();
+
+        void activatePort( long portNum );
+
+        void allocatePortBuffers();
+
+        const bool portIsOptional( Port * );
+
+        const bool portIs( Port *, const char * );
+
+        const bool portIsAudio( Port * );
+
+        const bool portIsInput( Port * );
+
+        const bool portIsOutput( Port * );
+
+        const bool portIsControl( Port * );
+
+        const bool portIsEvent( Port * );
+
+        const bool portIsAtom( Port * );
+
+        const bool portIsCV( Port * );
 
 
         /**
@@ -120,6 +176,19 @@ class Plugin : public Audio::Plugin {
         };
 
         void setLilvPlugin( const LilvPlugin* p );
+
+
+        /**
+         * Host related
+         */
+
+        void setHost( Host * h ) {
+
+            _Host = h;
+
+            setLilvWorld( h->getLilvWorld() );
+
+        };
 
 
         /**

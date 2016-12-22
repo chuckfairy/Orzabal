@@ -35,7 +35,7 @@ class Plugin {
 
         uint32_t _portsNum;
 
-        map<long, Port> _ports;
+        map<long, Port*> _ports;
 
         vector<long> _audioPorts;
 
@@ -46,6 +46,8 @@ class Plugin {
         vector<long> _controlPorts;
 
         char name[255];
+
+        int long _numPorts;
 
 
     public:
@@ -140,7 +142,11 @@ class Plugin {
          *
          */
 
-        void setPort( long index, Port port );
+        void setPort( long index, Port * port ) {
+
+            _ports[ index ] = port;
+
+        };
 
 
         /**
@@ -148,9 +154,9 @@ class Plugin {
          *
          */
 
-        virtual Port createPort( long portNum ) {
+        virtual Port * createPort( long portNum ) {
 
-            Port p;
+            Port * p = new Port;
 
             return p;
 
