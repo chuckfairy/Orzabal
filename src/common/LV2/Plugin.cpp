@@ -51,8 +51,6 @@ Plugin::Plugin( const LilvPlugin* p, Host * h ) {
 
     setLilvPlugin( p );
 
-    _UI = new UI( this );
-
 };
 
 
@@ -121,8 +119,6 @@ Audio::Port * Plugin::createPort( int long portNum ) {
     Port * port = new LV2::Port();
 
     port->lilv_port = lilv_plugin_get_port_by_index( _lilvPlugin, portNum );
-
-    port->lilv_port;
 
 	port->jack_port = NULL;
     port->evbuf     = NULL;
@@ -319,6 +315,8 @@ void Plugin::start() {
     }
 
     activatePorts();
+
+    _UI = new UI( this );
 
     _UI->start();
 

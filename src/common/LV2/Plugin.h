@@ -247,6 +247,12 @@ class Plugin : public Audio::Plugin {
 
         };
 
+        LilvInstance * getLilvInstance() {
+
+            return _lilvInstance;
+
+        };
+
 };
 
 };

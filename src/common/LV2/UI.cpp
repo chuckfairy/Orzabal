@@ -8,7 +8,9 @@
 #include <lilv/lilv.h>
 #include <suil/suil.h>
 
-#include <QtWidgets/QMainWindow>
+#include <QWindow>
+#include <QGuiApplication>
+#include <QApplication>
 
 #include "UI.h"
 #include "Plugin.h"
@@ -29,6 +31,8 @@ UI::UI( Plugin * p ) {
 
     setLilvWorld( p->getLilvWorld() );
 
+    setLilvInstance( p->getLilvInstance() );
+
 };
 
 
@@ -41,11 +45,9 @@ void UI::start() {
 
     // Get a plugin UI
 
-    const char * native_ui_type_uri = getNativeUiType();
-
     _lilvUIS = lilv_plugin_get_uis( _lilvPlugin );
 
-    const LilvNode* native_ui_type = lilv_new_uri( _lilvWorld, native_ui_type_uri );
+    const LilvNode* native_ui_type = lilv_new_uri( _lilvWorld, _NATIVE_UI_TYPE );
 
     LILV_FOREACH(uis, u, _lilvUIS) {
 
@@ -56,13 +58,14 @@ void UI::start() {
             _lilvUI = this_ui;
             break;
         }
+
     }
 
     //} else {
 
-        //_lilvUI = lilv_uis_get( _lilvUIS, lilv_uis_begin( _lilvUIS ) );
+    //} REMOVE
 
-    //}
+    //_lilvUI = lilv_uis_get( _lilvUIS, lilv_uis_begin( _lilvUIS ) );
 
     if( ! _lilvUI ) {
 
@@ -109,6 +112,8 @@ void UI::start() {
         fprintf(stderr, "UI: None\n");
 
     }
+
+    createUI();
 
 };
 
@@ -186,7 +191,7 @@ void UI::update() {
 
 void UI::createUI() {
 
-    QMainWindow* win = new QMainWindow();
+    win = new QWindow();
 
     _uiSuil = suil_host_new( UI::suilUIWrite, UI::suilPortIndex, NULL, NULL);
 
@@ -205,6 +210,7 @@ void UI::createUI() {
     const LV2_Feature idle_feature = {
         LV2_UI__idleInterface, NULL
     };
+
     const LV2_Feature* ui_features[] = {
         &uri_map_feature, &map_feature, &unmap_feature,
         &instance_feature,
@@ -261,7 +267,7 @@ void UI::createUI() {
         _uiInstance = suil_instance_new(
             _uiSuil,
             this,
-            getNativeUiType(),
+            _NATIVE_UI_TYPE,
             lilv_node_as_uri( lilv_plugin_get_uri( _lilvPlugin ) ),
             lilv_node_as_uri( lilv_ui_get_uri( _lilvUI ) ),
             lilv_node_as_uri( _uiType ),
@@ -281,9 +287,11 @@ void UI::createUI() {
         }
 
     } else {
+
         const LV2_Feature parent_feature = {
             LV2_UI__parent, win
         };
+
         const LV2_Feature instance_feature = {
             NS_EXT "instance-access", lilv_instance_get_handle( _lilvInstance )
         };
@@ -291,6 +299,7 @@ void UI::createUI() {
         const LV2_Feature data_feature = {
             LV2_DATA_ACCESS_URI, &ext_data
         };
+
         const LV2_Feature* ui_features[] = {
             &uri_map_feature, &map_feature, &unmap_feature,
             &instance_feature,
@@ -301,13 +310,17 @@ void UI::createUI() {
             NULL
         };
 
+        const char * p = lilv_node_as_uri( lilv_plugin_get_uri( _lilvPlugin ) );
+        const char * ui  = lilv_node_as_uri( lilv_ui_get_uri( _lilvUI ) );
+        const char * t = lilv_node_as_uri( _uiType );
+
         _uiInstance = suil_instance_new(
             _uiSuil,
             this,
-            UI::getNativeUiType(),
-            lilv_node_as_uri( lilv_plugin_get_uri( _lilvPlugin ) ),
-            lilv_node_as_uri( lilv_ui_get_uri( _lilvUI ) ),
-            lilv_node_as_uri( _uiType ),
+            _NATIVE_UI_TYPE,
+            p,
+            ui,
+            t,
             bundle_path,
             binary_path,
             ui_features
@@ -372,17 +385,6 @@ bool UI::hasResize() {
     lilv_node_free( p );
 
     return !fs_matches && !nrs_matches;
-
-};
-
-
-/**
- * UI type base get
- */
-
-const char * UI::getNativeUiType() {
-
-    return "http://lv2plug.in/ns/extensions/ui#Qt4UI";
 
 };
 

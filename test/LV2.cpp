@@ -9,10 +9,13 @@
 #include <Audio/Search.h>
 #include <LV2/Plugin.h>
 #include <LV2/Search.h>
+#include <QApplication>
 
 using namespace std;
 
 int main( int argc, char ** argv ) {
+
+    QApplication app(argc, argv);
 
     JackServer * server = new JackServer();
 

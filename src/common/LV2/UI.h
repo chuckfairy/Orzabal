@@ -29,6 +29,9 @@
 #include <suil/suil.h>
 #include <sratom/sratom.h>
 
+#include <QtWidgets/QMainWindow>
+#include <QApplication>
+
 #include <Audio/UI.h>
 
 #include "include/types.h"
@@ -74,8 +77,6 @@ class UI : public Audio::UI {
          * UI Instances
          */
 
-        bool _EXTERNAL_UI;
-
         SuilHost * _uiSuil;
 
         SuilInstance * _uiInstance;
@@ -100,6 +101,13 @@ class UI : public Audio::UI {
         LV2_Feature log_feature          = { LV2_LOG__log, NULL };
         LV2_Feature options_feature      = { LV2_OPTIONS__options, NULL };
 
+        QApplication * app;
+
+        QWindow * win;
+
+        QGuiApplication * g;
+
+
 
     protected:
 
@@ -118,8 +126,6 @@ class UI : public Audio::UI {
 
         LilvNode * getExternalLV2();
 
-        static const char * getNativeUiType();
-
 
         /**
          *  Lilv loading
@@ -137,6 +143,12 @@ class UI : public Audio::UI {
 
         };
 
+        void setLilvInstance( LilvInstance * i ) {
+
+            _lilvInstance = i;
+
+        };
+
         static void suilUIWrite(
             SuilController controller,
             uint32_t port_index,
@@ -149,6 +161,11 @@ class UI : public Audio::UI {
         static uint32_t suilPortIndex( SuilController, const char * );
 
         static Port * portBySymbol( Plugin *, const char * );
+
+
+        bool _EXTERNAL_UI;
+
+        const char * _NATIVE_UI_TYPE = "http://lv2plug.in/ns/extensions/ui#Qt4UI";
 
 
     public:
