@@ -29,6 +29,8 @@ int main( int argc, char ** argv ) {
 
     plugins[200]->start();
 
+    int exe = app.exec();
+
     sleep(50);
 
     //vector<Plugin>::iterator it;

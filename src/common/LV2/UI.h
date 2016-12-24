@@ -103,7 +103,7 @@ class UI : public Audio::UI {
 
         QApplication * app;
 
-        QWindow * win;
+        QMainWindow * win;
 
         QGuiApplication * g;
 
@@ -116,6 +116,12 @@ class UI : public Audio::UI {
          */
 
         LV2::Plugin * _Plugin;
+
+        void setPlugin( Plugin * p ) {
+
+            _Plugin = p;
+
+        };
 
 
         /**
@@ -149,6 +155,12 @@ class UI : public Audio::UI {
 
         };
 
+
+
+        /**
+         * Suil statics
+         */
+
         static void suilUIWrite(
             SuilController controller,
             uint32_t port_index,
@@ -162,10 +174,9 @@ class UI : public Audio::UI {
 
         static Port * portBySymbol( Plugin *, const char * );
 
-
         bool _EXTERNAL_UI;
 
-        const char * _NATIVE_UI_TYPE = "http://lv2plug.in/ns/extensions/ui#Qt4UI";
+        const char * _NATIVE_UI_TYPE = "http://lv2plug.in/ns/extensions/ui#Qt5UI";
 
 
     public:
@@ -196,7 +207,30 @@ class UI : public Audio::UI {
 
         void createUI();
 
+        void createQt();
 
+        void createNativeUI();
+
+        QWidget * createControlWidget();
+
+        bool portGroupLessThan( const PortContainer &p1, const PortContainer &p2 );
+
+
+        /**
+         * Lilv getters
+         */
+
+        const LilvPlugin * getLilvPlugin() {
+
+            return _lilvPlugin;
+
+        };
+
+        LilvWorld * getLilvWorld() {
+
+            return _lilvWorld;
+
+        };
 
 };
 

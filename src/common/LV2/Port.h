@@ -9,6 +9,11 @@
 
 namespace LV2 {
 
+/**
+ * Class forwarding
+ */
+class UI;
+
 
 /**
  * LV2 Port
@@ -33,6 +38,16 @@ struct Port : public Audio::Port {
 
     int old_api;
 
+};
+
+
+/**
+ * Conatiner
+ */
+
+struct PortContainer {
+	UI * ui;
+	Port* port;
 };
 
 };

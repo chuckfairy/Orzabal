@@ -11,9 +11,17 @@
 #include <QWindow>
 #include <QGuiApplication>
 #include <QApplication>
+#include <QScrollArea>
+#include <QWidget>
+#include <QLayout>
+#include <QGroupBox>
+#include <QStyle>
+#include <QDial>
+#include <QLabel>
 
 #include "UI.h"
 #include "Plugin.h"
+#include "WindowLayout.h"
 
 
 namespace LV2 {
@@ -191,7 +199,23 @@ void UI::update() {
 
 void UI::createUI() {
 
-    win = new QWindow();
+    win = new QMainWindow();
+
+    if( ! _lilvUI ) {
+
+        createQt();
+
+    } else {
+
+        createNativeUI();
+
+    }
+
+    win->show();
+
+}
+
+void UI::createNativeUI() {
 
     _uiSuil = suil_host_new( UI::suilUIWrite, UI::suilPortIndex, NULL, NULL);
 
@@ -264,6 +288,8 @@ void UI::createUI() {
             NULL
         };
 
+        return;
+
         _uiInstance = suil_instance_new(
             _uiSuil,
             this,
@@ -314,6 +340,8 @@ void UI::createUI() {
         const char * ui  = lilv_node_as_uri( lilv_ui_get_uri( _lilvUI ) );
         const char * t = lilv_node_as_uri( _uiType );
 
+        return;
+
         _uiInstance = suil_instance_new(
             _uiSuil,
             this,
@@ -350,7 +378,106 @@ void UI::createUI() {
 
     }
 
-}
+};
+
+void UI::createQt() {
+
+	QScrollArea* widget = new QScrollArea();
+
+    QWidget* controlWidget = createControlWidget();
+
+    ((QScrollArea*)widget)->setWidget(controlWidget);
+
+    ((QScrollArea*)widget)->setWidgetResizable(true);
+
+    widget->setMinimumWidth(800);
+
+    widget->setMinimumHeight(600);
+
+	win->setCentralWidget(widget);
+
+};
+
+QWidget * UI::createControlWidget() {
+
+	QList<PortContainer> portContainers;
+
+    int numPorts = _Plugin->getNumPorts();
+
+    for( int i = 0; i < _Plugin->getNumPorts(); i ++ ) {
+
+        Port * port = (Port*)_Plugin->getPort( i );
+
+		if( port->type == Audio::TYPE_CONTROL ) {
+
+            PortContainer portContainer;
+            portContainer.ui = this;
+            portContainer.port = port;
+            portContainers.append( portContainer );
+
+        }
+
+    }
+
+    QWidget* grid = new QWidget();
+    FlowLayout* flowLayout = new FlowLayout();
+    QLayout* layout = flowLayout;
+
+    LilvNode * lastGroup = NULL;
+    QHBoxLayout * groupLayout;
+
+    LilvNode * pg_group = lilv_new_uri( _lilvWorld, LV2_PORT_GROUPS__group);
+    LilvNode * lv2_name = lilv_new_uri( _lilvWorld, LV2_CORE__name );
+    LilvNode* pprop_notOnGUI = lilv_new_uri( _lilvWorld, LV2_PORT_PROPS__notOnGUI );
+
+
+    for (int i = 0; i < portContainers.count(); ++i) {
+
+        PortContainer portContainer = portContainers[i];
+        Port* port = portContainer.port;
+
+        Control*  control = new Control( portContainer );
+        LilvNode* group = lilv_port_get( _lilvPlugin, port->lilv_port, pg_group );
+
+        if( group ) {
+
+            if (!lilv_node_equals(group, lastGroup)) {
+
+                /* Group has changed */
+
+                LilvNode* groupName = lilv_world_get( _lilvWorld, group, lv2_name, NULL );
+
+                QGroupBox* groupBox = new QGroupBox(lilv_node_as_string(groupName));
+
+                groupLayout = new QHBoxLayout();
+                groupBox->setLayout(groupLayout);
+                layout->addWidget(groupBox);
+
+            }
+
+            groupLayout->addWidget( control );
+
+        } else {
+
+            layout->addWidget( (QGroupBox*) control );
+
+        }
+
+        lastGroup = group;
+
+        uint32_t index = lilv_port_get_index( _lilvPlugin, port->lilv_port );
+
+        port->widget = control;
+
+    }
+
+    grid->setLayout(layout);
+
+    lilv_node_free(pprop_notOnGUI);
+
+    return grid;
+
+};
 
 
 /**
@@ -419,19 +546,19 @@ LilvNode * UI::getExternalLV2() {
 
 Port * UI::portBySymbol( Plugin * p, const char * sym ) {
 
-	for ( uint32_t i = 0; i < p->getNumPorts(); ++ i ) {
+    for ( uint32_t i = 0; i < p->getNumPorts(); ++ i ) {
 
-		Port * port = (Port*) p->getPort( i );
+        Port * port = (Port*) p->getPort( i );
 
-		const LilvNode* port_sym = lilv_port_get_symbol( p->getLilvPlugin(), port->lilv_port );
+        const LilvNode* port_sym = lilv_port_get_symbol( p->getLilvPlugin(), port->lilv_port );
 
-		if( ! strcmp( lilv_node_as_string( port_sym ), sym ) ) {
+        if( ! strcmp( lilv_node_as_string( port_sym ), sym ) ) {
 
-			return port;
+            return port;
 
-		}
+        }
 
-	}
+    }
 
     return NULL;
 
@@ -443,12 +570,12 @@ Port * UI::portBySymbol( Plugin * p, const char * sym ) {
  */
 
 void UI::suilUIWrite(
-    SuilController controller,
-    uint32_t port_index,
-    uint32_t buffer_size,
-    uint32_t protocol,
-    const void * buffer
-) {
+        SuilController controller,
+        uint32_t port_index,
+        uint32_t buffer_size,
+        uint32_t protocol,
+        const void * buffer
+        ) {
 
 };
 
@@ -459,7 +586,7 @@ void UI::suilUIWrite(
 
 uint32_t UI::suilPortIndex( SuilController controller, const char * symbol ) {
 
-	Plugin * p = (Plugin*)controller;
+    Plugin * p = (Plugin*)controller;
 
     Port * port = UI::portBySymbol( p, symbol );
 

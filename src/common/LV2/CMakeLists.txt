@@ -24,8 +24,8 @@ file( GLOB
     "include/symap.c"
     "Host.cpp"
     "Search.cpp"
+    "WindowLayout.cpp"
     "Plugin.cpp"
-    "UI.h"
     "UI.cpp"
 )
 
