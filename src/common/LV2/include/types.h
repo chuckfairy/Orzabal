@@ -1,5 +1,12 @@
-#define NS_RDF "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-#define NS_XSD "http://www.w3.org/2001/XMLSchema#"
+/*
+  LV2 External UI extension
+
+*/
+#pragma once
+
+#define N_BUFFER_CYCLES 16
+
+#define NS_EXT "http://lv2plug.in/ns/ext/"
 
 #ifndef MIN
 #    define MIN(a, b) (((a) < (b)) ? (a) : (b))
@@ -9,52 +16,90 @@
 #    define MAX(a, b) (((a) > (b)) ? (a) : (b))
 #endif
 
-#ifdef __clang__
-#    define REALTIME __attribute__((annotate("realtime")))
-#else
-#    define REALTIME
+#include "lv2/lv2plug.in/ns/extensions/ui/ui.h"
+
+#define LV2_EXTERNAL_UI_URI     "http://kxstudio.sf.net/ns/lv2ext/external-ui"
+#define LV2_EXTERNAL_UI_PREFIX  LV2_EXTERNAL_UI_URI "#"
+
+#define LV2_EXTERNAL_UI__Host   LV2_EXTERNAL_UI_PREFIX "Host"
+#define LV2_EXTERNAL_UI__Widget LV2_EXTERNAL_UI_PREFIX "Widget"
+
+/** This extension used to be defined by a lv2plug.in URI */
+#define LV2_EXTERNAL_UI_DEPRECATED_URI "http://lv2plug.in/ns/extensions/ui#external"
+
+#ifdef __cplusplus
+extern "C" {
 #endif
 
-/* Size factor for UI ring buffers.  The ring size is a few times the size of
-   an event output to give the UI a chance to keep up.  Experiments with Ingen,
-   which can highly saturate its event output, led me to this value.  It
-   really ought to be enough for anybody(TM).
-*/
-#define N_BUFFER_CYCLES 16
+/**
+ * When LV2_EXTERNAL_UI__Widget UI is instantiated, the returned
+ * LV2UI_Widget handle must be cast to pointer to LV2_External_UI_Widget.
+ * UI is created in invisible state.
+ */
+typedef struct _LV2_External_UI_Widget {
+  /**
+   * Host calls this function regulary. UI library implementing the
+   * callback may do IPC or redraw the UI.
+   *
+   * @param _this_ the UI context
+   */
+  void (*run)(struct _LV2_External_UI_Widget * _this_);
 
-  /**< Exit semaphore */
+  /**
+   * Host calls this function to make the plugin UI visible.
+   *
+   * @param _this_ the UI context
+   */
+  void (*show)(struct _LV2_External_UI_Widget * _this_);
 
-//static LV2_URID map_uri(
-    //LV2_URID_Map_Handle handle,
-    //const char * uri
-//) {
-	//zix_sem_wait(&jalv->symap_lock);
-	//const LV2_URID id = symap_map(jalv->symap, uri);
-	//zix_sem_post(&jalv->symap_lock);
-	//return id;
-//}
+  /**
+   * Host calls this function to make the plugin UI invisible again.
+   *
+   * @param _this_ the UI context
+   */
+  void (*hide)(struct _LV2_External_UI_Widget * _this_);
 
-//static const char*
-//unmap_uri(LV2_URID_Unmap_Handle handle,
-          //LV2_URID              urid)
-//{
-	//Jalv* jalv = (Jalv*)handle;
-	//zix_sem_wait(&jalv->symap_lock);
-	//const char* uri = symap_unmap(jalv->symap, urid);
-	//zix_sem_post(&jalv->symap_lock);
-	//return uri;
-//}
+} LV2_External_UI_Widget;
+
+#define LV2_EXTERNAL_UI_RUN(ptr)  (ptr)->run(ptr)
+#define LV2_EXTERNAL_UI_SHOW(ptr) (ptr)->show(ptr)
+#define LV2_EXTERNAL_UI_HIDE(ptr) (ptr)->hide(ptr)
 
 /**
-   Map function for URI map extension.
-*/
-//static uint32_t uri_to_id(LV2_URI_Map_Callback_Data callback_data,
-          //const char*               map,
-          //const char*               uri)
-//{
-//	Jalv* jalv = (Jalv*)callback_data;
-	//zix_sem_wait(&jalv->symap_lock);
-	//const LV2_URID id = symap_map(symap, uri);
-	//zix_sem_post(&jalv->symap_lock);
-	//return id;
-//}
+ * On UI instantiation, host must supply LV2_EXTERNAL_UI__Host feature.
+ * LV2_Feature::data must be pointer to LV2_External_UI_Host.
+ */
+typedef struct _LV2_External_UI_Host {
+  /**
+   * Callback that plugin UI will call when UI (GUI window) is closed by user.
+   * This callback will be called during execution of LV2_External_UI_Widget::run()
+   * (i.e. not from background thread).
+   *
+   * After this callback is called, UI is defunct. Host must call LV2UI_Descriptor::cleanup().
+   * If host wants to make the UI visible again, the UI must be reinstantiated.
+   *
+   * @note When using the depreated URI LV2_EXTERNAL_UI_DEPRECATED_URI,
+   *       some hosts will not call LV2UI_Descriptor::cleanup() as they should,
+   *       and may call show() again without re-initialization.
+   *
+   * @param controller Host context associated with plugin UI, as
+   *                   supplied to LV2UI_Descriptor::instantiate().
+   */
+  void (*ui_closed)(LV2UI_Controller controller);
+
+  /**
+   * Optional (may be NULL) "user friendly" identifier which the UI
+   * may display to allow a user to easily associate this particular
+   * UI instance with the correct plugin instance as it is represented
+   * by the host (e.g. "track 1" or "channel 4").
+   *
+   * If supplied by host, the string will be referenced only during
+   * LV2UI_Descriptor::instantiate()
+   */
+  const char * plugin_human_id;
+
+} LV2_External_UI_Host;
+
+#ifdef __cplusplus
+} /* extern "C" */
+#endif

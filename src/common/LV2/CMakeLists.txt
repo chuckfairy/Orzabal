@@ -1,9 +1,17 @@
 # LV2 cmake
 
+# Find includes in corresponding build directories
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTOUIC ON)
+set( AUTOGEN_TARGET_DEPENDS ON )
+
 # project
 project(gabrielo-common-lv2 CXX)
 
-find_package( JACK )
+#find_package( JACK )
+find_package( Qt5Widgets REQUIRED )
+find_package( Qt5Core REQUIRED )
 
 #find_package(Lv2)
 #find_package(Lilv)
@@ -14,9 +22,10 @@ file( GLOB
     GABRIELO_LV2_INCLUDE_FILES
     "include/*.h"
     "include/symap.c"
-    "Plugin.cpp"
     "Host.cpp"
     "Search.cpp"
+    "Plugin.cpp"
+    "UI.h"
     "UI.cpp"
 )
 
@@ -40,12 +49,14 @@ include_directories( "/usr/local/lib" )
 target_link_libraries( gabrielo-common-lv2
     lilv-0 suil-0 jack sratom-0 serd-0 sord-0
     gabrielo-common-jack
+    Qt5::Widgets Qt5::Core
 )
 
 target_include_directories( gabrielo-common-lv2
     PUBLIC "/usr/local/include/lilv-0" "/usr/include/suil-0" "/usr/local/include/sratom-0"
     "/usr/local/include/serd-0" "/usr/include/sord-0"
     ".."
+    ${CMAKE_CURRENT_BINARY_DIR}
 )
 
 install( TARGETS

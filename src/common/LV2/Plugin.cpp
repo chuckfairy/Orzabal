@@ -19,6 +19,7 @@
 #include <jack/session.h>
 #include <jack/metadata.h>
 
+#include "UI.h"
 #include "include/symap.c"
 #include "include/semaphone.h"
 #include "Plugin.h"
@@ -49,6 +50,8 @@ Plugin::Plugin( const LilvPlugin* p, Host * h ) {
     setHost( h );
 
     setLilvPlugin( p );
+
+    _UI = new UI( this );
 
 };
 
@@ -316,6 +319,8 @@ void Plugin::start() {
     }
 
     activatePorts();
+
+    _UI->start();
 
     return;
 

@@ -45,6 +45,18 @@
 
 namespace LV2 {
 
+
+/**
+ * UI class forward
+ */
+
+class UI;
+
+
+/**
+ * Plugin Main fro Audio::Plugin
+ */
+
 class Plugin : public Audio::Plugin {
 
     private:
@@ -107,6 +119,8 @@ class Plugin : public Audio::Plugin {
          */
 
         Host * _Host;
+
+        UI * _UI;
 
         Symap * _symap;
 
@@ -176,6 +190,18 @@ class Plugin : public Audio::Plugin {
         const bool portIsAtom( Port * );
 
         const bool portIsCV( Port * );
+
+
+        /**
+         * Port getters extras
+         *
+         */
+
+        int getNumPorts() {
+
+            return _numPorts;
+
+        };
 
 
         /**

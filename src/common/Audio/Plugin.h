@@ -150,6 +150,17 @@ class Plugin {
 
 
         /**
+         *  Port getter
+         */
+
+        Port * getPort( long index ) {
+
+            return _ports[ index ];
+
+        };
+
+
+        /**
          * Create a port
          *
          */
