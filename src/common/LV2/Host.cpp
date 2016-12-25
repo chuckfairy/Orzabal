@@ -49,4 +49,12 @@ vector<Audio::Plugin*> Host::findAllPlugins() {
 
 }
 
+vector<Audio::Plugin*> Host::findAllInstruments() {
+
+    setSearch();
+
+    return _Search->findMidiInstruments();
+
+}
+
 };

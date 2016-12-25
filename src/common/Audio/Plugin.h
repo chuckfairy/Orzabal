@@ -43,6 +43,8 @@ class Plugin {
 
         vector<long> _outputs;
 
+        vector<long> _midiPorts;
+
         vector<long> _controlPorts;
 
         char name[255];
@@ -65,30 +67,6 @@ class Plugin {
         const char * getType() {
 
             return TYPE;
-
-        };
-
-
-        /**
-         * Inputs grabbed from ports
-         *
-         */
-
-        vector<long> * getInputs() {
-
-            return &_inputs;
-
-        };
-
-
-        /**
-         * Get output long ports
-         *
-         */
-
-        vector<long> * getOutputs() {
-
-            return &_outputs;
 
         };
 
@@ -139,6 +117,7 @@ class Plugin {
 
         /**
          * Map and set port
+         * Will include port types midi and others
          *
          */
 
@@ -146,7 +125,42 @@ class Plugin {
 
             _ports[ index ] = port;
 
+            switch( port->type ) {
+
+                case TYPE_CONTROL:
+                    _controlPorts.push_back( index );
+                    break;
+
+                case TYPE_AUDIO:
+                    _audioPorts.push_back( index );
+                    port->flow == FLOW_INPUT
+                        ? _inputs.push_back( index )
+                        : _outputs.push_back( index );
+                    break;
+
+                case TYPE_EVENT:
+                    _midiPorts.push_back( index );
+                    break;
+
+                default: case TYPE_UNKNOWN: case TYPE_CV:
+                    break;
+
+            }
+
         };
+
+
+        /**
+         * Has port type methods
+         */
+
+        bool hasMidi() { return ! _midiPorts.empty(); };
+
+        bool hasAudio() { return ! _audioPorts.empty(); };
+
+        bool hasInputs() { return ! _inputs.empty(); };
+
+        bool hasOutputs() { return ! _outputs.empty(); };
 
 
         /**
@@ -156,6 +170,30 @@ class Plugin {
         Port * getPort( long index ) {
 
             return _ports[ index ];
+
+        };
+
+        vector<long> * getMidiPorts() {
+
+            return &_midiPorts;
+
+        };
+
+        vector<long> * getAudioPorts() {
+
+            return &_audioPorts;
+
+        };
+
+        vector<long> * getInputPorts() {
+
+            return &_inputs;
+
+        };
+
+        vector<long> * getOutputPorts() {
+
+            return &_outputs;
 
         };
 
@@ -178,7 +216,7 @@ class Plugin {
          * Start up for lv2
          */
 
-        virtual void start() { std::cout << "TESTERES"; };
+        virtual void start() {};
 
 };
 

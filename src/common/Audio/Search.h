@@ -43,6 +43,28 @@ class Search {
 
         };
 
+        vector<Plugin*> findMidiInstruments() {
+
+            vector<Plugin*> plugins = findAll();
+
+            vector<Plugin*> midis;
+
+            vector<Plugin*>::iterator it;
+
+            for( it = plugins.begin(); it != plugins.end(); ++ it ) {
+
+                if( (*it)->hasMidi() ) {
+
+                    midis.push_back( (*it) );
+
+                }
+
+            }
+
+            return midis;
+
+        };
+
 };
 
 };

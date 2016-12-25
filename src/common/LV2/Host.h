@@ -52,6 +52,8 @@ class Host : public Jack::Host {
 
         vector<Audio::Plugin*> findAllPlugins();
 
+        vector<Audio::Plugin*> findAllInstruments();
+
 
 };
 

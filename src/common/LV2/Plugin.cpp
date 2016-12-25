@@ -420,7 +420,7 @@ void Plugin::activatePorts() {
 
 void Plugin::activatePort( long portNum ) {
 
-    Port * port = (Port*)_ports[ portNum ];
+    Port * port = (Port*) _ports[ portNum ];
 
     const LilvNode* sym = lilv_port_get_symbol( _lilvPlugin, port->lilv_port );
 
