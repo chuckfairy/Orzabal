@@ -10,12 +10,15 @@
 #include <LV2/Plugin.h>
 #include <LV2/Search.h>
 #include <QApplication>
+#include <QMainWindow>
 
 using namespace std;
 
 int main( int argc, char ** argv ) {
 
     QApplication app(argc, argv);
+
+    QMainWindow * win = new QMainWindow();
 
     JackServer * server = new JackServer();
 
@@ -25,9 +28,13 @@ int main( int argc, char ** argv ) {
 
     LV2::Host * host = new LV2::Host( server->getJackClient() );
 
-    vector<Audio::Plugin*> plugins = host->findAllPlugins();
+    vector<Audio::Plugin*> plugins = host->findAllInstruments();
 
-    plugins[200]->start();
+    plugins[40]->start();
+
+    win->setCentralWidget( ((LV2::Plugin*)plugins[40])->getUIWidget() );
+
+    win->show();
 
     int exe = app.exec();
 

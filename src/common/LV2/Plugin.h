@@ -32,6 +32,10 @@
 #include <suil/suil.h>
 #include <sratom/sratom.h>
 
+#include <jack/ringbuffer.h>
+
+#include <QScrollArea>
+
 #include <Audio/Plugin.h>
 
 #include "include/types.h"
@@ -120,8 +124,6 @@ class Plugin : public Audio::Plugin {
 
         Host * _Host;
 
-        UI * _UI;
-
         Symap * _symap;
 
         ZixSem _symap_lock;
@@ -143,6 +145,9 @@ class Plugin : public Audio::Plugin {
 
         const char * TYPE = "LV2";
 
+        UI * _UI;
+
+        jack_ringbuffer_t * _ringBuffer;
 
     public:
 
@@ -159,6 +164,15 @@ class Plugin : public Audio::Plugin {
         void start();
 
         void stop();
+
+        UI * getUI();
+
+
+        /**
+         * UI Widget getter
+         */
+
+        QScrollArea * getUIWidget();
 
 
         /**

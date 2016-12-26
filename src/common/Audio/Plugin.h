@@ -21,6 +21,12 @@ namespace Audio {
 
 
 /**
+ * Class forwarding
+ */
+class UI;
+
+
+/**
  * Base plugin class
  *
  */
@@ -51,6 +57,8 @@ class Plugin {
 
         int long _numPorts;
 
+        UI * _UI;
+
 
     public:
 
@@ -73,13 +81,19 @@ class Plugin {
 
         /**
          * Get name of plugin
-         * From _descriptor
+         * name related
          *
          */
 
         char * getName() {
 
             return name;
+
+        };
+
+        void setName( const char * s ) {
+
+            strcpy( name, s );
 
         };
 
@@ -97,22 +111,10 @@ class Plugin {
 
 
         /**
-         * Set name copy str
+         * UI related
          */
 
-        void setName( const char * s ) {
-
-            strcpy( name, s );
-
-        };
-
-
-        /**
-         * Set ports from Descriptor
-         *
-         */
-
-        virtual void setPorts() {};
+        UI * getUI();
 
 
         /**

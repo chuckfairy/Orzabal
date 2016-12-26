@@ -31,6 +31,7 @@
 
 #include <QtWidgets/QMainWindow>
 #include <QApplication>
+#include <QScrollArea>
 
 #include <Audio/UI.h>
 
@@ -101,11 +102,10 @@ class UI : public Audio::UI {
         LV2_Feature log_feature          = { LV2_LOG__log, NULL };
         LV2_Feature options_feature      = { LV2_OPTIONS__options, NULL };
 
-        QApplication * app;
 
         QMainWindow * win;
 
-        QGuiApplication * g;
+        QScrollArea * _MainWidget;
 
 
 
@@ -229,6 +229,12 @@ class UI : public Audio::UI {
         LilvWorld * getLilvWorld() {
 
             return _lilvWorld;
+
+        };
+
+        QScrollArea * getWidget() {
+
+            return _MainWidget;
 
         };
 

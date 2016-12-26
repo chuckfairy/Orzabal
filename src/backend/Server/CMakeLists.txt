@@ -15,7 +15,9 @@ file( GLOB
 # create gabrielo-backend-common library
 add_library( gabrielo-backend-server SHARED ${GABRIELO_SERVER_INCLUDE_FILES} )
 
-target_link_libraries( gabrielo-backend-server PUBLIC gabrielo-backend-audio )
+target_link_libraries( gabrielo-backend-server
+    PUBLIC gabrielo-backend-audio gabrielo-common-lv2
+)
 target_include_directories( gabrielo-backend-server PUBLIC ${JACK_INCLUDE_DIRS} ../ )
 add_definitions( ${JACK_DEFINITIONS} )
 

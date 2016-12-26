@@ -31,7 +31,7 @@ class Jack : public Host {
 
 
         /**
-         * Jack input port
+         * Jack output ports
          */
 
         jack_port_t * _outputLeft;

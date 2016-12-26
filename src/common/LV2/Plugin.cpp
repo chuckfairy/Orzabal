@@ -18,6 +18,7 @@
 #include <jack/midiport.h>
 #include <jack/session.h>
 #include <jack/metadata.h>
+#include <jack/ringbuffer.h>
 
 #include "UI.h"
 #include "include/symap.c"
@@ -300,6 +301,9 @@ void Plugin::start() {
         //}
     }
 
+    _ringBuffer = jack_ringbuffer_create(buffer_size);
+	jack_ringbuffer_mlock( _ringBuffer );
+
     /* Instantiate the plugin */
     _lilvInstance = lilv_plugin_instantiate( _lilvPlugin, sample_rate, features );
 
@@ -521,6 +525,28 @@ void Plugin::activatePort( long portNum ) {
 	}
 
 }
+
+
+/**
+ * UI
+ */
+
+UI * Plugin::getUI() {
+
+    return _UI;
+
+};
+
+
+/**
+ * UI
+ */
+
+QScrollArea * Plugin::getUIWidget() {
+
+    return _UI->getWidget();
+
+};
 
 
 /**

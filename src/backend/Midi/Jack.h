@@ -50,15 +50,24 @@ class Jack : public Host {
 
         Jack();
 
+
+        /**
+         * Connection methods
+         */
+
         void start();
 
         void createPorts();
+
+        void connectOutputTo();
+
+        void connectInputTo();
 
         vector<Port> getPorts();
 
 
         /**
-         *
+         * Jack related
          */
 
         void setJackClient( jack_client_t * j ) {
@@ -66,8 +75,6 @@ class Jack : public Host {
             _jackClient = j;
 
         };
-
-
 
 };
 

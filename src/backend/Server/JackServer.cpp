@@ -21,6 +21,8 @@ JackServer::JackServer() {
 
     _Audio = new Audio::Jack();
 
+    _Host = new LV2::Host( _client );
+
 };
 
 
@@ -46,7 +48,7 @@ bool JackServer::start() {
 
     // tell the JACK server to call `process()'
 
-    jack_set_process_callback( _client, JackServer::JackProcess, 0 );
+    jack_set_process_callback( _client, JackServer::JackProcess, (void*)(this) );
 
 
     // tell the JACK server to call `jack_shutdown()' if it ever shuts down
@@ -73,6 +75,8 @@ bool JackServer::stop() {
 
     jack_client_close( _client );
 
+    return true;
+
 };
 
 
@@ -82,6 +86,8 @@ bool JackServer::stop() {
  */
 
 bool JackServer::connect() {
+
+    return true;
 
 };
 

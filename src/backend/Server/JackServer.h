@@ -8,6 +8,8 @@
 
 #include <Audio/Jack.h>
 
+#include <LV2/Host.h>
+
 #include <stdio.h>
 #include <errno.h>
 #include <unistd.h>
@@ -58,6 +60,13 @@ class JackServer : public Server {
          */
 
         Audio::Jack * _Audio;
+
+
+        /**
+         * LV2
+         */
+
+        LV2::Host * _Host;
 
 
     protected:

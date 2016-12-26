@@ -211,8 +211,6 @@ void UI::createUI() {
 
     }
 
-    win->show();
-
 }
 
 void UI::createNativeUI() {
@@ -382,19 +380,17 @@ void UI::createNativeUI() {
 
 void UI::createQt() {
 
-	QScrollArea* widget = new QScrollArea();
+	_MainWidget = new QScrollArea();
 
     QWidget* controlWidget = createControlWidget();
 
-    ((QScrollArea*)widget)->setWidget(controlWidget);
+    ((QScrollArea*)_MainWidget)->setWidget(controlWidget);
 
-    ((QScrollArea*)widget)->setWidgetResizable(true);
+    ((QScrollArea*)_MainWidget)->setWidgetResizable(true);
 
-    widget->setMinimumWidth(800);
+    _MainWidget->setMinimumWidth(800);
 
-    widget->setMinimumHeight(600);
-
-	win->setCentralWidget(widget);
+    _MainWidget->setMinimumHeight(600);
 
 };
 
