@@ -59,11 +59,19 @@ class Jack : public Host {
 
         void createPorts();
 
-        void connectOutputTo();
-
-        void connectInputTo();
-
         vector<Port> getPorts();
+
+
+        /**
+         * Abstract jack port connection method
+         *
+         */
+
+        int connectJackPort( const char *, const char * );
+
+        void connectOutputTo( const char * );
+
+        void connectInputTo( const char * );
 
 
         /**

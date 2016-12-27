@@ -10,6 +10,8 @@ file( GLOB
     #"LADSPA/*.h"
     #"LADSPA/*.cpp"
 
+    "Util/Dispatcher.h"
+
     "LADSPA/LADSPAPlugin.cpp"
     "LADSPA/LADSPAPlugin.h"
     "LADSPA/LADSPASearch.cpp"
@@ -23,6 +25,7 @@ file( GLOB
     "Audio/Port.h"
 
     "Midi/Device.h"
+
 )
 
 

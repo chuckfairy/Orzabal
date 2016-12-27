@@ -4,8 +4,10 @@
  */
 #pragma once
 
+#include <Util/Dispatcher.h>
 
-class Server {
+
+class Server : public Util::Dispatcher {
 
     protected:
 

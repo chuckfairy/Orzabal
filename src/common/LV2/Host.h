@@ -28,6 +28,7 @@ class Host : public Jack::Host {
 
         LilvWorld * _lilvWorld;
 
+
     public:
 
         Host( jack_client_t * c );
