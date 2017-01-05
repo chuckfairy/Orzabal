@@ -15,6 +15,16 @@
 using std::vector;
 
 
+/*
+ * Class fowarding
+ */
+namespace Jack {
+
+class Server;
+
+};
+
+
 namespace LV2 {
 
 
@@ -30,6 +40,8 @@ class Host : public Jack::Host {
 
 
     public:
+
+        Host( Jack::Server * s );
 
         Host( jack_client_t * c );
 

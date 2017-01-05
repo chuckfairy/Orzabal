@@ -5,6 +5,7 @@
 #include <vector>
 
 #include <Jack/Host.h>
+#include <Jack/Server.h>
 #include <Audio/Plugin.h>
 
 #include "Host.h"
@@ -16,6 +17,19 @@ using std::vector;
 
 namespace LV2 {
 
+
+/**
+ * Construct
+ */
+
+Host::Host( Jack::Server * s ) : Jack::Host( s->getJackClient() ) {
+
+    _lilvWorld = lilv_world_new();
+    lilv_world_load_all( _lilvWorld );
+
+};
+
+
 /**
  * Construct
  */
@@ -26,6 +40,7 @@ Host::Host( jack_client_t * c ) : Jack::Host( c ) {
     lilv_world_load_all( _lilvWorld );
 
 };
+
 
 /**
  * Search methods

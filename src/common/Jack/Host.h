@@ -1,71 +1,165 @@
 /**
- * Jack host base
+ * Host audio mod
  *
  */
 #pragma once
 
+#include <vector>
+
 #include <jack/jack.h>
 
 #include <Audio/Host.h>
+#include <Audio/Plugin.h>
+#include <Audio/Port.h>
 
+
+using std::vector;
+
+
+/**
+ * Midi Alsa extended class
+ *
+ */
 
 namespace Jack {
 
-/**
- * Construct
- */
-
 class Host : public Audio::Host {
 
-    protected:
+    private:
 
-        jack_client_t * _JackClient;
+        const char * _name = "gabrielo-audio";
+
+
+        /**
+         * Host output ports
+         */
+
+        jack_port_t * _outputLeft;
+
+        jack_port_t * _outputRight;
+
+        const char * _outputLeftName = "output-L";
+
+        const char * _outputRightName = "output-R";
+
+
+        /**
+         * Host input port
+         */
+
+        jack_port_t * _inputLeft;
+
+        jack_port_t * _inputRight;
+
+        const char * _inputLeftName = "input-L";
+
+        const char * _inputRightName = "input-R";
+
+
+        /**
+         * Host client pointer
+         */
+
+        jack_client_t * _jackClient;
 
 
     public:
 
-        Host( jack_client_t * );
-
-
         /**
-         * host extensions
+         * Constructs
          *
          */
 
-        unsigned int getSampleRate() {
+        Host();
 
-            return jack_get_sample_rate( _JackClient );
-        };
+        Host( jack_client_t * j );
 
-        int getBufferSize() {
 
-            return jack_get_buffer_size( _JackClient );
+        /**
+         * Default start
+         *
+         */
 
-        };
+        void start();
 
-        int getMidiBufferSize() {
 
-            return jack_port_type_get_buffer_size( _JackClient, JACK_DEFAULT_MIDI_TYPE );
+        /**
+         * main jack client from server
+         */
+
+        void setHostClient( jack_client_t * j ) {
+
+            _jackClient = j;
 
         };
 
 
         /**
-         * Jack client related
+         * Get specific ports
+         */
+
+        vector<Port> getPortsByType( enum HostPortFlags );
+
+
+        /**
+         * Get specific ports
+         */
+
+        vector<Port> getInputPorts();
+
+
+        /**
+         * Get specific ports
+         */
+
+        vector<Port> getOutputPorts();
+
+
+        /**
+         * Get port name
+         */
+
+        const char * getPortFullName( const char * name ) {
+
+            char * c = (char*) malloc(80);
+
+            sprintf( c, "gabrielo-client:%s", name );
+
+            return c;
+
+        };
+
+
+        /**
+         * Default ports
          *
          */
 
-        void setJackClient( jack_client_t * c ) {
+        void createPorts();
 
-            _JackClient = c;
 
-        };
+        /**
+         * Abstract jack port connection method
+         *
+         */
 
-        jack_client_t * getJackClient() {
+        int connectHostPort( const char *, const char * );
 
-            return _JackClient;
 
-        };
+        /**
+         * Host Connection port methods
+         *
+         */
+
+        void connectRedirect();
+
+        bool connectInputTo( const char * );
+
+        bool connectInputTo( const char *, const char * );
+
+        bool connectOutputTo( const char * );
+
+        bool connectOutputTo( const char *, const char * );
 
 };
 
