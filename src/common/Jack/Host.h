@@ -13,6 +13,8 @@
 #include <Audio/Port.h>
 
 
+using Audio::Port;
+
 using std::vector;
 
 
@@ -22,6 +24,7 @@ using std::vector;
  */
 
 namespace Jack {
+
 
 class Host : public Audio::Host {
 
@@ -87,9 +90,15 @@ class Host : public Audio::Host {
          * main jack client from server
          */
 
-        void setHostClient( jack_client_t * j ) {
+        void setJackClient( jack_client_t * j ) {
 
             _jackClient = j;
+
+        };
+
+        jack_client_t * getJackClient() {
+
+            return _jackClient;
 
         };
 
@@ -98,7 +107,7 @@ class Host : public Audio::Host {
          * Get specific ports
          */
 
-        vector<Port> getPortsByType( enum HostPortFlags );
+        vector<Port> getPortsByType( enum JackPortFlags );
 
 
         /**
@@ -143,7 +152,7 @@ class Host : public Audio::Host {
          *
          */
 
-        int connectHostPort( const char *, const char * );
+        int connectJackPort( const char *, const char * );
 
 
         /**

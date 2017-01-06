@@ -22,7 +22,7 @@ namespace LV2 {
  * Construct
  */
 
-Host::Host( Jack::Server * s ) : Jack::Host( s->getJackClient() ) {
+Host::Host( Jack::Server * s ) : Jack::Patchbay( s->getJackClient() ) {
 
     _lilvWorld = lilv_world_new();
     lilv_world_load_all( _lilvWorld );
@@ -34,7 +34,7 @@ Host::Host( Jack::Server * s ) : Jack::Host( s->getJackClient() ) {
  * Construct
  */
 
-Host::Host( jack_client_t * c ) : Jack::Host( c ) {
+Host::Host( jack_client_t * c ) : Jack::Patchbay( c ) {
 
     _lilvWorld = lilv_world_new();
     lilv_world_load_all( _lilvWorld );

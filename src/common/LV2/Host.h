@@ -8,7 +8,7 @@
 
 #include <lilv/lilv.h>
 
-#include <Jack/Host.h>
+#include <Jack/Patchbay.h>
 #include <Audio/Plugin.h>
 
 
@@ -32,7 +32,7 @@ namespace LV2 {
  * Construct
  */
 
-class Host : public Jack::Host {
+class Host : public Jack::Patchbay {
 
     private:
 

@@ -35,7 +35,7 @@ Host::Host() {};
 
 Host::Host( jack_client_t * j ) {
 
-    setHostClient( j );
+    setJackClient( j );
 
 };
 
@@ -96,7 +96,7 @@ void Host::createPorts() {
  *
  */
 
-int Host::connectHostPort( const char * source, const char * destination ) {
+int Host::connectJackPort( const char * source, const char * destination ) {
 
     return jack_connect( _jackClient, source, destination );
 
@@ -109,8 +109,8 @@ int Host::connectHostPort( const char * source, const char * destination ) {
 
 bool Host::connectInputTo( const char * out ) {
 
-    connectHostPort( _inputLeftName, out );
-    connectHostPort( _inputRightName, out );
+    connectJackPort( _inputLeftName, out );
+    connectJackPort( _inputRightName, out );
 
     return true;
 
@@ -123,8 +123,8 @@ bool Host::connectInputTo( const char * out ) {
 
 bool Host::connectInputTo( const char * outLeft, const char * outRight ) {
 
-    connectHostPort( _inputLeftName, outLeft );
-    connectHostPort( _inputRightName, outRight );
+    connectJackPort( _inputLeftName, outLeft );
+    connectJackPort( _inputRightName, outRight );
 
     return true;
 
@@ -137,8 +137,8 @@ bool Host::connectInputTo( const char * outLeft, const char * outRight ) {
 
 bool Host::connectOutputTo( const char * input ) {
 
-    connectHostPort( getPortFullName( _outputLeftName ), input );
-    connectHostPort( getPortFullName( _outputRightName ), input );
+    connectJackPort( getPortFullName( _outputLeftName ), input );
+    connectJackPort( getPortFullName( _outputRightName ), input );
 
     return true;
 
@@ -151,8 +151,8 @@ bool Host::connectOutputTo( const char * input ) {
 
 bool Host::connectOutputTo( const char * inLeft, const char * inRight ) {
 
-    connectHostPort( getPortFullName( _outputLeftName ), inLeft );
-    connectHostPort( getPortFullName( _outputRightName ), inRight );
+    connectJackPort( getPortFullName( _outputLeftName ), inLeft );
+    connectJackPort( getPortFullName( _outputRightName ), inRight );
 
     return true;
 
@@ -165,12 +165,12 @@ bool Host::connectOutputTo( const char * inLeft, const char * inRight ) {
 
 void Host::connectRedirect() {
 
-    connectHostPort(
+    connectJackPort(
         getPortFullName( _outputLeftName ),
         getPortFullName( _inputLeftName )
     );
 
-    connectHostPort(
+    connectJackPort(
         getPortFullName( _outputRightName ),
         getPortFullName( _inputRightName )
     );
@@ -183,7 +183,7 @@ void Host::connectRedirect() {
  *
  */
 
-vector<Port> Host::getPortsByType( enum HostPortFlags PORT_FLAG ) {
+vector<Port> Host::getPortsByType( enum JackPortFlags PORT_FLAG ) {
 
     vector<Port> ports;
 
@@ -254,18 +254,18 @@ vector<Port> Host::getPortsByType( enum HostPortFlags PORT_FLAG ) {
 
 vector<Port> Host::getInputPorts() {
 
-    return getPortsByType( HostPortIsInput );
+    return getPortsByType( JackPortIsInput );
 
 };
 
 
 /**
- * Get ports by input type HostPortIsOutput
+ * Get ports by input type JackPortIsOutput
  */
 
 vector<Port> Host::getOutputPorts() {
 
-    return getPortsByType( HostPortIsOutput );
+    return getPortsByType( JackPortIsOutput );
 
 };
 

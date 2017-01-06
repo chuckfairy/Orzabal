@@ -6,7 +6,7 @@
 
 #include <jack/jack.h>
 
-#include <Audio/Patchbay.h>
+#include <Audio/Host.h>
 
 
 namespace Jack {
@@ -15,7 +15,7 @@ namespace Jack {
  * Construct
  */
 
-class Patchbay : public Audio::Patchbay {
+class Patchbay : public Audio::Host {
 
     protected:
 

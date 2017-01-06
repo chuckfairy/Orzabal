@@ -21,7 +21,7 @@ target_link_libraries( gabrielo-common-jack PUBLIC
     asound gabrielo-common gabrielo-common-audio jack
 )
 
-target_include_directories( gabrielo-common-jack PUBLIC "../../common" )
+target_include_directories( gabrielo-common-jack PUBLIC "../" )
 
 set_target_properties( gabrielo-common-jack PROPERTIES LINKER_LANGUAGE CXX )
 
