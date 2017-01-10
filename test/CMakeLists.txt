@@ -34,14 +34,12 @@ target_link_libraries( lv2list
     suil-0 jack sratom-0 serd-0 sord-0
     gabrielo-common-jack
     gabrielo-common-lv2
-    gabrielo-backend-server
     "/usr/local/lib/liblilv-0.so"
 )
 
 target_include_directories( lv2list
     PUBLIC
     "../../src/common"
-    "../../src/backend"
     "/usr/include/suil-0" "/usr/local/include/sratom-0"
     "/usr/local/include/serd-0" "/usr/include/sord-0"
 )

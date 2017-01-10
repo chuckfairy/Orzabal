@@ -13,7 +13,7 @@ namespace LV2 {
  * Class forwarding
  *
  */
-class Plugin;
+class Host;
 
 
 /**
@@ -21,11 +21,12 @@ class Plugin;
  *
  */
 
-class CallbackEvent : public Util::Event {
+class JackCallbackEvent : public Util::Event {
 
     private:
 
-        Plugin * _Plugin;
+        Host * _Patchbay;
+
 
     public:
 
@@ -33,9 +34,9 @@ class CallbackEvent : public Util::Event {
          * Construct
          */
 
-        CallbackEvent( Plugin * p ) {
+        JackCallbackEvent( Host * p ) {
 
-            _Plugin = p;
+            _Patchbay = p;
 
         };
 

@@ -35,6 +35,7 @@ class Search {
          * Search All
          *
          */
+
         virtual vector<Plugin*> findAll() {
 
             vector<Plugin*> pluginList;

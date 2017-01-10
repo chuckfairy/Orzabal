@@ -10,6 +10,7 @@
 
 #include "Host.h"
 #include "Search.h"
+#include "JackCallbackEvent.h"
 
 
 using std::vector;
@@ -43,6 +44,18 @@ Host::Host( jack_client_t * c ) : Jack::Patchbay( c ) {
 
 
 /**
+ * Plugin starting
+ */
+
+void Host::addPlugin( Audio::Plugin * p ) {
+
+    p->start();
+    _ActivePlugins.push_back( (Audio::Plugin*) p );
+
+};
+
+
+/**
  * Search methods
  */
 
@@ -58,11 +71,11 @@ void Host::setSearch() {
 
 vector<Audio::Plugin*> Host::findAllPlugins() {
 
-    setSearch();
+    updatePlugins();
 
-    return _Search->findAll();
+    return _Plugins;
 
-}
+};
 
 vector<Audio::Plugin*> Host::findAllInstruments() {
 
@@ -70,6 +83,70 @@ vector<Audio::Plugin*> Host::findAllInstruments() {
 
     return _Search->findMidiInstruments();
 
-}
+};
+
+
+/**
+ * Future repo update method
+ */
+
+void Host::updatePlugins() {
+
+    setSearch();
+
+    if( _Plugins.empty() ) {
+
+        _Plugins = _Search->findAll();
+
+    }
+
+};
+
+
+/**
+ * Callback event getter
+ *
+ */
+
+JackCallbackEvent * Host::getEvent() {
+
+    if( ! _Callback ) {
+
+        _Callback = new JackCallbackEvent( this );
+
+    }
+
+    return _Callback;
+
+};
+
+void Host::setStaticHost() {
+
+};
+
+
+/**
+ * Update jack host from jack frame pointer
+ */
+
+void Host::updateJack( void * frameVoid ) {
+
+    updatePlugins();
+
+    vector<Audio::Plugin*>::iterator it;
+
+    for( it = _Plugins.begin(); it != _Plugins.end(); ++ it ) {
+
+        if( !(*it)->isActive() ) {
+
+            return;
+
+        }
+
+
+
+    }
+
+};
 
 };

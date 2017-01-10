@@ -5,7 +5,7 @@
 #include <stdio.h>
 #include <iostream>
 
-#include <Server/JackServer.h>
+#include <Jack/Server.h>
 #include <Audio/Search.h>
 #include <LV2/Plugin.h>
 #include <LV2/Search.h>
@@ -20,7 +20,7 @@ int main( int argc, char ** argv ) {
 
     QMainWindow * win = new QMainWindow();
 
-    JackServer * server = new JackServer();
+    Jack::Server * server = new Jack::Server();
 
     server->start();
 
@@ -28,11 +28,13 @@ int main( int argc, char ** argv ) {
 
     LV2::Host * host = new LV2::Host( server->getJackClient() );
 
-    vector<Audio::Plugin*> plugins = host->findAllInstruments();
+    host->updatePlugins();
 
-    plugins[40]->start();
+    //vector<Audio::Plugin*> plugins = host->findAllInstruments();
 
-    win->setCentralWidget( ((LV2::Plugin*)plugins[40])->getUIWidget() );
+    //host->addPlugin( plugins[40] );
+
+    //win->setCentralWidget( ((LV2::Plugin*)plugins[40])->getUIWidget() );
 
     win->show();
 

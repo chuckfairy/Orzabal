@@ -1,6 +1,5 @@
 /**
- * Audio host p
- *
+ * Audio host
  *
  */
 #pragma once
@@ -9,6 +8,7 @@
 
 
 namespace Audio {
+
 
 class Host {
 

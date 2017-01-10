@@ -8,6 +8,8 @@
 
 #include <Audio/Host.h>
 
+#include "Host.h"
+
 
 namespace Jack {
 

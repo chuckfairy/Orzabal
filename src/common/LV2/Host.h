@@ -15,9 +15,10 @@
 using std::vector;
 
 
-/*
+/**
  * Class fowarding
  */
+
 namespace Jack {
 
 class Server;
@@ -26,6 +27,11 @@ class Server;
 
 
 namespace LV2 {
+
+
+class JackCallbackEvent;
+
+class Plugin;
 
 
 /**
@@ -38,12 +44,30 @@ class Host : public Jack::Patchbay {
 
         LilvWorld * _lilvWorld;
 
+        JackCallbackEvent * _Callback;
+
+        vector<Audio::Plugin*> _Plugins;
+
+        vector<Audio::Plugin*> _ActivePlugins;
+
 
     public:
 
         Host( Jack::Server * s );
 
         Host( jack_client_t * c );
+
+        /**
+         * Plugin starting
+         */
+
+        void addPlugin( Audio::Plugin * p );
+
+        vector<Audio::Plugin*> getPlugins() {
+
+            return _Plugins;
+
+        };
 
 
         /**
@@ -67,6 +91,23 @@ class Host : public Jack::Patchbay {
 
         vector<Audio::Plugin*> findAllInstruments();
 
+
+        /**
+         * Repo methods
+         */
+
+        void updatePlugins();
+
+
+        /**
+         * Update callback and hosting
+         */
+
+        JackCallbackEvent * getEvent();
+
+        void setStaticHost();
+
+        void updateJack( void * );
 
 };
 

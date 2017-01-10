@@ -24,6 +24,7 @@ file( GLOB
     "include/symap.c"
     "Host.cpp"
     "Search.cpp"
+    "JackCallbackEvent.cpp"
     "WindowLayout.cpp"
     "Plugin.cpp"
     "UI.cpp"

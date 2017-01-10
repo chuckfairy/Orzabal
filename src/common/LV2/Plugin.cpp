@@ -324,50 +324,16 @@ void Plugin::start() {
 
     _UI->start();
 
+    zix_sem_wait(&exit_sem);
+
     return;
-
-
-    /* Apply loaded state to plugin instance if necessary */
-
-    //if( state ) {
-        //jalv_apply_state(&jalv, state);
-    //}
 
     //if( jalv.opts.controls ) {
         //for( char** c = jalv.opts.controls; *c; ++c ) {
             //jalv_apply_control_arg(&jalv, *c);
         //}
     //}
-
-    /* Set Jack callbacks */
-    //jack_set_process_callback(jalv.jack_client,
-            //&jack_process_cb, (void*)(&jalv));
-    //jack_set_buffer_size_callback(jalv.jack_client,
-            //&jack_buffer_size_cb, (void*)(&jalv));
-    //jack_on_shutdown(jalv.jack_client,
-            //&jack_shutdown_cb, (void*)(&jalv));
-    //jack_set_latency_callback(jalv.jack_client,
-            //&jack_latency_cb, (void*)(&jalv));
-//#ifdef JALV_JACK_SESSION
-    //jack_set_session_callback(jalv.jack_client,
-            //&jack_session_cb, (void*)(&jalv));
-//#endif
-
-    /* Create Jack ports and connect plugin ports to buffers */
-    //for (uint32_t i = 0; i < jalv.num_ports; ++i) {
-        //activate_port(&jalv, i);
-    //}
-
-
-    /* Activate plugin */
-
-    /* Run UI (or prompt at console) */
-    //jalv_open_ui(&jalv);
-
     /* Wait for finish signal from UI or signal handler */
-    zix_sem_wait(&exit_sem);
-
-
 
 };
 
