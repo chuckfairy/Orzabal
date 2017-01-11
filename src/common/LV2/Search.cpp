@@ -25,8 +25,6 @@ Search::Search( Host * h ) {
 
     _Host = h;
 
-    setLilvWorld( _Host->getLilvWorld() );
-
 };
 
 
@@ -35,6 +33,8 @@ Search::Search( Host * h ) {
  */
 
 vector<Audio::Plugin*> Search::findAll() {
+
+    const LilvWorld * _lilvWorld = _Host->getLilvWorld();
 
     vector<Audio::Plugin*> pluginList;
 

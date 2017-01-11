@@ -28,6 +28,8 @@ Host::Host( Jack::Server * s ) : Jack::Patchbay( s->getJackClient() ) {
     _lilvWorld = lilv_world_new();
     lilv_world_load_all( _lilvWorld );
 
+    _Search = new Search( this );
+
 };
 
 
@@ -39,6 +41,8 @@ Host::Host( jack_client_t * c ) : Jack::Patchbay( c ) {
 
     _lilvWorld = lilv_world_new();
     lilv_world_load_all( _lilvWorld );
+
+    _Search = new Search( this );
 
 };
 
@@ -59,27 +63,13 @@ void Host::addPlugin( Audio::Plugin * p ) {
  * Search methods
  */
 
-void Host::setSearch() {
-
-    if( ! _Search ) {
-
-        _Search = new Search( this );
-
-    }
-
-};
-
 vector<Audio::Plugin*> Host::findAllPlugins() {
 
-    updatePlugins();
-
-    return _Plugins;
+    return _Search->findAll();
 
 };
 
 vector<Audio::Plugin*> Host::findAllInstruments() {
-
-    setSearch();
 
     return _Search->findMidiInstruments();
 
@@ -91,8 +81,6 @@ vector<Audio::Plugin*> Host::findAllInstruments() {
  */
 
 void Host::updatePlugins() {
-
-    setSearch();
 
     if( _Plugins.empty() ) {
 
@@ -135,15 +123,13 @@ void Host::updateJack( void * frameVoid ) {
 
     vector<Audio::Plugin*>::iterator it;
 
-    for( it = _Plugins.begin(); it != _Plugins.end(); ++ it ) {
+    for( it = _ActivePlugins.begin(); it != _ActivePlugins.end(); ++ it ) {
 
         if( !(*it)->isActive() ) {
 
             return;
 
         }
-
-
 
     }
 

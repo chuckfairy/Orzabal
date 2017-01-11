@@ -32,24 +32,12 @@ class Search : public Audio::Search {
 
         LV2::Host * _Host;
 
-        LilvWorld * _lilvWorld;
 
     public:
 
         Search( Host * h );
 
         vector<Audio::Plugin*> findAll();
-
-
-        /**
-         * Lilv host specific
-         */
-
-        void setLilvWorld( LilvWorld * w ) {
-
-            _lilvWorld = w;
-
-        };
 
 };
 

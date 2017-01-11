@@ -85,8 +85,6 @@ class Host : public Jack::Patchbay {
          * Search methods
          */
 
-        void setSearch();
-
         vector<Audio::Plugin*> findAllPlugins();
 
         vector<Audio::Plugin*> findAllInstruments();

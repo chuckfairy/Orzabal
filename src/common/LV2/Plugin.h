@@ -141,6 +141,13 @@ class Plugin : public Audio::Plugin {
         unsigned int buffer_size;
 
 
+        /**
+         * Timing props
+         */
+
+        bool _transportRolling;
+
+
     protected:
 
         const char * TYPE = "LV2";
@@ -166,6 +173,8 @@ class Plugin : public Audio::Plugin {
         void stop();
 
         UI * getUI();
+
+        void updateJack( jack_nframes_t nframes );
 
 
         /**

@@ -326,8 +326,6 @@ void Plugin::start() {
 
     zix_sem_wait(&exit_sem);
 
-    return;
-
     //if( jalv.opts.controls ) {
         //for( char** c = jalv.opts.controls; *c; ++c ) {
             //jalv_apply_control_arg(&jalv, *c);
@@ -511,6 +509,260 @@ UI * Plugin::getUI() {
 QScrollArea * Plugin::getUIWidget() {
 
     return _UI->getWidget();
+
+};
+
+
+/**
+ *
+ */
+
+void Plugin::updateJack( jack_nframes_t nframes ) {
+
+	/* Get Jack transport position */
+
+    jack_client_t * jackClient = _Host->getJackClient();
+
+    jack_position_t pos;
+
+    const bool rolling = (
+        jack_transport_query( jackClient, &pos ) == JackTransportRolling
+    );
+
+    /* If transport state is not as expected, then something has changed */
+    const bool xport_changed = (rolling != _transportRolling ||
+            pos.frame != jalv->position ||
+            pos.beats_per_minute != jalv->bpm);
+
+    uint8_t   pos_buf[256];
+    LV2_Atom* lv2_pos = (LV2_Atom*)pos_buf;
+    if (xport_changed) {
+        /* Build an LV2 position object to report change to plugin */
+        lv2_atom_forge_set_buffer(&jalv->forge, pos_buf, sizeof(pos_buf));
+        LV2_Atom_Forge*      forge = &jalv->forge;
+        LV2_Atom_Forge_Frame frame;
+        lv2_atom_forge_object(forge, &frame, 0, jalv->urids.time_Position);
+        lv2_atom_forge_key(forge, jalv->urids.time_frame);
+        lv2_atom_forge_long(forge, pos.frame);
+        lv2_atom_forge_key(forge, jalv->urids.time_speed);
+        lv2_atom_forge_float(forge, rolling ? 1.0 : 0.0);
+        if (pos.valid & JackPositionBBT) {
+            lv2_atom_forge_key(forge, jalv->urids.time_barBeat);
+            lv2_atom_forge_float(
+                    forge, pos.beat - 1 + (pos.tick / pos.ticks_per_beat));
+            lv2_atom_forge_key(forge, jalv->urids.time_bar);
+            lv2_atom_forge_long(forge, pos.bar - 1);
+            lv2_atom_forge_key(forge, jalv->urids.time_beatUnit);
+            lv2_atom_forge_int(forge, pos.beat_type);
+            lv2_atom_forge_key(forge, jalv->urids.time_beatsPerBar);
+            lv2_atom_forge_float(forge, pos.beats_per_bar);
+            lv2_atom_forge_key(forge, jalv->urids.time_beatsPerMinute);
+            lv2_atom_forge_float(forge, pos.beats_per_minute);
+        }
+
+        //if (jalv->opts.dump) {
+        //char* str = sratom_to_turtle(
+        //jalv->sratom, &jalv->unmap, "time:", NULL, NULL,
+        //lv2_pos->type, lv2_pos->size, LV2_ATOM_BODY(lv2_pos));
+        //jalv_ansi_start(stderr, 36);
+        //printf("\n## Position ##\n%s\n", str);
+        //jalv_ansi_reset(stderr);
+        //free(str);
+        //}
+    }
+
+
+    /* Update transport state to expected values for next cycle */
+
+    jalv->position = rolling ? pos.frame + nframes : pos.frame;
+    jalv->bpm = pos.beats_per_minute;
+    _transportRolling  = rolling;
+
+
+    /* Prepare port buffers */
+
+    for (uint32_t p = 0; p < _numPorts; ++p) {
+
+        Port * port = (Port*) _ports[ p ];
+
+        if (port->type == Audio::TYPE_AUDIO && port->jack_port) {
+
+            /* Connect plugin port directly to Jack port buffer */
+            lilv_instance_connect_port(
+                _lilvInstance,
+                p,
+                jack_port_get_buffer(port->jack_port, nframes)
+            );
+
+        } else if (port->type == Audio::TYPE_CV && port->jack_port) {
+
+            /* Connect plugin port directly to Jack port buffer */
+            lilv_instance_connect_port(
+                    _lilvInstance, p,
+                    jack_port_get_buffer(port->jack_port, nframes));
+
+        } else if (port->type == Audio::TYPE_EVENT && port->flow == Audio::FLOW_INPUT) {
+
+            lv2_evbuf_reset(port->evbuf, true);
+
+            /* Write transport change event if applicable */
+            LV2_Evbuf_Iterator iter = lv2_evbuf_begin(port->evbuf);
+            if (xport_changed) {
+                lv2_evbuf_write(
+                        &iter, 0, 0,
+                        lv2_pos->type, lv2_pos->size, LV2_ATOM_BODY(lv2_pos));
+            }
+
+            if (jalv->request_update) {
+                /* Plugin state has changed, request an update */
+                const LV2_Atom_Object get = {
+                    { sizeof(LV2_Atom_Object_Body), jalv->urids.atom_Object },
+                    { 0, jalv->urids.patch_Get } };
+                lv2_evbuf_write(
+                        &iter, 0, 0,
+                        get.atom.type, get.atom.size, LV2_ATOM_BODY(&get));
+            }
+
+            if (port->jack_port) {
+                /* Write Jack MIDI input */
+                void* buf = jack_port_get_buffer(port->jack_port, nframes);
+                for (uint32_t i = 0; i < jack_midi_get_event_count(buf); ++i) {
+                    jack_midi_event_t ev;
+                    jack_midi_event_get(&ev, buf, i);
+                    lv2_evbuf_write(&iter,
+                            ev.time, 0,
+                            jalv->midi_event_id,
+                            ev.size, ev.buffer);
+                }
+            }
+        } else if (port->type == TYPE_EVENT) {
+            /* Clear event output for plugin to write to */
+            lv2_evbuf_reset(port->evbuf, false);
+        }
+
+    }
+
+    jalv->request_update = false;
+
+
+    /* Read and apply control change events from UI */
+
+    if (jalv->has_ui) {
+
+        ControlChange ev;
+        const size_t  space = jack_ringbuffer_read_space(jalv->ui_events);
+        for (size_t i = 0; i < space; i += sizeof(ev) + ev.size) {
+            jack_ringbuffer_read(jalv->ui_events, (char*)&ev, sizeof(ev));
+            char body[ev.size];
+            if (jack_ringbuffer_read(jalv->ui_events, body, ev.size) != ev.size) {
+                fprintf(stderr, "error: Error reading from UI ring buffer\n");
+                break;
+            }
+            assert(ev.index < jalv->num_ports);
+            struct Port* const port = &jalv->ports[ev.index];
+            if (ev.protocol == 0) {
+                assert(ev.size == sizeof(float));
+                port->control = *(float*)body;
+            } else if (ev.protocol == jalv->urids.atom_eventTransfer) {
+                LV2_Evbuf_Iterator    e    = lv2_evbuf_end(port->evbuf);
+                const LV2_Atom* const atom = (const LV2_Atom*)body;
+                lv2_evbuf_write(&e, nframes, 0, atom->type, atom->size,
+                        LV2_ATOM_BODY_CONST(atom));
+            } else {
+                fprintf(stderr, "error: Unknown control change protocol %d\n",
+                        ev.protocol);
+            }
+
+        }
+
+    }
+
+    /* Run plugin for this cycle */
+    lilv_instance_run(_lilvInstance, nframes);
+
+    /* Process any worker replies. */
+    jalv_worker_emit_responses(&jalv->state_worker, _lilvInstance);
+    jalv_worker_emit_responses(&jalv->worker, _lilvInstance);
+
+    /* Notify the plugin the run() cycle is finished */
+    if (jalv->worker.iface && jalv->worker.iface->end_run) {
+        jalv->worker.iface->end_run(_lilvInstance->lv2_handle);
+    }
+
+    /* Check if it's time to send updates to the UI */
+    jalv->event_delta_t += nframes;
+    bool send_ui_updates = false;
+    jack_nframes_t update_frames   = jalv->sample_rate / jalv->ui_update_hz;
+
+    if (jalv->has_ui && (jalv->event_delta_t > update_frames)) {
+        send_ui_updates = true;
+        jalv->event_delta_t = 0;
+    }
+
+    /* Deliver MIDI output and UI events */
+    for (uint32_t p = 0; p < _numPorts; ++p) {
+        struct Port* const port = &jalv->ports[p];
+        if (port->flow == FLOW_OUTPUT && port->type == TYPE_CONTROL &&
+                lilv_port_has_property(jalv->plugin, port->lilv_port,
+                    jalv->nodes.lv2_reportsLatency)) {
+            if (jalv->plugin_latency != port->control) {
+                jalv->plugin_latency = port->control;
+                jack_recompute_total_latencies(jalv->jack_client);
+            }
+        }
+
+        if (port->flow == FLOW_OUTPUT && port->type == TYPE_EVENT) {
+            void* buf = NULL;
+            if (port->jack_port) {
+                buf = jack_port_get_buffer(port->jack_port, nframes);
+                jack_midi_clear_buffer(buf);
+            }
+
+            for (LV2_Evbuf_Iterator i = lv2_evbuf_begin(port->evbuf);
+                    lv2_evbuf_is_valid(i);
+                    i = lv2_evbuf_next(i)) {
+                uint32_t frames, subframes, type, size;
+                uint8_t* body;
+                lv2_evbuf_get(i, &frames, &subframes, &type, &size, &body);
+                if (buf && type == jalv->midi_event_id) {
+                    jack_midi_event_write(buf, frames, body, size);
+                }
+
+                /* TODO: Be more disciminate about what to send */
+                if (jalv->has_ui && !port->old_api) {
+                    char evbuf[sizeof(ControlChange) + sizeof(LV2_Atom)];
+                    ControlChange* ev = (ControlChange*)evbuf;
+                    ev->index    = p;
+                    ev->protocol = jalv->urids.atom_eventTransfer;
+                    ev->size     = sizeof(LV2_Atom) + size;
+                    LV2_Atom* atom = (LV2_Atom*)ev->body;
+                    atom->type = type;
+                    atom->size = size;
+                    if (jack_ringbuffer_write_space(jalv->plugin_events)
+                            < sizeof(evbuf) + size) {
+                        fprintf(stderr, "Plugin => UI buffer overflow!\n");
+                        break;
+                    }
+                    jack_ringbuffer_write(jalv->plugin_events, evbuf, sizeof(evbuf));
+                    /* TODO: race, ensure reader handles this correctly */
+                    jack_ringbuffer_write(jalv->plugin_events, (void*)body, size);
+                }
+            }
+        } else if (send_ui_updates
+                && port->flow != FLOW_INPUT
+                && port->type == TYPE_CONTROL) {
+            char buf[sizeof(ControlChange) + sizeof(float)];
+            ControlChange* ev = (ControlChange*)buf;
+            ev->index    = p;
+            ev->protocol = 0;
+            ev->size     = sizeof(float);
+            *(float*)ev->body = port->control;
+            if (jack_ringbuffer_write(jalv->plugin_events, buf, sizeof(buf))
+                    < sizeof(buf)) {
+                fprintf(stderr, "Plugin => UI buffer overflow!\n");
+            }
+        }
+    }
 
 };
 

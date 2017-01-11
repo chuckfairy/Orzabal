@@ -28,19 +28,19 @@ int main( int argc, char ** argv ) {
 
     LV2::Host * host = new LV2::Host( server->getJackClient() );
 
-    host->updatePlugins();
+    //host->updatePlugins();
 
-    //vector<Audio::Plugin*> plugins = host->findAllInstruments();
+    vector<Audio::Plugin*> plugins = host->findAllInstruments();
 
-    //host->addPlugin( plugins[40] );
+    host->addPlugin( plugins[40] );
 
-    //win->setCentralWidget( ((LV2::Plugin*)plugins[40])->getUIWidget() );
+    win->setCentralWidget( ((LV2::Plugin*)plugins[40])->getUIWidget() );
 
     win->show();
 
     int exe = app.exec();
 
-    sleep(50);
+    ///sleep(50);
 
     //vector<Plugin>::iterator it;
 
