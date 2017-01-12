@@ -7,6 +7,9 @@
 
 #include <Audio/Port.h>
 
+#include "include/lv2_evbuf.h"
+
+
 namespace LV2 {
 
 /**
@@ -26,15 +29,17 @@ struct Port : public Audio::Port {
 
     jack_port_t * jack_port;
 
-    //LV2_Evbuf*      evbuf;      ///< For MIDI ports, otherwise NULL
+
+    // For MIDI ports, otherwise NULL
+
+    LV2_Evbuf * evbuf;
+
 
     void * widget;
 
     size_t buf_size;
 
     uint32_t index;
-
-    void * evbuf;
 
     int old_api;
 

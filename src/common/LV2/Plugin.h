@@ -140,6 +140,23 @@ class Plugin : public Audio::Plugin {
 
         unsigned int buffer_size;
 
+        int _position;
+
+        int _bpm;
+
+        LV2_Atom_Forge _forge;
+
+        LV2_URID _time_position;
+        LV2_URID _time_bar;
+        LV2_URID _time_barBeat;
+        LV2_URID _time_beatUnit;
+        LV2_URID _time_beatsPerBar;
+        LV2_URID _time_beatsPerMinute;
+        LV2_URID _time_frame;
+        LV2_URID _time_speed;
+
+        bool _request_update;
+
 
         /**
          * Timing props

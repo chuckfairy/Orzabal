@@ -23,6 +23,7 @@
 #include "UI.h"
 #include "include/symap.c"
 #include "include/semaphone.h"
+#include "include/lv2_evbuf.h"
 #include "Plugin.h"
 #include "Port.h"
 #include "Host.h"
@@ -239,14 +240,17 @@ void Plugin::start() {
     //jalv.urids.patch_body           = symap_map(_symap, LV2_PATCH__body);
     //jalv.urids.patch_property       = symap_map(_symap, LV2_PATCH__property);
     //jalv.urids.patch_value          = symap_map(_symap, LV2_PATCH__value);
-    //jalv.urids.time_Position        = symap_map(_symap, LV2_TIME__Position);
-    //jalv.urids.time_bar             = symap_map(_symap, LV2_TIME__bar);
-    //jalv.urids.time_barBeat         = symap_map(_symap, LV2_TIME__barBeat);
-    //jalv.urids.time_beatUnit        = symap_map(_symap, LV2_TIME__beatUnit);
-    //jalv.urids.time_beatsPerBar     = symap_map(_symap, LV2_TIME__beatsPerBar);
-    //jalv.urids.time_beatsPerMinute  = symap_map(_symap, LV2_TIME__beatsPerMinute);
-    //jalv.urids.time_frame           = symap_map(_symap, LV2_TIME__frame);
-    //jalv.urids.time_speed           = symap_map(_symap, LV2_TIME__speed);
+    //
+
+    _time_position = symap_map(_symap, LV2_TIME__Position);
+    _time_bar = symap_map(_symap, LV2_TIME__bar);
+    _time_barBeat = symap_map(_symap, LV2_TIME__barBeat);
+    _time_beatUnit = symap_map(_symap, LV2_TIME__beatUnit);
+    _time_beatsPerBar = symap_map(_symap, LV2_TIME__beatsPerBar);
+    _time_beatsPerMinute  = symap_map(_symap, LV2_TIME__beatsPerMinute);
+    _time_frame = symap_map(_symap, LV2_TIME__frame);
+    _time_speed = symap_map(_symap, LV2_TIME__speed);
+
     LV2_URID ui_updateRate = symap_map(_symap, LV2_UI__updateRate);
     LilvNode * work_interface = lilv_new_uri( _Host->getLilvWorld(), LV2_WORKER__interface );
     LilvNode * work_schedule = lilv_new_uri( _Host->getLilvWorld(), LV2_WORKER__schedule );
@@ -531,51 +535,44 @@ void Plugin::updateJack( jack_nframes_t nframes ) {
 
     /* If transport state is not as expected, then something has changed */
     const bool xport_changed = (rolling != _transportRolling ||
-            pos.frame != jalv->position ||
-            pos.beats_per_minute != jalv->bpm);
+            pos.frame != _position ||
+            pos.beats_per_minute != _bpm);
 
     uint8_t   pos_buf[256];
     LV2_Atom* lv2_pos = (LV2_Atom*)pos_buf;
+
     if (xport_changed) {
+
         /* Build an LV2 position object to report change to plugin */
-        lv2_atom_forge_set_buffer(&jalv->forge, pos_buf, sizeof(pos_buf));
-        LV2_Atom_Forge*      forge = &jalv->forge;
+        lv2_atom_forge_set_buffer(&_forge, pos_buf, sizeof(pos_buf));
+        LV2_Atom_Forge* forge = &_forge;
         LV2_Atom_Forge_Frame frame;
-        lv2_atom_forge_object(forge, &frame, 0, jalv->urids.time_Position);
-        lv2_atom_forge_key(forge, jalv->urids.time_frame);
+        lv2_atom_forge_object(forge, &frame, 0, _time_position);
+        lv2_atom_forge_key(forge, _time_frame);
         lv2_atom_forge_long(forge, pos.frame);
-        lv2_atom_forge_key(forge, jalv->urids.time_speed);
+        lv2_atom_forge_key(forge, _time_speed);
         lv2_atom_forge_float(forge, rolling ? 1.0 : 0.0);
         if (pos.valid & JackPositionBBT) {
-            lv2_atom_forge_key(forge, jalv->urids.time_barBeat);
+            lv2_atom_forge_key(forge, _time_barBeat);
             lv2_atom_forge_float(
                     forge, pos.beat - 1 + (pos.tick / pos.ticks_per_beat));
-            lv2_atom_forge_key(forge, jalv->urids.time_bar);
+            lv2_atom_forge_key(forge, _time_bar);
             lv2_atom_forge_long(forge, pos.bar - 1);
-            lv2_atom_forge_key(forge, jalv->urids.time_beatUnit);
+            lv2_atom_forge_key(forge, _time_beatUnit);
             lv2_atom_forge_int(forge, pos.beat_type);
-            lv2_atom_forge_key(forge, jalv->urids.time_beatsPerBar);
+            lv2_atom_forge_key(forge, _time_beatsPerBar);
             lv2_atom_forge_float(forge, pos.beats_per_bar);
-            lv2_atom_forge_key(forge, jalv->urids.time_beatsPerMinute);
+            lv2_atom_forge_key(forge, _time_beatsPerMinute);
             lv2_atom_forge_float(forge, pos.beats_per_minute);
         }
 
-        //if (jalv->opts.dump) {
-        //char* str = sratom_to_turtle(
-        //jalv->sratom, &jalv->unmap, "time:", NULL, NULL,
-        //lv2_pos->type, lv2_pos->size, LV2_ATOM_BODY(lv2_pos));
-        //jalv_ansi_start(stderr, 36);
-        //printf("\n## Position ##\n%s\n", str);
-        //jalv_ansi_reset(stderr);
-        //free(str);
-        //}
     }
 
 
     /* Update transport state to expected values for next cycle */
 
-    jalv->position = rolling ? pos.frame + nframes : pos.frame;
-    jalv->bpm = pos.beats_per_minute;
+    _position = rolling ? pos.frame + nframes : pos.frame;
+    _bpm = pos.beats_per_minute;
     _transportRolling  = rolling;
 
 
@@ -585,13 +582,13 @@ void Plugin::updateJack( jack_nframes_t nframes ) {
 
         Port * port = (Port*) _ports[ p ];
 
-        if (port->type == Audio::TYPE_AUDIO && port->jack_port) {
+        if( port->type == Audio::TYPE_AUDIO && port->jack_port ) {
 
             /* Connect plugin port directly to Jack port buffer */
             lilv_instance_connect_port(
                 _lilvInstance,
                 p,
-                jack_port_get_buffer(port->jack_port, nframes)
+                jack_port_get_buffer( port->jack_port, nframes )
             );
 
         } else if (port->type == Audio::TYPE_CV && port->jack_port) {
@@ -599,9 +596,9 @@ void Plugin::updateJack( jack_nframes_t nframes ) {
             /* Connect plugin port directly to Jack port buffer */
             lilv_instance_connect_port(
                     _lilvInstance, p,
-                    jack_port_get_buffer(port->jack_port, nframes));
+                    jack_port_get_buffer( port->jack_port, nframes ) );
 
-        } else if (port->type == Audio::TYPE_EVENT && port->flow == Audio::FLOW_INPUT) {
+        } else if ( port->type == Audio::TYPE_EVENT && port->flow == Audio::FLOW_INPUT ) {
 
             lv2_evbuf_reset(port->evbuf, true);
 
@@ -609,11 +606,12 @@ void Plugin::updateJack( jack_nframes_t nframes ) {
             LV2_Evbuf_Iterator iter = lv2_evbuf_begin(port->evbuf);
             if (xport_changed) {
                 lv2_evbuf_write(
-                        &iter, 0, 0,
-                        lv2_pos->type, lv2_pos->size, LV2_ATOM_BODY(lv2_pos));
+                    &iter, 0, 0,
+                    lv2_pos->type, lv2_pos->size, LV2_ATOM_BODY(lv2_pos)
+                );
             }
 
-            if (jalv->request_update) {
+            if (_request_update) {
                 /* Plugin state has changed, request an update */
                 const LV2_Atom_Object get = {
                     { sizeof(LV2_Atom_Object_Body), jalv->urids.atom_Object },
@@ -635,19 +633,19 @@ void Plugin::updateJack( jack_nframes_t nframes ) {
                             ev.size, ev.buffer);
                 }
             }
-        } else if (port->type == TYPE_EVENT) {
+        } else if (port->type == Audio::TYPE_EVENT) {
             /* Clear event output for plugin to write to */
             lv2_evbuf_reset(port->evbuf, false);
         }
 
     }
 
-    jalv->request_update = false;
+    _request_update = false;
 
 
     /* Read and apply control change events from UI */
 
-    if (jalv->has_ui) {
+    if( _UI ) {
 
         ControlChange ev;
         const size_t  space = jack_ringbuffer_read_space(jalv->ui_events);
@@ -702,7 +700,7 @@ void Plugin::updateJack( jack_nframes_t nframes ) {
     /* Deliver MIDI output and UI events */
     for (uint32_t p = 0; p < _numPorts; ++p) {
         struct Port* const port = &jalv->ports[p];
-        if (port->flow == FLOW_OUTPUT && port->type == TYPE_CONTROL &&
+        if (port->flow == Audio::FLOW_OUTPUT && port->type == Audio::TYPE_CONTROL &&
                 lilv_port_has_property(jalv->plugin, port->lilv_port,
                     jalv->nodes.lv2_reportsLatency)) {
             if (jalv->plugin_latency != port->control) {
@@ -711,7 +709,7 @@ void Plugin::updateJack( jack_nframes_t nframes ) {
             }
         }
 
-        if (port->flow == FLOW_OUTPUT && port->type == TYPE_EVENT) {
+        if (port->flow == Audio::FLOW_OUTPUT && port->type == Audio::TYPE_EVENT) {
             void* buf = NULL;
             if (port->jack_port) {
                 buf = jack_port_get_buffer(port->jack_port, nframes);
@@ -749,8 +747,8 @@ void Plugin::updateJack( jack_nframes_t nframes ) {
                 }
             }
         } else if (send_ui_updates
-                && port->flow != FLOW_INPUT
-                && port->type == TYPE_CONTROL) {
+                && port->flow != Audio::FLOW_INPUT
+                && port->type == Audio::TYPE_CONTROL) {
             char buf[sizeof(ControlChange) + sizeof(float)];
             ControlChange* ev = (ControlChange*)buf;
             ev->index    = p;
