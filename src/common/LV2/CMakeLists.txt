@@ -22,6 +22,7 @@ file( GLOB
     GABRIELO_LV2_INCLUDE_FILES
     "include/*.h"
     "include/symap.c"
+    "include/lv2_evbuf.c"
     "Host.cpp"
     "Search.cpp"
     "JackCallbackEvent.cpp"
