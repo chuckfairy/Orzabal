@@ -2,6 +2,7 @@
  * LV2 Host extended from Jack
  *
  */
+#include <stdexcept>
 #include <vector>
 
 #include <Jack/Host.h>
@@ -14,7 +15,6 @@
 
 
 using std::vector;
-
 
 namespace LV2 {
 
@@ -108,7 +108,47 @@ JackCallbackEvent * Host::getEvent() {
 
 };
 
-void Host::setStaticHost() {
+
+/**
+ * Static host setting and runtime
+ *
+ */
+
+void Host::setAsStaticHost() {
+
+    jack_set_process_callback( _JackClient, Host::updateStaticHost, (void*)(this) );
+
+};
+
+int Host::updateStaticHost( jack_nframes_t nframes, void * hostPtr ) {
+
+    Host * h = (Host*) hostPtr;
+
+    h->updateJack( nframes );
+
+    return 0;
+
+};
+
+
+/**
+ * Server related
+ *
+ * @throws runtime_error if server incorrectly set
+ *
+ */
+
+void Host::setServerCallbacks() {
+
+    if( ! _Server ) {
+
+        throw std::runtime_error("No server set");
+
+    }
+
+    Util::Event * e = (Util::Event*) getEvent();
+
+    _Server->on( Jack::Server::UPDATE_EVENT, e );
 
 };
 
@@ -117,21 +157,36 @@ void Host::setStaticHost() {
  * Update jack host from jack frame pointer
  */
 
-void Host::updateJack( void * frameVoid ) {
-
-    updatePlugins();
+void Host::updateJack( jack_nframes_t nframes ) {
 
     vector<Audio::Plugin*>::iterator it;
 
+    std::cout << "NFRAMES " << nframes << "\n";
+
     for( it = _ActivePlugins.begin(); it != _ActivePlugins.end(); ++ it ) {
 
-        if( !(*it)->isActive() ) {
+        Plugin * p = (Plugin*) (*it);
 
-            return;
+        if( p->isActive() ) {
+
+            p->updateJack( nframes );
 
         }
 
     }
+
+};
+
+
+/**
+ * Update jack from possible void *
+ */
+
+void Host::updateJack( void * frameVoid ) {
+
+    return updateJack(
+        (jack_nframes_t) (uintptr_t) frameVoid
+    );
 
 };
 

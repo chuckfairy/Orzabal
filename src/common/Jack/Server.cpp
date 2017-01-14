@@ -28,6 +28,13 @@ Server::Server() {
 
 
 /**
+ * Static sets
+ */
+
+const char * Server::UPDATE_EVENT = "update";
+
+
+/**
  * Jack C server api start
  *
  */
@@ -118,13 +125,27 @@ void Server::getPorts() {
 
 
 /**
+ * Callback setting
+ */
+
+void Server::setClientCallbacks() {
+
+
+};
+
+
+/**
  * Jack server proccess callback
  *
  */
 
-int Server::JackProcess( jack_nframes_t nframes, void *o ) {
+int Server::JackProcess( jack_nframes_t nframes, void * o ) {
 
-    //std::cout << &o;
+    Server * s = (Server*) o;
+
+    //std::cout << "NFRAMES420 " << nframes << "\n";
+
+    s->dispatch( Server::UPDATE_EVENT, (void*) (uintptr_t) nframes );
 
     return 0;
 

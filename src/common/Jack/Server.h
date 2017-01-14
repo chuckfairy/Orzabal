@@ -91,6 +91,15 @@ class Server : public Audio::Server {
 
         void connectDefault();
 
+        void setClientCallbacks();
+
+
+        /**
+         * Event specific
+         */
+
+        static const char * UPDATE_EVENT;
+
 
         /**
          * Get jack status

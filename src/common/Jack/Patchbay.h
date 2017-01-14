@@ -14,6 +14,13 @@
 namespace Jack {
 
 /**
+ * Class forwards
+ */
+
+class Server;
+
+
+/**
  * Construct
  */
 
@@ -23,10 +30,19 @@ class Patchbay : public Audio::Host {
 
         jack_client_t * _JackClient;
 
+        Server * _Server;
+
 
     public:
 
         Patchbay( jack_client_t * );
+
+
+        /**
+         * Server related
+         */
+
+        void setServer( Server * );
 
 
         /**

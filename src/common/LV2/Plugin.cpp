@@ -230,7 +230,9 @@ void Plugin::start() {
     atom_Object = symap_map(_symap, LV2_ATOM__Object);
     //jalv.urids.atom_Path            = symap_map(_symap, LV2_ATOM__Path);
     //jalv.urids.atom_String          = symap_map(_symap, LV2_ATOM__String);
-    //jalv.urids.atom_eventTransfer   = symap_map(_symap, LV2_ATOM__eventTransfer);
+
+    atom_eventTransfer = symap_map(_symap, LV2_ATOM__eventTransfer);
+
     LV2_URID bufsz_maxBlockLength = symap_map(_symap, LV2_BUF_SIZE__maxBlockLength);
     LV2_URID bufsz_minBlockLength = symap_map(_symap, LV2_BUF_SIZE__minBlockLength);
     LV2_URID bufsz_sequenceSize = symap_map(_symap, LV2_BUF_SIZE__sequenceSize);
@@ -258,6 +260,8 @@ void Plugin::start() {
     LV2_URID ui_updateRate = symap_map(_symap, LV2_UI__updateRate);
     LilvNode * work_interface = lilv_new_uri( _Host->getLilvWorld(), LV2_WORKER__interface );
     LilvNode * work_schedule = lilv_new_uri( _Host->getLilvWorld(), LV2_WORKER__schedule );
+
+    lv2_reportsLatency = lilv_new_uri( _Host->getLilvWorld(), LV2_CORE__reportsLatency );
 
     int block_length = _Host->getBufferSize();
 
@@ -529,6 +533,8 @@ void Plugin::updateJack( jack_nframes_t nframes ) {
 
 	/* Get Jack transport position */
 
+    return;
+
     jack_client_t * jackClient = _Host->getJackClient();
 
     jack_position_t pos;
@@ -556,7 +562,9 @@ void Plugin::updateJack( jack_nframes_t nframes ) {
         lv2_atom_forge_long(forge, pos.frame);
         lv2_atom_forge_key(forge, _time_speed);
         lv2_atom_forge_float(forge, rolling ? 1.0 : 0.0);
+
         if (pos.valid & JackPositionBBT) {
+
             lv2_atom_forge_key(forge, _time_barBeat);
             lv2_atom_forge_float(
                     forge, pos.beat - 1 + (pos.tick / pos.ticks_per_beat));
@@ -568,6 +576,7 @@ void Plugin::updateJack( jack_nframes_t nframes ) {
             lv2_atom_forge_float(forge, pos.beats_per_bar);
             lv2_atom_forge_key(forge, _time_beatsPerMinute);
             lv2_atom_forge_float(forge, pos.beats_per_minute);
+
         }
 
     }
@@ -614,7 +623,7 @@ void Plugin::updateJack( jack_nframes_t nframes ) {
             if (xport_changed) {
                 lv2_evbuf_write(
                     &iter, 0, 0,
-                    lv2_pos->type, lv2_pos->size, LV2_ATOM_BODY(lv2_pos)
+                    lv2_pos->type, lv2_pos->size, (uint8_t*) LV2_ATOM_BODY(lv2_pos)
                 );
             }
 
@@ -628,7 +637,7 @@ void Plugin::updateJack( jack_nframes_t nframes ) {
 
                 lv2_evbuf_write(
                     &iter, 0, 0,
-                    get.atom.type, get.atom.size, LV2_ATOM_BODY(&get)
+                    get.atom.type, get.atom.size, (uint8_t*) LV2_ATOM_BODY(&get)
                 );
 
             }
@@ -642,7 +651,7 @@ void Plugin::updateJack( jack_nframes_t nframes ) {
                     jack_midi_event_get(&ev, buf, i);
                     lv2_evbuf_write(&iter,
                             ev.time, 0,
-                            jalv->midi_event_id,
+                            midi_event_id,
                             ev.size, ev.buffer);
                 }
 
@@ -726,7 +735,7 @@ void Plugin::updateJack( jack_nframes_t nframes ) {
         if (port->flow == Audio::FLOW_OUTPUT && port->type == Audio::TYPE_CONTROL &&
 
                 lilv_port_has_property( _lilvPlugin, port->lilv_port,
-                    jalv->nodes.lv2_reportsLatency)) {
+                    lv2_reportsLatency)) {
 
             if (plugin_latency != port->control) {
 
@@ -754,7 +763,7 @@ void Plugin::updateJack( jack_nframes_t nframes ) {
                 uint32_t frames, subframes, type, size;
                 uint8_t* body;
                 lv2_evbuf_get(i, &frames, &subframes, &type, &size, &body);
-                if (buf && type == jalv->midi_event_id) {
+                if (buf && type == midi_event_id) {
                     jack_midi_event_write(buf, frames, body, size);
                 }
 
@@ -766,7 +775,7 @@ void Plugin::updateJack( jack_nframes_t nframes ) {
                     char evbuf[sizeof(ControlChange) + sizeof(LV2_Atom)];
                     ControlChange* ev = (ControlChange*)evbuf;
                     ev->index = p;
-                    ev->protocol = jalv->urids.atom_eventTransfer;
+                    ev->protocol = atom_eventTransfer;
                     ev->size = sizeof(LV2_Atom) + size;
                     LV2_Atom* atom = (LV2_Atom*)ev->body;
                     atom->type = type;
@@ -781,7 +790,7 @@ void Plugin::updateJack( jack_nframes_t nframes ) {
 
                     jack_ringbuffer_write(plugin_events, evbuf, sizeof(evbuf));
                     /* TODO: race, ensure reader handles this correctly */
-                    jack_ringbuffer_write(plugin_events, (void*)body, size);
+                    jack_ringbuffer_write(plugin_events, (const char*)body, size);
 
                 }
 

@@ -103,9 +103,20 @@ class Host : public Jack::Patchbay {
 
         JackCallbackEvent * getEvent();
 
-        void setStaticHost();
+        void setAsStaticHost();
+
+        static int updateStaticHost( jack_nframes_t, void * );
+
+        void updateJack( jack_nframes_t );
 
         void updateJack( void * );
+
+
+        /**
+         * Server related
+         */
+
+        void setServerCallbacks();
 
 };
 

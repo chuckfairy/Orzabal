@@ -4,6 +4,7 @@
 #pragma once
 
 #include <map>
+#include <iostream>
 #include <vector>
 
 using std::map;
@@ -72,6 +73,8 @@ class Dispatcher {
         void dispatch( const char * event, void * data ) {
 
             if( ! hasEvents( event ) ) {
+
+                std::cout << _events.count( event ) << "\n";
 
                 return;
 

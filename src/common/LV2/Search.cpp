@@ -44,14 +44,11 @@ vector<Audio::Plugin*> Search::findAll() {
 
         const LilvPlugin* p = lilv_plugins_get(plugins, i);
 
-        //Plugin * _p = new Plugin( p );
         Audio::Plugin * d = new Plugin( p, _Host );
 
         pluginList.push_back( d );
 
     }
-
-    //lilv_world_free(world);
 
     return pluginList;
 

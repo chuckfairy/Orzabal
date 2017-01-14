@@ -149,6 +149,7 @@ class Plugin : public Audio::Plugin {
         LV2_Atom_Forge _forge;
 
         LV2_URID atom_Object;
+        LV2_URID atom_eventTransfer;
         LV2_URID _time_position;
         LV2_URID _time_bar;
         LV2_URID _time_barBeat;
@@ -157,6 +158,8 @@ class Plugin : public Audio::Plugin {
         LV2_URID _time_beatsPerMinute;
         LV2_URID _time_frame;
         LV2_URID _time_speed;
+
+        LilvNode * lv2_reportsLatency;
 
         bool _request_update;
 

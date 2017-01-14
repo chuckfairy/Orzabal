@@ -32,7 +32,13 @@ int main( int argc, char ** argv ) {
 
     vector<Audio::Plugin*> plugins = host->findAllInstruments();
 
+    host->setServer( server );
+
+    host->setServerCallbacks();
+
     host->addPlugin( plugins[40] );
+
+    server->dispatch( "update", (void*) 0 );
 
     win->setCentralWidget( ((LV2::Plugin*)plugins[40])->getUIWidget() );
 
