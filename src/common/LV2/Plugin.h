@@ -6,6 +6,8 @@
 
 #include <iostream>
 #include <string.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 #include <lv2/lv2plug.in/ns/ext/atom/atom.h>
 #include <lv2/lv2plug.in/ns/ext/atom/forge.h>
@@ -162,6 +164,10 @@ class Plugin : public Audio::Plugin {
 
         float ui_update_hz;
 
+        uint32_t midi_event_id;
+
+        uint32_t plugin_latency;
+
 
         /**
          * Timing props
@@ -177,6 +183,11 @@ class Plugin : public Audio::Plugin {
         UI * _UI;
 
         jack_ringbuffer_t * _ringBuffer;
+
+        jack_nframes_t event_delta_t;
+
+        jack_ringbuffer_t* plugin_events;
+
 
     public:
 
