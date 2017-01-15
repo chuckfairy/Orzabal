@@ -543,7 +543,7 @@ void Plugin::allocatePortBuffer( uint32_t i ) {
                     port->old_api ? LV2_EVBUF_EVENT : LV2_EVBUF_ATOM,
                     map.map(
                         map.handle,
-                        lilv_node_as_string(atom_Chunk)
+                        lilv_node_as_string( atom_Chunk )
                     ),
                     map.map(
                         map.handle,
@@ -557,6 +557,7 @@ void Plugin::allocatePortBuffer( uint32_t i ) {
 
         default:
             break;
+
     }
 
 };
@@ -858,7 +859,8 @@ void Plugin::updatePort( uint32_t p, jack_nframes_t nframes ) {
 
             const LV2_Atom_Object get = {
                 { sizeof(LV2_Atom_Object_Body), atom_Object },
-                { 0, patch_Get } };
+                { 0, patch_Get }
+            };
 
             lv2_evbuf_write(
                 &iter, 0, 0,

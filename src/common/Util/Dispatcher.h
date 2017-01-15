@@ -74,8 +74,6 @@ class Dispatcher {
 
             if( ! hasEvents( event ) ) {
 
-                std::cout << _events.count( event ) << "\n";
-
                 return;
 
             };
