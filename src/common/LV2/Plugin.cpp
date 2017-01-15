@@ -210,8 +210,6 @@ Audio::Port * Plugin::createPort( int long portNum ) {
 
 void Plugin::start() {
 
-    std::cout << _lilvURI << "\n";
-
     _symap = symap_new();
 
     int block_size = 512;
@@ -233,6 +231,9 @@ void Plugin::start() {
 
     atom_eventTransfer = symap_map(_symap, LV2_ATOM__eventTransfer);
 
+	atom_Chunk = lilv_new_uri( _Host->getLilvWorld(), LV2_ATOM__Chunk );
+	atom_Sequence = lilv_new_uri( _Host->getLilvWorld(), LV2_ATOM__Sequence );
+
     LV2_URID bufsz_maxBlockLength = symap_map(_symap, LV2_BUF_SIZE__maxBlockLength);
     LV2_URID bufsz_minBlockLength = symap_map(_symap, LV2_BUF_SIZE__minBlockLength);
     LV2_URID bufsz_sequenceSize = symap_map(_symap, LV2_BUF_SIZE__sequenceSize);
@@ -246,7 +247,7 @@ void Plugin::start() {
     //jalv.urids.patch_body           = symap_map(_symap, LV2_PATCH__body);
     //jalv.urids.patch_property       = symap_map(_symap, LV2_PATCH__property);
     //jalv.urids.patch_value          = symap_map(_symap, LV2_PATCH__value);
-    //
+    patch_Get = symap_map(_symap, LV2_PATCH__Get);
 
     _time_position = symap_map(_symap, LV2_TIME__Position);
     _time_bar = symap_map(_symap, LV2_TIME__bar);
@@ -265,7 +266,7 @@ void Plugin::start() {
 
     int block_length = _Host->getBufferSize();
 
-    int midi_buf_size = _Host->getMidiBufferSize();
+    midi_buf_size = _Host->getMidiBufferSize();
 
     sample_rate = _Host->getSampleRate();
 
@@ -298,9 +299,13 @@ void Plugin::start() {
     };
 
 
-    //jalv_allocate_port_buffers(&jalv);
+    //Allocate lv2 bufs
 
-    /* Create workers if necessary */
+    allocatePortBuffers();
+
+
+    /* @TODO Create workers if necessary */
+
     if( lilv_plugin_has_feature( _lilvPlugin, work_schedule )
             && lilv_plugin_has_extension_data(_lilvPlugin, work_interface)) {
 
@@ -337,6 +342,8 @@ void Plugin::start() {
     _UI->start();
 
     zix_sem_wait(&exit_sem);
+
+    ACTIVE = true;
 
     //if( jalv.opts.controls ) {
         //for( char** c = jalv.opts.controls; *c; ++c ) {
@@ -500,7 +507,59 @@ void Plugin::activatePort( long portNum ) {
 
 	}
 
+};
+
+
+/**
+ * Allocate port buffers (only necessary for MIDI).
+ */
+
+void Plugin::allocatePortBuffers() {
+
+	for( uint32_t i = 0; i < _numPorts; ++i ) {
+
+        allocatePortBuffer( i );
+
+    }
+
 }
+
+void Plugin::allocatePortBuffer( uint32_t i ) {
+
+    Port* port = (Port*) _ports[ i ];
+
+    switch( port->type ) {
+
+        case Audio::TYPE_EVENT: {
+
+            lv2_evbuf_free( port->evbuf );
+
+            const size_t buf_size = port->buf_size > 0
+                ? port->buf_size
+                : midi_buf_size;
+
+            port->evbuf = lv2_evbuf_new(
+                    buf_size,
+                    port->old_api ? LV2_EVBUF_EVENT : LV2_EVBUF_ATOM,
+                    map.map(
+                        map.handle,
+                        lilv_node_as_string(atom_Chunk)
+                    ),
+                    map.map(
+                        map.handle,
+                        lilv_node_as_string( atom_Sequence ) )
+                    );
+            lilv_instance_connect_port(
+                    _lilvInstance, i, lv2_evbuf_get_buffer(port->evbuf));
+            break;
+
+        }
+
+        default:
+            break;
+    }
+
+};
 
 
 /**
@@ -533,7 +592,7 @@ void Plugin::updateJack( jack_nframes_t nframes ) {
 
 	/* Get Jack transport position */
 
-    return;
+    std::cout << "NFRAMES " << nframes << "\n";
 
     jack_client_t * jackClient = _Host->getJackClient();
 
@@ -544,14 +603,14 @@ void Plugin::updateJack( jack_nframes_t nframes ) {
     );
 
     /* If transport state is not as expected, then something has changed */
-    const bool xport_changed = (rolling != _transportRolling ||
+    xport_changed = (rolling != _transportRolling ||
             pos.frame != _position ||
             pos.beats_per_minute != _bpm);
 
     uint8_t   pos_buf[256];
-    LV2_Atom* lv2_pos = (LV2_Atom*)pos_buf;
+    lv2_pos = (LV2_Atom*)pos_buf;
 
-    if (xport_changed) {
+    if( xport_changed ) {
 
         /* Build an LV2 position object to report change to plugin */
         lv2_atom_forge_set_buffer(&_forge, pos_buf, sizeof(pos_buf));
@@ -589,79 +648,17 @@ void Plugin::updateJack( jack_nframes_t nframes ) {
     _transportRolling  = rolling;
 
     LV2_URID param_sampleRate = symap_map(_symap, LV2_PARAMETERS__sampleRate);
-    LV2_URID patch_Get = symap_map(_symap, LV2_PATCH__Get);
 
 
     /* Prepare port buffers */
 
-    for (uint32_t p = 0; p < _numPorts; ++p) {
+    for( uint32_t p = 0; p < _numPorts; ++ p ) {
 
-        Port * port = (Port*) _ports[ p ];
-
-        if( port->type == Audio::TYPE_AUDIO && port->jack_port ) {
-
-            /* Connect plugin port directly to Jack port buffer */
-            lilv_instance_connect_port(
-                _lilvInstance,
-                p,
-                jack_port_get_buffer( port->jack_port, nframes )
-            );
-
-        } else if (port->type == Audio::TYPE_CV && port->jack_port) {
-
-            /* Connect plugin port directly to Jack port buffer */
-            lilv_instance_connect_port(
-                    _lilvInstance, p,
-                    jack_port_get_buffer( port->jack_port, nframes ) );
-
-        } else if ( port->type == Audio::TYPE_EVENT && port->flow == Audio::FLOW_INPUT ) {
-
-            lv2_evbuf_reset(port->evbuf, true);
-
-            /* Write transport change event if applicable */
-            LV2_Evbuf_Iterator iter = lv2_evbuf_begin(port->evbuf);
-            if (xport_changed) {
-                lv2_evbuf_write(
-                    &iter, 0, 0,
-                    lv2_pos->type, lv2_pos->size, (uint8_t*) LV2_ATOM_BODY(lv2_pos)
-                );
-            }
-
-            if (_request_update) {
-
-                /* Plugin state has changed, request an update */
-
-                const LV2_Atom_Object get = {
-                    { sizeof(LV2_Atom_Object_Body), atom_Object },
-                    { 0, patch_Get } };
-
-                lv2_evbuf_write(
-                    &iter, 0, 0,
-                    get.atom.type, get.atom.size, (uint8_t*) LV2_ATOM_BODY(&get)
-                );
-
-            }
-
-            if (port->jack_port) {
-
-                /* Write Jack MIDI input */
-                void* buf = jack_port_get_buffer(port->jack_port, nframes);
-                for (uint32_t i = 0; i < jack_midi_get_event_count(buf); ++i) {
-                    jack_midi_event_t ev;
-                    jack_midi_event_get(&ev, buf, i);
-                    lv2_evbuf_write(&iter,
-                            ev.time, 0,
-                            midi_event_id,
-                            ev.size, ev.buffer);
-                }
-
-            }
-        } else if (port->type == Audio::TYPE_EVENT) {
-            /* Clear event output for plugin to write to */
-            lv2_evbuf_reset(port->evbuf, false);
-        }
+        updatePort( p, nframes );
 
     }
+
+    return;
 
     _request_update = false;
 
@@ -814,6 +811,79 @@ void Plugin::updateJack( jack_nframes_t nframes ) {
 
         }
 
+    }
+
+};
+
+/**
+ * Update lv2 to jack port
+ */
+
+void Plugin::updatePort( uint32_t p, jack_nframes_t nframes ) {
+
+    Port * port = (Port*) _ports[ p ];
+
+    if( port->type == Audio::TYPE_AUDIO && port->jack_port ) {
+
+        /* Connect plugin port directly to Jack port buffer */
+        lilv_instance_connect_port(
+            _lilvInstance,
+            p,
+            jack_port_get_buffer( port->jack_port, nframes )
+        );
+
+    } else if( port->type == Audio::TYPE_CV && port->jack_port ) {
+
+        /* Connect plugin port directly to Jack port buffer */
+//        lilv_instance_connect_port(
+//                _lilvInstance, p,
+//                jack_port_get_buffer( port->jack_port, nframes ) );
+
+    } else if( port->type == Audio::TYPE_EVENT && port->flow == Audio::FLOW_INPUT ) {
+
+        lv2_evbuf_reset(port->evbuf, true);
+
+        /* Write transport change event if applicable */
+        LV2_Evbuf_Iterator iter = lv2_evbuf_begin(port->evbuf);
+        if (xport_changed) {
+            lv2_evbuf_write(
+                &iter, 0, 0,
+                lv2_pos->type, lv2_pos->size, (uint8_t*) LV2_ATOM_BODY(lv2_pos)
+            );
+        }
+
+        if (_request_update) {
+
+            /* Plugin state has changed, request an update */
+
+            const LV2_Atom_Object get = {
+                { sizeof(LV2_Atom_Object_Body), atom_Object },
+                { 0, patch_Get } };
+
+            lv2_evbuf_write(
+                &iter, 0, 0,
+                get.atom.type, get.atom.size, (uint8_t*) LV2_ATOM_BODY(&get)
+            );
+
+        }
+
+        if (port->jack_port) {
+
+            /* Write Jack MIDI input */
+            void* buf = jack_port_get_buffer(port->jack_port, nframes);
+            for (uint32_t i = 0; i < jack_midi_get_event_count(buf); ++i) {
+                jack_midi_event_t ev;
+                jack_midi_event_get(&ev, buf, i);
+                lv2_evbuf_write(&iter,
+                        ev.time, 0,
+                        midi_event_id,
+                        ev.size, ev.buffer);
+            }
+
+        }
+    } else if (port->type == Audio::TYPE_EVENT) {
+        /* Clear event output for plugin to write to */
+        lv2_evbuf_reset(port->evbuf, false);
     }
 
 };

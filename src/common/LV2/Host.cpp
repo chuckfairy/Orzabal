@@ -161,8 +161,6 @@ void Host::updateJack( jack_nframes_t nframes ) {
 
     vector<Audio::Plugin*>::iterator it;
 
-    std::cout << "NFRAMES " << nframes << "\n";
-
     for( it = _ActivePlugins.begin(); it != _ActivePlugins.end(); ++ it ) {
 
         Plugin * p = (Plugin*) (*it);

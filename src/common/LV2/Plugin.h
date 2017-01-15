@@ -148,8 +148,11 @@ class Plugin : public Audio::Plugin {
 
         LV2_Atom_Forge _forge;
 
+        LilvNode * atom_Chunk;
+        LilvNode* atom_Sequence;
         LV2_URID atom_Object;
         LV2_URID atom_eventTransfer;
+
         LV2_URID _time_position;
         LV2_URID _time_bar;
         LV2_URID _time_barBeat;
@@ -158,6 +161,11 @@ class Plugin : public Audio::Plugin {
         LV2_URID _time_beatsPerMinute;
         LV2_URID _time_frame;
         LV2_URID _time_speed;
+        LV2_URID patch_Get;
+
+        LV2_URID_Map map;
+
+        LV2_Atom* lv2_pos;
 
         LilvNode * lv2_reportsLatency;
 
@@ -167,9 +175,13 @@ class Plugin : public Audio::Plugin {
 
         float ui_update_hz;
 
+        int midi_buf_size;
+
         uint32_t midi_event_id;
 
         uint32_t plugin_latency;
+
+        bool xport_changed;
 
 
         /**
@@ -210,7 +222,9 @@ class Plugin : public Audio::Plugin {
 
         UI * getUI();
 
-        void updateJack( jack_nframes_t nframes );
+        void updateJack( jack_nframes_t );
+
+        void updatePort( uint32_t, jack_nframes_t );
 
 
         /**
@@ -231,6 +245,8 @@ class Plugin : public Audio::Plugin {
         void activatePort( long portNum );
 
         void allocatePortBuffers();
+
+        void allocatePortBuffer( uint32_t i );
 
         const bool portIsOptional( Port * );
 
