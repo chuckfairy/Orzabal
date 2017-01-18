@@ -219,6 +219,11 @@ void Plugin::start() {
     int uiUpdateHZ = 60;
     buffer_size = 4096;
 
+    ///@TODO
+	map.handle = this;
+	//map.map = map_uri;
+    //lv2_atom_forge_init(&_forge, &map);
+
     LV2_URID atom_Float = symap_map(_symap, LV2_ATOM__Float);
     LV2_URID atom_Int = symap_map(_symap, LV2_ATOM__Int);
 
@@ -270,7 +275,7 @@ void Plugin::start() {
 
     sample_rate = _Host->getSampleRate();
 
-    ui_update_hz = (float)sample_rate / midi_buf_size * 2.0f;
+    ui_update_hz = (float) sample_rate / midi_buf_size * 2.0f;
 
 
     /* Build options array to pass to plugin */
@@ -301,8 +306,6 @@ void Plugin::start() {
 
     //Allocate lv2 bufs
 
-    allocatePortBuffers();
-
 
     /* @TODO Create workers if necessary */
 
@@ -325,6 +328,8 @@ void Plugin::start() {
     _lilvInstance = lilv_plugin_instantiate( _lilvPlugin, sample_rate, features );
 
     lilv_instance_activate( _lilvInstance );
+
+    allocatePortBuffers();
 
 
     //Set descriptor
@@ -375,9 +380,7 @@ void Plugin::stop() {
     lilv_instance_deactivate( _lilvInstance );
     lilv_instance_free( _lilvInstance );
 
-    /* Clean up */
-//    jack_ringbuffer_free(jalv.ui_events);
-//    jack_ringbuffer_free(jalv.plugin_events);
+    jack_ringbuffer_free( _ringBuffer );
 
     symap_free( _symap );
     zix_sem_destroy( &_symap_lock );
@@ -537,6 +540,8 @@ void Plugin::allocatePortBuffer( uint32_t i ) {
             const size_t buf_size = port->buf_size > 0
                 ? port->buf_size
                 : midi_buf_size;
+
+            return;
 
             port->evbuf = lv2_evbuf_new(
                     buf_size,
@@ -779,16 +784,16 @@ void Plugin::updateJack( jack_nframes_t nframes ) {
                     atom->type = type;
                     atom->size = size;
 
-                    if( jack_ringbuffer_write_space( plugin_events )
+                    if( jack_ringbuffer_write_space( _ringBuffer )
                             < sizeof(evbuf) + size
                     ) {
                         fprintf(stderr, "Plugin => UI buffer overflow!\n");
                         break;
                     }
 
-                    jack_ringbuffer_write(plugin_events, evbuf, sizeof(evbuf));
+                    jack_ringbuffer_write(_ringBuffer, evbuf, sizeof(evbuf));
                     /* TODO: race, ensure reader handles this correctly */
-                    jack_ringbuffer_write(plugin_events, (const char*)body, size);
+                    jack_ringbuffer_write(_ringBuffer, (const char*)body, size);
 
                 }
 
@@ -805,7 +810,7 @@ void Plugin::updateJack( jack_nframes_t nframes ) {
             ev->size     = sizeof(float);
             *(float*)ev->body = port->control;
 
-            if (jack_ringbuffer_write(plugin_events, buf, sizeof(buf))
+            if (jack_ringbuffer_write(_ringBuffer, buf, sizeof(buf))
                     < sizeof(buf)) {
                 fprintf(stderr, "Plugin => UI buffer overflow!\n");
             }

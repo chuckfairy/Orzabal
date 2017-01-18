@@ -34,13 +34,13 @@ int main( int argc, char ** argv ) {
 
     host->setServer( server );
 
-    host->setServerCallbacks();
+    //host->setServerCallbacks();
 
     host->addPlugin( plugins[40] );
 
-    server->dispatch( "update", (void*) 0 );
+    //server->dispatch( "update", (void*) 0 );
 
-    win->setCentralWidget( ((LV2::Plugin*)plugins[40])->getUIWidget() );
+    //win->setCentralWidget( ((LV2::Plugin*)plugins[40])->getUIWidget() );
 
     win->show();
 
