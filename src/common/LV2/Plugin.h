@@ -126,8 +126,6 @@ class Plugin : public Audio::Plugin {
 
         Host * _Host;
 
-        Symap * _symap;
-
         ZixSem _symap_lock;
 
         ZixSem exit_sem;
@@ -327,6 +325,17 @@ class Plugin : public Audio::Plugin {
             return _lilvInstance;
 
         };
+
+
+        /**
+         * LV2 Mapping midi
+         */
+
+        Symap * _symap;
+
+        ZixSem symap_lock;
+
+        static LV2_URID mapURI( LV2_URID_Map_Handle, const char * );
 
 };
 

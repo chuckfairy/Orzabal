@@ -29,6 +29,7 @@
 #include "ControlChange.h"
 #include "Host.h"
 
+//@TODO move to std::max
 #ifndef MIN
 #    define MIN(a, b) (((a) < (b)) ? (a) : (b))
 #endif
@@ -68,7 +69,9 @@ void Plugin::setPorts() {
     long i;
 
     _defaultValues = (float*)calloc(
-		lilv_plugin_get_num_ports( _lilvPlugin ), sizeof(float));
+        lilv_plugin_get_num_ports( _lilvPlugin ),
+        sizeof( float )
+    );
 
     lilv_plugin_get_port_ranges_float( _lilvPlugin, NULL, NULL, _defaultValues );
 
@@ -219,10 +222,17 @@ void Plugin::start() {
     int uiUpdateHZ = 60;
     buffer_size = 4096;
 
-    ///@TODO
+	zix_sem_init( &symap_lock, 1 );
+
+    //Map setup
+
 	map.handle = this;
-	//map.map = map_uri;
-    //lv2_atom_forge_init(&_forge, &map);
+	map.map = Plugin::mapURI;
+    lv2_atom_forge_init(&_forge, &map);
+
+
+    //URI and symap creation
+    //@TODO possibly move
 
     LV2_URID atom_Float = symap_map(_symap, LV2_ATOM__Float);
     LV2_URID atom_Int = symap_map(_symap, LV2_ATOM__Int);
@@ -267,6 +277,9 @@ void Plugin::start() {
     LilvNode * work_interface = lilv_new_uri( _Host->getLilvWorld(), LV2_WORKER__interface );
     LilvNode * work_schedule = lilv_new_uri( _Host->getLilvWorld(), LV2_WORKER__schedule );
 
+
+    //Buffer and data setting
+
     lv2_reportsLatency = lilv_new_uri( _Host->getLilvWorld(), LV2_CORE__reportsLatency );
 
     int block_length = _Host->getBufferSize();
@@ -279,6 +292,7 @@ void Plugin::start() {
 
 
     /* Build options array to pass to plugin */
+
     const LV2_Options_Option options[] = {
         {
             LV2_OPTIONS_INSTANCE, 0, param_sampleRate,
@@ -422,7 +436,7 @@ void Plugin::activatePort( long portNum ) {
 
     port->name = name.c_str();
 
-    std::cout << "TEST\n" << port->name;
+    std::cout << "\n" << port->name;
 
 
 	/* Connect unsupported ports to NULL (known to be optional by this point) */
@@ -456,14 +470,23 @@ void Plugin::activatePort( long portNum ) {
             break;
 
         case Audio::TYPE_CV:
+
             port->jack_port = jack_port_register(
                     jack_client, port->name,
                     JACK_DEFAULT_AUDIO_TYPE, jack_flags, 0);
+
             if (port->jack_port) {
-                jack_set_property(jack_client, jack_port_uuid(port->jack_port),
-                        "http://jackaudio.org/metadata/signal-type", "CV",
-                        "text/plain");
+
+                jack_set_property(
+                    jack_client,
+                    jack_port_uuid(port->jack_port),
+                    "http://jackaudio.org/metadata/signal-type",
+                    "CV",
+                    "text/plain"
+                );
+
             }
+
             break;
 
         case Audio::TYPE_EVENT:
@@ -541,21 +564,24 @@ void Plugin::allocatePortBuffer( uint32_t i ) {
                 ? port->buf_size
                 : midi_buf_size;
 
-            return;
-
             port->evbuf = lv2_evbuf_new(
-                    buf_size,
-                    port->old_api ? LV2_EVBUF_EVENT : LV2_EVBUF_ATOM,
-                    map.map(
-                        map.handle,
-                        lilv_node_as_string( atom_Chunk )
-                    ),
-                    map.map(
-                        map.handle,
-                        lilv_node_as_string( atom_Sequence ) )
-                    );
+                buf_size,
+                port->old_api ? LV2_EVBUF_EVENT : LV2_EVBUF_ATOM,
+                map.map(
+                    map.handle,
+                    lilv_node_as_string( atom_Chunk )
+                ),
+                map.map(
+                    map.handle,
+                    lilv_node_as_string( atom_Sequence )
+                )
+            );
+
             lilv_instance_connect_port(
-                    _lilvInstance, i, lv2_evbuf_get_buffer(port->evbuf));
+                _lilvInstance,
+                i,
+                lv2_evbuf_get_buffer( port->evbuf )
+            );
             break;
 
         }
@@ -663,8 +689,6 @@ void Plugin::updateJack( jack_nframes_t nframes ) {
         updatePort( p, nframes );
 
     }
-
-    return;
 
     _request_update = false;
 
@@ -821,6 +845,7 @@ void Plugin::updateJack( jack_nframes_t nframes ) {
 
 };
 
+
 /**
  * Update lv2 to jack port
  */
@@ -966,6 +991,25 @@ const bool Plugin::portIsAtom( Port * p ) {
 const bool Plugin::portIsCV( Port * p ) {
 
     return portIs( p, LV2_CORE__CVPort );
+
+};
+
+
+/**
+ * Map of URI ID getting
+ */
+
+LV2_URID Plugin::mapURI( LV2_URID_Map_Handle handle, const char * uri ) {
+
+    Plugin * jalv = (Plugin*) handle;
+
+    zix_sem_wait(&jalv->symap_lock);
+
+    const LV2_URID id = symap_map(jalv->_symap, uri);
+
+    zix_sem_post(&jalv->symap_lock);
+
+    return id;
 
 };
 

@@ -34,11 +34,9 @@ int main( int argc, char ** argv ) {
 
     host->setServer( server );
 
-    //host->setServerCallbacks();
+    host->setServerCallbacks();
 
     host->addPlugin( plugins[40] );
-
-    //server->dispatch( "update", (void*) 0 );
 
     //win->setCentralWidget( ((LV2::Plugin*)plugins[40])->getUIWidget() );
 
@@ -47,20 +45,6 @@ int main( int argc, char ** argv ) {
     int exe = app.exec();
 
     ///sleep(50);
-
-    //vector<Plugin>::iterator it;
-
-    //for( int i = 0; i < 10; i ++ ) {
-
-    //cout << plugins[i].getName() << "\n";
-
-    //}
-
-    //   for( it = plugins.begin(); it != plugins.end(); ++it ) {
-    //
-    //       cout << it->getName() << "\n";
-    //
-    //   }
 
     return 0;
 
