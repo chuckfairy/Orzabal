@@ -904,15 +904,19 @@ void Plugin::updatePort( uint32_t p, jack_nframes_t nframes ) {
             /* Write Jack MIDI input */
             void* buf = jack_port_get_buffer(port->jack_port, nframes);
             for (uint32_t i = 0; i < jack_midi_get_event_count(buf); ++i) {
+
                 jack_midi_event_t ev;
                 jack_midi_event_get(&ev, buf, i);
                 lv2_evbuf_write(&iter,
-                        ev.time, 0,
-                        midi_event_id,
-                        ev.size, ev.buffer);
+                    ev.time, 0,
+                    midi_event_id,
+                    ev.size, ev.buffer
+                );
+
             }
 
         }
+
     } else if (port->type == Audio::TYPE_EVENT) {
         /* Clear event output for plugin to write to */
         lv2_evbuf_reset(port->evbuf, false);
