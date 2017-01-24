@@ -142,7 +142,7 @@ void Host::setServerCallbacks() {
 
     if( ! _Server ) {
 
-        throw std::runtime_error("No server set");
+        throw std::runtime_error( "No server set" );
 
     }
 

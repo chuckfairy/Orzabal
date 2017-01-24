@@ -3,6 +3,9 @@
  */
 #pragma once
 
+#include <jack/jack.h>
+#include <jack/ringbuffer.h>
+
 #include <lv2/lv2plug.in/ns/ext/worker/worker.h>
 
 

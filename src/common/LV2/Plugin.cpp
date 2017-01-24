@@ -118,6 +118,8 @@ void Plugin::setLilvPlugin( const LilvPlugin * p ) {
 /**
  * Create lv2 port num
  *
+ * @throws runtime_error Port malfunction
+ *
  */
 
 Audio::Port * Plugin::createPort( int long portNum ) {
@@ -147,7 +149,9 @@ Audio::Port * Plugin::createPort( int long portNum ) {
         port->flow = Audio::FLOW_OUTPUT;
 
 	} else if (!optional) {
-		//die("Mandatory port has unknown type (neither input nor output)");
+
+        throw std::runtime_error( "Port not optional, but not IO" );
+
 	}
 
 
