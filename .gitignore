@@ -21,6 +21,7 @@ moc_*.cpp
 *.sw[po]
 .idea
 *.so
+*.run
 *.user
 *.bak
 *.[ao]

@@ -26,10 +26,10 @@ install( TARGETS
 
 ## LV2
 
-add_executable( lv2list LV2.cpp )
+add_executable( lv2test.run LV2.cpp )
 
 # We have to link
-target_link_libraries( lv2list
+target_link_libraries( lv2test.run
     PUBLIC gabrielo-common-lv2 gabrielo-common
     suil-0 jack sratom-0 serd-0 sord-0
     gabrielo-common-jack
@@ -37,7 +37,7 @@ target_link_libraries( lv2list
     "/usr/local/lib/liblilv-0.so"
 )
 
-target_include_directories( lv2list
+target_include_directories( lv2test.run
     PUBLIC
     "../../src/common"
     "/usr/include/suil-0" "/usr/local/include/sratom-0"
@@ -45,7 +45,7 @@ target_include_directories( lv2list
 )
 
 install( TARGETS
-   lv2list
+   lv2test.run
 
    RUNTIME DESTINATION bin
    LIBRARY DESTINATION lib

@@ -23,11 +23,14 @@ file( GLOB
     "include/*.h"
     "include/symap.c"
     "include/lv2_evbuf.c"
+    "include/symap.c"
+    "include/zix_thread.c"
     "Host.cpp"
     "Search.cpp"
     "JackCallbackEvent.cpp"
     "WindowLayout.cpp"
     "Plugin.cpp"
+    "PluginWorker.cpp"
     "UI.cpp"
 )
 

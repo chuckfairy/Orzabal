@@ -1,8 +1,11 @@
 /**
  * Plugin worker jack processing h
  */
+#include <cstdlib>
 
+#include "Plugin.h"
 #include "PluginWorker.h"
+
 
 namespace LV2 {
 
@@ -18,18 +21,34 @@ PluginWorker::PluginWorker( Plugin * p ) {
 
 
 /**
+ * Plugin impl getter
+ */
+
+Plugin * PluginWorker::getPlugin() {
+
+    return _Plugin;
+
+}
+
+
+/**
  * Main responder
  */
 
 LV2_Worker_Status PluginWorker::respond(
     LV2_Worker_Respond_Handle handle,
-    uint32_t                  size,
-    const void*               data
+    uint32_t size,
+    const void * data
 ) {
 
     PluginWorker* worker = (PluginWorker*)handle;
-    jack_ringbuffer_write( worker->responses, (const char*) &size, sizeof( size ) );
-    jack_ringbuffer_write( worker->responses, (const char*) data, size );
+
+    jack_ringbuffer_t * res = worker->getResponses();
+
+    jack_ringbuffer_write( res, (const char*)&size, sizeof( size ));
+
+    jack_ringbuffer_write( res, (const char*) data, size);
+
     return LV2_WORKER_SUCCESS;
 
 };
@@ -41,40 +60,57 @@ LV2_Worker_Status PluginWorker::respond(
 
 void * PluginWorker::zixWork(void* data) {
 
-    PluginWorker * worker = (JalvWorker*)data;
-    Jalv* jalv = worker->jalv;
+    PluginWorker * worker = (PluginWorker*) data;
+    Plugin * plugin = worker->getPlugin();
     void* buf = NULL;
+
+    ZixSem sem = worker->getZixSem();
 
     while( true ) {
 
-        zix_sem_wait(&worker->sem);
+        zix_sem_wait( &sem );
 
-        if (jalv->exit) {
+        if( plugin->isActive() ) {
             break;
         }
 
         uint32_t size = 0;
-        jack_ringbuffer_read(worker->requests, (char*)&size, sizeof(size));
 
-        if (!(buf = realloc(buf, size))) {
+        jack_ringbuffer_read(
+            worker->getRequests(),
+            (char*) &size,
+            sizeof( size )
+        );
+
+        if ( ! ( buf = realloc( buf, size ) ) ) {
+
             fprintf(stderr, "error: realloc() failed\n");
             free(buf);
             return NULL;
+
         }
 
-        jack_ringbuffer_read(worker->requests, (char*)buf, size);
+        jack_ringbuffer_read(
+            worker->getRequests(),
+            (char*) buf,
+            size
+        );
 
-        zix_sem_wait(&jalv->work_lock);
+        ZixSem workerLock = worker->getPlugin()->getWorkerLock();
 
-        worker->iface->work(
-            jalv->instance->lv2_handle,
-            jalv_worker_respond,
+        zix_sem_wait( &workerLock );
+
+        const LV2_Worker_Interface* iface = worker->getIface();
+
+        iface->work(
+            plugin->getLV2Handle(),
+            PluginWorker::respond,
             worker,
             size,
             buf
         );
 
-        zix_sem_post( _Plugin->work_lock );
+        zix_sem_post( &workerLock );
 
     }
 
@@ -89,14 +125,14 @@ void * PluginWorker::zixWork(void* data) {
  * Main init
  */
 
-void PluginWorker::init( const LV2_Worker_Interface* ifaceInit, bool threaded ) {
+void PluginWorker::init( const LV2_Worker_Interface* iface, bool threaded ) {
 
     _iface = iface;
     _threaded = threaded;
 
     if( _threaded ) {
 
-        zix_thread_create( &_thread, 4096, Plugin::zixWork, this );
+        zix_thread_create( &_thread, 4096, PluginWorker::zixWork, this );
         _requests = jack_ringbuffer_create( 4096 );
         jack_ringbuffer_mlock( _requests );
 
@@ -116,24 +152,24 @@ void PluginWorker::init( const LV2_Worker_Interface* ifaceInit, bool threaded ) 
 
 void PluginWorker::finish() {
 
-    if( !requests ) {
+    if( ! _requests ) {
 
         return;
 
     }
 
-    if( threaded ) {
+    if( _threaded ) {
 
         zix_sem_post( &sem );
-        zix_thread_join( thread, NULL );
-        jack_ringbuffer_free( requests );
+        zix_thread_join( _thread, NULL );
+        jack_ringbuffer_free( _requests );
 
     }
 
-    jack_ringbuffer_free( responses );
-    free(worker->response);
+    jack_ringbuffer_free( _responses );
+    free( _response );
 
-}:
+};
 
 
 /**
@@ -148,26 +184,48 @@ LV2_Worker_Status PluginWorker::schedule(
 
     PluginWorker * worker = (PluginWorker*) handle;
 
-    Plugin * jalv = _Plugin;
+    Plugin * plugin = worker->getPlugin();
 
-    if( worker->threaded ) {
+    if( worker->isThreaded() ) {
+
+        jack_ringbuffer_t * requests = worker->getRequests();
 
         // Schedule a request to be executed by the worker thread
         jack_ringbuffer_write(
-            _requests,
-            (const char*)&size,
+            requests,
+            (const char*) &size,
             sizeof(size)
         );
 
-        jack_ringbuffer_write( _requests, (const char*)data, size );
+        jack_ringbuffer_write( requests, (const char*) data, size );
+
+
+        //Zix sem setup
+
+        ZixSem sem = worker->getZixSem();
+
         zix_sem_post( &sem );
 
     } else {
+
         // Execute work immediately in this thread
-        zix_sem_wait(&jalv->work_lock);
-        worker->iface->work(
-                jalv->instance->lv2_handle, jalv_worker_respond, worker, size, data);
-        zix_sem_post(&jalv->work_lock);
+
+        ZixSem workerLock = plugin->getWorkerLock();
+
+        zix_sem_wait( &workerLock );
+
+        const LV2_Worker_Interface* iface = worker->getIface();
+
+        iface->work(
+            plugin->getLV2Handle(),
+            PluginWorker::respond,
+            worker,
+            size,
+            data
+        );
+
+        zix_sem_post( &workerLock );
+
     }
 
     return LV2_WORKER_SUCCESS;
@@ -179,25 +237,27 @@ LV2_Worker_Status PluginWorker::schedule(
  * Plubic emitter of all responses on ring buffer space
  */
 
-void PluginWorker::emitResponses( JalvWorker* worker, LilvInstance* instance ) {
+void PluginWorker::emitResponses( LilvInstance* instance ) {
 
-    if( worker->responses ) {
+    if( ! getResponses() ) {
 
-        uint32_t read_space = jack_ringbuffer_read_space( _responses );
+        return;
 
-        while( read_space ) {
+    }
 
-            uint32_t size = 0;
+    uint32_t read_space = jack_ringbuffer_read_space( _responses );
 
-            jack_ringbuffer_read( _responses, (char*) &size, sizeof( size ) );
+    while( read_space ) {
 
-            jack_ringbuffer_read( _responses, (char*) _response, size );
+        uint32_t size = 0;
 
-            worker->iface->work_response( instance->lv2_handle, size, _response );
+        jack_ringbuffer_read( _responses, (char*) &size, sizeof( size ) );
 
-            read_space -= sizeof(size) + size;
+        jack_ringbuffer_read( _responses, (char*) _response, size );
 
-        }
+        _iface->work_response( instance->lv2_handle, size, _response );
+
+        read_space -= sizeof( size ) + size;
 
     }
 

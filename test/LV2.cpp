@@ -24,7 +24,7 @@ int main( int argc, char ** argv ) {
 
     server->start();
 
-    server->connectDefault();
+    //server->connectDefault();
 
     LV2::Host * host = new LV2::Host( server->getJackClient() );
 
@@ -38,7 +38,7 @@ int main( int argc, char ** argv ) {
 
     host->addPlugin( plugins[40] );
 
-    //win->setCentralWidget( ((LV2::Plugin*)plugins[40])->getUIWidget() );
+    win->setCentralWidget( ((LV2::Plugin*)plugins[40])->getUIWidget() );
 
     win->show();
 

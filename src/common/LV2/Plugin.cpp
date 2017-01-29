@@ -621,6 +621,17 @@ QScrollArea * Plugin::getUIWidget() {
 
 
 /**
+ * Get LV2 Handle from instalce
+ */
+
+LV2_Handle Plugin::getLV2Handle() {
+
+    return _lilvInstance->lv2_handle;
+
+};
+
+
+/**
  *
  */
 

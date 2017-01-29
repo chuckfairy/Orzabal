@@ -128,6 +128,8 @@ class Plugin : public Audio::Plugin {
 
         ZixSem _symap_lock;
 
+        ZixSem _worker_lock;
+
         ZixSem exit_sem;
 
         Sratom * _sratom;
@@ -219,6 +221,7 @@ class Plugin : public Audio::Plugin {
         void stop();
 
         UI * getUI();
+
 
         void updateJack( jack_nframes_t );
 
@@ -325,6 +328,20 @@ class Plugin : public Audio::Plugin {
             return _lilvInstance;
 
         };
+
+        LV2_Handle getLV2Handle();
+
+
+        /**
+         * Plugin worker lock
+         */
+
+        ZixSem getWorkerLock() {
+
+            return _worker_lock;
+
+        };
+
 
 
         /**

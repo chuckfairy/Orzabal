@@ -1,5 +1,6 @@
 /**
  * Plugin worker jack processing h
+ *
  */
 #pragma once
 
@@ -7,6 +8,12 @@
 #include <jack/ringbuffer.h>
 
 #include <lv2/lv2plug.in/ns/ext/worker/worker.h>
+
+#include <lilv/lilv.h>
+
+#include "include/symap.h"
+#include "include/semaphone.h"
+#include "include/zix_thread.c"
 
 
 namespace LV2 {
@@ -33,15 +40,15 @@ class PluginWorker {
          * Requests and response via jack
          */
 
-        jack_ringbuffer_t * requests;
-        jack_ringbuffer_t * responses;
+        jack_ringbuffer_t * _requests;
+        jack_ringbuffer_t * _responses;
 
 
         /**
          * Worker response buffer
          */
 
-        void* response;
+        void * _response;
 
 
         /**
@@ -55,26 +62,34 @@ class PluginWorker {
          * Worker thread
          */
 
-        ZixThread thread;
+        ZixThread _thread;
 
 
         /**
          * Plugin worker interface
          */
 
-        const LV2_Worker_Interface* iface;
+        const LV2_Worker_Interface* _iface;
 
 
         /**
          * Run work in another thread
          */
 
-        bool threaded;
+        bool _threaded;
 
 
     public:
 
         PluginWorker( Plugin * );
+
+
+        /**
+         * Main initialize called from plugin
+         */
+
+        void init( const LV2_Worker_Interface *, bool threaded );
+
 
         /**
          * Finisher
@@ -87,11 +102,78 @@ class PluginWorker {
          * LV2 scheduler
          */
 
-        LV2_Worker_Status schedule(
+        static LV2_Worker_Status schedule(
             LV2_Worker_Schedule_Handle,
             uint32_t,
             const void *
         );
+
+
+        /**
+         * Main static response
+         */
+
+        static LV2_Worker_Status respond(
+            LV2_Worker_Respond_Handle handle,
+            uint32_t size,
+            const void * data
+        );
+
+        static void * zixWork( void* data );
+
+        void emitResponses( LilvInstance * );
+
+
+        /**
+         * Main thread flow, should be set from Plugin
+         */
+
+        bool isThreaded() {
+
+            return _threaded;
+
+        };
+
+
+        /**
+         * Main getters
+         */
+
+        Plugin * getPlugin();
+
+
+        /**
+         * Jack ring buffer getters
+         */
+
+        jack_ringbuffer_t * getRequests() {
+
+            return _requests;
+
+        };
+
+        jack_ringbuffer_t * getResponses() {
+
+            return _responses;
+
+        };
+
+
+        /**
+         * Zix sem
+         */
+
+        ZixSem getZixSem() {
+
+            return sem;
+
+        };
+
+        const LV2_Worker_Interface * getIface() {
+
+            return _iface;
+
+        };
 
 };
 
