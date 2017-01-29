@@ -32,7 +32,6 @@
 
 #include <lilv/lilv.h>
 #include <suil/suil.h>
-#include <sratom/sratom.h>
 
 #include <jack/ringbuffer.h>
 
@@ -53,10 +52,11 @@ namespace LV2 {
 
 
 /**
- * UI class forward
+ * class forward
  */
 
 class UI;
+class PluginWorker;
 
 
 /**
@@ -128,13 +128,20 @@ class Plugin : public Audio::Plugin {
 
         ZixSem _symap_lock;
 
+
+        /**
+         * Worker related
+         */
+
         ZixSem _worker_lock;
+
+        PluginWorker * _worker;
+        PluginWorker * _stateWorker;
+
 
         ZixSem exit_sem;
 
-        Sratom * _sratom;
-
-        const char * _tempDir = "/tmp/gabrielo-lv2";
+        const char * _tempDir = "/tmp/orzabal-lv2";
 
         size_t longest_sym;
 
@@ -201,7 +208,7 @@ class Plugin : public Audio::Plugin {
 
         jack_nframes_t event_delta_t;
 
-        jack_ringbuffer_t* plugin_events;
+        jack_ringbuffer_t * plugin_events;
 
 
     public:

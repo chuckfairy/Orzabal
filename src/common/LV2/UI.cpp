@@ -142,54 +142,69 @@ void UI::stop() {
 
 /**
  * UI gui updating
+ * called from timer
  *
  */
 
 void UI::update() {
 
-
 	/* Emit UI events. */
-	//ControlChange ev;
-	//const size_t  space = jack_ringbuffer_read_space(jalv->plugin_events);
-	//for (size_t i = 0;
-		 //i + sizeof(ev) + sizeof(float) <= space;
-		 //i += sizeof(ev) + ev.size) {
-//         Read event header to get the size 
-//		//jack_ringbuffer_read(jalv->plugin_events, (char*)&ev, sizeof(ev));
-//
-//         Resize read buffer if necessary 
-//		//jalv->ui_event_buf = realloc(jalv->ui_event_buf, ev.size);
-//		//void* const buf = jalv->ui_event_buf;
-//
-//         Read event body 
-//		//jack_ringbuffer_read(jalv->plugin_events, buf, ev.size);
-//
-//		//if (jalv->opts.dump && ev.protocol == jalv->urids.atom_eventTransfer) {
-//             Dump event in Turtle to the console 
-//			//LV2_Atom* atom = (LV2_Atom*)buf;
-//			//char*     str  = sratom_to_turtle(
-//				//jalv->ui_sratom, &jalv->unmap, "jalv:", NULL, NULL,
-//				//atom->type, atom->size, LV2_ATOM_BODY(atom));
-			//jalv_ansi_start(stdout, 35);
-			//printf("\n## Plugin => UI (%u bytes) ##\n%s\n", atom->size, str);
-			//jalv_ansi_reset(stdout);
-			//free(str);
-		//}
+    ControlChange ev;
+    const size_t  space = jack_ringbuffer_read_space(jalv->plugin_events);
+    for(
+        size_t i = 0;
+        i + sizeof(ev) + sizeof(float) <= space;
+        i += sizeof(ev) + ev.size
+    ) {
+        //Read event header to get the size
+        jack_ringbuffer_read( plugin_events, (char*)&ev, sizeof(ev));
 
-		//if (jalv->ui_instance) {
-			//suil_instance_port_event(jalv->ui_instance, ev.index,
-									 //ev.size, ev.protocol, buf);
-		//} else {
-			//jalv_ui_port_event(jalv, ev.index, ev.size, ev.protocol, buf);
-		//}
+        //Resize read buffer if necessary
+        _uiEventBuf = realloc( _uiEventBuf, ev.size );
+        void* const buf = _uiEventBuf;
 
-		//if (ev.protocol == 0 && jalv->opts.print_controls) {
-			//print_control_value(jalv, &jalv->ports[ev.index], *(float*)buf);
-		//}
-	//}
-	//if (jalv->externalui && jalv->extuiptr) {
-		//LV2_EXTERNAL_UI_RUN(jalv->extuiptr);
-	//}
+        //Read event body
+        jack_ringbuffer_read( plugin_events, buf, ev.size );
+
+        if( jalv->opts.dump && ev.protocol == atom_eventTransfer ) {
+
+            //Dump event in Turtle to the console
+            LV2_Atom* atom = (LV2_Atom*)buf;
+            char * str  = sratom_to_turtle(
+                jalv->ui_sratom, &jalv->unmap, "jalv:", NULL, NULL,
+                atom->type, atom->size, LV2_ATOM_BODY(atom)
+            );
+
+            //jalv_ansi_start(stdout, 35);
+            //printf("\n## Plugin => UI (%u bytes) ##\n%s\n", atom->size, str);
+            //jalv_ansi_reset(stdout);
+            free(str);
+
+        }
+
+        if ( _lilvUI ) {
+
+            suil_instance_port_event(
+                _lilvUI,
+                ev.index,
+                ev.size, ev.protocol, buf
+            );
+
+        } else {
+
+            jalv_ui_port_event(jalv, ev.index, ev.size, ev.protocol, buf);
+
+        }
+
+        if (ev.protocol == 0 && jalv->opts.print_controls) {
+            //print_control_value(jalv, &jalv->ports[ev.index], *(float*)buf);
+        }
+
+    }
+
+    if (jalv->externalui && jalv->extuiptr) {
+        LV2_EXTERNAL_UI_RUN(jalv->extuiptr);
+    }
 
 };
 

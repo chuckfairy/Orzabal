@@ -45,7 +45,7 @@ LV2_Worker_Status PluginWorker::respond(
 
     jack_ringbuffer_t * res = worker->getResponses();
 
-    jack_ringbuffer_write( res, (const char*)&size, sizeof( size ));
+    jack_ringbuffer_write( res, (const char*) &size, sizeof( size ) );
 
     jack_ringbuffer_write( res, (const char*) data, size);
 
@@ -132,14 +132,14 @@ void PluginWorker::init( const LV2_Worker_Interface* iface, bool threaded ) {
 
     if( _threaded ) {
 
-        zix_thread_create( &_thread, 4096, PluginWorker::zixWork, this );
-        _requests = jack_ringbuffer_create( 4096 );
+        zix_thread_create( &_thread, THREAD_BUFFER_SIZE, PluginWorker::zixWork, this );
+        _requests = jack_ringbuffer_create( THREAD_BUFFER_SIZE );
         jack_ringbuffer_mlock( _requests );
 
     }
 
-    _responses = jack_ringbuffer_create( 4096 );
-    _response  = malloc( 4096 );
+    _responses = jack_ringbuffer_create( THREAD_BUFFER_SIZE );
+    _response  = malloc( THREAD_BUFFER_SIZE );
 
     jack_ringbuffer_mlock( _responses );
 
@@ -260,6 +260,17 @@ void PluginWorker::emitResponses( LilvInstance* instance ) {
         read_space -= sizeof( size ) + size;
 
     }
+
+};
+
+
+/**
+ * Worker iface end run
+ */
+
+void PluginWorker::emitIfaceEndRun( LV2_Handle handle ) {
+
+    _iface->end_run( handle );
 
 };
 

@@ -24,6 +24,7 @@
 #include "include/symap.c"
 #include "include/semaphone.h"
 #include "include/lv2_evbuf.h"
+#include "PluginWorker.h"
 #include "Plugin.h"
 #include "Port.h"
 #include "ControlChange.h"
@@ -54,6 +55,8 @@ Plugin::Plugin( const LilvPlugin* p, Host * h ) {
     setHost( h );
 
     setLilvPlugin( p );
+
+    _worker = new PluginWorker( this );
 
 };
 
@@ -180,8 +183,12 @@ Audio::Port * Plugin::createPort( int long portNum ) {
 		port->type = Audio::TYPE_EVENT;
 		port->old_api = false;
 
-	} else if (!optional) {
-		//die("Mandatory port has unknown data type");
+	} else if( !optional ) {
+
+        throw std::runtime_error(
+            "Mandatory port has unknown data type"
+        );
+
 	}
 
     const LilvNode * rsz_minimumSize = lilv_new_uri( _lilvWorld, LV2_RESIZE_PORT__minimumSize );
@@ -228,6 +235,8 @@ void Plugin::start() {
 
 	zix_sem_init( &symap_lock, 1 );
 
+	zix_sem_init(&exit_sem, 0);
+
     //Map setup
 
 	map.handle = this;
@@ -236,7 +245,7 @@ void Plugin::start() {
 
 
     //URI and symap creation
-    //@TODO possibly move
+    //@TODO definitely move
 
     LV2_URID atom_Float = symap_map(_symap, LV2_ATOM__Float);
     LV2_URID atom_Int = symap_map(_symap, LV2_ATOM__Int);
@@ -276,6 +285,11 @@ void Plugin::start() {
     _time_beatsPerMinute  = symap_map(_symap, LV2_TIME__beatsPerMinute);
     _time_frame = symap_map(_symap, LV2_TIME__frame);
     _time_speed = symap_map(_symap, LV2_TIME__speed);
+
+    //@ENDTODO
+
+	LV2_Worker_Schedule sched = { &_worker, PluginWorker::schedule };
+    sched_feature.data = &sched;
 
     LV2_URID ui_updateRate = symap_map(_symap, LV2_UI__updateRate);
     LilvNode * work_interface = lilv_new_uri( _Host->getLilvWorld(), LV2_WORKER__interface );
@@ -322,9 +336,6 @@ void Plugin::start() {
     };
 
 
-    //Allocate lv2 bufs
-
-
     /* @TODO Create workers if necessary */
 
     if( lilv_plugin_has_feature( _lilvPlugin, work_schedule )
@@ -333,11 +344,16 @@ void Plugin::start() {
         const LV2_Worker_Interface* iface = (const LV2_Worker_Interface*)
             lilv_instance_get_extension_data( _lilvInstance, LV2_WORKER__interface );
 
-        //jalv_worker_init(&jalv, &jalv.worker, iface, true);
-        //if (jalv.safe_restore) {
+        _worker->init( iface, true );
+
+        //@TODO Implement save reloading
+        //if (safe_restore) {
             //jalv_worker_init(&jalv, &jalv.state_worker, iface, false);
         //}
     }
+
+
+    //Allocate jack bufs
 
     _ringBuffer = jack_ringbuffer_create(buffer_size);
 	jack_ringbuffer_mlock( _ringBuffer );
@@ -364,9 +380,11 @@ void Plugin::start() {
 
     _UI->start();
 
-    zix_sem_wait(&exit_sem);
-
     ACTIVE = true;
+
+
+    //@TODO determine sem flow or thread/atomic alternative
+    zix_sem_wait(&exit_sem);
 
     //if( jalv.opts.controls ) {
         //for( char** c = jalv.opts.controls; *c; ++c ) {
@@ -385,9 +403,10 @@ void Plugin::start() {
 void Plugin::stop() {
 
     /* Terminate the worker */
-    //jalv_worker_finish(&jalv.worker);
 
-    /* Deactivate JACK */
+    _worker->finish();
+
+    /* @TODO Deactivate JACK */
     //for (uint32_t i = 0; i < numPorts; ++i) {
         //if (jalv.ports[i].evbuf) {
             //lv2_evbuf_free(jalv.ports[i].evbuf);
@@ -402,7 +421,6 @@ void Plugin::stop() {
 
     symap_free( _symap );
     zix_sem_destroy( &_symap_lock );
-    sratom_free( _sratom );
     //lilv_world_free(world);
 
     zix_sem_destroy( &exit_sem );
@@ -750,14 +768,18 @@ void Plugin::updateJack( jack_nframes_t nframes ) {
     /* Run plugin for this cycle */
     lilv_instance_run(_lilvInstance, nframes);
 
-    /* Process any worker replies. */
-//    jalv_worker_emit_responses(&jalv->state_worker, _lilvInstance);
-//    jalv_worker_emit_responses(&jalv->worker, _lilvInstance);
+	/* Process any worker replies. */
+    _worker->emitResponses( _lilvInstance );
+
+    //@TODO Implement saved state
+	//_stateWorker->emitResponses( _lilvInstance );
 
     /* Notify the plugin the run() cycle is finished */
-//    if (jalv->worker.iface && jalv->worker.iface->end_run) {
-//        jalv->worker.iface->end_run(_lilvInstance->lv2_handle);
-//    }
+    if ( _worker->hasIfaceRun() ) {
+
+        _worker->emitIfaceEndRun( _lilvInstance->lv2_handle );
+
+    }
 
     /* Check if it's time to send updates to the UI */
     event_delta_t += nframes;
@@ -881,9 +903,10 @@ void Plugin::updatePort( uint32_t p, jack_nframes_t nframes ) {
     } else if( port->type == Audio::TYPE_CV && port->jack_port ) {
 
         /* Connect plugin port directly to Jack port buffer */
-//        lilv_instance_connect_port(
-//                _lilvInstance, p,
-//                jack_port_get_buffer( port->jack_port, nframes ) );
+        lilv_instance_connect_port(
+            _lilvInstance, p,
+            jack_port_get_buffer( port->jack_port, nframes )
+        );
 
     } else if( port->type == Audio::TYPE_EVENT && port->flow == Audio::FLOW_INPUT ) {
 

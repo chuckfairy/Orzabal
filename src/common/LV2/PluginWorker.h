@@ -15,6 +15,8 @@
 #include "include/semaphone.h"
 #include "include/zix_thread.c"
 
+#include "PluginWorker.h"
+
 
 namespace LV2 {
 
@@ -79,6 +81,9 @@ class PluginWorker {
         bool _threaded;
 
 
+        const uint32_t THREAD_BUFFER_SIZE = 4096;
+
+
     public:
 
         PluginWorker( Plugin * );
@@ -123,6 +128,8 @@ class PluginWorker {
 
         void emitResponses( LilvInstance * );
 
+        void emitIfaceEndRun( LV2_Handle );
+
 
         /**
          * Main thread flow, should be set from Plugin
@@ -131,6 +138,17 @@ class PluginWorker {
         bool isThreaded() {
 
             return _threaded;
+
+        };
+
+
+        /**
+         * Main iface needs run emitter
+         */
+
+        bool hasIfaceRun() {
+
+            return ( _iface && _iface->end_run );
 
         };
 
