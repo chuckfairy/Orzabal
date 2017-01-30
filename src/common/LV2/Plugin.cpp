@@ -234,14 +234,23 @@ void Plugin::start() {
     buffer_size = 4096;
 
 	zix_sem_init( &symap_lock, 1 );
-
 	zix_sem_init(&exit_sem, 0);
+
+    uri_map_feature.data  = &uri_map;
+    uri_map.callback_data = this;
 
     //Map setup
 
-	map.handle = this;
-	map.map = Plugin::mapURI;
+    map.handle = this;
+    map.map = Plugin::mapURI;
+//
     lv2_atom_forge_init(&_forge, &map);
+//
+    map_feature.data = &map;
+
+    unmap.handle = this;
+    unmap.unmap = Plugin::unmapURI;
+    unmap_feature.data = &unmap;
 
 
     //URI and symap creation
@@ -336,7 +345,7 @@ void Plugin::start() {
     };
 
 
-    /* @TODO Create workers if necessary */
+    /* Create workers if necessary */
 
     if( lilv_plugin_has_feature( _lilvPlugin, work_schedule )
             && lilv_plugin_has_extension_data(_lilvPlugin, work_interface)) {
@@ -371,7 +380,9 @@ void Plugin::start() {
     _lilvDescriptor = lilv_instance_get_descriptor( _lilvInstance );
 
     if( ! _lilvInstance ) {
-        //die("Failed to instantiate plugin.\n");
+
+        throw std::runtime_error( "Plugin could not instaniate" );
+
     }
 
     activatePorts();
@@ -728,40 +739,54 @@ void Plugin::updateJack( jack_nframes_t nframes ) {
 
     /* Read and apply control change events from UI */
 
-    if( _UI ) {
+    if( _UI && false ) {
 
-//        ControlChange ev;
-//        const size_t space = jack_ringbuffer_read_space(jalv->ui_events);
-//
-//        for (size_t i = 0; i < space; i += sizeof(ev) + ev.size) {
-//
-//            jack_ringbuffer_read(jalv->ui_events, (char*)&ev, sizeof(ev));
-//            char body[ev.size];
-//
-//            if (jack_ringbuffer_read(jalv->ui_events, body, ev.size) != ev.size) {
-//                fprintf(stderr, "error: Error reading from UI ring buffer\n");
-//                break;
-//            }
-//
-//            //assert(ev.index < jalv->num_ports);
-//
-//            Port * port = _ports[ev.index];
-//
-//            if (ev.protocol == 0) {
-//                assert(ev.size == sizeof(float));
-//                port->control = *(float*)body;
-//            } else if (ev.protocol == jalv->urids.atom_eventTransfer) {
-//                LV2_Evbuf_Iterator    e    = lv2_evbuf_end(port->evbuf);
-//                const LV2_Atom* const atom = (const LV2_Atom*)body;
-//                lv2_evbuf_write(&e, nframes, 0, atom->type, atom->size,
-//                        LV2_ATOM_BODY_CONST(atom));
-//            } else {
-//                fprintf(stderr, "error: Unknown control change protocol %d\n",
-//                        ev.protocol);
-//            }
-//
-//        }
+        ControlChange ev;
 
+        jack_ringbuffer_t * ui_events = _UI->getPortEvents();
+
+        const size_t readSpace = jack_ringbuffer_read_space( ui_events );
+
+        for( size_t i = 0; i < readSpace; i += sizeof(ev) + ev.size ) {
+
+            jack_ringbuffer_read(ui_events, (char*)&ev, sizeof(ev));
+            char body[ev.size];
+
+            if (jack_ringbuffer_read(ui_events, body, ev.size) != ev.size) {
+                fprintf(stderr, "error: Error reading from UI ring buffer\n");
+                break;
+            }
+
+            //assert(ev.index < jalv->num_ports);
+
+            Port * port = (Port*) _ports[ev.index];
+
+            if (ev.protocol == 0) {
+                assert(ev.size == sizeof(float));
+                port->control = *(float*)body;
+            } else if (ev.protocol == atom_eventTransfer) {
+                LV2_Evbuf_Iterator    e    = lv2_evbuf_end(port->evbuf);
+                const LV2_Atom* const atom = (const LV2_Atom*)body;
+                lv2_evbuf_write(
+                    &e,
+                    nframes,
+                    0,
+                    atom->type,
+                    atom->size,
+                    (const uint8_t*) LV2_ATOM_BODY_CONST(atom)
+                );
+
+            } else {
+
+                throw std::runtime_error(
+                    "error: Unknown control change protocol %d\n"
+                    //ev.protocol);
+                );
+
+
+            }
+
+        }
 
     }
 
@@ -1050,6 +1075,27 @@ LV2_URID Plugin::mapURI( LV2_URID_Map_Handle handle, const char * uri ) {
     const LV2_URID id = symap_map(jalv->_symap, uri);
 
     zix_sem_post(&jalv->symap_lock);
+
+    return id;
+
+};
+
+const char * Plugin::unmapURI( LV2_URID_Map_Handle handle, LV2_URID urid ) {
+
+	Plugin* plugin = (Plugin*)handle;
+	zix_sem_wait(&plugin->symap_lock);
+	const char * uri = symap_unmap( plugin->_symap, urid );
+    zix_sem_post(&plugin->symap_lock);
+	return uri;
+
+};
+
+uint32_t Plugin::uriToId( LV2_URI_Map_Callback_Data callback_data, const char * map, const char * uri ) {
+
+    Plugin* plugin = (Plugin*)callback_data;
+    zix_sem_wait(&plugin->symap_lock);
+    const LV2_URID id = symap_map(plugin->_symap, uri);
+    zix_sem_post(&plugin->symap_lock);
 
     return id;
 

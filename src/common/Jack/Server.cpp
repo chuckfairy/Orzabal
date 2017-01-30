@@ -4,6 +4,9 @@
  */
 #include <iostream>
 #include <jack/jack.h>
+#include <jack/midiport.h>
+#include <jack/session.h>
+#include <jack/metadata.h>
 
 #include <Audio/Port.h>
 
@@ -32,6 +35,9 @@ Server::Server() {
  */
 
 const char * Server::UPDATE_EVENT = "update";
+const char * Server::SHUTDOWN_EVENT = "shutdown";
+const char * Server::LATENCY_EVENT = "latency";
+const char * Server::BUFFER_SIZE_EVENT = "buffer-size";
 
 
 /**
@@ -58,10 +64,16 @@ bool Server::start() {
 
     jack_set_process_callback( _client, Server::JackProcess, (void*)(this) );
 
+    jack_on_shutdown( _client, Server::JackOnShutdown, (void*)(this) );
+
+	jack_set_buffer_size_callback( _client, Server::JackOnBufferSize, (void*)(this) );
+
+	jack_set_latency_callback( _client, Server::JackOnLatency, (void*)(this) );
+
+	//jack_set_session_callback( _client, &jack_buffer_size_cb, (void*)(this) );
+
 
     // tell the JACK server to call `jack_shutdown()' if it ever shuts down
-
-    jack_on_shutdown( _client, Server::JackOnShutdown, 0 );
 
     JackRegisterPorts();
 
@@ -143,8 +155,6 @@ int Server::JackProcess( jack_nframes_t nframes, void * o ) {
 
     Server * s = (Server*) o;
 
-    //std::cout << "NFRAMES420 " << nframes << "\n";
-
     s->dispatch( Server::UPDATE_EVENT, (void*) (uintptr_t) nframes );
 
     return 0;
@@ -159,7 +169,41 @@ int Server::JackProcess( jack_nframes_t nframes, void * o ) {
 
 void Server::JackOnShutdown( void *o ) {
 
-    printf( "JACK HAS SHUTDOWN" );
+    Server * s = (Server*) o;
+
+    s->dispatch( Server::SHUTDOWN_EVENT, nullptr );
+
+    s->stop();
+
+};
+
+
+/**
+ * Jack buffer size change
+ *
+ */
+
+int Server::JackOnBufferSize( jack_nframes_t nframes, void *o ) {
+
+    Server * s = (Server*) o;
+
+    s->dispatch( Server::BUFFER_SIZE_EVENT, (void*) (uintptr_t) nframes );
+
+    return 0;
+
+};
+
+
+/**
+ * Jack server latency mode change
+ *
+ */
+
+void Server::JackOnLatency( jack_latency_callback_mode_t mode, void *o ) {
+
+    Server * s = (Server*) o;
+
+    s->dispatch( Server::LATENCY_EVENT, (void*) mode );
 
 };
 

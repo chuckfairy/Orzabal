@@ -83,6 +83,8 @@ class PluginWorker {
 
         const uint32_t THREAD_BUFFER_SIZE = 4096;
 
+        bool ACTIVE;
+
 
     public:
 
@@ -146,11 +148,7 @@ class PluginWorker {
          * Main iface needs run emitter
          */
 
-        bool hasIfaceRun() {
-
-            return ( _iface && _iface->end_run );
-
-        };
+        bool hasIfaceRun();
 
 
         /**

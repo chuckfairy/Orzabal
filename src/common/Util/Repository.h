@@ -108,6 +108,17 @@ class Repository : public Dispatcher {
 
 
         /**
+         * Get iterator
+         */
+
+        vector<Plugin>::iterator getIterator() {
+
+            return _items.begin();
+
+        };
+
+
+        /**
          * Get index from item
          *
          * @throws std::runtime_error Item not found

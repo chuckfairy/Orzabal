@@ -143,6 +143,8 @@ void PluginWorker::init( const LV2_Worker_Interface* iface, bool threaded ) {
 
     jack_ringbuffer_mlock( _responses );
 
+    ACTIVE = true;
+
 };
 
 
@@ -152,7 +154,7 @@ void PluginWorker::init( const LV2_Worker_Interface* iface, bool threaded ) {
 
 void PluginWorker::finish() {
 
-    if( ! _requests ) {
+    if( ! ACTIVE || ! _requests ) {
 
         return;
 
@@ -237,9 +239,9 @@ LV2_Worker_Status PluginWorker::schedule(
  * Plubic emitter of all responses on ring buffer space
  */
 
-void PluginWorker::emitResponses( LilvInstance* instance ) {
+void PluginWorker::emitResponses( LilvInstance * instance ) {
 
-    if( ! getResponses() ) {
+    if( ! ACTIVE || ! _responses ) {
 
         return;
 
@@ -265,8 +267,15 @@ void PluginWorker::emitResponses( LilvInstance* instance ) {
 
 
 /**
- * Worker iface end run
+ * Worker iface related
  */
+
+bool PluginWorker::hasIfaceRun() {
+
+    return ( ACTIVE && _iface && _iface->end_run );
+
+};
+
 
 void PluginWorker::emitIfaceEndRun( LV2_Handle handle ) {
 

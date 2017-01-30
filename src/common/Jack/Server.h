@@ -99,6 +99,9 @@ class Server : public Audio::Server {
          */
 
         static const char * UPDATE_EVENT;
+        static const char * SHUTDOWN_EVENT;
+        static const char * LATENCY_EVENT;
+        static const char * BUFFER_SIZE_EVENT;
 
 
         /**
@@ -175,9 +178,11 @@ class Server : public Audio::Server {
          *
          */
 
-        static int JackProcess( jack_nframes_t nframes, void *o );
+        static int JackProcess( jack_nframes_t, void * );
 
-        static int JackOnSRateChange( jack_nframes_t n, void *o );
+        static int JackOnBufferSize( jack_nframes_t, void * );
+
+        static void JackOnLatency( jack_latency_callback_mode_t, void * );
 
         static void JackOnShutdown( void *o );
 

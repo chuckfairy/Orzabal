@@ -29,6 +29,9 @@
 #include <suil/suil.h>
 #include <sratom/sratom.h>
 
+#include <jack/jack.h>
+#include <jack/ringbuffer.h>
+
 #include <QtWidgets/QMainWindow>
 #include <QApplication>
 #include <QScrollArea>
@@ -83,6 +86,8 @@ class UI : public Audio::UI {
         SuilInstance * _uiInstance;
 
         Sratom * _uiSratom;
+
+        jack_ringbuffer_t * _uiPortEvents;
 
         void * _uiEventBuf;
 
@@ -235,6 +240,17 @@ class UI : public Audio::UI {
         QScrollArea * getWidget() {
 
             return _MainWidget;
+
+        };
+
+
+        /**
+         * Event data
+         */
+
+        jack_ringbuffer_t * getPortEvents() {
+
+            return _uiPortEvents;
 
         };
 

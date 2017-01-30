@@ -86,6 +86,7 @@ class Plugin : public Audio::Plugin {
          *  LV2 Feature options
          */
 
+        LV2_URI_Map_Feature uri_map = { NULL, &Plugin::uriToId };
         LV2_Feature uri_map_feature      = { NS_EXT "uri-map", NULL };
         LV2_Feature map_feature          = { LV2_URID__map, NULL };
         LV2_Feature unmap_feature        = { LV2_URID__unmap, NULL };
@@ -171,6 +172,8 @@ class Plugin : public Audio::Plugin {
         LV2_URID patch_Get;
 
         LV2_URID_Map map;
+
+        LV2_URID_Unmap unmap;
 
         LV2_Atom* lv2_pos;
 
@@ -359,7 +362,21 @@ class Plugin : public Audio::Plugin {
 
         ZixSem symap_lock;
 
+
+        /**
+         * LV2 Mapping feature
+         */
+
         static LV2_URID mapURI( LV2_URID_Map_Handle, const char * );
+
+        static const char * unmapURI( LV2_URID_Map_Handle, LV2_URID );
+
+
+        /**
+          Map function for URI map extension.
+          */
+
+        static uint32_t uriToId( LV2_URI_Map_Callback_Data, const char *, const char * );
 
 };
 

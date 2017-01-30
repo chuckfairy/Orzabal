@@ -30,15 +30,24 @@ int main( int argc, char ** argv ) {
 
     //host->updatePlugins();
 
-    vector<Audio::Plugin*> plugins = host->findAllInstruments();
+    try {
 
-    host->setServer( server );
+        vector<Audio::Plugin*> plugins = host->findAllInstruments();
 
-    host->setServerCallbacks();
+        host->setServer( server );
 
-    host->addPlugin( plugins[40] );
+        host->setServerCallbacks();
 
-    win->setCentralWidget( ((LV2::Plugin*)plugins[40])->getUIWidget() );
+        host->addPlugin( plugins[34] );
+
+
+    } catch( std::exception& e ) {
+
+        std::cout << e.what();
+
+    }
+
+    //win->setCentralWidget( ((LV2::Plugin*)plugins[38])->getUIWidget() );
 
     win->show();
 

@@ -121,6 +121,11 @@ void UI::start() {
 
     }
 
+
+    //Create jack ring buffers @TODO move to plugin grab
+
+    //_uiPortEvents = jack_ringbuffer_create( 4096 );
+
     createUI();
 
 };
@@ -149,64 +154,65 @@ void UI::stop() {
 void UI::update() {
 
 	/* Emit UI events. */
-    ControlChange ev;
-    const size_t  space = jack_ringbuffer_read_space(jalv->plugin_events);
-    for(
-        size_t i = 0;
-        i + sizeof(ev) + sizeof(float) <= space;
-        i += sizeof(ev) + ev.size
-    ) {
-        //Read event header to get the size
-        jack_ringbuffer_read( plugin_events, (char*)&ev, sizeof(ev));
-
-        //Resize read buffer if necessary
-        _uiEventBuf = realloc( _uiEventBuf, ev.size );
-        void* const buf = _uiEventBuf;
-
-        //Read event body
-        jack_ringbuffer_read( plugin_events, buf, ev.size );
-
-        if( jalv->opts.dump && ev.protocol == atom_eventTransfer ) {
-
-            //Dump event in Turtle to the console
-            LV2_Atom* atom = (LV2_Atom*)buf;
-            char * str  = sratom_to_turtle(
-                jalv->ui_sratom, &jalv->unmap, "jalv:", NULL, NULL,
-                atom->type, atom->size, LV2_ATOM_BODY(atom)
-            );
-
-            //jalv_ansi_start(stdout, 35);
-            //printf("\n## Plugin => UI (%u bytes) ##\n%s\n", atom->size, str);
-            //jalv_ansi_reset(stdout);
-            free(str);
-
-        }
-
-        if ( _lilvUI ) {
-
-            suil_instance_port_event(
-                _lilvUI,
-                ev.index,
-                ev.size, ev.protocol, buf
-            );
-
-        } else {
-
-            jalv_ui_port_event(jalv, ev.index, ev.size, ev.protocol, buf);
-
-        }
-
-        if (ev.protocol == 0 && jalv->opts.print_controls) {
-            //print_control_value(jalv, &jalv->ports[ev.index], *(float*)buf);
-        }
-
-    }
-
-    if (jalv->externalui && jalv->extuiptr) {
-        LV2_EXTERNAL_UI_RUN(jalv->extuiptr);
-    }
+//    ControlChange ev;
+//    const size_t  space = jack_ringbuffer_read_space(jalv->plugin_events);
+//    for(
+//        size_t i = 0;
+//        i + sizeof(ev) + sizeof(float) <= space;
+//        i += sizeof(ev) + ev.size
+//    ) {
+//        //Read event header to get the size
+//        jack_ringbuffer_read( plugin_events, (char*)&ev, sizeof(ev));
+//
+//        //Resize read buffer if necessary
+//        _uiEventBuf = realloc( _uiEventBuf, ev.size );
+//        void* const buf = _uiEventBuf;
+//
+//        //Read event body
+//        jack_ringbuffer_read( plugin_events, buf, ev.size );
+//
+//        if( jalv->opts.dump && ev.protocol == atom_eventTransfer ) {
+//
+//            //Dump event in Turtle to the console
+//            LV2_Atom* atom = (LV2_Atom*)buf;
+//            char * str  = sratom_to_turtle(
+//                jalv->ui_sratom, &jalv->unmap, "jalv:", NULL, NULL,
+//                atom->type, atom->size, LV2_ATOM_BODY(atom)
+//            );
+//
+//            //jalv_ansi_start(stdout, 35);
+//            //printf("\n## Plugin => UI (%u bytes) ##\n%s\n", atom->size, str);
+//            //jalv_ansi_reset(stdout);
+//            free(str);
+//
+//        }
+//
+//        if ( _lilvUI ) {
+//
+//            suil_instance_port_event(
+//                _lilvUI,
+//                ev.index,
+//                ev.size, ev.protocol, buf
+//            );
+//
+//        } else {
+//
+//            jalv_ui_port_event(jalv, ev.index, ev.size, ev.protocol, buf);
+//
+//        }
+//
+//        if (ev.protocol == 0 && jalv->opts.print_controls) {
+//            //print_control_value(jalv, &jalv->ports[ev.index], *(float*)buf);
+//        }
+//
+//    }
+//
+//    if (jalv->externalui && jalv->extuiptr) {
+//        LV2_EXTERNAL_UI_RUN(jalv->extuiptr);
+//    }
 
 };
+
 
 /**
  * Instaniate instances
@@ -581,12 +587,12 @@ Port * UI::portBySymbol( Plugin * p, const char * sym ) {
  */
 
 void UI::suilUIWrite(
-        SuilController controller,
-        uint32_t port_index,
-        uint32_t buffer_size,
-        uint32_t protocol,
-        const void * buffer
-        ) {
+    SuilController controller,
+    uint32_t port_index,
+    uint32_t buffer_size,
+    uint32_t protocol,
+    const void * buffer
+) {
 
 };
 
