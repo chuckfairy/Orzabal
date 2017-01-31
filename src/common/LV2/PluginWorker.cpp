@@ -17,6 +17,8 @@ PluginWorker::PluginWorker( Plugin * p ) {
 
     _Plugin = p;
 
+	zix_sem_init( &sem, 0 );
+
 };
 
 

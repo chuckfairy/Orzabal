@@ -132,10 +132,10 @@ Audio::Port * Plugin::createPort( int long portNum ) {
     port->lilv_port = lilv_plugin_get_port_by_index( _lilvPlugin, portNum );
 
 	port->jack_port = NULL;
-    port->evbuf     = NULL;
+    port->evbuf = NULL;
 	port->buf_size  = 0;
-	port->index     = portNum;
-	port->control   = 0.0f;
+	port->index = portNum;
+	port->control = 0.0f;
     port->flow = Audio::FLOW_UNKNOWN;
 
     const bool optional = portIsOptional( port );
@@ -175,11 +175,13 @@ Audio::Port * Plugin::createPort( int long portNum ) {
 
 	} else if( portIsEvent( port ) ) {
 
+        std::cout << "EVENT CREATED\n\n\n\n\n";
 		port->type = Audio::TYPE_EVENT;
 		port->old_api = true;
 
 	} else if( portIsAtom( port ) ) {
 
+        std::cout << "EVENT CREATED ATOM\n\n\n\n\n";
 		port->type = Audio::TYPE_EVENT;
 		port->old_api = false;
 
@@ -234,7 +236,7 @@ void Plugin::start() {
     buffer_size = 4096;
 
 	zix_sem_init( &symap_lock, 1 );
-	zix_sem_init(&exit_sem, 0);
+	zix_sem_init( &exit_sem, 0 );
 
     uri_map_feature.data  = &uri_map;
     uri_map.callback_data = this;
@@ -243,15 +245,14 @@ void Plugin::start() {
 
     map.handle = this;
     map.map = Plugin::mapURI;
-//
-    lv2_atom_forge_init(&_forge, &map);
-//
+
     map_feature.data = &map;
 
     unmap.handle = this;
     unmap.unmap = Plugin::unmapURI;
     unmap_feature.data = &unmap;
 
+    lv2_atom_forge_init(&_forge, &map);
 
     //URI and symap creation
     //@TODO definitely move
@@ -259,8 +260,11 @@ void Plugin::start() {
     LV2_URID atom_Float = symap_map(_symap, LV2_ATOM__Float);
     LV2_URID atom_Int = symap_map(_symap, LV2_ATOM__Int);
 
-//	midi_event_id = uri_to_id(
-//		&jalv, "http://lv2plug.in/ns/ext/event", LV2_MIDI__MidiEvent);
+    midi_event_id = Plugin::uriToId(
+        this,
+        "http://lv2plug.in/ns/ext/event",
+        LV2_MIDI__MidiEvent
+    );
 
     atom_Object = symap_map(_symap, LV2_ATOM__Object);
     //jalv.urids.atom_Path            = symap_map(_symap, LV2_ATOM__Path);
@@ -821,10 +825,15 @@ void Plugin::updateJack( jack_nframes_t nframes ) {
 
         Port * port = (Port*) _ports[ p ];
 
-        if (port->flow == Audio::FLOW_OUTPUT && port->type == Audio::TYPE_CONTROL &&
-
-                lilv_port_has_property( _lilvPlugin, port->lilv_port,
-                    lv2_reportsLatency)) {
+        if(
+            port->flow == Audio::FLOW_OUTPUT
+            && port->type == Audio::TYPE_CONTROL
+            && lilv_port_has_property(
+                _lilvPlugin,
+                port->lilv_port,
+                lv2_reportsLatency
+            )
+        ) {
 
             if (plugin_latency != port->control) {
 
@@ -840,6 +849,8 @@ void Plugin::updateJack( jack_nframes_t nframes ) {
 
             void* buf = NULL;
 
+            std::cout << "Any Flow Pleas\n";
+
             if (port->jack_port) {
                 buf = jack_port_get_buffer(port->jack_port, nframes);
                 jack_midi_clear_buffer(buf);
@@ -853,6 +864,7 @@ void Plugin::updateJack( jack_nframes_t nframes ) {
                 uint8_t* body;
                 lv2_evbuf_get(i, &frames, &subframes, &type, &size, &body);
                 if (buf && type == midi_event_id) {
+                    std::cout << "Midi Event Huzzah\n";
                     jack_midi_event_write(buf, frames, body, size);
                 }
 
@@ -946,7 +958,7 @@ void Plugin::updatePort( uint32_t p, jack_nframes_t nframes ) {
             );
         }
 
-        if (_request_update) {
+        if( _request_update ) {
 
             /* Plugin state has changed, request an update */
 
@@ -962,10 +974,11 @@ void Plugin::updatePort( uint32_t p, jack_nframes_t nframes ) {
 
         }
 
-        if (port->jack_port) {
+        if( port->jack_port ) {
 
             /* Write Jack MIDI input */
             void* buf = jack_port_get_buffer(port->jack_port, nframes);
+
             for (uint32_t i = 0; i < jack_midi_get_event_count(buf); ++i) {
 
                 jack_midi_event_t ev;
@@ -1089,6 +1102,11 @@ const char * Plugin::unmapURI( LV2_URID_Map_Handle handle, LV2_URID urid ) {
 	return uri;
 
 };
+
+
+/**
+ *  Map function for URI map extension.
+ */
 
 uint32_t Plugin::uriToId( LV2_URI_Map_Callback_Data callback_data, const char * map, const char * uri ) {
 

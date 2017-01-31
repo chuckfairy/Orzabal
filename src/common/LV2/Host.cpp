@@ -150,6 +150,8 @@ void Host::setServerCallbacks() {
 
     _Server->on( Jack::Server::UPDATE_EVENT, e );
 
+    _Server->on( Jack::Server::BUFFER_SIZE_EVENT, e );
+
 };
 
 
