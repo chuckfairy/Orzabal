@@ -64,6 +64,7 @@ void UI::start() {
         if( lilv_ui_is_supported( this_ui, suil_ui_supported, native_ui_type, &_uiType ) ) {
             /* TODO: Multiple UI support */
             _lilvUI = this_ui;
+            _HAS_LILV_UI = true;
             break;
         }
 
@@ -75,9 +76,9 @@ void UI::start() {
 
     //_lilvUI = lilv_uis_get( _lilvUIS, lilv_uis_begin( _lilvUIS ) );
 
-    if( ! _lilvUI ) {
+    if( ! _HAS_LILV_UI ) {
 
-        LILV_FOREACH( uis, u, _lilvUI ) {
+        LILV_FOREACH( uis, u, _lilvUIS ) {
 
             const LilvUI* ui = lilv_uis_get( _lilvUIS, u );
 
@@ -112,8 +113,8 @@ void UI::start() {
 
     if( _lilvUI ) {
 
-        fprintf(stderr, "UI: %s\n", lilv_node_as_uri( lilv_ui_get_uri( _lilvUI ) ) );
-        fprintf(stderr, "UI Type: %s\n", lilv_node_as_uri( _uiType ) );
+        //fprintf(stderr, "UI: %s\n", lilv_node_as_uri( lilv_ui_get_uri( _lilvUI ) ) );
+        //fprintf(stderr, "UI Type: %s\n", lilv_node_as_uri( _uiType ) );
 
     } else {
 
@@ -224,13 +225,13 @@ void UI::createUI() {
 
     if( ! _lilvUI ) {
 
-        createQt();
-
     } else {
 
-        createNativeUI();
+        //createNativeUI();
 
     }
+
+    createQt();
 
 }
 

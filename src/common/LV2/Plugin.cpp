@@ -175,13 +175,11 @@ Audio::Port * Plugin::createPort( int long portNum ) {
 
 	} else if( portIsEvent( port ) ) {
 
-        std::cout << "EVENT CREATED\n\n\n\n\n";
 		port->type = Audio::TYPE_EVENT;
 		port->old_api = true;
 
 	} else if( portIsAtom( port ) ) {
 
-        std::cout << "EVENT CREATED ATOM\n\n\n\n\n";
 		port->type = Audio::TYPE_EVENT;
 		port->old_api = false;
 
@@ -354,7 +352,7 @@ void Plugin::start() {
     if( lilv_plugin_has_feature( _lilvPlugin, work_schedule )
             && lilv_plugin_has_extension_data(_lilvPlugin, work_interface)) {
 
-        const LV2_Worker_Interface* iface = (const LV2_Worker_Interface*)
+        const LV2_Worker_Interface * iface = (const LV2_Worker_Interface*)
             lilv_instance_get_extension_data( _lilvInstance, LV2_WORKER__interface );
 
         _worker->init( iface, true );
@@ -395,12 +393,6 @@ void Plugin::start() {
 
     _UI->start();
 
-    ACTIVE = true;
-
-
-    //@TODO determine sem flow or thread/atomic alternative
-    zix_sem_wait(&exit_sem);
-
     //if( jalv.opts.controls ) {
         //for( char** c = jalv.opts.controls; *c; ++c ) {
             //jalv_apply_control_arg(&jalv, *c);
@@ -410,6 +402,20 @@ void Plugin::start() {
 
 };
 
+
+/**
+ * Main thread run
+ */
+
+void Plugin::run() {
+
+    ACTIVE = true;
+
+
+    //@TODO determine sem flow or thread/atomic alternative
+    zix_sem_wait(&exit_sem);
+
+};
 
 /**
  * LilvURI stop
@@ -787,7 +793,6 @@ void Plugin::updateJack( jack_nframes_t nframes ) {
                     //ev.protocol);
                 );
 
-
             }
 
         }
@@ -809,6 +814,7 @@ void Plugin::updateJack( jack_nframes_t nframes ) {
         _worker->emitIfaceEndRun( _lilvInstance->lv2_handle );
 
     }
+
 
     /* Check if it's time to send updates to the UI */
     event_delta_t += nframes;

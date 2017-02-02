@@ -72,7 +72,7 @@ void * PluginWorker::zixWork(void* data) {
 
         zix_sem_wait( &sem );
 
-        if( plugin->isActive() ) {
+        if( ! plugin->isActive() ) {
             break;
         }
 
@@ -274,7 +274,7 @@ void PluginWorker::emitResponses( LilvInstance * instance ) {
 
 bool PluginWorker::hasIfaceRun() {
 
-    return ( ACTIVE && _iface && _iface->end_run );
+    return ( ACTIVE && _Plugin->isActive() && _iface && _iface->end_run );
 
 };
 

@@ -181,6 +181,8 @@ class UI : public Audio::UI {
 
         bool _EXTERNAL_UI;
 
+        bool _HAS_LILV_UI;
+
         const char * _NATIVE_UI_TYPE = "http://lv2plug.in/ns/extensions/ui#Qt5UI";
 
 

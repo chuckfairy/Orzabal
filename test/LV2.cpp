@@ -36,9 +36,13 @@ int main( int argc, char ** argv ) {
 
     host->setServerCallbacks();
 
-    host->addPlugin( plugins[34] );
+    Audio::Plugin * p = plugins[18];
 
-    win->setCentralWidget( ((LV2::Plugin*)plugins[34])->getUIWidget() );
+    host->addPlugin( p );
+
+    ((LV2::Plugin*)p)->run();
+
+    //win->setCentralWidget( ((LV2::Plugin*)plugins[10])->getUIWidget() );
 
     win->show();
 
