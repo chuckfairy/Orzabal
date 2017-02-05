@@ -134,27 +134,37 @@ class Plugin : public Audio::Plugin {
          * Worker related
          */
 
-        ZixSem _worker_lock;
-
         PluginWorker * _worker;
         PluginWorker * _stateWorker;
 
+        ZixSem _worker_lock;
 
         ZixSem exit_sem;
 
-        const char * _tempDir = "/tmp/orzabal-lv2";
-
         size_t longest_sym;
+
+
+        /**
+         * LV2 Port default values
+         */
 
         float * _defaultValues;
 
-        unsigned int buffer_size;
 
-        int _position;
-
-        int _bpm;
+        /**
+         * Atom thread lv2
+         */
 
         LV2_Atom_Forge _forge;
+
+
+        /**
+         * @TODO move mapping URI base
+         */
+
+        LV2_URID_Map map;
+
+        LV2_URID_Unmap unmap;
 
         LilvNode * atom_Chunk;
         LilvNode* atom_Sequence;
@@ -171,9 +181,10 @@ class Plugin : public Audio::Plugin {
         LV2_URID _time_speed;
         LV2_URID patch_Get;
 
-        LV2_URID_Map map;
 
-        LV2_URID_Unmap unmap;
+        /**
+         * Timing props
+         */
 
         LV2_Atom* lv2_pos;
 
@@ -193,12 +204,15 @@ class Plugin : public Audio::Plugin {
 
         bool xport_changed;
 
-
-        /**
-         * Timing props
-         */
+        int block_length;
 
         bool _transportRolling;
+
+        unsigned int buffer_size;
+
+        int _position;
+
+        int _bpm;
 
 
     protected:
@@ -216,7 +230,7 @@ class Plugin : public Audio::Plugin {
 
     public:
 
-        Plugin( const LilvPlugin * p, Host * h );
+        explicit Plugin( const LilvPlugin * p, Host * h );
 
 
         /**
@@ -233,11 +247,6 @@ class Plugin : public Audio::Plugin {
         void stop();
 
         UI * getUI();
-
-
-        void updateJack( jack_nframes_t );
-
-        void updatePort( uint32_t, jack_nframes_t );
 
 
         /**
@@ -278,18 +287,6 @@ class Plugin : public Audio::Plugin {
         const bool portIsAtom( Port * );
 
         const bool portIsCV( Port * );
-
-
-        /**
-         * Port getters extras
-         *
-         */
-
-        int getNumPorts() {
-
-            return _numPorts;
-
-        };
 
 
         /**
@@ -355,6 +352,18 @@ class Plugin : public Audio::Plugin {
         };
 
 
+        /**
+         * Jack related
+         */
+
+        void updateJack( jack_nframes_t );
+
+        void updatePort( uint32_t, jack_nframes_t );
+
+        void updateJackLatency( jack_latency_callback_mode_t );
+
+        void updateJackBufferSize( jack_nframes_t );
+
 
         /**
          * LV2 Mapping midi
@@ -379,6 +388,15 @@ class Plugin : public Audio::Plugin {
           */
 
         static uint32_t uriToId( LV2_URI_Map_Callback_Data, const char *, const char * );
+
+
+        /**
+         * LV2 Temp path make
+         */
+
+        static const char * TEMP_PATH;
+
+        static char * LV2MakePath( LV2_State_Make_Path_Handle, const char * );
 
 };
 

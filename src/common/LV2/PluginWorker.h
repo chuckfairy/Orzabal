@@ -83,7 +83,7 @@ class PluginWorker {
 
         const uint32_t THREAD_BUFFER_SIZE = 4096;
 
-        bool ACTIVE;
+        bool ACTIVE = false;
 
 
     public:
@@ -95,7 +95,7 @@ class PluginWorker {
          * Main initialize called from plugin
          */
 
-        void init( const LV2_Worker_Interface *, bool threaded );
+        void init( LilvInstance *, bool threaded );
 
 
         /**

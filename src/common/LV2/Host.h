@@ -29,6 +29,10 @@ class Server;
 namespace LV2 {
 
 
+/**
+ * fowarding
+ */
+
 class JackCallbackEvent;
 
 class Plugin;
@@ -110,6 +114,10 @@ class Host : public Jack::Patchbay {
         void updateJack( jack_nframes_t );
 
         void updateJack( void * );
+
+        void updateJackLatency( void * );
+
+        void updateJackBufferSize( void * );
 
 
         /**

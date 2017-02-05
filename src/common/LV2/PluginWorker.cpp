@@ -127,9 +127,12 @@ void * PluginWorker::zixWork(void* data) {
  * Main init
  */
 
-void PluginWorker::init( const LV2_Worker_Interface* iface, bool threaded ) {
+void PluginWorker::init( LilvInstance * instance, bool threaded ) {
 
-    _iface = iface;
+
+    _iface = (const LV2_Worker_Interface*)
+        lilv_instance_get_extension_data( instance, LV2_WORKER__interface );
+
     _threaded = threaded;
 
     if( _threaded ) {
@@ -274,7 +277,7 @@ void PluginWorker::emitResponses( LilvInstance * instance ) {
 
 bool PluginWorker::hasIfaceRun() {
 
-    return ( ACTIVE && _Plugin->isActive() && _iface && _iface->end_run );
+    return ( ACTIVE && _Plugin->isActive() && _iface );
 
 };
 

@@ -111,6 +111,17 @@ class Plugin {
 
 
         /**
+         * Port getters count
+         */
+
+        int getNumPorts() {
+
+            return _numPorts;
+
+        };
+
+
+        /**
          * UI related
          */
 

@@ -4,7 +4,7 @@
  */
 #include <jack/jack.h>
 
-#include "JackBufferEvent.h"
+#include "JackLatencyEvent.h"
 #include "Host.h"
 
 namespace LV2 {
@@ -15,9 +15,9 @@ namespace LV2 {
  *
  */
 
-void JackBufferEvent::run( void * o ) {
+void JackLatencyEvent::run( void * o ) {
 
-    _Patchbay->updateJackBufferSize( o );
+    _Patchbay->updateJackLatency( o );
 
 };
 

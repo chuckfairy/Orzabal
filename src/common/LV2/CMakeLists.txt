@@ -25,6 +25,8 @@ file( GLOB
     "include/lv2_evbuf.c"
     "include/symap.c"
     "include/zix_thread.c"
+    "Events/JackLatencyEvent.cpp"
+    "Events/JackBufferEvent.cpp"
     "Host.cpp"
     "Search.cpp"
     "JackCallbackEvent.cpp"

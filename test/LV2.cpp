@@ -36,15 +36,15 @@ int main( int argc, char ** argv ) {
 
     host->setServerCallbacks();
 
-    Audio::Plugin * p = plugins[18];
+    Audio::Plugin * p = plugins[34];
 
     host->addPlugin( p );
 
-    ((LV2::Plugin*)p)->run();
-
     //win->setCentralWidget( ((LV2::Plugin*)plugins[10])->getUIWidget() );
 
-    win->show();
+    //win->show();
+
+    ((LV2::Plugin*)p)->run();
 
     int exe = app.exec();
 

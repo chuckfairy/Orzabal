@@ -226,7 +226,6 @@ void Plugin::start() {
 
     _symap = symap_new();
 
-    int block_size = 512;
 
     /* Build options array to pass to plugin */
 
@@ -251,6 +250,7 @@ void Plugin::start() {
     unmap_feature.data = &unmap;
 
     lv2_atom_forge_init(&_forge, &map);
+
 
     //URI and symap creation
     //@TODO definitely move
@@ -299,6 +299,9 @@ void Plugin::start() {
 
     //@ENDTODO
 
+	LV2_State_Make_Path make_path = { this, Plugin::LV2MakePath };
+	make_path_feature.data = &make_path;
+
 	LV2_Worker_Schedule sched = { &_worker, PluginWorker::schedule };
     sched_feature.data = &sched;
 
@@ -311,7 +314,7 @@ void Plugin::start() {
 
     lv2_reportsLatency = lilv_new_uri( _Host->getLilvWorld(), LV2_CORE__reportsLatency );
 
-    int block_length = _Host->getBufferSize();
+    block_length = _Host->getBufferSize();
 
     midi_buf_size = _Host->getMidiBufferSize();
 
@@ -346,22 +349,7 @@ void Plugin::start() {
         { LV2_OPTIONS_INSTANCE, 0, 0, 0, 0, NULL }
     };
 
-
-    /* Create workers if necessary */
-
-    if( lilv_plugin_has_feature( _lilvPlugin, work_schedule )
-            && lilv_plugin_has_extension_data(_lilvPlugin, work_interface)) {
-
-        const LV2_Worker_Interface * iface = (const LV2_Worker_Interface*)
-            lilv_instance_get_extension_data( _lilvInstance, LV2_WORKER__interface );
-
-        _worker->init( iface, true );
-
-        //@TODO Implement save reloading
-        //if (safe_restore) {
-            //jalv_worker_init(&jalv, &jalv.state_worker, iface, false);
-        //}
-    }
+	options_feature.data = (void*) &options;
 
 
     //Allocate jack bufs
@@ -375,6 +363,20 @@ void Plugin::start() {
     lilv_instance_activate( _lilvInstance );
 
     allocatePortBuffers();
+
+
+    /* Create workers if necessary */
+
+    if( lilv_plugin_has_feature( _lilvPlugin, work_schedule )
+            && lilv_plugin_has_extension_data(_lilvPlugin, work_interface)) {
+
+        _worker->init( _lilvInstance, true );
+
+        //@TODO Implement save reloading
+        //if (safe_restore) {
+            //jalv_worker_init(&jalv, &jalv.state_worker, iface, false);
+        //}
+    }
 
 
     //Set descriptor
@@ -446,7 +448,7 @@ void Plugin::stop() {
 
     zix_sem_destroy( &exit_sem );
 
-    remove( _tempDir );
+    //remove( _tempDir );
 
 };
 
@@ -927,6 +929,60 @@ void Plugin::updateJack( jack_nframes_t nframes ) {
 
 
 /**
+ * Jack latency callback
+ */
+
+void Plugin::updateJackLatency( jack_latency_callback_mode_t mode ) {
+
+    const enum Audio::PortFlow flow = ((mode == JackCaptureLatency)
+        ? Audio::FLOW_INPUT :
+        Audio::FLOW_OUTPUT);
+
+	/* First calculate the min/max latency of all feeding ports */
+	uint32_t             ports_found = 0;
+	jack_latency_range_t range       = { UINT32_MAX, 0 };
+	for (uint32_t p = 0; p < _numPorts; ++p) {
+
+		Port * port = (Port*) _ports[p];
+
+		if (port->jack_port && port->flow == flow) {
+
+			jack_latency_range_t r;
+			jack_port_get_latency_range(port->jack_port, mode, &r);
+			if(r.min < range.min) { range.min = r.min; }
+			if(r.max > range.max) { range.max = r.max; }
+			++ports_found;
+
+		}
+
+	}
+
+
+	if (ports_found == 0) {
+		range.min = 0;
+	}
+
+	/* Add the plugin's own latency */
+	range.min += plugin_latency;
+	range.max += plugin_latency;
+
+	/* Tell Jack about it */
+	for (uint32_t p = 0; p < _numPorts; ++p) {
+
+		Port * port = (Port*) _ports[p];
+
+		if( port->jack_port && port->flow == flow ) {
+
+			jack_port_set_latency_range(port->jack_port, mode, &range);
+
+		}
+
+	}
+
+};
+
+
+/**
  * Update lv2 to jack port
  */
 
@@ -957,7 +1013,8 @@ void Plugin::updatePort( uint32_t p, jack_nframes_t nframes ) {
 
         /* Write transport change event if applicable */
         LV2_Evbuf_Iterator iter = lv2_evbuf_begin(port->evbuf);
-        if (xport_changed) {
+
+        if( xport_changed ) {
             lv2_evbuf_write(
                 &iter, 0, 0,
                 lv2_pos->type, lv2_pos->size, (uint8_t*) LV2_ATOM_BODY(lv2_pos)
@@ -1122,6 +1179,29 @@ uint32_t Plugin::uriToId( LV2_URI_Map_Callback_Data callback_data, const char * 
     zix_sem_post(&plugin->symap_lock);
 
     return id;
+
+};
+
+
+/**
+ * LV2 make path feature
+ */
+
+const char * Plugin::TEMP_PATH = "/tmp/";
+
+char * Plugin::LV2MakePath( LV2_State_Make_Path_Handle handle, const char * path ) {
+
+    Plugin * p = (Plugin*) handle;
+
+	const size_t a_len = strlen( path );
+	const size_t b_len = strlen( Plugin::TEMP_PATH );
+	char * const fullPath = (char*)malloc(a_len + b_len + 1);
+
+	memcpy(fullPath, path, a_len);
+	memcpy(fullPath + a_len, Plugin::TEMP_PATH, b_len);
+	fullPath[a_len + b_len] = '\0';
+
+    return fullPath;
 
 };
 
