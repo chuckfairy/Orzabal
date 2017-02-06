@@ -210,6 +210,8 @@ class Plugin : public Audio::Plugin {
 
         unsigned int buffer_size;
 
+        bool buf_size_set = false;
+
         int _position;
 
         int _bpm;
