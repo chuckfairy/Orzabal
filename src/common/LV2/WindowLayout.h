@@ -3,6 +3,8 @@
  */
 #pragma once
 
+#include <cmath>
+
 #include <QAction>
 #include <QApplication>
 #include <QDial>

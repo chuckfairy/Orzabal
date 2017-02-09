@@ -273,7 +273,7 @@ Control::setValue(float value)
         step = (std::find(scalePoints.begin(), scalePoints.end(), value)
                 - scalePoints.begin());
     } else if (isLogarithmic) {
-        step = steps * log(value / min) / log(max / min);
+        step = steps * std::log(value / min) / log(max / min);
     } else {
         step = value * steps;
     }

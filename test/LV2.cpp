@@ -36,7 +36,7 @@ int main( int argc, char ** argv ) {
 
     host->setServerCallbacks();
 
-    Audio::Plugin * p = plugins[34];
+    Audio::Plugin * p = plugins[5];
 
     host->addPlugin( p );
 

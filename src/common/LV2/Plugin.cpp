@@ -71,7 +71,7 @@ void Plugin::setPorts() {
 
     long i;
 
-    _defaultValues = (float*)calloc(
+    _defaultValues = (float*) calloc(
         lilv_plugin_get_num_ports( _lilvPlugin ),
         sizeof( float )
     );
@@ -196,7 +196,7 @@ Audio::Port * Plugin::createPort( int long portNum ) {
 	LilvNode* min_size = lilv_port_get( _lilvPlugin, port->lilv_port, rsz_minimumSize );
 	if (min_size && lilv_node_is_int(min_size)) {
 		port->buf_size = lilv_node_as_int(min_size);
-        int buffer_size = MAX( buffer_size, port->buf_size * N_BUFFER_CYCLES );
+        buffer_size = MAX( buffer_size, port->buf_size * N_BUFFER_CYCLES );
 	}
 
 	lilv_node_free(min_size);
