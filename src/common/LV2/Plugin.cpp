@@ -57,6 +57,7 @@ Plugin::Plugin( const LilvPlugin* p, Host * h ) {
     setLilvPlugin( p );
 
     _worker = new PluginWorker( this );
+    _stateWorker = new PluginWorker( this );
 
 };
 
@@ -297,6 +298,12 @@ void Plugin::start() {
     _time_frame = symap_map(_symap, LV2_TIME__frame);
     _time_speed = symap_map(_symap, LV2_TIME__speed);
 
+    if( ! hasRequiredFeatures() ) {
+
+        throw std::runtime_error( "Does not have required features" );
+
+    }
+
     //@ENDTODO
 
 	LV2_State_Make_Path make_path = { this, Plugin::LV2MakePath };
@@ -304,6 +311,9 @@ void Plugin::start() {
 
 	LV2_Worker_Schedule sched = { &_worker, PluginWorker::schedule };
     sched_feature.data = &sched;
+
+	LV2_Worker_Schedule ssched = { &_stateWorker, PluginWorker::schedule };
+	state_sched_feature.data = &ssched;
 
     LV2_URID ui_updateRate = symap_map(_symap, LV2_UI__updateRate);
     LilvNode * work_interface = lilv_new_uri( _Host->getLilvWorld(), LV2_WORKER__interface );
@@ -351,11 +361,18 @@ void Plugin::start() {
 
 	options_feature.data = (void*) &options;
 
+    //State setup to get defaults
+    _state = lilv_state_new_from_world(
+        _lilvWorld,
+        &map,
+        lilv_plugin_get_uri(_lilvPlugin)
+    );
+
 
     //Allocate jack bufs
-
-    _ringBuffer = jack_ringbuffer_create(buffer_size);
+    _ringBuffer = jack_ringbuffer_create( buffer_size );
 	jack_ringbuffer_mlock( _ringBuffer );
+
 
     /* Instantiate the plugin */
     _lilvInstance = lilv_plugin_instantiate( _lilvPlugin, sample_rate, features );
@@ -415,7 +432,7 @@ void Plugin::run() {
 
 
     //@TODO determine sem flow or thread/atomic alternative
-    zix_sem_wait(&exit_sem);
+    //zix_sem_wait(&exit_sem);
 
 };
 
@@ -691,14 +708,18 @@ void Plugin::updateJack( jack_nframes_t nframes ) {
     );
 
     /* If transport state is not as expected, then something has changed */
-    xport_changed = (rolling != _transportRolling ||
-            pos.frame != _position ||
-            pos.beats_per_minute != _bpm);
+    xport_changed = (
+        rolling != _transportRolling ||
+        pos.frame != _position ||
+        pos.beats_per_minute != _bpm
+    );
 
     uint8_t   pos_buf[256];
-    lv2_pos = (LV2_Atom*)pos_buf;
+    LV2_Atom * lv2_pos = (LV2_Atom*) pos_buf;
 
     if( xport_changed ) {
+
+        std::cout << "XPORT\n\n";
 
         /* Build an LV2 position object to report change to plugin */
         lv2_atom_forge_set_buffer(&_forge, pos_buf, sizeof(pos_buf));
@@ -742,7 +763,7 @@ void Plugin::updateJack( jack_nframes_t nframes ) {
 
     for( uint32_t p = 0; p < _numPorts; ++ p ) {
 
-        updatePort( p, nframes );
+        updatePort( p, nframes, lv2_pos );
 
     }
 
@@ -1002,11 +1023,15 @@ void Plugin::updateJackBufferSize( jack_nframes_t nframes ) {
  * Update lv2 to jack port
  */
 
-void Plugin::updatePort( uint32_t p, jack_nframes_t nframes ) {
+void Plugin::updatePort(
+    uint32_t p,
+    jack_nframes_t nframes,
+    LV2_Atom* lv2_pos
+) {
 
     Port * port = (Port*) _ports[ p ];
 
-    if( port->type == Audio::TYPE_AUDIO && port->jack_port ) {
+    if( port->type == Audio::TYPE_AUDIO ) {
 
         /* Connect plugin port directly to Jack port buffer */
         lilv_instance_connect_port(
@@ -1023,12 +1048,15 @@ void Plugin::updatePort( uint32_t p, jack_nframes_t nframes ) {
             jack_port_get_buffer( port->jack_port, nframes )
         );
 
-    } else if( port->type == Audio::TYPE_EVENT && port->flow == Audio::FLOW_INPUT ) {
+    } else if(
+        port->type == Audio::TYPE_EVENT
+        && port->flow == Audio::FLOW_INPUT
+    ) {
 
-        lv2_evbuf_reset(port->evbuf, true);
+        lv2_evbuf_reset( port->evbuf, true );
 
         /* Write transport change event if applicable */
-        LV2_Evbuf_Iterator iter = lv2_evbuf_begin(port->evbuf);
+        LV2_Evbuf_Iterator iter = lv2_evbuf_begin( port->evbuf );
 
         if( xport_changed ) {
             lv2_evbuf_write(
@@ -1037,7 +1065,7 @@ void Plugin::updatePort( uint32_t p, jack_nframes_t nframes ) {
             );
         }
 
-        if( _request_update ) {
+        if( _request_update || true ) {
 
             /* Plugin state has changed, request an update */
 
@@ -1061,7 +1089,7 @@ void Plugin::updatePort( uint32_t p, jack_nframes_t nframes ) {
             for (uint32_t i = 0; i < jack_midi_get_event_count(buf); ++i) {
 
                 jack_midi_event_t ev;
-                jack_midi_event_get(&ev, buf, i);
+                jack_midi_event_get( &ev, buf, i );
                 lv2_evbuf_write(&iter,
                     ev.time, 0,
                     midi_event_id,
@@ -1153,6 +1181,56 @@ const bool Plugin::portIsCV( Port * p ) {
 
 };
 
+/**
+ * Check required lilv features
+ */
+
+bool Plugin::hasRequiredFeatures() {
+
+	LilvNodes* req_feats = lilv_plugin_get_required_features( _lilvPlugin );
+
+	LILV_FOREACH( nodes, f, req_feats ) {
+
+		const char* uri = lilv_node_as_uri(
+            lilv_nodes_get( req_feats, f )
+        );
+
+		if( ! lilvFeaturesIsSupported( uri ) ) {
+
+			return false;
+
+		}
+
+	}
+
+	lilv_nodes_free(req_feats);
+
+    return true;
+
+};
+
+bool Plugin::lilvFeaturesIsSupported( const char * uri ) {
+
+	if(!strcmp( uri, "http://lv2plug.in/ns/lv2core#isLive" ) ) {
+
+		return true;
+
+	}
+
+	for( const LV2_Feature * const * f = features; *f; ++f ) {
+
+		if( !strcmp( uri, (*f)->URI ) ) {
+
+			return true;
+
+		}
+
+	}
+
+	return false;
+
+};
+
 
 /**
  * Map of URI ID getting
@@ -1187,10 +1265,14 @@ const char * Plugin::unmapURI( LV2_URID_Map_Handle handle, LV2_URID urid ) {
  *  Map function for URI map extension.
  */
 
-uint32_t Plugin::uriToId( LV2_URI_Map_Callback_Data callback_data, const char * map, const char * uri ) {
+uint32_t Plugin::uriToId(
+    LV2_URI_Map_Callback_Data callback_data,
+    const char * map,
+    const char * uri
+) {
 
-    Plugin* plugin = (Plugin*)callback_data;
-    zix_sem_wait(&plugin->symap_lock);
+    Plugin* plugin = (Plugin*) callback_data;
+    zix_sem_wait( &plugin->symap_lock );
     const LV2_URID id = symap_map(plugin->_symap, uri);
     zix_sem_post(&plugin->symap_lock);
 

@@ -23,6 +23,11 @@
 
 #include "lv2_evbuf.h"
 
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 struct LV2_Evbuf_Impl {
 	LV2_Evbuf_Type type;
 	uint32_t       capacity;
@@ -274,3 +279,7 @@ lv2_evbuf_write(LV2_Evbuf_Iterator* iter,
 
 	return true;
 }
+
+#ifdef __cplusplus
+}
+#endif

@@ -100,11 +100,7 @@ void Host::updatePlugins() {
 
 JackCallbackEvent * Host::getEvent() {
 
-    if( ! _Callback ) {
-
-        _Callback = new JackCallbackEvent( this );
-
-    }
+    _Callback = new JackCallbackEvent( this );
 
     return _Callback;
 

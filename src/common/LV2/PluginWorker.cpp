@@ -43,6 +43,8 @@ LV2_Worker_Status PluginWorker::respond(
     const void * data
 ) {
 
+    std::cout << "WORKER \n";
+
     PluginWorker* worker = (PluginWorker*)handle;
 
     jack_ringbuffer_t * res = worker->getResponses();

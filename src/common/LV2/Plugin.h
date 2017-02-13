@@ -128,6 +128,7 @@ class Plugin : public Audio::Plugin {
         Host * _Host;
 
         ZixSem _symap_lock;
+        size_t longest_sym = 0;
 
 
         /**
@@ -140,8 +141,6 @@ class Plugin : public Audio::Plugin {
         ZixSem _worker_lock;
 
         ZixSem exit_sem;
-
-        size_t longest_sym;
 
 
         /**
@@ -159,6 +158,13 @@ class Plugin : public Audio::Plugin {
 
 
         /**
+         * Lilv state
+         */
+
+        LilvState * _state;
+
+
+        /**
          * @TODO move mapping URI base
          */
 
@@ -167,7 +173,7 @@ class Plugin : public Audio::Plugin {
         LV2_URID_Unmap unmap;
 
         LilvNode * atom_Chunk;
-        LilvNode* atom_Sequence;
+        LilvNode * atom_Sequence;
         LV2_URID atom_Object;
         LV2_URID atom_eventTransfer;
 
@@ -196,7 +202,7 @@ class Plugin : public Audio::Plugin {
 
         float ui_update_hz;
 
-        int midi_buf_size;
+        int midi_buf_size = 1024;
 
         uint32_t midi_event_id;
 
@@ -204,7 +210,7 @@ class Plugin : public Audio::Plugin {
 
         bool xport_changed;
 
-        int block_length;
+        int block_length = 4096;
 
         bool _transportRolling;
 
@@ -214,7 +220,7 @@ class Plugin : public Audio::Plugin {
 
         int _position;
 
-        int _bpm;
+        int _bpm = 120.0f;
 
 
     protected:
@@ -292,6 +298,15 @@ class Plugin : public Audio::Plugin {
 
 
         /**
+         * required features checker
+         */
+
+        bool hasRequiredFeatures();
+
+        bool lilvFeaturesIsSupported( const char * );
+
+
+        /**
          * Lilv plugin related
          */
 
@@ -360,7 +375,7 @@ class Plugin : public Audio::Plugin {
 
         void updateJack( jack_nframes_t );
 
-        void updatePort( uint32_t, jack_nframes_t );
+        void updatePort( uint32_t, jack_nframes_t, LV2_Atom * );
 
         void updateJackLatency( jack_latency_callback_mode_t );
 
