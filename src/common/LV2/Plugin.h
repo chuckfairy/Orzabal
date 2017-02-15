@@ -86,22 +86,22 @@ class Plugin : public Audio::Plugin {
          *  LV2 Feature options
          */
 
-        LV2_URI_Map_Feature uri_map = { NULL, &Plugin::uriToId };
-        LV2_Feature uri_map_feature      = { NS_EXT "uri-map", NULL };
-        LV2_Feature map_feature          = { LV2_URID__map, NULL };
-        LV2_Feature unmap_feature        = { LV2_URID__unmap, NULL };
-        LV2_Feature make_path_feature    = { LV2_STATE__makePath, NULL };
-        LV2_Feature sched_feature        = { LV2_WORKER__schedule, NULL };
-        LV2_Feature state_sched_feature  = { LV2_WORKER__schedule, NULL };
-        LV2_Feature safe_restore_feature = { LV2_STATE__threadSafeRestore, NULL };
-        LV2_Feature log_feature          = { LV2_LOG__log, NULL };
-        LV2_Feature options_feature      = { LV2_OPTIONS__options, NULL };
-        LV2_Feature def_state_feature    = { LV2_STATE__loadDefaultState, NULL };
+        LV2_URI_Map_Feature uri_map { NULL, &Plugin::uriToId };
+        LV2_Feature uri_map_feature { NS_EXT "uri-map", NULL };
+        LV2_Feature map_feature { LV2_URID__map, NULL };
+        LV2_Feature unmap_feature { LV2_URID__unmap, NULL };
+        LV2_Feature make_path_feature { LV2_STATE__makePath, NULL };
+        LV2_Feature sched_feature { LV2_WORKER__schedule, NULL };
+        LV2_Feature state_sched_feature { LV2_WORKER__schedule, NULL };
+        LV2_Feature safe_restore_feature { LV2_STATE__threadSafeRestore, NULL };
+        LV2_Feature log_feature { LV2_LOG__log, NULL };
+        LV2_Feature options_feature { LV2_OPTIONS__options, NULL };
+        LV2_Feature def_state_feature { LV2_STATE__loadDefaultState, NULL };
 
-        const LV2_Extension_Data_Feature ext_data = { NULL };
+        const LV2_Extension_Data_Feature ext_data { NULL };
 
         /** These features have no data */
-        const LV2_Feature buf_size_features[3] = {
+        const LV2_Feature buf_size_features[3] {
             { LV2_BUF_SIZE__powerOf2BlockLength, NULL },
             { LV2_BUF_SIZE__fixedBlockLength, NULL },
             { LV2_BUF_SIZE__boundedBlockLength, NULL }
@@ -127,7 +127,6 @@ class Plugin : public Audio::Plugin {
 
         Host * _Host;
 
-        ZixSem _symap_lock;
         size_t longest_sym = 0;
 
 
@@ -187,6 +186,11 @@ class Plugin : public Audio::Plugin {
         LV2_URID _time_speed;
         LV2_URID patch_Get;
 
+        LV2_URID param_sampleRate;
+        LV2_URID bufsz_maxBlockLength;
+        LV2_URID bufsz_minBlockLength;
+        LV2_URID bufsz_sequenceSize;
+
 
         /**
          * Timing props
@@ -208,11 +212,11 @@ class Plugin : public Audio::Plugin {
 
         uint32_t plugin_latency;
 
-        bool xport_changed;
+        bool xport_changed = false;
 
         int block_length = 4096;
 
-        bool _transportRolling;
+        bool _transportRolling = false;
 
         unsigned int buffer_size;
 
@@ -232,8 +236,6 @@ class Plugin : public Audio::Plugin {
         jack_ringbuffer_t * _ringBuffer;
 
         jack_nframes_t event_delta_t;
-
-        jack_ringbuffer_t * plugin_events;
 
 
     public:

@@ -83,6 +83,8 @@ class Server : public Audio::Server {
 
         bool start();
 
+        void run();
+
         bool stop();
 
         bool connect();
@@ -90,8 +92,6 @@ class Server : public Audio::Server {
         void getPorts();
 
         void connectDefault();
-
-        void setClientCallbacks();
 
 
         /**

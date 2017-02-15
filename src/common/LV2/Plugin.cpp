@@ -230,7 +230,6 @@ void Plugin::start() {
 
     /* Build options array to pass to plugin */
 
-    int uiUpdateHZ = 60;
     buffer_size = 4096;
 
 	zix_sem_init( &symap_lock, 1 );
@@ -274,13 +273,13 @@ void Plugin::start() {
 	atom_Chunk = lilv_new_uri( _Host->getLilvWorld(), LV2_ATOM__Chunk );
 	atom_Sequence = lilv_new_uri( _Host->getLilvWorld(), LV2_ATOM__Sequence );
 
-    LV2_URID bufsz_maxBlockLength = symap_map(_symap, LV2_BUF_SIZE__maxBlockLength);
-    LV2_URID bufsz_minBlockLength = symap_map(_symap, LV2_BUF_SIZE__minBlockLength);
-    LV2_URID bufsz_sequenceSize = symap_map(_symap, LV2_BUF_SIZE__sequenceSize);
+    bufsz_maxBlockLength = symap_map(_symap, LV2_BUF_SIZE__maxBlockLength);
+    bufsz_minBlockLength = symap_map(_symap, LV2_BUF_SIZE__minBlockLength);
+    bufsz_sequenceSize = symap_map(_symap, LV2_BUF_SIZE__sequenceSize);
     //jalv.urids.log_Error            = symap_map(_symap, LV2_LOG__Error);
     //jalv.urids.log_Trace            = symap_map(_symap, LV2_LOG__Trace);
     //jalv.urids.log_Warning          = symap_map(_symap, LV2_LOG__Warning);
-    LV2_URID param_sampleRate = symap_map(_symap, LV2_PARAMETERS__sampleRate);
+    param_sampleRate = symap_map(_symap, LV2_PARAMETERS__sampleRate);
     //jalv.urids.patch_Get            = symap_map(_symap, LV2_PATCH__Get);
     //jalv.urids.patch_Put            = symap_map(_symap, LV2_PATCH__Put);
     //jalv.urids.patch_Set            = symap_map(_symap, LV2_PATCH__Set);
@@ -379,6 +378,8 @@ void Plugin::start() {
 
     lilv_instance_activate( _lilvInstance );
 
+
+    //Allocate buffer lv2evbuf
     allocatePortBuffers();
 
 
@@ -460,7 +461,7 @@ void Plugin::stop() {
     jack_ringbuffer_free( _ringBuffer );
 
     symap_free( _symap );
-    zix_sem_destroy( &_symap_lock );
+    zix_sem_destroy( &symap_lock );
     //lilv_world_free(world);
 
     zix_sem_destroy( &exit_sem );
@@ -756,8 +757,6 @@ void Plugin::updateJack( jack_nframes_t nframes ) {
     _bpm = pos.beats_per_minute;
     _transportRolling  = rolling;
 
-    LV2_URID param_sampleRate = symap_map(_symap, LV2_PARAMETERS__sampleRate);
-
 
     /* Prepare port buffers */
 
@@ -772,7 +771,7 @@ void Plugin::updateJack( jack_nframes_t nframes ) {
 
     /* Read and apply control change events from UI */
 
-    if( _UI && false ) {
+    if( _UI || true ) {
 
         ControlChange ev;
 
@@ -795,10 +794,13 @@ void Plugin::updateJack( jack_nframes_t nframes ) {
             Port * port = (Port*) _ports[ev.index];
 
             if (ev.protocol == 0) {
+
                 assert(ev.size == sizeof(float));
                 port->control = *(float*)body;
+
             } else if (ev.protocol == atom_eventTransfer) {
-                LV2_Evbuf_Iterator    e    = lv2_evbuf_end(port->evbuf);
+
+                LV2_Evbuf_Iterator e = lv2_evbuf_end(port->evbuf);
                 const LV2_Atom* const atom = (const LV2_Atom*)body;
                 lv2_evbuf_write(
                     &e,
@@ -823,7 +825,7 @@ void Plugin::updateJack( jack_nframes_t nframes ) {
     }
 
     /* Run plugin for this cycle */
-    lilv_instance_run(_lilvInstance, nframes);
+    lilv_instance_run( _lilvInstance, nframes );
 
 	/* Process any worker replies. */
     _worker->emitResponses( _lilvInstance );
@@ -918,9 +920,9 @@ void Plugin::updateJack( jack_nframes_t nframes ) {
                         break;
                     }
 
-                    jack_ringbuffer_write(_ringBuffer, evbuf, sizeof(evbuf));
+                    jack_ringbuffer_write( _ringBuffer, evbuf, sizeof(evbuf) );
                     /* TODO: race, ensure reader handles this correctly */
-                    jack_ringbuffer_write(_ringBuffer, (const char*)body, size);
+                    jack_ringbuffer_write( _ringBuffer, (const char*)body, size );
 
                 }
 
@@ -1034,6 +1036,8 @@ void Plugin::updatePort(
     if( port->type == Audio::TYPE_AUDIO ) {
 
         /* Connect plugin port directly to Jack port buffer */
+        std::cout << jack_port_get_buffer( port->jack_port, nframes );
+
         lilv_instance_connect_port(
             _lilvInstance,
             p,
@@ -1084,9 +1088,11 @@ void Plugin::updatePort(
         if( port->jack_port ) {
 
             /* Write Jack MIDI input */
-            void* buf = jack_port_get_buffer(port->jack_port, nframes);
+            void * buf = jack_port_get_buffer(port->jack_port, nframes);
 
             for (uint32_t i = 0; i < jack_midi_get_event_count(buf); ++i) {
+
+                std::cout << " MIDI ";
 
                 jack_midi_event_t ev;
                 jack_midi_event_get( &ev, buf, i );
@@ -1271,7 +1277,8 @@ uint32_t Plugin::uriToId(
     const char * uri
 ) {
 
-    Plugin* plugin = (Plugin*) callback_data;
+    Plugin * plugin = (Plugin*) callback_data;
+    std::cout << "URI TO ID \n ";
     zix_sem_wait( &plugin->symap_lock );
     const LV2_URID id = symap_map(plugin->_symap, uri);
     zix_sem_post(&plugin->symap_lock);

@@ -60,7 +60,7 @@ bool Server::start() {
     }
 
 
-    // tell the JACK server to call `process()'
+    // Set jack callbacks
 
     jack_set_process_callback( _client, Server::JackProcess, (void*)(this) );
 
@@ -73,13 +73,19 @@ bool Server::start() {
 	//jack_set_session_callback( _client, &jack_buffer_size_cb, (void*)(this) );
 
 
-    // tell the JACK server to call `jack_shutdown()' if it ever shuts down
-
     JackRegisterPorts();
 
-    jack_activate( _client );
-
     return true;
+
+};
+
+
+/**
+ * Main run func
+ */
+void Server::run() {
+
+    jack_activate( _client );
 
 };
 
@@ -132,16 +138,6 @@ void Server::JackRegisterPorts() {
  */
 
 void Server::getPorts() {
-
-};
-
-
-/**
- * Callback setting
- */
-
-void Server::setClientCallbacks() {
-
 
 };
 

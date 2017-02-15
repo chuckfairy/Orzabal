@@ -125,7 +125,8 @@ void UI::start() {
 
     //Create jack ring buffers @TODO move to plugin grab
 
-    //_uiPortEvents = jack_ringbuffer_create( 4096 );
+    _uiPortEvents = jack_ringbuffer_create( 4096 );
+	jack_ringbuffer_mlock( _uiPortEvents );
 
     createUI();
 
@@ -233,7 +234,7 @@ void UI::createUI() {
 
     createQt();
 
-}
+};
 
 void UI::createNativeUI() {
 
