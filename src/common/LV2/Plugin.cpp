@@ -1239,6 +1239,104 @@ bool Plugin::lilvFeaturesIsSupported( const char * uri ) {
 
 
 /**
+ * Lilv state restore
+ */
+
+void Plugin::applyLilvState() {
+
+    const LV2_Feature* state_features[9] = {
+        &uri_map_feature, &map_feature, &unmap_feature,
+        &make_path_feature,
+        &state_sched_feature,
+        &safe_restore_feature,
+        &log_feature,
+        &options_feature,
+        NULL
+    };
+
+    bool must_pause = !safe_restore && play_state == Audio::RUNNING;
+
+    if( must_pause ) {
+
+        play_state = Audio::PAUSE_REQUESTED;
+        zix_sem_wait(&paused);
+
+    }
+
+    lilv_state_restore(
+        _state,
+        _lilvInstance,
+        Plugin::set_port_value,
+        this,
+        0,
+        state_features
+    );
+
+    if( must_pause ) {
+        _request_update = true;
+        play_state = Audio::RUNNING;
+    }
+
+};
+
+/**
+ * Static lilv state apply
+ */
+void Plugin::setPortValue(
+    const char* port_symbol,
+    void*       user_data,
+    const void* value,
+    uint32_t    size,
+    uint32_t    type
+) {
+
+	Plugin * jalv = (Plugin*) user_data;
+
+	struct Port* port = jalv->getPortBySymbol( port_symbol );
+
+	if (!port) {
+		fprintf(stderr, "error: Preset port `%s' is missing\n", port_symbol);
+		return;
+	}
+
+	float fvalue;
+	if (type == jalv->forge.Float) {
+		fvalue = *(const float*)value;
+	} else if (type == jalv->forge.Double) {
+		fvalue = *(const double*)value;
+	} else if (type == jalv->forge.Int) {
+		fvalue = *(const int32_t*)value;
+	} else if (type == jalv->forge.Long) {
+		fvalue = *(const int64_t*)value;
+	} else {
+		fprintf(stderr, "error: Preset `%s' value has bad type <%s>\n",
+		        port_symbol, jalv->unmap.unmap(jalv->unmap.handle, type));
+		return;
+	}
+
+	if (jalv->play_state != Audio::RUNNING) {
+		// Set value on port struct directly
+		port->control = fvalue;
+	} else {
+		// Send value to running plugin
+		//jalv_ui_write(jalv, port->index, sizeof(fvalue), 0, &fvalue);
+	}
+
+	if (jalv->has_ui) {
+		// Update UI
+		char buf[sizeof(ControlChange) + sizeof(fvalue)];
+		ControlChange* ev = (ControlChange*)buf;
+		ev->index    = port->index;
+		ev->protocol = 0;
+		ev->size     = sizeof(fvalue);
+		*(float*)ev->body = fvalue;
+		jack_ringbuffer_write(jalv->plugin_events, buf, sizeof(buf));
+	}
+
+};
+
+
+/**
  * Map of URI ID getting
  */
 

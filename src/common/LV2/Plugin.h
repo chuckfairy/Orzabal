@@ -38,6 +38,7 @@
 #include <QScrollArea>
 
 #include <Audio/Plugin.h>
+#include <Audio/PlayState.h>
 
 #include "include/types.h"
 #include "include/symap.h"
@@ -140,6 +141,7 @@ class Plugin : public Audio::Plugin {
         ZixSem _worker_lock;
 
         ZixSem exit_sem;
+        ZixSem paused;
 
 
         /**
@@ -222,9 +224,20 @@ class Plugin : public Audio::Plugin {
 
         bool buf_size_set = false;
 
-        int _position;
+        int _position = 0;
 
         int _bpm = 120.0f;
+
+
+        /**
+         * Lilv state restore
+         */
+
+        bool safe_restore = false;
+
+        Audio::PlayState play_state;
+
+        void applyLilvState();
 
 
     protected:
@@ -300,6 +313,19 @@ class Plugin : public Audio::Plugin {
 
 
         /**
+         * Port value setting
+         */
+
+        static void setPortValue(
+            const char * port_symbol,
+            void * user_data,
+            const void * value,
+            uint32_t    size,
+            uint32_t    type
+        );
+
+
+        /**
          * required features checker
          */
 
@@ -369,6 +395,13 @@ class Plugin : public Audio::Plugin {
             return _worker_lock;
 
         };
+
+
+        /**
+         * Get port by symbol
+         */
+
+        Port * getPortBySymbol( const char * );
 
 
         /**
