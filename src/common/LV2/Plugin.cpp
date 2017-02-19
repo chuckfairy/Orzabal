@@ -20,7 +20,6 @@
 #include <jack/metadata.h>
 #include <jack/ringbuffer.h>
 
-#include "UI.h"
 #include "include/symap.c"
 #include "include/semaphone.h"
 #include "include/lv2_evbuf.h"
@@ -29,6 +28,7 @@
 #include "Port.h"
 #include "ControlChange.h"
 #include "Host.h"
+#include "UI.h"
 
 //@TODO move to std::max
 #ifndef MIN
@@ -396,6 +396,7 @@ void Plugin::start() {
         //}
     }
 
+    applyLilvState();
 
     //Set descriptor
 
@@ -1258,15 +1259,15 @@ void Plugin::applyLilvState() {
 
     if( must_pause ) {
 
-        play_state = Audio::PAUSE_REQUESTED;
-        zix_sem_wait(&paused);
+//        play_state = Audio::PAUSE_REQUESTED;
+//        zix_sem_wait(&paused);
 
     }
 
     lilv_state_restore(
         _state,
         _lilvInstance,
-        Plugin::set_port_value,
+        Plugin::setPortValue,
         this,
         0,
         state_features
@@ -1279,9 +1280,11 @@ void Plugin::applyLilvState() {
 
 };
 
+
 /**
  * Static lilv state apply
  */
+
 void Plugin::setPortValue(
     const char* port_symbol,
     void*       user_data,
@@ -1300,13 +1303,13 @@ void Plugin::setPortValue(
 	}
 
 	float fvalue;
-	if (type == jalv->forge.Float) {
+	if (type == jalv->_forge.Float) {
 		fvalue = *(const float*)value;
-	} else if (type == jalv->forge.Double) {
+	} else if (type == jalv->_forge.Double) {
 		fvalue = *(const double*)value;
-	} else if (type == jalv->forge.Int) {
+	} else if (type == jalv->_forge.Int) {
 		fvalue = *(const int32_t*)value;
-	} else if (type == jalv->forge.Long) {
+	} else if (type == jalv->_forge.Long) {
 		fvalue = *(const int64_t*)value;
 	} else {
 		fprintf(stderr, "error: Preset `%s' value has bad type <%s>\n",
@@ -1316,25 +1319,50 @@ void Plugin::setPortValue(
 
 	if (jalv->play_state != Audio::RUNNING) {
 		// Set value on port struct directly
-		port->control = fvalue;
 	} else {
 		// Send value to running plugin
 		//jalv_ui_write(jalv, port->index, sizeof(fvalue), 0, &fvalue);
 	}
 
-	if (jalv->has_ui) {
-		// Update UI
-		char buf[sizeof(ControlChange) + sizeof(fvalue)];
-		ControlChange* ev = (ControlChange*)buf;
-		ev->index    = port->index;
-		ev->protocol = 0;
-		ev->size     = sizeof(fvalue);
-		*(float*)ev->body = fvalue;
-		jack_ringbuffer_write(jalv->plugin_events, buf, sizeof(buf));
-	}
+    port->control = fvalue;
+
+//	if (jalv->has_ui) {
+//		// Update UI
+//		char buf[sizeof(ControlChange) + sizeof(fvalue)];
+//		ControlChange* ev = (ControlChange*)buf;
+//		ev->index    = port->index;
+//		ev->protocol = 0;
+//		ev->size     = sizeof(fvalue);
+//		*(float*)ev->body = fvalue;
+//		jack_ringbuffer_write(jalv->plugin_events, buf, sizeof(buf));
+//	}
 
 };
 
+
+/**
+ * Plugin reference by lilv port char
+ */
+
+Port * Plugin::getPortBySymbol( const char * sym ) {
+
+    for (uint32_t i = 0; i < _numPorts; ++i) {
+
+        Port * port = (Port*) _ports[ i ];
+        const LilvNode* port_sym = lilv_port_get_symbol(
+            _lilvPlugin,
+            port->lilv_port
+        );
+
+        if (!strcmp(lilv_node_as_string(port_sym), sym)) {
+            return port;
+        }
+
+    }
+
+    return nullptr;
+
+};
 
 /**
  * Map of URI ID getting
