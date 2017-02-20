@@ -10,8 +10,8 @@
 #include <QtCore>
 #include <QComboBox>
 
-#include <Server/JackServer.h>
-#include <Audio/Jack.h>
+#include <Jack/Server.h>
+#include <Jack/Host.h>
 #include <Audio/Port.h>
 
 
@@ -32,19 +32,19 @@ class OutputDropdown : public QComboBox {
 
     private:
 
-        Audio::Jack * _Host;
+        Jack::Host * _Host;
 
 
     public:
 
         OutputDropdown( QWidget * parent );
-        OutputDropdown( JackServer * );
+        OutputDropdown( Jack::Server * );
 
 
         /**
          * Set Host
          */
-        void setHost( Audio::Jack * h ) {
+        void setHost( Jack::Host * h ) {
 
             _Host = h;
 

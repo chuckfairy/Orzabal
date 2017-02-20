@@ -80,6 +80,8 @@ class Plugin : public Audio::Plugin {
 
         const LV2_Descriptor * _lilvDescriptor;
 
+        //@TODO possibly change to pointer
+
         char _lilvURI[500];
 
 
@@ -320,8 +322,8 @@ class Plugin : public Audio::Plugin {
             const char * port_symbol,
             void * user_data,
             const void * value,
-            uint32_t    size,
-            uint32_t    type
+            uint32_t size,
+            uint32_t type
         );
 
 
@@ -384,6 +386,17 @@ class Plugin : public Audio::Plugin {
         };
 
         LV2_Handle getLV2Handle();
+
+
+        /**
+         * LV2 URI
+         */
+
+        char * getURI() {
+
+            return (char *) _lilvURI;
+
+        };
 
 
         /**

@@ -66,6 +66,7 @@ class Server : public Audio::Server {
 
         /**
          * LV2
+         * @TODO rename to more patchbay
          */
 
         LV2::Host * _Host;
@@ -139,31 +140,11 @@ class Server : public Audio::Server {
 
         };
 
-
-
         /**
-         * Get status type
-         *
+         * Get patchbay
          */
-        const char * getJackStatusType() {
 
-            if( JACK_STATUS & JackServerFailed ) {
-
-                return "SERVER_FAILED";
-
-            } else if( JACK_STATUS & JackServerStarted ) {
-
-                return "SERVER_STARTED";
-
-            } else if ( JACK_STATUS & JackNameNotUnique ) {
-
-                return "SERVER_NAME_NOT_UNIQUE";
-
-            }
-
-            return "";
-
-        };
+        LV2::Host * getPatchbay();
 
 
         /**

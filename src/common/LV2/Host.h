@@ -61,17 +61,25 @@ class Host : public Jack::Patchbay {
 
         Host( jack_client_t * c );
 
-        /**
-         * Plugin starting
-         */
 
-        void addPlugin( Audio::Plugin * p );
+        /**
+         * Plugin Getters
+         */
 
         vector<Audio::Plugin*> getPlugins() {
 
             return _Plugins;
 
         };
+
+        /**
+         * Plugin starting
+         */
+
+        void addPlugin( Audio::Plugin * p );
+
+        void addPluginByIndex( uint32_t );
+
 
 
         /**

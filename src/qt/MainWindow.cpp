@@ -12,23 +12,31 @@
  *
  * @Override
  */
-MainWindow::MainWindow( QWidget * parent, Qt::WindowFlags flags ) : QMainWindow( parent, flags ) {
+MainWindow::MainWindow( QWidget * parent, Qt::WindowFlags flags ) :
+    QMainWindow( parent, flags ) {
 
     UI.setupUi( this );
 
 
     //Jack Startup
 
-    _Server = new JackServer();
+    _Server = new Jack::Server();
 
     _Server->start();
 
     _Server->connectDefault();
 
 
+    //@TODO Probably move this construction
+
+    LV2::Host * host = _Server->getPatchbay();
+
+    //host->setServerCallbacks();
+
+
     //Widget creation
 
-    dropdown = new InstrumentDropdown();
+    dropdown = new InstrumentDropdown( _Server );
 
     effects = new EffectsList();
 
@@ -43,5 +51,7 @@ MainWindow::MainWindow( QWidget * parent, Qt::WindowFlags flags ) : QMainWindow(
     UI.horizontalLayout_3->addWidget( effects );
     UI.horizontalLayout_6->addWidget( midiDevices );
     UI.horizontalLayout_5->addWidget( Outputs );
+
+    _Server->run();
 
 };

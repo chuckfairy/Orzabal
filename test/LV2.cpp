@@ -29,15 +29,13 @@ int main( int argc, char ** argv ) {
 
     LV2::Host * host = new LV2::Host( server->getJackClient() );
 
-    //host->updatePlugins();
-
     vector<Audio::Plugin*> plugins = host->findAllInstruments();
 
     host->setServer( server );
 
     host->setServerCallbacks();
 
-    Audio::Plugin * p = plugins[15];
+    Audio::Plugin * p = plugins[20];
 
     host->addPlugin( p );
 

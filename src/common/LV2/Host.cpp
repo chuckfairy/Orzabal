@@ -30,6 +30,8 @@ Host::Host( Jack::Server * s ) : Jack::Patchbay( s->getJackClient() ) {
     _lilvWorld = lilv_world_new();
     lilv_world_load_all( _lilvWorld );
 
+    setServer( s );
+
     _Search = new Search( this );
 
 };
@@ -57,6 +59,17 @@ void Host::addPlugin( Audio::Plugin * p ) {
 
     _ActivePlugins.push_back( p );
     p->start();
+
+};
+
+void Host::addPluginByIndex( uint32_t i ) {
+
+    //@TODO move to repository class
+    //@TODO really is instruments
+
+    vector<Audio::Plugin*> plugins = findAllInstruments();
+
+    addPlugin( plugins[ i ] );
 
 };
 

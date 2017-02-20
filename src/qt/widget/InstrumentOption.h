@@ -15,4 +15,6 @@ struct InstrumentOption {
 
     const char * name;
 
+    char * uri;
+
 };

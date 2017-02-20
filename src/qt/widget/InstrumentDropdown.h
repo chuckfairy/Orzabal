@@ -15,6 +15,7 @@
 
 #include <LV2/Search.h>
 #include <Audio/Plugin.h>
+#include <Jack/Server.h>
 
 #include "InstrumentOption.h"
 
@@ -39,10 +40,10 @@ class InstrumentDropdown : public QComboBox {
 
 
         /**
-         * LV2 searcher pointer
+         * Jack server
          */
 
-        LV2::Search * Searcher;
+        Jack::Server * _Server;
 
 
         /**
@@ -56,7 +57,7 @@ class InstrumentDropdown : public QComboBox {
     public:
 
         InstrumentDropdown( QWidget * parent );
-        InstrumentDropdown();
+        InstrumentDropdown( Jack::Server * );
         ~InstrumentDropdown() {};
 
         void setupUI();
@@ -119,15 +120,6 @@ class InstrumentDropdown : public QComboBox {
          *
          */
 
-        void handleSelectionChanged( int index ) {
-
-            if( index == 0 ) { return; }
-
-            QMessageBox* msg = new QMessageBox();
-            msg->setWindowTitle("Hello !");
-            msg->setText( currentText() );
-            msg->show();
-
-        };
+        void handleSelectionChanged( int index );
 
 };

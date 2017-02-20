@@ -23,9 +23,6 @@ namespace Jack {
 
 Server::Server() {
 
-    _Audio = new Host();
-
-    _Host = new LV2::Host( _client );
 
 };
 
@@ -53,7 +50,7 @@ bool Server::start() {
 
     if( _client == NULL ) {
 
-        printf( "NOT CLIENT OPEN" );
+        printf( "NO CLIENT OPEN" );
 
         return false;
 
@@ -72,6 +69,15 @@ bool Server::start() {
 
 	//jack_set_session_callback( _client, &jack_buffer_size_cb, (void*)(this) );
 
+
+    //Host starting
+
+    _Audio = new Host();
+
+    _Host = new LV2::Host( _client );
+
+
+    //Register host classes
 
     JackRegisterPorts();
 
@@ -138,6 +144,17 @@ void Server::JackRegisterPorts() {
  */
 
 void Server::getPorts() {
+
+};
+
+
+/**
+ * Get patchbay
+ */
+
+LV2::Host * Server::getPatchbay() {
+
+    return _Host;
 
 };
 

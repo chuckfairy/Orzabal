@@ -5,7 +5,7 @@
 #pragma once
 
 #include <QtCore>
-#include <Server/JackServer.h>
+#include <Jack/Server.h>
 
 #include "ui_MainWindow.h"
 
@@ -25,7 +25,7 @@ class MainWindow : public QMainWindow {
          *
          */
 
-        JackServer * _Server;
+        Jack::Server * _Server;
 
     public:
 

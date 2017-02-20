@@ -19,7 +19,7 @@ using Audio::Port;
  *
  */
 
-OutputDropdown::OutputDropdown( JackServer * server ) {
+OutputDropdown::OutputDropdown( Jack::Server * server ) {
 
     setHost( server->getAudio() );
 

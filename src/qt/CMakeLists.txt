@@ -41,6 +41,7 @@ add_executable(example ${example_SRC} ${common-ladspa})
 target_link_libraries( example
     dl
     gabrielo-common-lv2 gabrielo-common
+    gabrielo-common-jack
     gabrielo-backend-server
     gabrielo-backend-audio
     gabrielo-backend-midi
