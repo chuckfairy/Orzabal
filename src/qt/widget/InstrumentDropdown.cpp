@@ -86,7 +86,7 @@ void InstrumentDropdown::handleSelectionChanged( int index ) {
 
 
     LV2::Host * h = _Server->getPatchbay();
-    h->addPluginByIndex( index );
+    h->addPluginByIndex( index - 1 );
 
     //QMessageBox* msg = new QMessageBox();
     //msg->setWindowTitle("Hello !");

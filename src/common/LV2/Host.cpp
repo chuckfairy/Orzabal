@@ -58,7 +58,9 @@ Host::Host( jack_client_t * c ) : Jack::Patchbay( c ) {
 void Host::addPlugin( Audio::Plugin * p ) {
 
     _ActivePlugins.push_back( p );
+
     p->start();
+    ((LV2::Plugin*)p)->run();
 
 };
 

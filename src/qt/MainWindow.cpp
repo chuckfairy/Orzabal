@@ -24,14 +24,16 @@ MainWindow::MainWindow( QWidget * parent, Qt::WindowFlags flags ) :
 
     _Server->start();
 
-    _Server->connectDefault();
+    //_Server->connectDefault();
 
 
     //@TODO Probably move this construction
 
     LV2::Host * host = _Server->getPatchbay();
 
-    //host->setServerCallbacks();
+    host->setServer( _Server );
+
+    host->setServerCallbacks();
 
 
     //Widget creation

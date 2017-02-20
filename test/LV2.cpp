@@ -45,7 +45,7 @@ int main( int argc, char ** argv ) {
 
     server->run();
 
-    ((LV2::Plugin*)p)->run();
+    //((LV2::Plugin*)p)->run();
 
     int exe = app.exec();
 

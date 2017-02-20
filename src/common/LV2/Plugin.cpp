@@ -699,7 +699,7 @@ void Plugin::updateJack( jack_nframes_t nframes ) {
 
 	/* Get Jack transport position */
 
-    std::cout << "NFRAMES " << nframes << "\n";
+    std::cout << " NFRAMES " << nframes << "\n";
 
     jack_client_t * jackClient = _Host->getJackClient();
 
