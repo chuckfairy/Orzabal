@@ -58,6 +58,14 @@ InstrumentDropdown::InstrumentDropdown( QWidget * parent ) : QComboBox( parent )
 
 
 /**
+ * Static setting
+ * event related
+ */
+
+const char * InstrumentDropdown::CHANGE_EVENT = "CHANGE";
+
+
+/**
  * Add instrument implmentation
  * Will use list iterator
  *
@@ -86,7 +94,9 @@ void InstrumentDropdown::handleSelectionChanged( int index ) {
 
 
     LV2::Host * h = _Server->getPatchbay();
-    h->addPluginByIndex( index - 1 );
+    Audio::Plugin * p = h->getPluginByIndex( index - 1 );
+
+    dispatch( CHANGE_EVENT, (void*) p );
 
     //QMessageBox* msg = new QMessageBox();
     //msg->setWindowTitle("Hello !");

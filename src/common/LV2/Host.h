@@ -80,6 +80,7 @@ class Host : public Jack::Patchbay {
 
         void addPluginByIndex( uint32_t );
 
+        Audio::Plugin * getPluginByIndex( uint32_t i );
 
 
         /**

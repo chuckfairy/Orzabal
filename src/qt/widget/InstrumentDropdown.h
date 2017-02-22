@@ -15,6 +15,7 @@
 
 #include <LV2/Search.h>
 #include <Audio/Plugin.h>
+#include <Util/Dispatcher.h>
 #include <Jack/Server.h>
 
 #include "InstrumentOption.h"
@@ -26,7 +27,11 @@ using std::vector;
  * Instrument dropdown GUI
  *
  */
-class InstrumentDropdown : public QComboBox {
+
+class InstrumentDropdown :
+    public QComboBox,
+    public Util::Dispatcher
+{
 
     Q_OBJECT
 
@@ -59,6 +64,17 @@ class InstrumentDropdown : public QComboBox {
         InstrumentDropdown( QWidget * parent );
         InstrumentDropdown( Jack::Server * );
         ~InstrumentDropdown() {};
+
+        /**
+         * Events
+         */
+
+        static const char * CHANGE_EVENT;
+
+
+        /**
+         * Main ui
+         */
 
         void setupUI();
 
@@ -111,6 +127,7 @@ class InstrumentDropdown : public QComboBox {
          *
          */
         bool hasInstrument( InstrumentOption instrument );
+
 
     public slots:
 

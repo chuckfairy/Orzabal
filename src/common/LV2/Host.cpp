@@ -75,6 +75,18 @@ void Host::addPluginByIndex( uint32_t i ) {
 
 };
 
+Audio::Plugin * Host::getPluginByIndex( uint32_t i ) {
+
+    //@TODO move to repository class
+    //@TODO really is instruments
+
+    vector<Audio::Plugin*> plugins = findAllInstruments();
+
+    return plugins[ i ];
+
+};
+
+
 
 /**
  * Search methods

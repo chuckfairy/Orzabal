@@ -46,6 +46,8 @@ MainWindow::MainWindow( QWidget * parent, Qt::WindowFlags flags ) :
 
     Outputs = new OutputDropdown( _Server );
 
+    _Layout = new SimpleLayout( this );
+
 
     //UI creation
 

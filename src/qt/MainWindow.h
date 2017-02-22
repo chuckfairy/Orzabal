@@ -11,6 +11,7 @@
 
 #include "widget/InstrumentDropdown.h"
 #include "widget/EffectsList.h"
+#include "widget/SimpleLayout.h"
 
 #include "Settings/MidiDeviceDropdown.h"
 #include "Settings/OutputDropdown.h"
@@ -27,26 +28,12 @@ class MainWindow : public QMainWindow {
 
         Jack::Server * _Server;
 
-    public:
-
-        //  override the constructor
-
-        MainWindow(QWidget * parent = 0, Qt::WindowFlags flags = 0);
-
-
-        /**
-         * Qt Window UI
-         */
-
-        Ui_MainWindow UI;
-
-
         /**
          * Instrument dropdown
          *
          */
 
-        InstrumentDropdown *dropdown;
+        InstrumentDropdown * dropdown;
 
 
         /**
@@ -64,10 +51,39 @@ class MainWindow : public QMainWindow {
 
         MidiDeviceDropdown *midiDevices;
 
+
         /**
          * Output dropdown
          */
 
         OutputDropdown * Outputs;
+
+
+        /**
+         * Layout future layouter
+         */
+
+        SimpleLayout * _Layout;
+
+
+    public:
+
+        //  override the constructor
+
+        MainWindow(QWidget * parent = 0, Qt::WindowFlags flags = 0);
+
+
+        /**
+         * Qt Window UI
+         */
+
+        Ui_MainWindow UI;
+
+
+        /**
+         * Getters
+         */
+
+        Jack::Server * getServer();
 
 };
