@@ -46,16 +46,29 @@ MainWindow::MainWindow( QWidget * parent, Qt::WindowFlags flags ) :
 
     Outputs = new OutputDropdown( _Server );
 
+
+    //@TODO Move to layout picker
+
     _Layout = new SimpleLayout( this );
 
 
     //UI creation
 
-    UI.horizontalLayout_4->insertWidget( 0, dropdown );
+    //UI.horizontalLayout_4->insertWidget( 0, dropdown );
     UI.horizontalLayout_3->addWidget( effects );
     UI.horizontalLayout_6->addWidget( midiDevices );
     UI.horizontalLayout_5->addWidget( Outputs );
 
     _Server->run();
+
+};
+
+/**
+ * Get server
+ */
+
+Jack::Server * MainWindow::getServer() {
+
+    return _Server;
 
 };

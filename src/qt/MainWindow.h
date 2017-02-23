@@ -28,6 +28,7 @@ class MainWindow : public QMainWindow {
 
         Jack::Server * _Server;
 
+
         /**
          * Instrument dropdown
          *
@@ -85,5 +86,11 @@ class MainWindow : public QMainWindow {
          */
 
         Jack::Server * getServer();
+
+        Ui_MainWindow * getUI() {
+
+            return &UI;
+
+        };
 
 };

@@ -39,18 +39,21 @@
 #include <Audio/UI.h>
 
 #include "include/types.h"
-#include "Port.h"
 
 
 namespace LV2 {
 
 
 /**
- * Plugin forward
+ * Forwarding
  *
  */
 
 class Plugin;
+
+class PortContainer;
+
+class Port;
 
 
 /**
@@ -112,6 +115,7 @@ class UI : public Audio::UI {
 
         QScrollArea * _MainWidget;
 
+        QWidget* _controlWidget;
 
 
     protected:
@@ -245,6 +249,12 @@ class UI : public Audio::UI {
 
         };
 
+
+        QWidget* getControlWidget() {
+
+            return _controlWidget;
+
+        };
 
         /**
          * Event data

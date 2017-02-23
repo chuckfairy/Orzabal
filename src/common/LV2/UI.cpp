@@ -19,6 +19,7 @@
 #include <QDial>
 #include <QLabel>
 
+#include "Port.h"
 #include "UI.h"
 #include "Plugin.h"
 #include "WindowLayout.h"
@@ -405,9 +406,9 @@ void UI::createQt() {
 
 	_MainWidget = new QScrollArea();
 
-    QWidget* controlWidget = createControlWidget();
+    _controlWidget = createControlWidget();
 
-    ((QScrollArea*)_MainWidget)->setWidget(controlWidget);
+    //((QScrollArea*)_MainWidget)->setWidget(controlWidget);
 
     ((QScrollArea*)_MainWidget)->setWidgetResizable(true);
 

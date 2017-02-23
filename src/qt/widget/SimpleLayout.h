@@ -4,6 +4,7 @@
 #pragma once
 
 #include <LV2/Plugin.h>
+#include <LV2/UI.h>
 #include <Util/Dispatcher.h>
 
 #include "InstrumentDropdown.h"

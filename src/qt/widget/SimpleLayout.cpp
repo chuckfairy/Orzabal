@@ -3,6 +3,9 @@
  */
 #include <Jack/Server.h>
 
+#include <MainWindow.h>
+
+#include "SimpleChangeEvent.h"
 #include "SimpleLayout.h"
 
 
@@ -10,7 +13,13 @@ SimpleLayout::SimpleLayout( MainWindow * app ) {
 
     _App = app;
 
-    _Dropdown = new InstrumentDropdown;
+    _Dropdown = new InstrumentDropdown( _App->getServer() );
+
+    setEvents();
+
+    _App->getUI()
+        ->horizontalLayout_4->insertWidget( 0, _Dropdown );
+
 
 };
 
@@ -25,7 +34,14 @@ void SimpleLayout::setEvents() {
 
 };
 
+
+/**
+ * Main dropdown change event
+ */
+
 void SimpleLayout::handleChange( void * data ) {
+
+    std::cout << "TESTING CHANGE\n";
 
     LV2::Plugin * p = (LV2::Plugin*) data;
 
@@ -33,6 +49,13 @@ void SimpleLayout::handleChange( void * data ) {
 
     server->getPatchbay()->addPlugin( p );
 
+    _App->getUI()
+        ->scrollArea->setWidget(
+            p->getUI()->getControlWidget()
+        );
+
     PLUGIN_SET = true;
+
+    p->run();
 
 };

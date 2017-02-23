@@ -25,10 +25,10 @@
 #include "include/lv2_evbuf.h"
 #include "PluginWorker.h"
 #include "Plugin.h"
+#include "UI.h"
 #include "Port.h"
 #include "ControlChange.h"
 #include "Host.h"
-#include "UI.h"
 
 //@TODO move to std::max
 #ifndef MIN
@@ -671,6 +671,7 @@ UI * Plugin::getUI() {
 
 /**
  * UI
+ * @TODO Move this
  */
 
 QScrollArea * Plugin::getUIWidget() {
