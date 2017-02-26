@@ -124,8 +124,8 @@ int Host::connectJackPort( const char * source, const char * destination ) {
 
 bool Host::connectInputTo( const char * out ) {
 
-    connectJackPort( _inputLeftName, out );
-    connectJackPort( _inputRightName, out );
+    connectJackPort( out, getPortFullName( _inputLeftName ) );
+    connectJackPort( out, getPortFullName( _inputRightName ) );
 
     return true;
 
@@ -138,8 +138,8 @@ bool Host::connectInputTo( const char * out ) {
 
 bool Host::connectInputTo( const char * outLeft, const char * outRight ) {
 
-    connectJackPort( _inputLeftName, outLeft );
-    connectJackPort( _inputRightName, outRight );
+    connectJackPort( outLeft, getPortFullName( _inputLeftName ) );
+    connectJackPort( outRight, getPortFullName( _inputRightName ) );
 
     return true;
 
