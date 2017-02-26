@@ -24,7 +24,7 @@ MainWindow::MainWindow( QWidget * parent, Qt::WindowFlags flags ) :
 
     _Server->start();
 
-    //_Server->connectDefault();
+    _Server->connectDefault();
 
 
     //@TODO Probably move this construction
@@ -34,6 +34,11 @@ MainWindow::MainWindow( QWidget * parent, Qt::WindowFlags flags ) :
     host->setServer( _Server );
 
     host->setServerCallbacks();
+
+
+    //Audio setup
+
+    Jack::Host * audio = _Server->getAudio();
 
 
     //Widget creation

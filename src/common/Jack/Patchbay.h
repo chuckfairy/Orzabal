@@ -6,7 +6,7 @@
 
 #include <jack/jack.h>
 
-#include <Audio/Host.h>
+#include <Audio/Patchbay.h>
 
 #include "Host.h"
 
@@ -24,7 +24,7 @@ class Server;
  * Construct
  */
 
-class Patchbay : public Audio::Host {
+class Patchbay : public Audio::Patchbay {
 
     protected:
 
@@ -35,7 +35,7 @@ class Patchbay : public Audio::Host {
 
     public:
 
-        Patchbay( jack_client_t * );
+        explicit Patchbay( jack_client_t * );
 
 
         /**
@@ -84,6 +84,13 @@ class Patchbay : public Audio::Host {
             return _JackClient;
 
         };
+
+
+        /**
+         * Connectors
+         */
+
+        void connectPluginPorts( Audio::Plugin * );
 
 };
 

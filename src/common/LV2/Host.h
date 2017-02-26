@@ -5,6 +5,7 @@
 #pragma once
 
 #include <vector>
+#include <inttypes.h>
 
 #include <lilv/lilv.h>
 
@@ -49,10 +50,6 @@ class Host : public Jack::Patchbay {
         LilvWorld * _lilvWorld;
 
         JackCallbackEvent * _Callback;
-
-        vector<Audio::Plugin*> _Plugins;
-
-        vector<Audio::Plugin*> _ActivePlugins;
 
 
     public:

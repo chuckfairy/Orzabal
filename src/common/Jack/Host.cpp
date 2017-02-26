@@ -92,6 +92,21 @@ void Host::createPorts() {
 
 
 /**
+ * Interal port checker
+ */
+
+bool Host::isInternalPort( const char * name ) {
+
+    return (
+        strcmp( getPortFullName( _inputLeftName ), name  ) == 0
+        || strcmp( getPortFullName( _inputRightName ), name  ) == 0
+        || strcmp( getPortFullName( _outputLeftName ), name  ) == 0
+        || strcmp( getPortFullName( _outputRightName ), name  ) == 0
+    );
+
+};
+
+/**
  * Host back connection to private client
  *
  */
@@ -160,25 +175,6 @@ bool Host::connectOutputTo( const char * inLeft, const char * inRight ) {
 
 
 /**
- * Connect input output redirect
- */
-
-void Host::connectRedirect() {
-
-    connectJackPort(
-        getPortFullName( _outputLeftName ),
-        getPortFullName( _inputLeftName )
-    );
-
-    connectJackPort(
-        getPortFullName( _outputRightName ),
-        getPortFullName( _inputRightName )
-    );
-
-};
-
-
-/**
  * Get global jack ports
  *
  */
@@ -198,11 +194,25 @@ vector<Port> Host::getPortsByType( enum JackPortFlags PORT_FLAG ) {
 
     while( globalPorts[iClientPort] ) {
 
-        string clientName( globalPorts[iClientPort] );
+        //std::cout << ;
 
-        Port p {
-            globalPorts[iClientPort]
-        };
+        const char * portName = globalPorts[ iClientPort ];
+
+
+        //Check if interal
+
+        if( isInternalPort( portName ) ) {
+
+            ++iClientPort;
+
+            continue;
+
+        }
+
+
+        string clientName( portName );
+
+        Port p { portName };
 
         ports.push_back( p );
 
@@ -226,20 +236,9 @@ vector<Port> Host::getPortsByType( enum JackPortFlags PORT_FLAG ) {
 
             }
 
-            //if (pClient && pPort == 0) {
-
-            //pPort = new qjackctlHostPort(pClient, pHostPort);
-            //pPort->setPortName(sPortName);
-            //iDirtyCount++;
-
-            //}
-
-            //if (pPort)
-            //pPort->markClientPort(1);
-
         }
 
-        iClientPort++;
+        ++iClientPort;
 
     }
 

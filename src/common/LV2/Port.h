@@ -5,7 +5,7 @@
 
 #include <jack/jack.h>
 
-#include <Audio/Port.h>
+#include <Jack/Port.h>
 
 #include "include/lv2_evbuf.h"
 
@@ -23,11 +23,9 @@ class UI;
  *
  */
 
-struct Port : public Audio::Port {
+struct Port : public Jack::Port {
 
     const LilvPort * lilv_port;
-
-    jack_port_t * jack_port;
 
 
     // For MIDI ports, otherwise NULL
@@ -36,10 +34,6 @@ struct Port : public Audio::Port {
 
 
     void * widget;
-
-    size_t buf_size;
-
-    uint32_t index;
 
     int old_api;
 

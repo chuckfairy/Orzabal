@@ -146,9 +146,6 @@ class Plugin {
 
                 case TYPE_AUDIO:
                     _audioPorts.push_back( index );
-                    port->flow == FLOW_INPUT
-                        ? _inputs.push_back( index )
-                        : _outputs.push_back( index );
                     break;
 
                 case TYPE_EVENT:
@@ -157,6 +154,17 @@ class Plugin {
 
                 default: case TYPE_UNKNOWN: case TYPE_CV:
                     break;
+
+            }
+
+
+            //Set audios
+
+            if( port->type == TYPE_AUDIO ) {
+
+                port->flow == FLOW_INPUT
+                    ? _inputs.push_back( index )
+                    : _outputs.push_back( index );
 
             }
 
@@ -230,6 +238,10 @@ class Plugin {
          */
 
         virtual void start() {};
+
+        virtual void run() {};
+
+        virtual void stop() {};
 
 };
 

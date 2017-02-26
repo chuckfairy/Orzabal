@@ -4,6 +4,9 @@
  */
 #pragma once
 
+#include <inttypes.h>
+#include <string>
+
 namespace Audio {
 
 enum PortFlow {
@@ -41,6 +44,10 @@ struct Port {
     float lowerBound;
 
     float upperBound;
+
+    uint32_t index;
+
+    std::string nameString;
 
 };
 

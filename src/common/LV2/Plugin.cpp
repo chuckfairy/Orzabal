@@ -152,7 +152,7 @@ Audio::Port * Plugin::createPort( int long portNum ) {
 
         port->flow = Audio::FLOW_OUTPUT;
 
-	} else if (!optional) {
+	} else if( ! optional ) {
 
         throw std::runtime_error( "Port not optional, but not IO" );
 
@@ -192,7 +192,10 @@ Audio::Port * Plugin::createPort( int long portNum ) {
 
 	}
 
-    const LilvNode * rsz_minimumSize = lilv_new_uri( _lilvWorld, LV2_RESIZE_PORT__minimumSize );
+    const LilvNode * rsz_minimumSize = lilv_new_uri(
+        _lilvWorld,
+        LV2_RESIZE_PORT__minimumSize
+    );
 
 	LilvNode* min_size = lilv_port_get( _lilvPlugin, port->lilv_port, rsz_minimumSize );
 	if (min_size && lilv_node_is_int(min_size)) {
@@ -494,16 +497,15 @@ void Plugin::activatePort( long portNum ) {
 
     char nameChar[25];
 
-    sprintf( nameChar, "%s:%s", name, lilv_node_as_string( sym ) );
+    sprintf( nameChar, "%s[%s]", name, lilv_node_as_string( sym ) );
 
-    string name( nameChar );
-
-    port->name = name.c_str();
+    port->nameString = nameChar;
+    port->name = port->nameString.c_str();
 
     std::cout << "\n" << port->name;
 
 
-	/* Connect unsupported ports to NULL (known to be optional by this point) */
+	//Connect unsupported ports to NULL (known to be optional by this point)
 
 	if (port->flow == Audio::FLOW_UNKNOWN || port->type == Audio::TYPE_UNKNOWN) {
         lilv_instance_connect_port( _lilvInstance, portNum, NULL );
@@ -518,6 +520,7 @@ void Plugin::activatePort( long portNum ) {
     jack_client_t * jack_client = _Host->getJackClient();
 
     const LilvNode * midi_MidiEvent = lilv_new_uri( _lilvWorld, LV2_MIDI__MidiEvent );
+
 
 	/* Connect the port based on its type */
 
@@ -848,7 +851,7 @@ void Plugin::updateJack( jack_nframes_t nframes ) {
     bool send_ui_updates = false;
     jack_nframes_t update_frames = sample_rate / ui_update_hz;
 
-    if ( _UI && (event_delta_t > update_frames) ) {
+    if( event_delta_t > update_frames ) {
         send_ui_updates = true;
         event_delta_t = 0;
     }

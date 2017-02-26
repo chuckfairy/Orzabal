@@ -59,6 +59,9 @@ class Host : public Audio::Host {
         const char * _inputRightName = "input-R";
 
 
+        static const char ** _portNames;
+
+
         /**
          * Host client pointer
          */
@@ -75,7 +78,7 @@ class Host : public Audio::Host {
 
         Host();
 
-        Host( jack_client_t * j );
+        explicit Host( jack_client_t * j );
 
 
         /**
@@ -130,13 +133,20 @@ class Host : public Audio::Host {
 
         const char * getPortFullName( const char * name ) {
 
-            char * c = (char*) malloc(80);
+            char * c = (char*) malloc(180);
 
             sprintf( c, "gabrielo-client:%s", name );
 
             return c;
 
         };
+
+
+        /**
+         * Internal port checker
+         */
+
+        bool isInternalPort( const char * );
 
 
         /**
@@ -159,8 +169,6 @@ class Host : public Audio::Host {
          * Host Connection port methods
          *
          */
-
-        void connectRedirect();
 
         bool connectInputTo( const char * );
 

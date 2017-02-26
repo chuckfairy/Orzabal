@@ -79,6 +79,8 @@ bool Server::start() {
 
     //Register host classes
 
+    jack_activate( _client );
+
     JackRegisterPorts();
 
     return true;
@@ -91,7 +93,7 @@ bool Server::start() {
  */
 void Server::run() {
 
-    jack_activate( _client );
+    //jack_activate( _client );
 
 };
 
@@ -230,8 +232,6 @@ void Server::connectDefault() {
     vector<Port> ports = _Audio->getInputPorts();
 
     _Audio->connectOutputTo( ports[0].name, ports[1].name );
-
-    _Audio->connectRedirect();
 
 };
 

@@ -60,6 +60,9 @@ void Host::addPlugin( Audio::Plugin * p ) {
     _ActivePlugins.push_back( p );
 
     p->start();
+
+    connectPluginPorts( p );
+
     ((LV2::Plugin*)p)->run();
 
 };
