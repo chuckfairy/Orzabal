@@ -3,6 +3,8 @@
  */
 #pragma once
 
+#include <jack/types.h>
+
 #include <Audio/Port.h>
 
 namespace Jack {

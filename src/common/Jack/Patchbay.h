@@ -92,6 +92,10 @@ class Patchbay : public Audio::Patchbay {
 
         void connectPluginPorts( Audio::Plugin * );
 
+        void connectPluginAudioPorts( Audio::Plugin * );
+
+        void connectPluginMidiPorts( Audio::Plugin * );
+
 };
 
 };

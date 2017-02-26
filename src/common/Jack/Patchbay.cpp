@@ -6,6 +6,7 @@
 
 #include "Server.h"
 #include "Patchbay.h"
+#include "Midi.h"
 #include "Port.h"
 
 
@@ -36,11 +37,23 @@ void Patchbay::setServer( Server * s ) {
 
 /**
  * Plugin port connector to server audio
+ */
+
+void Patchbay::connectPluginPorts( Audio::Plugin * p ) {
+
+    connectPluginAudioPorts( p );
+    connectPluginMidiPorts( p );
+
+};
+
+
+/**
+ * Audio outputs connector
  * @TODO support more than stereo
  *
  */
 
-void Patchbay::connectPluginPorts( Audio::Plugin * p ) {
+void Patchbay::connectPluginAudioPorts( Audio::Plugin * p ) {
 
     //Get outputs
 
@@ -55,8 +68,6 @@ void Patchbay::connectPluginPorts( Audio::Plugin * p ) {
 
     if( ports->size() > 1 ) {
 
-        std::cout << " CONNECTING PLUGIN PORTS \n";
-
         Jack::Port * portLeft = (Jack::Port*) p->getPort(
             (*ports)[ 0 ]
         );
@@ -66,10 +77,6 @@ void Patchbay::connectPluginPorts( Audio::Plugin * p ) {
         );
 
         const char * leftName = audio->getPortFullName( portLeft->name );
-
-        std::cout << leftName << " " << portLeft->name << "\n";
-
-        std::cout << jack_port_name( portLeft->jack_port ) << "\n";
 
         audio->connectInputTo(
             jack_port_name( portLeft->jack_port ),
@@ -85,6 +92,38 @@ void Patchbay::connectPluginPorts( Audio::Plugin * p ) {
         audio->connectInputTo(
             audio->getPortFullName( portMono->name )
         );
+
+    }
+
+};
+
+
+/**
+ * Midi connector for plugin
+ */
+
+void Patchbay::connectPluginMidiPorts( Audio::Plugin * p ) {
+
+    vector<long> * ports = p->getMidiPorts();
+
+    if( ports->empty() ) { return; }
+
+
+    Jack::Midi * midi = _Server->getMidi();
+
+    vector<long>::iterator it;
+
+    for( it = ports->begin(); it != ports->end(); ++ it ) {
+
+        Port * port = (Port*) p->getPort( *it );
+
+        if( ! port->jack_port ) { continue; }
+
+        if( port->flow == Audio::FLOW_INPUT ) {
+
+            midi->addInput( port->jack_port );
+
+        }
 
     }
 

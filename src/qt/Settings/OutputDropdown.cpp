@@ -5,13 +5,12 @@
 #include <vector>
 
 #include <Audio/Port.h>
+#include <Jack/Port.h>
 
 #include "OutputDropdown.h"
 
 
 using std::vector;
-
-using Audio::Port;
 
 
 /**
@@ -34,9 +33,11 @@ OutputDropdown::OutputDropdown( Jack::Server * server ) {
 
 void OutputDropdown::updateOptions() {
 
-    vector<Port> ports = _Host->getInputPorts();
+    vector<Jack::Port> ports = _Host->getInputPorts();
 
-    for( vector<Port>::iterator itVec = ports.begin(); itVec != ports.end(); ++itVec ) {
+    vector<Jack::Port>::iterator itVec;
+
+    for( itVec = ports.begin(); itVec != ports.end(); ++itVec ) {
 
         addOutput( *itVec );
 
@@ -56,7 +57,7 @@ OutputDropdown::OutputDropdown( QWidget * parent ) : QComboBox( parent ) {};
  * Add output implmentation
  *
  */
-void OutputDropdown::addOutput( Port port, const int order ) {
+void OutputDropdown::addOutput( Jack::Port port, const int order ) {
 
     addItem( port.name );
 

@@ -12,8 +12,8 @@
 #include <Audio/Plugin.h>
 #include <Audio/Port.h>
 
+#include "Port.h"
 
-using Audio::Port;
 
 using std::vector;
 
@@ -25,6 +25,15 @@ using std::vector;
 
 namespace Jack {
 
+/**
+ * Forwarding
+ */
+class Server;
+
+
+/**
+ * Main class
+ */
 
 class Host : public Audio::Host {
 
@@ -69,6 +78,13 @@ class Host : public Audio::Host {
         jack_client_t * _jackClient;
 
 
+        /**
+         * From orzabal server
+         */
+
+        Server * _Server;
+
+
     public:
 
         /**
@@ -78,7 +94,9 @@ class Host : public Audio::Host {
 
         Host();
 
-        explicit Host( jack_client_t * j );
+        explicit Host( jack_client_t * );
+
+        explicit Host( Server * );
 
 
         /**
@@ -110,7 +128,7 @@ class Host : public Audio::Host {
          * Get specific ports
          */
 
-        vector<Port> getPortsByType( enum JackPortFlags );
+        vector<Port> getPortsByType( enum JackPortFlags, const char * );
 
 
         /**
@@ -177,6 +195,10 @@ class Host : public Audio::Host {
         bool connectOutputTo( const char * );
 
         bool connectOutputTo( const char *, const char * );
+
+        void redirectInput( jack_nframes_t );
+
+        void setServerCallbacks();
 
 };
 

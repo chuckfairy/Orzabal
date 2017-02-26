@@ -10,6 +10,7 @@
 
 #include <Audio/Port.h>
 
+#include "Midi.h"
 #include "Server.h"
 
 using Audio::Port;
@@ -72,7 +73,9 @@ bool Server::start() {
 
     //Host starting
 
-    _Audio = new Host();
+    _Audio = new Host( this );
+
+    _Midi = new Midi( this );
 
     _Host = new LV2::Host( _client );
 
@@ -146,6 +149,16 @@ void Server::JackRegisterPorts() {
  */
 
 void Server::getPorts() {
+
+};
+
+/**
+ * Get midi
+ */
+
+Midi * Server::getMidi() {
+
+    return _Midi;
 
 };
 

@@ -9,6 +9,7 @@ file( GLOB
     GABRIELO_BACKEND_AUDIO_INCLUDE_FILES
     "*.cpp"
     "*.h"
+    "Events/*.cpp"
 )
 
 

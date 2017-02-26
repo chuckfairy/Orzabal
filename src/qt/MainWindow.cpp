@@ -3,6 +3,9 @@
  *
  */
 #include <QHBoxLayout>
+
+#include <Jack/Midi.h>
+
 #include "MainWindow.h"
 #include "widget/EffectsList.h"
 #include "Settings/MidiDeviceDropdown.h"
@@ -40,6 +43,11 @@ MainWindow::MainWindow( QWidget * parent, Qt::WindowFlags flags ) :
 
     Jack::Host * audio = _Server->getAudio();
 
+    audio->setServerCallbacks();
+
+    Jack::Midi * midi = _Server->getMidi();
+    midi->connectDefaults();
+
 
     //Widget creation
 
@@ -59,7 +67,6 @@ MainWindow::MainWindow( QWidget * parent, Qt::WindowFlags flags ) :
 
     //UI creation
 
-    //UI.horizontalLayout_4->insertWidget( 0, dropdown );
     UI.horizontalLayout_3->addWidget( effects );
     UI.horizontalLayout_6->addWidget( midiDevices );
     UI.horizontalLayout_5->addWidget( Outputs );

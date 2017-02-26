@@ -6,8 +6,12 @@
 #include <iostream>
 #include <string>
 
+#include <jack/types.h>
 
+#include "Events/RedirectionEvent.h"
+#include "Server.h"
 #include "Host.h"
+
 
 using std::string;
 using std::vector;
@@ -36,6 +40,15 @@ Host::Host() {};
 Host::Host( jack_client_t * j ) {
 
     setJackClient( j );
+
+};
+
+
+Host::Host( Server * s ) {
+
+    _Server = s;
+
+    setJackClient( _Server->getJackClient() );
 
 };
 
@@ -179,14 +192,17 @@ bool Host::connectOutputTo( const char * inLeft, const char * inRight ) {
  *
  */
 
-vector<Port> Host::getPortsByType( enum JackPortFlags PORT_FLAG ) {
+vector<Port> Host::getPortsByType(
+    enum JackPortFlags PORT_FLAG,
+    const char * AUDIO_TYPE
+) {
 
     vector<Port> ports;
 
     const char ** globalPorts = jack_get_ports(
         _jackClient,
         0,
-        JACK_DEFAULT_AUDIO_TYPE,
+        AUDIO_TYPE,
         PORT_FLAG
     );
 
@@ -212,16 +228,18 @@ vector<Port> Host::getPortsByType( enum JackPortFlags PORT_FLAG ) {
 
         string clientName( portName );
 
-        Port p { portName };
+        Port p;
+
+        p.name = portName;
+        p.jack_port = jack_port_by_name(_jackClient, portName );
 
         ports.push_back( p );
 
         int *pClient = 0;
         int *pPort   = 0;
-        jack_port_t *pHostPort = jack_port_by_name(_jackClient, clientName.c_str() );
         int iColon = clientName.find(':');
 
-        if (pHostPort && iColon >= 0) {
+        if( p.jack_port && iColon >= 0 ) {
 
             //QString sClientName = left
             //QString sPortName   = right
@@ -253,7 +271,7 @@ vector<Port> Host::getPortsByType( enum JackPortFlags PORT_FLAG ) {
 
 vector<Port> Host::getInputPorts() {
 
-    return getPortsByType( JackPortIsInput );
+    return getPortsByType( JackPortIsInput, JACK_DEFAULT_AUDIO_TYPE );
 
 };
 
@@ -264,7 +282,56 @@ vector<Port> Host::getInputPorts() {
 
 vector<Port> Host::getOutputPorts() {
 
-    return getPortsByType( JackPortIsOutput );
+    return getPortsByType( JackPortIsOutput, JACK_DEFAULT_AUDIO_TYPE );
+
+};
+
+
+/**
+ * Redirection of input to out
+ */
+
+void Host::redirectInput( jack_nframes_t nframes ) {
+
+    jack_default_audio_sample_t
+        * inLeft,
+        * inRight,
+        * outLeft,
+        * outRight;
+
+    size_t bufSize = sizeof( jack_default_audio_sample_t ) * (nframes);
+
+
+    //Port buffer getting
+
+    inLeft = (jack_default_audio_sample_t*)
+        jack_port_get_buffer( _inputLeft, nframes );
+    inRight = (jack_default_audio_sample_t*)
+        jack_port_get_buffer( _inputRight, nframes);
+
+    outLeft = (jack_default_audio_sample_t*)
+        jack_port_get_buffer( _outputLeft, nframes );
+    outRight = (jack_default_audio_sample_t*)
+        jack_port_get_buffer( _outputRight, nframes );
+
+
+    //Buffer copy redirection
+
+    memcpy( outLeft, inLeft, bufSize );
+    memcpy( outRight, inRight, bufSize );
+
+};
+
+
+/**
+ * Server callback processing mainly redirection
+ */
+
+void Host::setServerCallbacks() {
+
+    Util::Event * e = new RedirectionEvent( this );
+
+    _Server->on( Server::UPDATE_EVENT, e );
 
 };
 

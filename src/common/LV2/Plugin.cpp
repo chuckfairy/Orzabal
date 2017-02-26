@@ -696,7 +696,7 @@ LV2_Handle Plugin::getLV2Handle() {
 
 
 /**
- *
+ * Main process update from jack
  */
 
 void Plugin::updateJack( jack_nframes_t nframes ) {

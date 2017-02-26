@@ -10,9 +10,10 @@
 #include <QtCore>
 #include <QComboBox>
 
+#include <Audio/Port.h>
 #include <Jack/Server.h>
 #include <Jack/Host.h>
-#include <Audio/Port.h>
+#include <Jack/Port.h>
 
 
 using std::vector;
@@ -63,7 +64,7 @@ class OutputDropdown : public QComboBox {
          *
          * @return bool
          */
-        void addOutput( Port port ) {
+        void addOutput( Jack::Port port ) {
 
             return addOutput( port, -1 );
 
@@ -79,7 +80,7 @@ class OutputDropdown : public QComboBox {
          *
          * @return bool
          */
-        void addOutput( Port, const int );
+        void addOutput( Jack::Port, const int );
 
 
         /**

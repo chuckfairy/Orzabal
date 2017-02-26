@@ -20,6 +20,12 @@
 
 namespace Jack {
 
+/**
+ * Forwarding
+ */
+
+class Midi;
+
 
 /**
  * Jack server extension
@@ -62,6 +68,13 @@ class Server : public Audio::Server {
          */
 
         Host * _Audio;
+
+
+        /**
+         * Midi connectors
+         */
+
+        Midi * _Midi;
 
 
         /**
@@ -141,8 +154,10 @@ class Server : public Audio::Server {
         };
 
         /**
-         * Get patchbay
+         * Getter audio modules
          */
+
+        Midi * getMidi();
 
         LV2::Host * getPatchbay();
 
