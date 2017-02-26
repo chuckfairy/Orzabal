@@ -1,5 +1,5 @@
 /**
- * Start 
+ * Start main qt window
  *
  */
 #include <iostream>

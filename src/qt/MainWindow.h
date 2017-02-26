@@ -5,6 +5,7 @@
 #pragma once
 
 #include <QtCore>
+#include <Qt>
 #include <Jack/Server.h>
 
 #include "ui_MainWindow.h"

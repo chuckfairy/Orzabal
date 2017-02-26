@@ -3,6 +3,7 @@
  *
  */
 #include <QHBoxLayout>
+#include <QFile>
 
 #include <Jack/Midi.h>
 
@@ -67,6 +68,13 @@ MainWindow::MainWindow( QWidget * parent, Qt::WindowFlags flags ) :
 
     //UI creation
 
+    QFile styleFile( ":/Styles/MainStyle.qss" );
+    styleFile.open( QFile::ReadOnly );
+
+    // Apply the loaded stylesheet
+    QString style( styleFile.readAll() );
+
+    UI.centralWidget->setStyleSheet( style );
     UI.horizontalLayout_3->addWidget( effects );
     UI.horizontalLayout_6->addWidget( midiDevices );
     UI.horizontalLayout_5->addWidget( Outputs );
