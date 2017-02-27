@@ -7,7 +7,7 @@ QLineEdit {
 }
 
 * {
-    background: black;
+    background: #101010;
     color: white;
 }
 

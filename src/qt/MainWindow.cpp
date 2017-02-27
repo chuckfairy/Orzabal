@@ -17,9 +17,12 @@
  * @Override
  */
 MainWindow::MainWindow( QWidget * parent, Qt::WindowFlags flags ) :
-    QMainWindow( parent, flags ) {
+    QMainWindow( parent, 0 ) {
 
     UI.setupUi( this );
+
+    //setWindowFlags(Qt::CustomizeWindowHint);
+    //setWindowFlags(Qt::FramelessWindowHint);
 
 
     //Jack Startup
