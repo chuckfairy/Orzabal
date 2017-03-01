@@ -10,6 +10,7 @@
 #include <QtCore>
 #include <QComboBox>
 
+#include <Util/Dispatcher.h>
 #include <Audio/Port.h>
 #include <Jack/Server.h>
 #include <Jack/Host.h>
@@ -29,7 +30,7 @@ using Audio::Port;
  *
  */
 
-class OutputDropdown : public QComboBox {
+class OutputDropdown : public QComboBox, public Util::Event {
 
     private:
 

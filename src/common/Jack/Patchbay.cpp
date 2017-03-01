@@ -109,6 +109,8 @@ void Patchbay::connectPluginMidiPorts( Audio::Plugin * p ) {
     if( ports->empty() ) { return; }
 
 
+    //Connect to all midi inputs
+
     Jack::Midi * midi = _Server->getMidi();
 
     vector<long>::iterator it;

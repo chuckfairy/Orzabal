@@ -18,7 +18,8 @@ SOURCES += main.cpp\
 HEADERS  += MainWindow.h
 
 FORMS    += MainWindow.ui \
-    about.ui
+    UI/About.ui \
+    UI/SettingsForm.ui
 
 DISTFILES += \
     About.ui.qml \

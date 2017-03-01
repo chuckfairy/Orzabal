@@ -29,7 +29,7 @@ qt5_add_resources(RESOURCES ./Resources.qrc)
 
 
 #links
-include_directories(${CMAKE_CURRENT_BINARY_DIR} ../common ../backend  )
+include_directories(${CMAKE_CURRENT_BINARY_DIR} ../common )
 
 
 # tell CMake to compile every .cpp file in this directory and add it to an executable named `example`
@@ -49,9 +49,6 @@ target_link_libraries( example
     dl
     gabrielo-common-lv2 gabrielo-common
     gabrielo-common-jack
-    gabrielo-backend-server
-    gabrielo-backend-audio
-    gabrielo-backend-midi
     "/usr/local/lib/liblilv-0.so"
     Qt5::Widgets Qt5::Core
     Qt5::Qml
