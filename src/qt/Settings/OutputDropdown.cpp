@@ -20,6 +20,13 @@ using std::vector;
 
 OutputDropdown::OutputDropdown( Jack::Server * server ) {
 
+    connect(
+        this,
+        SIGNAL( currentIndexChanged( int ) ),
+        this,
+        SLOT( handleSelectionChanged( int ) )
+    );
+
     setHost( server->getAudio() );
 
     updateOptions();
@@ -54,6 +61,13 @@ OutputDropdown::OutputDropdown( QWidget * parent ) : QComboBox( parent ) {};
 
 
 /**
+ * Events
+ */
+
+const char * OutputDropdown::CHANGE_EVENT = "CHANGE";
+
+
+/**
  * Add output implmentation
  *
  */
@@ -62,5 +76,16 @@ void OutputDropdown::addOutput( Jack::Port port, const int order ) {
     addItem( port.name );
 
     //Outputs.push_back( device );
+
+};
+
+
+/**
+ * Main change handler
+ */
+
+void OutputDropdown::handleSelectionChanged( int index ) {
+
+    dispatch( CHANGE_EVENT, (void*) (intptr_t) index );
 
 };

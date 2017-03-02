@@ -16,15 +16,6 @@ using std::vector;
 
 MidiDeviceDropdown::MidiDeviceDropdown() {
 
-    midiDriver = new Midi::ALSA();
-
-    vector<Midi::Device> devices = midiDriver->getDevices();
-
-    for( vector<Midi::Device>::iterator itVec = devices.begin(); itVec != devices.end(); ++itVec ) {
-
-        addMidiDevice( *itVec );
-
-    }
 
 };
 
@@ -43,9 +34,9 @@ MidiDeviceDropdown::MidiDeviceDropdown( QWidget * parent ) : QComboBox( parent )
  * Will use list iterator
  *
  */
-void MidiDeviceDropdown::addMidiDevice( Device device, const int order ) {
+void MidiDeviceDropdown::addMidiDevice( Jack::Port * port , const int order ) {
 
-    addItem( device.name );
+    addItem( port->name );
 
     //MidiDevices.push_back( device );
 

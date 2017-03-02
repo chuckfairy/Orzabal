@@ -4,13 +4,10 @@
  */
 #pragma once
 
-#include <Midi/Device.h>
-#include <Midi/ALSA.h>
+#include <Jack/Port.h>
 
 #include <QtCore>
 #include <QComboBox>
-
-using Midi::Device;
 
 
 /**
@@ -21,8 +18,6 @@ using Midi::Device;
 class MidiDeviceDropdown : public QComboBox {
 
     private:
-
-        Midi::ALSA * midiDriver;
 
 
     public:
@@ -38,7 +33,7 @@ class MidiDeviceDropdown : public QComboBox {
          *
          * @return bool
          */
-        void addMidiDevice( Device device ) {
+        void addMidiDevice( Jack::Port * device ) {
 
             return addMidiDevice( device, -1 );
 
@@ -54,7 +49,7 @@ class MidiDeviceDropdown : public QComboBox {
          *
          * @return bool
          */
-        void addMidiDevice( Device device, const int order );
+        void addMidiDevice( Jack::Port *, const int );
 
 
         /**

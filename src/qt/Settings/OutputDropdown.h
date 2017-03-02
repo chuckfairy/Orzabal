@@ -30,7 +30,9 @@ using Audio::Port;
  *
  */
 
-class OutputDropdown : public QComboBox, public Util::Event {
+class OutputDropdown : public QComboBox, public Util::Dispatcher {
+
+    Q_OBJECT
 
     private:
 
@@ -41,6 +43,13 @@ class OutputDropdown : public QComboBox, public Util::Event {
 
         OutputDropdown( QWidget * parent );
         OutputDropdown( Jack::Server * );
+
+
+        /**
+         * Change events
+         */
+
+        static const char * CHANGE_EVENT;
 
 
         /**
@@ -90,5 +99,15 @@ class OutputDropdown : public QComboBox, public Util::Event {
          * @return bool
          */
         //bool hasOutput( Port device );
+
+    public slots:
+
+
+        /**
+         * Change event
+         *
+         */
+
+        void handleSelectionChanged( int index );
 
 };
