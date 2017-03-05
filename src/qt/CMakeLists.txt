@@ -41,6 +41,7 @@ file(
     ui_MainWindow.h
     widget/*.cpp
     Settings/*.cpp
+    Settings/Events/*.cpp
 )
 
 add_executable(example ${example_SRC} ${common-ladspa} ${RESOURCES})

@@ -57,6 +57,7 @@ void OutputDropdown::updateOptions() {
  * Constructor widget override
  *
  */
+
 OutputDropdown::OutputDropdown( QWidget * parent ) : QComboBox( parent ) {};
 
 

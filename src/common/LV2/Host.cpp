@@ -78,6 +78,45 @@ void Host::addPluginByIndex( uint32_t i ) {
 
 };
 
+
+/**
+ * Remove active plugin
+ */
+
+void Host::removePlugin( uint32_t index ) {
+
+    if( ! _ActivePlugins[ index ] ) { return; }
+
+    Plugin * p = (Plugin*) _ActivePlugins[ index ];
+
+    _ActivePlugins.erase( _ActivePlugins.begin() + index );
+
+    p->stop();
+
+};
+
+
+/**
+ * Clear all plugins
+ */
+
+void Host::clearPlugins() {
+
+    if( _ActivePlugins.empty() ) { return; }
+
+    while( ! _ActivePlugins.empty() ) {
+
+        removePlugin( 0 );
+
+    }
+
+}
+
+
+/**
+ * Plugin index helper
+ */
+
 Audio::Plugin * Host::getPluginByIndex( uint32_t i ) {
 
     //@TODO move to repository class

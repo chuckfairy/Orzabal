@@ -4,6 +4,7 @@
  */
 #pragma once
 
+#include <string.h>
 #include <vector>
 
 #include <jack/jack.h>
@@ -15,6 +16,7 @@
 #include "Port.h"
 
 
+using std::string;
 using std::vector;
 
 
@@ -66,6 +68,10 @@ class Host : public Audio::Host {
         const char * _inputLeftName = "input-L";
 
         const char * _inputRightName = "input-R";
+
+        string * _lastOutputLeft;
+
+        string  * _lastOutputRight;
 
 
         static const char ** _portNames;
@@ -196,7 +202,26 @@ class Host : public Audio::Host {
 
         bool connectOutputTo( const char *, const char * );
 
+
+        /**
+         * Disconnections
+         */
+
+        void disconnectInputs();
+
+        void disconnectOutputs();
+
+
+        /**
+         * Redirect output to input
+         */
+
         void redirectInput( jack_nframes_t );
+
+
+        /**
+         * Server set callbacks
+         */
 
         void setServerCallbacks();
 

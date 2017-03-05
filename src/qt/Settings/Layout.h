@@ -3,6 +3,8 @@
  */
 #pragma once
 
+#include "OutputDropdown.h"
+
 /**
  * Forwading
  */
@@ -21,15 +23,36 @@ class Layout {
 
         MainWindow * _App;
 
-        MidiDeviceDropdown * _MidiDropdown;
+        /**
+         * Widget dropdowns
+         */
 
         OutputDropdown * _LeftOutput;
         OutputDropdown * _RightOutput;
+
+        /**
+         * Main event
+         */
+
+        Util::Event * _Event;
+
+
+        /**
+         * Private setters for cleaniness
+         */
+
+        void setDropdowns();
+
+        void setEvents();
+
+        void setAppUI();
 
 
     public:
 
         Layout( MainWindow * );
+
+        void updateOutputPorts();
 
 };
 

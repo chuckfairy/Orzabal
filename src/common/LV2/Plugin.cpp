@@ -449,6 +449,8 @@ void Plugin::stop() {
 
     /* Terminate the worker */
 
+    ACTIVE = false;
+
     _worker->finish();
 
     /* @TODO Deactivate JACK */

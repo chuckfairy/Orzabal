@@ -15,8 +15,24 @@
 #include "widget/SimpleLayout.h"
 
 #include "Settings/MidiDeviceDropdown.h"
-#include "Settings/OutputDropdown.h"
 
+
+/**
+ * Forwarding
+ */
+namespace Orza { namespace Qt {  namespace Settings {
+
+class Layout;
+
+}; }; };
+
+
+using Orza::Qt::Settings::Layout;
+
+
+/**
+ * Main class
+ */
 
 class MainWindow : public QMainWindow {
 
@@ -55,10 +71,10 @@ class MainWindow : public QMainWindow {
 
 
         /**
-         * Output dropdown
+         * Settings layout
          */
 
-        OutputDropdown * Outputs;
+        Layout * _SettingsLayout;
 
 
         /**
@@ -72,7 +88,7 @@ class MainWindow : public QMainWindow {
 
         //  override the constructor
 
-        MainWindow(QWidget * parent = 0, Qt::WindowFlags flags = 0);
+        MainWindow(QWidget * parent = 0, ::Qt::WindowFlags flags = 0);
 
 
         /**

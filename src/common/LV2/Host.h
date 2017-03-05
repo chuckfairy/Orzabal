@@ -77,6 +77,15 @@ class Host : public Jack::Patchbay {
 
         void addPluginByIndex( uint32_t );
 
+        void removePlugin( uint32_t );
+
+        void clearPlugins();
+
+
+        /**
+         * Getter helpers
+         */
+
         Audio::Plugin * getPluginByIndex( uint32_t i );
 
 

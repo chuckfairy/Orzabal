@@ -7,6 +7,7 @@
 
 #include <Jack/Midi.h>
 
+#include "Settings/Layout.h"
 #include "MainWindow.h"
 #include "widget/EffectsList.h"
 #include "Settings/MidiDeviceDropdown.h"
@@ -61,11 +62,10 @@ MainWindow::MainWindow( QWidget * parent, Qt::WindowFlags flags ) :
 
     midiDevices = new MidiDeviceDropdown();
 
-    Outputs = new OutputDropdown( _Server );
-
 
     //@TODO Move to layout picker
 
+    _SettingsLayout = new Layout( this );
     _Layout = new SimpleLayout( this );
 
 
@@ -80,7 +80,6 @@ MainWindow::MainWindow( QWidget * parent, Qt::WindowFlags flags ) :
     UI.centralWidget->setStyleSheet( style );
     UI.horizontalLayout_3->addWidget( effects );
     UI.horizontalLayout_6->addWidget( midiDevices );
-    UI.horizontalLayout_5->addWidget( Outputs );
 
     _Server->run();
 

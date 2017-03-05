@@ -47,6 +47,8 @@ void SimpleLayout::handleChange( void * data ) {
 
     Jack::Server * server = _App->getServer();
 
+    server->getPatchbay()->clearPlugins();
+
     server->getPatchbay()->addPlugin( p );
 
     _App->getUI()

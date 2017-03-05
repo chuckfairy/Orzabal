@@ -151,6 +151,8 @@ bool Host::connectInputTo( const char * out ) {
 
 bool Host::connectInputTo( const char * outLeft, const char * outRight ) {
 
+    std::cout << "\n" << outLeft << " " << outRight;
+
     connectJackPort( outLeft, getPortFullName( _inputLeftName ) );
     connectJackPort( outRight, getPortFullName( _inputRightName ) );
 
@@ -168,6 +170,9 @@ bool Host::connectOutputTo( const char * input ) {
     connectJackPort( getPortFullName( _outputLeftName ), input );
     connectJackPort( getPortFullName( _outputRightName ), input );
 
+    _lastOutputLeft = new string( input );
+    _lastOutputRight = new string( input );
+
     return true;
 
 };
@@ -182,7 +187,40 @@ bool Host::connectOutputTo( const char * inLeft, const char * inRight ) {
     connectJackPort( getPortFullName( _outputLeftName ), inLeft );
     connectJackPort( getPortFullName( _outputRightName ), inRight );
 
+    _lastOutputLeft = new string( inLeft );
+    _lastOutputRight = new string( inRight );
+
     return true;
+
+};
+
+
+/**
+ * Disconnections
+ */
+
+void Host::disconnectInputs() {
+
+    jack_port_disconnect( _jackClient, _inputLeft );
+    jack_port_disconnect( _jackClient, _inputRight );
+
+};
+
+void Host::disconnectOutputs() {
+
+    //std::cout << _lastOutputLeft->c_str() << _lastOutputRight->c_str() << " DICONNECTION \n";
+
+    jack_disconnect(
+        _jackClient,
+        getPortFullName( _outputLeftName ),
+        _lastOutputLeft->c_str()
+    );
+
+    jack_disconnect(
+        _jackClient,
+        getPortFullName( _outputRightName ),
+        _lastOutputRight->c_str()
+    );
 
 };
 
