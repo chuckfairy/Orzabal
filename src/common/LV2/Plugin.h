@@ -242,6 +242,13 @@ class Plugin : public Audio::Plugin {
         void applyLilvState();
 
 
+        /**
+         * Port internal functions
+         */
+
+        void deactivatePorts();
+
+
     protected:
 
         const char * TYPE = "LV2";

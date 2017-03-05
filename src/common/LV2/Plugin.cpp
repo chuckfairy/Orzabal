@@ -93,6 +93,37 @@ void Plugin::setPorts() {
 
 
 /**
+ * Port deactivation
+ */
+
+void Plugin::deactivatePorts() {
+
+    jack_client_t * jack_client = _Host->getJackClient();
+
+    for( uint32_t i = 0; i < _numPorts; ++i ) {
+
+        Port * port = (Port*) getPort( i );
+
+        //Deactivate jack and bufs
+
+        if( port->jack_port ) {
+
+            jack_port_unregister( jack_client, port->jack_port );
+
+        }
+
+        if( port->evbuf ) {
+
+            lv2_evbuf_free( port->evbuf );
+
+        }
+
+    }
+
+};
+
+
+/**
  * Lilv set plugin
  * sets name and other details
  *
@@ -459,6 +490,9 @@ void Plugin::stop() {
             //lv2_evbuf_free(jalv.ports[i].evbuf);
         //}
     //}
+    //
+
+    deactivatePorts();
 
     /* Deactivate plugin */
     lilv_instance_deactivate( _lilvInstance );
