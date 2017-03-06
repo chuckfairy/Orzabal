@@ -4,6 +4,7 @@
  */
 #include <QHBoxLayout>
 #include <QFile>
+#include <QIcon>
 
 #include <Jack/Midi.h>
 
@@ -69,6 +70,11 @@ MainWindow::MainWindow( QWidget * parent, Qt::WindowFlags flags ) :
     _Layout = new SimpleLayout( this );
 
 
+    //Icon
+
+    QIcon icon(":icon.png");
+    setWindowIcon( icon );
+
     //UI creation
 
     QFile styleFile( ":/Styles/MainStyle.qss" );
@@ -78,6 +84,8 @@ MainWindow::MainWindow( QWidget * parent, Qt::WindowFlags flags ) :
     QString style( styleFile.readAll() );
 
     UI.centralWidget->setStyleSheet( style );
+
+
     UI.horizontalLayout_3->addWidget( effects );
     UI.horizontalLayout_6->addWidget( midiDevices );
 
