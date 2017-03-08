@@ -29,7 +29,7 @@ RUN apt-get -y install liblo7 liblo-dev liblo-tools
 
 
 # Audio plugins
-RUN apt-get -y install libvamp-*sdk2v5 vamp-plugin* librubberband* libfftw3-* libjack-dev liblrdf0* libsamplerate0*  libserd-0-0 libserd-dev libsord-0-0 libsord-dev libsratom-0-0 libsratom-dev
+RUN apt-get -y install libvamp-*sdk2v5 vamp-plugin* librubberband* libfftw3-* libjack0 libjack-dev liblrdf0* libsamplerate0*  libserd-0-0 libserd-dev libsord-0-0 libsord-dev libsratom-0-0 libsratom-dev
 RUN apt-get -y install liblv2dynparam* lv2core lv2-dev liblilv-dev liblilv-0-0
 
 
@@ -44,7 +44,6 @@ RUN apt-get -y install \
     libqt5network5 \
     libqt5opengl5 \
     libqt5opengl5-dev \
-    libqt5qml-graphicaleffects \
     libqt5qml5 \
     libqt5quick5 \
     libqt5quicktest5 \
@@ -59,14 +58,11 @@ RUN apt-get -y install \
     qt5-default \
     qt5-qmake \
     qt5-image-formats-plugins \
-    qtdeclarative5-controls-plugin \
+    qml-module-qtquick-controls \
     qtdeclarative5-dbg \
     qtdeclarative5-dev \
     qtdeclarative5-dev-tools \
-    qtdeclarative5-dialogs-plugin \
-    qtdeclarative5-models-plugin \
-    qtdeclarative5-qtquick2-plugin \
-    qtdeclarative5-window-plugin \
+    qml-module-qtquick-dialogs \
     qttools5-dev-tools \
     qttools5-dev
 

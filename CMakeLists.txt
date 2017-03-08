@@ -7,6 +7,9 @@ cmake_minimum_required( VERSION 2.7 )
 set(CMAKE_EXPORT_COMPILE_COMMANDS "ON")
 
 set( CMAKE_CXX_STANDARD 11 )
+set( CMAKE_C_STANDARD 11 )
+
+set(CMAKE_CXX_FLAGS "-std=c++11 ${CMAKE_CXX_FLAGS} -g -ftest-coverage -fprofile-arcs")
 
 INCLUDE( CPack )
 
@@ -42,4 +45,4 @@ add_subdirectory( src/qt )
 
 #add_subdirectory( src/include/jalv )
 
-add_subdirectory( test )
+#add_subdirectory( test )
