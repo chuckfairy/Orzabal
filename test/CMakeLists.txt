@@ -55,22 +55,21 @@ install( TARGETS
 
 ## Jack backend
 
-add_executable( jacktest Jack.cpp )
+#add_executable( jacktest Jack.cpp )
 
-# We have to link
-target_link_libraries( jacktest
-    PUBLIC gabrielo-backend-server gabrielo-backend-midi jack asound sndfile
-)
+#target_link_libraries( jacktest
+    #PUBLIC gabrielo-backend-server gabrielo-backend-midi jack asound sndfile
+#)
 
 
-target_include_directories( jacktest PUBLIC ${JACK_INCLUDE_DIRS} )
+#target_include_directories( jacktest PUBLIC ${JACK_INCLUDE_DIRS} )
 
-target_include_directories( jacktest PUBLIC "../src/backend" )
+#target_include_directories( jacktest PUBLIC "../src/backend" )
 
-install( TARGETS
-   jacktest
+#install( TARGETS
+   #jacktest
 
-   RUNTIME DESTINATION bin
-   LIBRARY DESTINATION lib
-   ARCHIVE DESTINATION lib
-)
+   #RUNTIME DESTINATION bin
+   #LIBRARY DESTINATION lib
+   #ARCHIVE DESTINATION lib
+#)
