@@ -739,8 +739,6 @@ void Plugin::updateJack( jack_nframes_t nframes ) {
 
 	/* Get Jack transport position */
 
-    std::cout << " NFRAMES " << nframes << "\n";
-
     jack_client_t * jackClient = _Host->getJackClient();
 
     jack_position_t pos;
@@ -921,8 +919,6 @@ void Plugin::updateJack( jack_nframes_t nframes ) {
 
             void* buf = NULL;
 
-            std::cout << "Any Flow Pleas\n";
-
             if (port->jack_port) {
                 buf = jack_port_get_buffer(port->jack_port, nframes);
                 jack_midi_clear_buffer(buf);
@@ -936,7 +932,6 @@ void Plugin::updateJack( jack_nframes_t nframes ) {
                 uint8_t* body;
                 lv2_evbuf_get(i, &frames, &subframes, &type, &size, &body);
                 if (buf && type == midi_event_id) {
-                    std::cout << "Midi Event Huzzah\n";
                     jack_midi_event_write(buf, frames, body, size);
                 }
 
@@ -1077,7 +1072,6 @@ void Plugin::updatePort(
     if( port->type == Audio::TYPE_AUDIO ) {
 
         /* Connect plugin port directly to Jack port buffer */
-        std::cout << jack_port_get_buffer( port->jack_port, nframes );
 
         lilv_instance_connect_port(
             _lilvInstance,
@@ -1444,7 +1438,6 @@ uint32_t Plugin::uriToId(
 ) {
 
     Plugin * plugin = (Plugin*) callback_data;
-    std::cout << "URI TO ID \n ";
     zix_sem_wait( &plugin->symap_lock );
     const LV2_URID id = symap_map(plugin->_symap, uri);
     zix_sem_post(&plugin->symap_lock);

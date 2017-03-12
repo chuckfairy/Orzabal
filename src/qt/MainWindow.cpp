@@ -23,6 +23,8 @@ MainWindow::MainWindow( QWidget * parent, Qt::WindowFlags flags ) :
 
     UI.setupUi( this );
 
+    setWindowTitle( "Orzabal" );
+
     //setWindowFlags(Qt::CustomizeWindowHint);
     //setWindowFlags(Qt::FramelessWindowHint);
 
@@ -85,8 +87,7 @@ MainWindow::MainWindow( QWidget * parent, Qt::WindowFlags flags ) :
 
     UI.centralWidget->setStyleSheet( style );
 
-
-    UI.horizontalLayout_3->addWidget( effects );
+    //UI.horizontalLayout_3->addWidget( effects );
     UI.horizontalLayout_6->addWidget( midiDevices );
 
     _Server->run();

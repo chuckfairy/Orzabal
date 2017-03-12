@@ -8,7 +8,7 @@ QWidget {
 }
 
 .QTextEdit, QComboBox {
-    border: 1px solid #1EFAFA;
+    border: 1px solid #1E6AD1;
 }
 
 QComboBox {
@@ -40,7 +40,7 @@ QComboBox::drop-down {
 
     background: #000;
     border-width: 1px;
-    border-color: #1EFAFA;
+    border-color: #1E6AD1;
     border-style: solid;
     border-radius: 3px;
     border-bottom-right-radius: 3px;
@@ -56,7 +56,7 @@ QComboBox::down-arrow:focus {
 }
 
 QTabWidget {
-    border: 1px solid #1EFAFA;
+    border: 1px solid #1E6AD1;
 }
 
 QTabWidget:focus, QCheckBox:focus, QRadioButton:focus, QSlider:focus {
@@ -67,13 +67,13 @@ QLineEdit {
     background-color: #232629;
     padding: 5px;
     border-style: solid;
-    border: 1px solid #1EFAFA;
+    border: 1px solid #1E6AD1;
     border-radius: 2px;
     color: #eff0f1;
 }
 
 QGroupBox {
-    border:1px solid #1EFAFA;
+    border:1px solid #1E6AD1;
     border-radius: 2px;
     margin-top: 20px;
 }
@@ -89,7 +89,7 @@ QGroupBox::title {
 QAbstractScrollArea, QScrollArea,
 QScrollArea > QWidget > QWidget {
     border-radius: 2px;
-    border: 1px solid #1EFAFA;
+    border: 1px solid #1E6AD1;
     background-color: #232629;
 }
 
@@ -364,7 +364,7 @@ QPushButton:pressed
 
 QComboBox {
     selection-background-color: #3daee9;
-    border: 1px solid #1EFAFA;
+    border: 1px solid #1E6AD1;
     border-radius: 2px;
     padding: 5px;
     min-width: 75px;
@@ -869,12 +869,12 @@ QHeaderView::section:checked
  }
 
 .QPushButton {
-    border: 0.5px solid #1EFAFA;
+    border: 0.5px solid #1E6AD1;
     padding: 5px;
     border-radius: 3px;
 }
 
 .QPushButton:hover {
-    background: #1EFAFA;
+    background: #1E6AD1;
     color: #000;
 }
