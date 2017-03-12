@@ -36,7 +36,7 @@ class Jack : public Host {
 
         int _outputPort;
 
-        const char * _name = "gabrielo-midi-jack";
+        const char * _name = "orzabal-midi-jack";
 
 
         /**

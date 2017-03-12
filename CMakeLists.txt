@@ -1,6 +1,6 @@
 # Jack cmake
 
-project(gabrielo-all CXX)
+project(orzabal-all CXX)
 
 cmake_minimum_required( VERSION 2.7 )
 
@@ -13,13 +13,13 @@ set(CMAKE_CXX_FLAGS "-std=c++11 ${CMAKE_CXX_FLAGS} -g -ftest-coverage -fprofile-
 
 INCLUDE( CPack )
 
-project(gabrielo)
+project(orzabal)
 
 set( CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH}" "${PROJECT_SOURCE_DIR}/CMake" )
 
-set( GABRIELO_ROOT_PATH "${PROJECT_SOURCE_DIR}" )
+set( ORZABAL_ROOT_PATH "${PROJECT_SOURCE_DIR}" )
 
-set( GABRIELO_LIB_PATH "${CMAKE_MODULE_PATH}" "${PROJECT_SOURCE_DIR}/lib" )
+set( ORZABAL_LIB_PATH "${CMAKE_MODULE_PATH}" "${PROJECT_SOURCE_DIR}/lib" )
 
 FIND_PACKAGE(Boost)
 IF (Boost_FOUND)

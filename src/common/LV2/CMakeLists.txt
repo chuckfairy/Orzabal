@@ -7,7 +7,7 @@ set(CMAKE_AUTOUIC ON)
 set( AUTOGEN_TARGET_DEPENDS ON )
 
 # project
-project(gabrielo-common-lv2 CXX)
+project(orzabal-common-lv2 CXX)
 
 #find_package( JACK )
 find_package( Qt5Widgets REQUIRED )
@@ -17,9 +17,9 @@ find_package( Qt5Core REQUIRED )
 #find_package(Lilv)
 
 
-#set( GABRIELO_LV2_INCLUDE_FILES )
+#set( ORZABAL_LV2_INCLUDE_FILES )
 file( GLOB
-    GABRIELO_LV2_INCLUDE_FILES
+    ORZABAL_LV2_INCLUDE_FILES
     "include/*.h"
     "include/symap.c"
     "include/lv2_evbuf.c"
@@ -38,28 +38,28 @@ file( GLOB
 
 
 ## Building
-# create gabrielo-common-lv2 library
-add_library(gabrielo-common-lv2 SHARED ${GABRIELO_LV2_INCLUDE_FILES} )
+# create orzabal-common-lv2 library
+add_library(orzabal-common-lv2 SHARED ${ORZABAL_LV2_INCLUDE_FILES} )
 
-set_target_properties(gabrielo-common-lv2 PROPERTIES LINKER_LANGUAGE CXX)
+set_target_properties(orzabal-common-lv2 PROPERTIES LINKER_LANGUAGE CXX)
 
 
 ## Installing
 # add installation for target farweller
 
-install(TARGETS gabrielo-common-lv2
-    DESTINATION "${GABRIELO_LIB_PATH}"
+install(TARGETS orzabal-common-lv2
+    DESTINATION "${ORZABAL_LIB_PATH}"
 )
 
 include_directories( "/usr/local/lib" )
 
-target_link_libraries( gabrielo-common-lv2
+target_link_libraries( orzabal-common-lv2
     lilv-0 suil-0 jack sratom-0 serd-0 sord-0
-    gabrielo-common-jack
+    orzabal-common-jack
     Qt5::Widgets Qt5::Core
 )
 
-target_include_directories( gabrielo-common-lv2
+target_include_directories( orzabal-common-lv2
     PUBLIC "/usr/local/include/lilv-0" "/usr/local/include/suil-0" "/usr/local/include/sratom-0"
     "/usr/local/include/serd-0" "/usr/include/sord-0"
     ".."
@@ -67,7 +67,7 @@ target_include_directories( gabrielo-common-lv2
 )
 
 install( TARGETS
-   gabrielo-common-lv2
+   orzabal-common-lv2
 
    RUNTIME DESTINATION bin
    LIBRARY DESTINATION lib

@@ -1,12 +1,12 @@
-project(gabrielo-common-jack CXX)
+project(orzabal-common-jack CXX)
 
 find_package( JACK )
-#find_package( gabrielo-common )
+#find_package( orzabal-common )
 set_package_properties( JACK PROPERTIES TYPE REQUIRED PURPOSE "Enables JACK plugin" )
 
 
 file( GLOB
-    GABRIELO_BACKEND_AUDIO_INCLUDE_FILES
+    ORZABAL_BACKEND_AUDIO_INCLUDE_FILES
     "*.cpp"
     "*.h"
     "Events/*.cpp"
@@ -14,22 +14,22 @@ file( GLOB
 
 
 ## Building
-# create gabrielo-backend-common library
-add_library( gabrielo-common-jack SHARED ${GABRIELO_BACKEND_AUDIO_INCLUDE_FILES} )
+# create orzabal-backend-common library
+add_library( orzabal-common-jack SHARED ${ORZABAL_BACKEND_AUDIO_INCLUDE_FILES} )
 
 
-target_link_libraries( gabrielo-common-jack PUBLIC
-    asound gabrielo-common gabrielo-common-audio jack
+target_link_libraries( orzabal-common-jack PUBLIC
+    asound orzabal-common orzabal-common-audio jack
 )
 
-target_include_directories( gabrielo-common-jack PUBLIC "../" )
+target_include_directories( orzabal-common-jack PUBLIC "../" )
 
-set_target_properties( gabrielo-common-jack PROPERTIES LINKER_LANGUAGE CXX )
+set_target_properties( orzabal-common-jack PROPERTIES LINKER_LANGUAGE CXX )
 
-install(TARGETS gabrielo-common-jack EXPORT gabrielo-common-jack-export
+install(TARGETS orzabal-common-jack EXPORT orzabal-common-jack-export
     RUNTIME DESTINATION bin
     ARCHIVE DESTINATION lib
     LIBRARY DESTINATION lib
-    DESTINATION "${GABRIELO_LIB_PATH}"
+    DESTINATION "${ORZABAL_LIB_PATH}"
     INCLUDES DESTINATION include
 )

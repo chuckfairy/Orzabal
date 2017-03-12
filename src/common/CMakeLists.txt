@@ -1,10 +1,10 @@
 # Common lib
-project(gabrielo-common CXX)
+project(orzabal-common CXX)
 
 
-#set( GABRIELO_GUI_INCLUDE_FILES )
+#set( ORZABAL_GUI_INCLUDE_FILES )
 file( GLOB
-    GABRIELO_COMMON_INCLUDE_FILES
+    ORZABAL_COMMON_INCLUDE_FILES
     "*.cpp"
     "*.h"
     #"LADSPA/*.h"
@@ -30,30 +30,30 @@ file( GLOB
 
 
 ## Building
-# create gabrielo-gui library
-add_library( gabrielo-common ${GABRIELO_COMMON_INCLUDE_FILES} )
+# create orzabal-gui library
+add_library( orzabal-common ${ORZABAL_COMMON_INCLUDE_FILES} )
 
-target_link_libraries( gabrielo-common dl )
+target_link_libraries( orzabal-common dl )
 
-#target_include_directories( gabrielo-common PUBLIC LV2 )
+#target_include_directories( orzabal-common PUBLIC LV2 )
 
-target_link_libraries( gabrielo-common
+target_link_libraries( orzabal-common
     "/usr/local/lib/liblilv-0.so"
 )
 
-target_include_directories( gabrielo-common PUBLIC "/usr/local/include/lilv-0" )
+target_include_directories( orzabal-common PUBLIC "/usr/local/include/lilv-0" )
 
-set_target_properties(gabrielo-common PROPERTIES LINKER_LANGUAGE CXX)
+set_target_properties(orzabal-common PROPERTIES LINKER_LANGUAGE CXX)
 
 
 ## Installing
 # add installation for target farweller
 
-install(TARGETS gabrielo-common EXPORT gabrielo-common-export
+install(TARGETS orzabal-common EXPORT orzabal-common-export
     RUNTIME DESTINATION bin
     ARCHIVE DESTINATION lib
     LIBRARY DESTINATION lib
-    DESTINATION "${GABRIELO_LIB_PATH}"
+    DESTINATION "${ORZABAL_LIB_PATH}"
     INCLUDES DESTINATION include
 )
 
@@ -61,11 +61,11 @@ install(TARGETS gabrielo-common EXPORT gabrielo-common-export
 # copy public include files
 install(FILES
     LADSPA/LADSPAPort.h
-    DESTINATION "${GABRIELO_LIB_PATH}/gabrielo-common"
+    DESTINATION "${ORZABAL_LIB_PATH}/orzabal-common"
 )
 
 
 ## create export file which can be imported by other cmake projects
-install(EXPORT gabrielo-common-export
-    DESTINATION lib/cmake/gabrielo-common-lib
+install(EXPORT orzabal-common-export
+    DESTINATION lib/cmake/orzabal-common-lib
 )

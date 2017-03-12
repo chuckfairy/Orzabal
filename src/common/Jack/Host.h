@@ -41,7 +41,7 @@ class Host : public Audio::Host {
 
     private:
 
-        const char * _name = "gabrielo-audio";
+        const char * _name = "orzabal-audio";
 
 
         /**
@@ -159,7 +159,7 @@ class Host : public Audio::Host {
 
             char * c = (char*) malloc(180);
 
-            sprintf( c, "gabrielo-client:%s", name );
+            sprintf( c, "orzabal-client:%s", name );
 
             return c;
 

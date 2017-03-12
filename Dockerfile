@@ -2,7 +2,7 @@ FROM ubuntu:16.04
 
 MAINTAINER Chuck Fairy <charlieabeling@gmail.com>
 
-RUN echo "building gabrielo image"
+RUN echo "building orzabal image"
 
 #CMD echo "Hello Container"
 
@@ -67,8 +67,8 @@ RUN apt-get -y install \
     qttools5-dev
 
 # Git load
-RUN git clone https://github.com/chuckfairy/jack-tests.git /gabrielo
-RUN cd /gabrielo; git submodule update --init; cmake .; make
+RUN git clone https://github.com/chuckfairy/jack-tests.git /orzabal
+RUN cd /orzabal; git submodule update --init; cmake .; make
 
 
 # VNC testing

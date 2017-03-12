@@ -1,36 +1,36 @@
 # Audio common lib
-project(gabrielo-common-audio CXX)
+project(orzabal-common-audio CXX)
 
 
 file( GLOB
-    GABRIELO_AUDIO_INCLUDE_FILES
+    ORZABAL_AUDIO_INCLUDE_FILES
     "*.h"
 )
 
 
 ## Building
-# create gabrielo-gui library
-add_library(gabrielo-common-audio SHARED ${GABRIELO_AUDIO_INCLUDE_FILES} )
+# create orzabal-gui library
+add_library(orzabal-common-audio SHARED ${ORZABAL_AUDIO_INCLUDE_FILES} )
 
-set_target_properties(gabrielo-common-audio PROPERTIES LINKER_LANGUAGE CXX)
+set_target_properties(orzabal-common-audio PROPERTIES LINKER_LANGUAGE CXX)
 
 
 ## Installing
 # add installation for target farweller
 
-install(TARGETS gabrielo-common-audio
-    DESTINATION "${GABRIELO_LIB_PATH}"
+install(TARGETS orzabal-common-audio
+    DESTINATION "${ORZABAL_LIB_PATH}"
 )
 
 
 # copy public include files
 #install(FILES
-    #${GABRIELO_GUI_INCLUDE_FILES}
-    #DESTINATION ${GABRIELO_LIB_PATH}/gabrielo-common-audio)
+    #${ORZABAL_GUI_INCLUDE_FILES}
+    #DESTINATION ${ORZABAL_LIB_PATH}/orzabal-common-audio)
 
 
 ## create export file which can be imported by other cmake projects
-#install(EXPORT gabrielo-common-audio_export
+#install(EXPORT orzabal-common-audio_export
     #NAMESPACE sample::
-    #DESTINATION lib/cmake/gabrielo-common-audio_lib
+    #DESTINATION lib/cmake/orzabal-common-audio_lib
     #)

@@ -1,7 +1,7 @@
 #Src test
 
 # test project
-project(gabrielo-tests CXX)
+project(orzabal-tests CXX)
 
 
 ## LADSPA
@@ -10,7 +10,7 @@ add_executable( ladspalist LADSPA.cpp )
 
 # We have to link
 target_link_libraries( ladspalist
-    PUBLIC gabrielo-common
+    PUBLIC orzabal-common
 )
 
 target_include_directories( ladspalist PUBLIC "../src/common" )
@@ -30,10 +30,10 @@ add_executable( lv2test.run LV2.cpp )
 
 # We have to link
 target_link_libraries( lv2test.run
-    PUBLIC gabrielo-common-lv2 gabrielo-common
+    PUBLIC orzabal-common-lv2 orzabal-common
     suil-0 jack sratom-0 serd-0 sord-0
-    gabrielo-common-jack
-    gabrielo-common-lv2
+    orzabal-common-jack
+    orzabal-common-lv2
     "/usr/local/lib/liblilv-0.so"
 )
 
@@ -58,7 +58,7 @@ install( TARGETS
 #add_executable( jacktest Jack.cpp )
 
 #target_link_libraries( jacktest
-    #PUBLIC gabrielo-backend-server gabrielo-backend-midi jack asound sndfile
+    #PUBLIC orzabal-backend-server orzabal-backend-midi jack asound sndfile
 #)
 
 

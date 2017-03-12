@@ -12,15 +12,10 @@ find_package(Qt5Core REQUIRED)
 find_package(Qt5Qml REQUIRED)
 
 
-# later on, we'll use Qt Creator to build out our UI
-# Qt Creator creates .ui files which will be preprocessed for us (that's what qt5_wrap_ui does)
-# After preprocessing, a .h and .cpp file are produced for each .ui file
-# we add the binary output directory as an include directory so that we can include the .h file later on
-file(GLOB example_UIS MainWindow.ui)
-
+file(GLOB orzabal.qt_UIS MainWindow.ui)
 file(GLOB common-ladspa ../common/LADSPA/*.cpp)
 
-qt5_wrap_ui(example_UIS ${example_UIS} )
+qt5_wrap_ui(orzabal.qt_UIS ${orzabal.qt_UIS} )
 
 #list(APPEND QML_DIRS "Styles")
 #set(QML_IMPORT_PATH "${QML_DIRS}" CACHE STRING "Qt Creator extra qml import paths")
@@ -32,10 +27,10 @@ qt5_add_resources(RESOURCES ./Resources.qrc)
 include_directories(${CMAKE_CURRENT_BINARY_DIR} ../common )
 
 
-# tell CMake to compile every .cpp file in this directory and add it to an executable named `example`
+# tell CMake to compile every .cpp file in this directory and add it to an executable named `orzabal.qt`
 file(
     GLOB
-    example_SRC
+    orzabal.qt_SRC
     MainWindow.cpp
     main.cpp
     ui_MainWindow.h
@@ -44,12 +39,12 @@ file(
     Settings/Events/*.cpp
 )
 
-add_executable(example ${example_SRC} ${common-ladspa} ${RESOURCES})
+add_executable(orzabal.qt ${orzabal.qt_SRC} ${common-ladspa} ${RESOURCES})
 
-target_link_libraries( example
+target_link_libraries( orzabal.qt
     dl
-    gabrielo-common-lv2 gabrielo-common
-    gabrielo-common-jack
+    orzabal-common-lv2 orzabal-common
+    orzabal-common-jack
     "/usr/local/lib/liblilv-0.so"
     Qt5::Widgets Qt5::Core
     Qt5::Qml

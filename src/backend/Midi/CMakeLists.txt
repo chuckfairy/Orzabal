@@ -1,30 +1,30 @@
-project(gabrielo-backend-midi CXX)
+project(orzabal-backend-midi CXX)
 
 find_package( JACK )
-#find_package( gabrielo-common )
+#find_package( orzabal-common )
 set_package_properties( JACK PROPERTIES TYPE REQUIRED PURPOSE "Enables JACK plugin" )
 
 
 file( GLOB
-    GABRIELO_MIDI_INCLUDE_FILES
+    ORZABAL_MIDI_INCLUDE_FILES
     "*.cpp"
     "*.h"
 )
 
 
 ## Building
-# create gabrielo-backend-common library
-add_library( gabrielo-backend-midi SHARED ${GABRIELO_MIDI_INCLUDE_FILES} )
+# create orzabal-backend-common library
+add_library( orzabal-backend-midi SHARED ${ORZABAL_MIDI_INCLUDE_FILES} )
 
-target_link_libraries( gabrielo-backend-midi PUBLIC asound gabrielo-common jack )
-target_include_directories( gabrielo-backend-midi PUBLIC "../../common" )
+target_link_libraries( orzabal-backend-midi PUBLIC asound orzabal-common jack )
+target_include_directories( orzabal-backend-midi PUBLIC "../../common" )
 
-set_target_properties( gabrielo-backend-midi PROPERTIES LINKER_LANGUAGE CXX )
+set_target_properties( orzabal-backend-midi PROPERTIES LINKER_LANGUAGE CXX )
 
-install(TARGETS gabrielo-backend-midi EXPORT gabrielo-backend-midi-export
+install(TARGETS orzabal-backend-midi EXPORT orzabal-backend-midi-export
     RUNTIME DESTINATION bin
     ARCHIVE DESTINATION lib
     LIBRARY DESTINATION lib
-    DESTINATION "${GABRIELO_LIB_PATH}"
+    DESTINATION "${ORZABAL_LIB_PATH}"
     INCLUDES DESTINATION include
 )

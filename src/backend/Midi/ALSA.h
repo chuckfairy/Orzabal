@@ -36,7 +36,7 @@ class ALSA : public Host {
 
         int _outputPort;
 
-        const char * _name = "gabrielo-midi";
+        const char * _name = "orzabal-midi";
 
 
     public:

@@ -87,8 +87,8 @@ class Server : public Audio::Server {
 
     protected:
 
-        const char * _name = "gabrielo";
-        const char * _clientName = "gabrielo-client";
+        const char * _name = "orzabal";
+        const char * _clientName = "orzabal-client";
 
 
     public:
