@@ -56,6 +56,7 @@ class Host : public Audio::Host {
 
         const char * _outputRightName = "output-R";
 
+        vector<jack_port_t*> _outputPorts;
 
         /**
          * Host input port
@@ -69,12 +70,14 @@ class Host : public Audio::Host {
 
         const char * _inputRightName = "input-R";
 
+        vector<jack_port_t*> _inputPorts;
+
+
+        //@TODO possibly remove
+
         string * _lastOutputLeft;
 
         string  * _lastOutputRight;
-
-
-        static const char ** _portNames;
 
 
         /**
@@ -97,8 +100,6 @@ class Host : public Audio::Host {
          * Constructs
          *
          */
-
-        Host();
 
         explicit Host( jack_client_t * );
 
@@ -149,6 +150,23 @@ class Host : public Audio::Host {
          */
 
         vector<Port> getOutputPorts();
+
+
+        /**
+         * Internal jack outputs get
+         */
+
+        vector<jack_port_t*> * getJackInputPorts() {
+
+            return & _inputPorts;
+
+        };
+
+        vector<jack_port_t*> * getJackOutputPorts() {
+
+            return & _outputPorts;
+
+        };
 
 
         /**

@@ -27,13 +27,7 @@ namespace Jack {
 
 /**
  * Constructs
- */
-
-Host::Host() {};
-
-
-/**
- * Create with jack
+ * Create with jack or server
  *
  */
 
@@ -100,6 +94,11 @@ void Host::createPorts() {
         JackPortIsOutput,
         0
     );
+
+    _inputPorts.push_back( _inputLeft );
+    _inputPorts.push_back( _inputRight );
+    _outputPorts.push_back( _outputLeft );
+    _outputPorts.push_back( _outputRight );
 
 };
 

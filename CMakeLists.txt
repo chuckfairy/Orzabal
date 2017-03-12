@@ -45,4 +45,4 @@ add_subdirectory( src/qt )
 
 #add_subdirectory( src/include/jalv )
 
-#add_subdirectory( test )
+add_subdirectory( test )

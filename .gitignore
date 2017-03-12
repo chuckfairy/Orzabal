@@ -17,6 +17,8 @@ src/qt/example
 *_automoc.cpp
 moc_*.cpp
 
+test/testBin
+
 
 *.sw[po]
 .idea
