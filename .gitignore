@@ -27,3 +27,4 @@ test/testBin
 *.user
 *.bak
 *.[ao]
+*.qt
