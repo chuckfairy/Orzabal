@@ -502,7 +502,6 @@ void Plugin::stop() {
 
     symap_free( _symap );
     zix_sem_destroy( &symap_lock );
-    //lilv_world_free(world);
 
     zix_sem_destroy( &exit_sem );
 

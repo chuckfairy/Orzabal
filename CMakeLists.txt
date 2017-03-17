@@ -27,7 +27,8 @@ IF (Boost_FOUND)
     ADD_DEFINITIONS( "-DHAS_BOOST" )
 ENDIF()
 
-#add_subdirectory( src )
+
+## Main includes
 
 add_subdirectory( src/common )
 

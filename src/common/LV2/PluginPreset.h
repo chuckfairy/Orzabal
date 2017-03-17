@@ -33,9 +33,27 @@ class PluginPreset {
 
         Audio::Preset * _preset;
 
+
+        /**
+         * Lilv node types and setter
+         */
+
+        LilvNode * _rdfs_label;
+
+        LilvNode * _pset_Preset;
+
+        void setNodes();
+
     public:
 
         explicit PluginPreset( Plugin * );
+
+
+        /**
+         * Main setup
+         */
+
+        void setup();
 
 
         /**
