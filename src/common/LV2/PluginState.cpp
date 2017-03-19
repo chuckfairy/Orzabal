@@ -63,14 +63,11 @@ void PluginState::applyLilvState() {
 
 void PluginState::setStateDefault() {
 
-    //@TODO State setup to get defaults
-    //_state = lilv_state_new_from_world(
-        //_lilvWorld,
-        //&map,
-        //lilv_plugin_get_uri( _lilvPlugin )
-    //);
-
-    applyLilvState();
+    _state = lilv_state_new_from_world(
+        _Plugin->getLilvWorld(),
+        _Plugin->getLV2Map(),
+        lilv_plugin_get_uri( _Plugin->getLilvPlugin() )
+    );
 
 };
 

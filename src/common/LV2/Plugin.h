@@ -58,6 +58,7 @@ namespace LV2 {
 
 class UI;
 class PluginWorker;
+class PluginState;
 
 
 /**
@@ -156,6 +157,13 @@ class Plugin : public Audio::Plugin {
 
 
         /**
+         * Plugin extension
+         */
+
+        PluginState * _State;
+
+
+        /**
          * LV2 Port default values
          */
 
@@ -241,17 +249,6 @@ class Plugin : public Audio::Plugin {
 
 
         /**
-         * Lilv state restore
-         */
-
-        bool safe_restore = false;
-
-        Audio::PlayState play_state;
-
-        void applyLilvState();
-
-
-        /**
          * Port internal functions
          */
 
@@ -288,6 +285,17 @@ class Plugin : public Audio::Plugin {
         void stop();
 
         UI * getUI();
+
+
+        /**
+         * Plugin object getters
+         */
+
+        PluginState * getState() {
+
+            return _State;
+
+        };
 
 
         /**
@@ -362,7 +370,7 @@ class Plugin : public Audio::Plugin {
 
         };
 
-        void setLilvPlugin( const LilvPlugin* p );
+        void setLilvPlugin( const LilvPlugin * );
 
 
         /**
@@ -484,6 +492,12 @@ class Plugin : public Audio::Plugin {
         static LV2_URID mapURI( LV2_URID_Map_Handle, const char * );
 
         static const char * unmapURI( LV2_URID_Map_Handle, LV2_URID );
+
+        LV2_URID_Map * getLV2Map() {
+
+            return &map;
+
+        };
 
 
         /**

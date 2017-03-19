@@ -5,6 +5,7 @@
 
 #include <lilv/lilv.h>
 
+#include <Audio/PlayState.h>
 #include <Audio/Preset.h>
 
 namespace LV2 {
@@ -41,8 +42,6 @@ class PluginState {
 
         Audio::PlayState _play_state;
 
-        void applyLilvState();
-
 
         /**
          * Lilv state
@@ -53,6 +52,17 @@ class PluginState {
     public:
 
         explicit PluginState( Plugin * );
+
+
+        /**
+         * State enums
+         */
+
+        Audio::PlayState getPlayState() {
+
+            return _play_state;
+
+        };
 
 
         /**
@@ -75,6 +85,13 @@ class PluginState {
         void setLilvState( LilvState * );
 
         void setLilvState( Audio::Preset * );
+
+
+        /**
+         * Main apply of state
+         */
+
+        void applyLilvState();
 
 };
 

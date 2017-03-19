@@ -24,6 +24,7 @@
 #include "include/semaphone.h"
 #include "include/lv2_evbuf.h"
 #include "PluginWorker.h"
+#include "PluginState.h"
 #include "Plugin.h"
 #include "UI.h"
 #include "Port.h"
@@ -58,6 +59,8 @@ Plugin::Plugin( const LilvPlugin* p, Host * h ) {
 
     _worker = new PluginWorker( this );
     _stateWorker = new PluginWorker( this );
+
+    _State = new PluginState( this );
 
 };
 
@@ -394,12 +397,9 @@ void Plugin::start() {
 
 	options_feature.data = (void*) &options;
 
-    //State setup to get defaults
-    _state = lilv_state_new_from_world(
-        _lilvWorld,
-        &map,
-        lilv_plugin_get_uri( _lilvPlugin )
-    );
+
+    //Set default state
+    _State->setStateDefault();
 
 
     //Allocate jack bufs
@@ -409,6 +409,12 @@ void Plugin::start() {
 
     /* Instantiate the plugin */
     _lilvInstance = lilv_plugin_instantiate( _lilvPlugin, sample_rate, features );
+
+    if( ! _lilvInstance ) {
+
+        throw std::runtime_error( "Plugin could not instaniate" );
+
+    }
 
     lilv_instance_activate( _lilvInstance );
 
@@ -430,17 +436,16 @@ void Plugin::start() {
         //}
     }
 
-    applyLilvState();
+
+    //Apply state
+
+    _State->applyLilvState();
+
 
     //Set descriptor
 
     _lilvDescriptor = lilv_instance_get_descriptor( _lilvInstance );
 
-    if( ! _lilvInstance ) {
-
-        throw std::runtime_error( "Plugin could not instaniate" );
-
-    }
 
     activatePorts();
 
@@ -1268,38 +1273,6 @@ bool Plugin::lilvFeaturesIsSupported( const char * uri ) {
 
 
 /**
- * Lilv state restore
- */
-
-void Plugin::applyLilvState() {
-
-    bool must_pause = !safe_restore && play_state == Audio::RUNNING;
-
-    if( must_pause ) {
-
-//        play_state = Audio::PAUSE_REQUESTED;
-//        zix_sem_wait(&paused);
-
-    }
-
-    lilv_state_restore(
-        _state,
-        _lilvInstance,
-        Plugin::setPortValue,
-        this,
-        0,
-        state_features
-    );
-
-    if( must_pause ) {
-        _request_update = true;
-        play_state = Audio::RUNNING;
-    }
-
-};
-
-
-/**
  * Static lilv state apply
  */
 
@@ -1311,9 +1284,9 @@ void Plugin::setPortValue(
     uint32_t    type
 ) {
 
-	Plugin * jalv = (Plugin*) user_data;
+	Plugin * plugin = (Plugin*) user_data;
 
-	struct Port* port = jalv->getPortBySymbol( port_symbol );
+	struct Port* port = plugin->getPortBySymbol( port_symbol );
 
 	if (!port) {
 		fprintf(stderr, "error: Preset port `%s' is missing\n", port_symbol);
@@ -1321,30 +1294,30 @@ void Plugin::setPortValue(
 	}
 
 	float fvalue;
-	if (type == jalv->_forge.Float) {
+	if (type == plugin->_forge.Float) {
 		fvalue = *(const float*)value;
-	} else if (type == jalv->_forge.Double) {
+	} else if (type == plugin->_forge.Double) {
 		fvalue = *(const double*)value;
-	} else if (type == jalv->_forge.Int) {
+	} else if (type == plugin->_forge.Int) {
 		fvalue = *(const int32_t*)value;
-	} else if (type == jalv->_forge.Long) {
+	} else if (type == plugin->_forge.Long) {
 		fvalue = *(const int64_t*)value;
 	} else {
 		fprintf(stderr, "error: Preset `%s' value has bad type <%s>\n",
-		        port_symbol, jalv->unmap.unmap(jalv->unmap.handle, type));
+		        port_symbol, plugin->unmap.unmap(plugin->unmap.handle, type));
 		return;
 	}
 
-	if (jalv->play_state != Audio::RUNNING) {
+    if (plugin->getState()->getPlayState() != Audio::RUNNING) {
 		// Set value on port struct directly
 	} else {
 		// Send value to running plugin
-		//jalv_ui_write(jalv, port->index, sizeof(fvalue), 0, &fvalue);
+		//plugin_ui_write(plugin, port->index, sizeof(fvalue), 0, &fvalue);
 	}
 
     port->control = fvalue;
 
-//	if (jalv->has_ui) {
+//	if (plugin->has_ui) {
 //		// Update UI
 //		char buf[sizeof(ControlChange) + sizeof(fvalue)];
 //		ControlChange* ev = (ControlChange*)buf;
@@ -1352,7 +1325,7 @@ void Plugin::setPortValue(
 //		ev->protocol = 0;
 //		ev->size     = sizeof(fvalue);
 //		*(float*)ev->body = fvalue;
-//		jack_ringbuffer_write(jalv->plugin_events, buf, sizeof(buf));
+//		jack_ringbuffer_write(plugin->plugin_events, buf, sizeof(buf));
 //	}
 
 };
