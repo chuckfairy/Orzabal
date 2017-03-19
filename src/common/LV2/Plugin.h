@@ -103,7 +103,6 @@ class Plugin : public Audio::Plugin {
 
         const LV2_Extension_Data_Feature ext_data { NULL };
 
-        /** These features have no data */
         const LV2_Feature buf_size_features[3] {
             { LV2_BUF_SIZE__powerOf2BlockLength, NULL },
             { LV2_BUF_SIZE__fixedBlockLength, NULL },
@@ -120,6 +119,16 @@ class Plugin : public Audio::Plugin {
             &buf_size_features[0],
             &buf_size_features[1],
             &buf_size_features[2],
+            NULL
+        };
+
+        const LV2_Feature* state_features[9] = {
+            &uri_map_feature, &map_feature, &unmap_feature,
+            &make_path_feature,
+            &state_sched_feature,
+            &safe_restore_feature,
+            &log_feature,
+            &options_feature,
             NULL
         };
 
@@ -357,6 +366,17 @@ class Plugin : public Audio::Plugin {
 
 
         /**
+         * Lilv plugin state related and object helper
+         */
+
+        const LV2_Feature * getLilvStateFeatures() {
+
+            return *state_features;
+
+        }
+
+
+        /**
          * Host related
          */
 
@@ -435,6 +455,17 @@ class Plugin : public Audio::Plugin {
         void updateJackLatency( jack_latency_callback_mode_t );
 
         void updateJackBufferSize( jack_nframes_t );
+
+
+        /**
+         * Update related
+         */
+
+        void setRequestUpdate( bool u ) {
+
+            _request_update = u;
+
+        };
 
 
         /**

@@ -3,7 +3,14 @@
  */
 #pragma once
 
+#include <vector>
+
+#include <lilv/lilv.h>
+
 #include <Audio/Preset.h>
+
+
+using std::vector;
 
 
 namespace LV2 {
@@ -23,10 +30,15 @@ class PluginPreset {
 
     private:
 
+        /**
+         * Plugin internal
+         */
+
         Plugin * _Plugin;
 
+
         /**
-         * Interal presets
+         * Internal presets
          */
 
         vector<Audio::Preset*> _presets;
@@ -43,6 +55,7 @@ class PluginPreset {
         LilvNode * _pset_Preset;
 
         void setNodes();
+
 
     public:
 
@@ -62,7 +75,43 @@ class PluginPreset {
 
         vector<Audio::Preset*> getAll();
 
-        void setPreset( Preset * );
+
+        /**
+         * Preset getter setters
+         */
+
+        void setPreset( Audio::Preset * preset ) {
+
+            _preset = preset;
+
+        };
+
+        Audio::Preset * getPreset() {
+
+            return _preset;
+
+        };
+
+
+        /**
+         * Main apply to plugin state from current preset
+         */
+
+        void applyPreset();
+
+
+        /**
+         * Apply preset overload do setting as well
+         */
+
+        void applyPreset( Audio::Preset * );
+
+
+        /**
+         * Save current state as preset
+         */
+
+        void saveStateAsPreset();
 
 };
 

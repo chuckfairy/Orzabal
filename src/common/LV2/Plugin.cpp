@@ -398,7 +398,7 @@ void Plugin::start() {
     _state = lilv_state_new_from_world(
         _lilvWorld,
         &map,
-        lilv_plugin_get_uri(_lilvPlugin)
+        lilv_plugin_get_uri( _lilvPlugin )
     );
 
 
@@ -466,11 +466,8 @@ void Plugin::run() {
 
     ACTIVE = true;
 
-
-    //@TODO determine sem flow or thread/atomic alternative
-    //zix_sem_wait(&exit_sem);
-
 };
+
 
 /**
  * LilvURI stop
@@ -504,8 +501,6 @@ void Plugin::stop() {
     zix_sem_destroy( &symap_lock );
 
     zix_sem_destroy( &exit_sem );
-
-    //remove( _tempDir );
 
 };
 
@@ -1277,16 +1272,6 @@ bool Plugin::lilvFeaturesIsSupported( const char * uri ) {
  */
 
 void Plugin::applyLilvState() {
-
-    const LV2_Feature* state_features[9] = {
-        &uri_map_feature, &map_feature, &unmap_feature,
-        &make_path_feature,
-        &state_sched_feature,
-        &safe_restore_feature,
-        &log_feature,
-        &options_feature,
-        NULL
-    };
 
     bool must_pause = !safe_restore && play_state == Audio::RUNNING;
 

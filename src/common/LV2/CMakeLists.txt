@@ -33,6 +33,8 @@ file( GLOB
     "WindowLayout.cpp"
     "Plugin.cpp"
     "PluginWorker.cpp"
+    "PluginState.cpp"
+    "PluginPreset.cpp"
     "UI.cpp"
 )
 

@@ -1,9 +1,20 @@
 /**
  * Get all presets
  */
+#include "Plugin.h"
 #include "PluginPreset.h"
 
 namespace LV2 {
+
+/**
+ * Main construct
+ */
+
+PluginPreset::PluginPreset( Plugin * plugin )
+    : _Plugin( plugin )
+{
+};
+
 
 /**
  * Setup impl
@@ -38,6 +49,7 @@ void PluginPreset::setNodes() {
 };
 
 
+
 /**
  * Get all plugin presets
  */
@@ -65,18 +77,18 @@ vector<Audio::Preset*> PluginPreset::getAll() {
 
         lilv_world_load_resource( world, preset );
 
-		LilvNodes * labels = lilv_world_find_nodes(
-			world,
+        LilvNodes * labels = lilv_world_find_nodes(
+            world,
             preset,
             _rdfs_label,
             NULL
         );
 
-		if( ! labels ) {
+        if( ! labels ) {
 
             //@TODO Log
-			//fprintf(stderr, "Preset <%s> has no rdfs:label\n",
-					//lilv_node_as_string(lilv_nodes_get(presets, i)));
+            //fprintf(stderr, "Preset <%s> has no rdfs:label\n",
+            //lilv_node_as_string(lilv_nodes_get(presets, i)));
             continue;
 
         }
@@ -94,11 +106,29 @@ vector<Audio::Preset*> PluginPreset::getAll() {
 
         lilv_nodes_free( labels );
 
-	}
+    }
 
-	lilv_nodes_free( lilvPresets );
+    lilv_nodes_free( lilvPresets );
 
     return presets;
+
+};
+
+
+/**
+ * Main preset state applys
+ */
+
+void PluginPreset::applyPreset() {
+
+};
+
+
+void PluginPreset::applyPreset( Audio::Preset * p ) {
+
+    setPreset( p );
+
+    applyPreset();
 
 };
 
