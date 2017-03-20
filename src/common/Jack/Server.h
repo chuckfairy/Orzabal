@@ -116,6 +116,7 @@ class Server : public Audio::Server {
         static const char * SHUTDOWN_EVENT;
         static const char * LATENCY_EVENT;
         static const char * BUFFER_SIZE_EVENT;
+        static const char * PORT_REGISTER_EVENT;
 
 
         /**
@@ -181,6 +182,16 @@ class Server : public Audio::Server {
         static void JackOnLatency( jack_latency_callback_mode_t, void * );
 
         static void JackOnShutdown( void *o );
+
+
+        /**
+         * Port registered or unregistered
+         *
+         * see JackPortRegistrationCallback
+         *
+         */
+
+        static void JackOnPortResgistration( jack_port_id_t, int, void * );
 
 };
 

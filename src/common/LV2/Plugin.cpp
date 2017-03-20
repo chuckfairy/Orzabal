@@ -4,6 +4,7 @@
  */
 #include <string.h>
 #include <iostream>
+#include <algorithm>
 
 #include <sys/stat.h>
 #include <sys/types.h>
@@ -30,15 +31,6 @@
 #include "Port.h"
 #include "ControlChange.h"
 #include "Host.h"
-
-//@TODO move to std::max
-#ifndef MIN
-#    define MIN(a, b) (((a) < (b)) ? (a) : (b))
-#endif
-
-#ifndef MAX
-#    define MAX(a, b) (((a) > (b)) ? (a) : (b))
-#endif
 
 
 using std::string;
@@ -234,7 +226,8 @@ Audio::Port * Plugin::createPort( int long portNum ) {
 	LilvNode* min_size = lilv_port_get( _lilvPlugin, port->lilv_port, rsz_minimumSize );
 	if (min_size && lilv_node_is_int(min_size)) {
 		port->buf_size = lilv_node_as_int(min_size);
-        buffer_size = MAX( buffer_size, port->buf_size * N_BUFFER_CYCLES );
+        unsigned int bufCycles = port->buf_size * N_BUFFER_CYCLES;
+        buffer_size = std::max( buffer_size, bufCycles );
 	}
 
 	lilv_node_free(min_size);
@@ -1125,8 +1118,6 @@ void Plugin::updatePort(
             void * buf = jack_port_get_buffer(port->jack_port, nframes);
 
             for (uint32_t i = 0; i < jack_midi_get_event_count(buf); ++i) {
-
-                std::cout << " MIDI ";
 
                 jack_midi_event_t ev;
                 jack_midi_event_get( &ev, buf, i );

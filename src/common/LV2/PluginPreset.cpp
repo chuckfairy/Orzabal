@@ -49,7 +49,6 @@ void PluginPreset::setNodes() {
 };
 
 
-
 /**
  * Get all plugin presets
  */

@@ -12,10 +12,15 @@
 
 #include "Midi.h"
 #include "Server.h"
+#include "Events/PortRegistrationData.h"
+
 
 using Audio::Port;
 
+
 namespace Jack {
+
+using Events::PortRegistrationData;
 
 /**
  * Construct
@@ -36,6 +41,7 @@ const char * Server::UPDATE_EVENT = "update";
 const char * Server::SHUTDOWN_EVENT = "shutdown";
 const char * Server::LATENCY_EVENT = "latency";
 const char * Server::BUFFER_SIZE_EVENT = "buffer-size";
+const char * Server::PORT_REGISTER_EVENT = "port-register";
 
 
 /**
@@ -67,6 +73,12 @@ bool Server::start() {
 	jack_set_buffer_size_callback( _client, Server::JackOnBufferSize, (void*)(this) );
 
 	jack_set_latency_callback( _client, Server::JackOnLatency, (void*)(this) );
+
+    jack_set_port_registration_callback(
+        _client,
+        Server::JackOnPortResgistration,
+        (void*)(this)
+    );
 
 	//jack_set_session_callback( _client, &jack_buffer_size_cb, (void*)(this) );
 
@@ -245,6 +257,26 @@ void Server::connectDefault() {
     vector<Port> ports = _Audio->getInputPorts();
 
     _Audio->connectOutputTo( ports[0].name, ports[1].name );
+
+};
+
+
+/**
+ * Port registered or unregistered impl
+ * Uses dispatcher for reuse
+ */
+
+void Server::JackOnPortResgistration(
+    jack_port_id_t id,
+    int registry,
+    void * serverPtr
+) {
+
+    Util::Dispatcher * s = (Util::Dispatcher*) serverPtr;
+
+    PortRegistrationData * data = new PortRegistrationData( id, registry );
+
+    s->dispatch( Server::PORT_REGISTER_EVENT, (void*) data );
 
 };
 

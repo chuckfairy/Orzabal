@@ -17,10 +17,9 @@ namespace Jack {
  * Construct
  */
 
-Patchbay::Patchbay( jack_client_t * c ) {
-
-    setJackClient( c );
-
+Patchbay::Patchbay( jack_client_t * c ) :
+    ServerStandalone( c )
+{
 };
 
 

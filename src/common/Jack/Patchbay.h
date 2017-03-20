@@ -9,6 +9,7 @@
 #include <Audio/Patchbay.h>
 
 #include "Host.h"
+#include "ServerStandalone.h"
 
 
 namespace Jack {
@@ -24,11 +25,9 @@ class Server;
  * Construct
  */
 
-class Patchbay : public Audio::Patchbay {
+class Patchbay : public Audio::Patchbay, public ServerStandalone {
 
     protected:
-
-        jack_client_t * _JackClient;
 
         Server * _Server;
 
@@ -52,36 +51,18 @@ class Patchbay : public Audio::Patchbay {
 
         unsigned int getSampleRate() {
 
-            return jack_get_sample_rate( _JackClient );
+            return jack_get_sample_rate( _jackClient );
         };
 
         int getBufferSize() {
 
-            return jack_get_buffer_size( _JackClient );
+            return jack_get_buffer_size( _jackClient );
 
         };
 
         int getMidiBufferSize() {
 
-            return jack_port_type_get_buffer_size( _JackClient, JACK_DEFAULT_MIDI_TYPE );
-
-        };
-
-
-        /**
-         * Jack client related
-         *
-         */
-
-        void setJackClient( jack_client_t * c ) {
-
-            _JackClient = c;
-
-        };
-
-        jack_client_t * getJackClient() {
-
-            return _JackClient;
+            return jack_port_type_get_buffer_size( _jackClient, JACK_DEFAULT_MIDI_TYPE );
 
         };
 

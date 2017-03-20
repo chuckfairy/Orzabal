@@ -177,29 +177,6 @@ JackCallbackEvent * Host::getEvent() {
 
 
 /**
- * Static host setting and runtime
- * mainly testing related
- *
- */
-
-void Host::setAsStaticHost() {
-
-    jack_set_process_callback( _JackClient, Host::updateStaticHost, (void*)(this) );
-
-};
-
-int Host::updateStaticHost( jack_nframes_t nframes, void * hostPtr ) {
-
-    Host * h = (Host*) hostPtr;
-
-    h->updateJack( nframes );
-
-    return 0;
-
-};
-
-
-/**
  * Server related
  *
  * @throws runtime_error if server incorrectly set

@@ -31,18 +31,17 @@ namespace Jack {
  *
  */
 
-Host::Host( jack_client_t * j ) {
-
-    setJackClient( j );
-
+Host::Host( jack_client_t * j ) :
+    ServerStandalone( j )
+{
 };
 
 
-Host::Host( Server * s ) {
+Host::Host( Server * s ) :
+    ServerStandalone( s->getJackClient() )
+{
 
     _Server = s;
-
-    setJackClient( _Server->getJackClient() );
 
 };
 
@@ -343,11 +342,13 @@ void Host::redirectInput( jack_nframes_t nframes ) {
 
     inLeft = (jack_default_audio_sample_t*)
         jack_port_get_buffer( _inputLeft, nframes );
+
     inRight = (jack_default_audio_sample_t*)
         jack_port_get_buffer( _inputRight, nframes);
 
     outLeft = (jack_default_audio_sample_t*)
         jack_port_get_buffer( _outputLeft, nframes );
+
     outRight = (jack_default_audio_sample_t*)
         jack_port_get_buffer( _outputRight, nframes );
 
@@ -362,13 +363,25 @@ void Host::redirectInput( jack_nframes_t nframes ) {
 
 /**
  * Server callback processing mainly redirection
+ * Will use Orzabal server or standalone use
+ *
  */
 
 void Host::setServerCallbacks() {
 
     Util::Event * e = new RedirectionEvent( this );
 
-    _Server->on( Server::UPDATE_EVENT, e );
+
+    //Check on Server instance
+
+    Util::Dispatcher * dispatch = ( _Server == NULL )
+        ? (Util::Dispatcher*) this
+        : (Util::Dispatcher*) _Server;
+
+
+    //Setting
+
+    dispatch->on( Server::UPDATE_EVENT, e );
 
 };
 

@@ -13,6 +13,7 @@
 #include <Audio/Plugin.h>
 #include <Audio/Port.h>
 
+#include "ServerStandalone.h"
 #include "Port.h"
 
 
@@ -37,9 +38,11 @@ class Server;
  * Main class
  */
 
-class Host : public Audio::Host {
+class Host :
+    public Audio::Host, public ServerStandalone
+{
 
-    private:
+    protected:
 
         const char * _name = "orzabal-audio";
 
@@ -81,17 +84,10 @@ class Host : public Audio::Host {
 
 
         /**
-         * Host client pointer
-         */
-
-        jack_client_t * _jackClient;
-
-
-        /**
          * From orzabal server
          */
 
-        Server * _Server;
+        Server * _Server = NULL;
 
 
     public:
@@ -112,23 +108,6 @@ class Host : public Audio::Host {
          */
 
         void start();
-
-
-        /**
-         * main jack client from server
-         */
-
-        void setJackClient( jack_client_t * j ) {
-
-            _jackClient = j;
-
-        };
-
-        jack_client_t * getJackClient() {
-
-            return _jackClient;
-
-        };
 
 
         /**
