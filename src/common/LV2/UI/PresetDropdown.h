@@ -6,7 +6,10 @@
 #include <QtCore>
 #include <QComboBox>
 
+#include <lilv/lilv.h>
+
 namespace LV2 {
+
 
 /**
  * Forwarding
@@ -19,7 +22,7 @@ class Plugin;
  * Main class
  */
 
-class PresetDropdown : public QCombobox {
+class PresetDropdown : public QComboBox {
 
     Q_OBJECT
 
@@ -30,10 +33,8 @@ class PresetDropdown : public QCombobox {
 
     public:
 
-        PresetDropdown( Plugin * plugin ) :
-            _Plugin(plugin)
-        {
-        }
+        PresetDropdown( QWidget * parent );
+        PresetDropdown( Plugin * plugin );
 
 
     public slots:

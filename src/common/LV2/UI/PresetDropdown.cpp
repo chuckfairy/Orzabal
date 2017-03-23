@@ -1,10 +1,8 @@
 /**
  * Preset action item
  */
-#pragma once
-
-#include "PresetAction.h"
-#include <Plugin.h>
+#include "PresetDropdown.h"
+#include <LV2/Plugin.h>
 
 namespace LV2 {
 
@@ -17,7 +15,7 @@ PresetDropdown::PresetDropdown( Plugin * p ) :
 {
 };
 
-PresetDropdown::handleSelectionChanged( int index ) {
+void PresetDropdown::handleSelectionChanged( int index ) {
 
     //_Plugin->getPreset()->apply
 

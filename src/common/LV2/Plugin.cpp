@@ -26,6 +26,7 @@
 #include "include/lv2_evbuf.h"
 #include "PluginWorker.h"
 #include "PluginState.h"
+#include "PluginPreset.h"
 #include "Plugin.h"
 #include "UI.h"
 #include "Port.h"
@@ -53,6 +54,7 @@ Plugin::Plugin( const LilvPlugin* p, Host * h ) {
     _stateWorker = new PluginWorker( this );
 
     _State = new PluginState( this );
+    _Preset = new PluginPreset( this );
 
 };
 
@@ -393,6 +395,7 @@ void Plugin::start() {
 
     //Set default state
     _State->setStateDefault();
+    //_Preset->setup();
 
 
     //Allocate jack bufs

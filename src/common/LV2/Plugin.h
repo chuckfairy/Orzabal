@@ -59,6 +59,7 @@ namespace LV2 {
 class UI;
 class PluginWorker;
 class PluginState;
+class PluginPreset;
 
 
 /**
@@ -161,6 +162,13 @@ class Plugin : public Audio::Plugin {
          */
 
         PluginState * _State;
+
+
+        /**
+         * Preset extension
+         */
+
+        PluginPreset * _Preset;
 
 
         /**

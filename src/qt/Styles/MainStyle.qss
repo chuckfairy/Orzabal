@@ -576,20 +576,20 @@ QTabBar::tab:right:!selected:hover {
 }
 
 QTabBar QToolButton::right-arrow:enabled {
-     image: url(:/qss_icons/rc/right_arrow.png);
- }
+    image: url(:/qss_icons/rc/right_arrow.png);
+}
 
- QTabBar QToolButton::left-arrow:enabled {
-     image: url(:/qss_icons/rc/left_arrow.png);
- }
+QTabBar QToolButton::left-arrow:enabled {
+    image: url(:/qss_icons/rc/left_arrow.png);
+}
 
 QTabBar QToolButton::right-arrow:disabled {
-     image: url(:/qss_icons/rc/right_arrow_disabled.png);
- }
+    image: url(:/qss_icons/rc/right_arrow_disabled.png);
+}
 
- QTabBar QToolButton::left-arrow:disabled {
-     image: url(:/qss_icons/rc/left_arrow_disabled.png);
- }
+QTabBar QToolButton::left-arrow:disabled {
+    image: url(:/qss_icons/rc/left_arrow_disabled.png);
+}
 
 
 QDockWidget {
@@ -648,12 +648,12 @@ QTreeView::branch:open:has-children:has-siblings  {
 QTreeView::branch:has-children:!has-siblings:closed:hover,
 QTreeView::branch:closed:has-children:has-siblings:hover {
     image: url(:/qss_icons/rc/branch_closed-on.png);
-    }
+}
 
 QTreeView::branch:open:has-children:!has-siblings:hover,
 QTreeView::branch:open:has-children:has-siblings:hover  {
     image: url(:/qss_icons/rc/branch_open-on.png);
-    }
+}
 
 QListView::item:!selected:hover, QTreeView::item:!selected:hover  {
     background: rgba(167,218,245, 0.3);
@@ -709,14 +709,14 @@ QToolButton {
 }
 
 QToolButton[popupMode="1"] { /* only for MenuButtonPopup */
- padding-right: 20px; /* make way for the popup button */
- border: 1px #76797C;
- border-radius: 5px;
+    padding-right: 20px; /* make way for the popup button */
+    border: 1px #76797C;
+    border-radius: 5px;
 }
 
 QToolButton[popupMode="2"] { /* only for InstantPopup */
- padding-right: 10px; /* make way for the popup button */
- border: 1px #76797C;
+    padding-right: 10px; /* make way for the popup button */
+    border: 1px #76797C;
 }
 
 
@@ -727,7 +727,7 @@ QToolButton:hover, QToolButton::menu-button:hover {
 }
 
 QToolButton:checked, QToolButton:pressed,
-        QToolButton::menu-button:pressed {
+QToolButton::menu-button:pressed {
     background-color: #3daee9;
     border: 1px solid #3daee9;
     padding: 5px;
@@ -823,7 +823,7 @@ QHeaderView::section::horizontal {
 QHeaderView::section:checked {
     color: white;
     background-color: #334e5e;
- }
+}
 
 .QPushButton {
     border: 0.5px solid #1E6AD1;

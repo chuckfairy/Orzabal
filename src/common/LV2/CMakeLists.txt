@@ -36,6 +36,7 @@ file( GLOB
     "PluginState.cpp"
     "PluginPreset.cpp"
     "UI.cpp"
+    "./UI/*.cpp"
 )
 
 

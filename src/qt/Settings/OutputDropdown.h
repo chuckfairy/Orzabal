@@ -100,6 +100,7 @@ class OutputDropdown : public QComboBox, public Util::Dispatcher {
          */
         //bool hasOutput( Port device );
 
+
     public slots:
 
 

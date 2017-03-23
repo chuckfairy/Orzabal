@@ -2,11 +2,11 @@
  * Server standalone trait setting
  *
  */
-#pragma once
-
 #include <jack/jack.h>
 
 #include <Util/Dispatcher.h>
+
+#include "Server.h"
 
 
 namespace Jack {
@@ -21,21 +21,21 @@ void ServerStandalone::setAsStandalone() {
 
     // Set jack callbacks
 
-    jack_set_process_callback( _client, Server::JackProcess, (void*)(this) );
+    jack_set_process_callback( _jackClient, Server::JackProcess, (void*)(this) );
 
-    jack_on_shutdown( _client, Server::JackOnShutdown, (void*)(this) );
+    jack_on_shutdown( _jackClient, Server::JackOnShutdown, (void*)(this) );
 
-	jack_set_buffer_size_callback( _client, Server::JackOnBufferSize, (void*)(this) );
+	jack_set_buffer_size_callback( _jackClient, Server::JackOnBufferSize, (void*)(this) );
 
-	jack_set_latency_callback( _client, Server::JackOnLatency, (void*)(this) );
+	jack_set_latency_callback( _jackClient, Server::JackOnLatency, (void*)(this) );
 
     jack_set_port_registration_callback(
-        _client,
+        _jackClient,
         Server::JackOnPortResgistration,
         (void*)(this)
     );
 
-    jack_activate( _client );
+    jack_activate( _jackClient );
 
 };
 
