@@ -305,6 +305,8 @@ class Plugin : public Audio::Plugin {
 
         };
 
+        PluginPreset * getPreset();
+
 
         /**
          * UI Widget getter

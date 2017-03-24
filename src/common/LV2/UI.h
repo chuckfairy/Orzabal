@@ -55,6 +55,8 @@ class PortContainer;
 
 class Port;
 
+class PresetDropdown;
+
 
 /**
  * UI use of lilv
@@ -64,6 +66,19 @@ class Port;
 class UI : public Audio::UI {
 
     private:
+
+        /**
+         * Widget object
+         */
+
+        QMainWindow * win;
+
+        QScrollArea * _MainWidget;
+
+        QWidget* _controlWidget;
+
+        PresetDropdown * _PresetDropdown;
+
 
         /**
          *  Lilv types
@@ -110,12 +125,6 @@ class UI : public Audio::UI {
         LV2_Feature log_feature          = { LV2_LOG__log, NULL };
         LV2_Feature options_feature      = { LV2_OPTIONS__options, NULL };
 
-
-        QMainWindow * win;
-
-        QScrollArea * _MainWidget;
-
-        QWidget* _controlWidget;
 
 
     protected:

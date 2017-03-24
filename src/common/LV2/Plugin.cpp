@@ -395,7 +395,7 @@ void Plugin::start() {
 
     //Set default state
     _State->setStateDefault();
-    //_Preset->setup();
+    _Preset->setup();
 
 
     //Allocate jack bufs
@@ -699,6 +699,12 @@ void Plugin::allocatePortBuffer( uint32_t i ) {
 UI * Plugin::getUI() {
 
     return _UI;
+
+};
+
+PluginPreset * Plugin::getPreset() {
+
+    return _Preset;
 
 };
 

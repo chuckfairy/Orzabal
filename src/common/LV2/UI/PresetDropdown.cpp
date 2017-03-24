@@ -2,7 +2,9 @@
  * Preset action item
  */
 #include "PresetDropdown.h"
+
 #include <LV2/Plugin.h>
+#include <LV2/PluginPreset.h>
 
 namespace LV2 {
 
@@ -14,6 +16,32 @@ PresetDropdown::PresetDropdown( Plugin * p ) :
     _Plugin( p )
 {
 };
+
+
+/**
+ * char
+ */
+
+void PresetDropdown::load() {
+
+    PluginPreset * p = _Plugin->getPreset();
+    vector<Audio::Preset*> presets = p->getAll();
+    vector<Audio::Preset*>::const_iterator it;
+
+    for( it = presets.begin(); it != presets.end(); ++ it ) {
+
+        addItem( (*it)->name );
+
+    }
+
+};
+
+
+/**
+ * Dropdown change leads to preset
+ * change right away
+ *
+ */
 
 void PresetDropdown::handleSelectionChanged( int index ) {
 

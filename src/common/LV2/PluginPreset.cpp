@@ -67,6 +67,8 @@ vector<Audio::Preset*> PluginPreset::getAll() {
 
     LilvWorld * world = _Plugin->getLilvWorld();
 
+    std::cout << "PRESET SETTING";
+
 	LILV_FOREACH( nodes, i, lilvPresets ) {
 
 
@@ -86,7 +88,6 @@ vector<Audio::Preset*> PluginPreset::getAll() {
         if( ! labels ) {
 
             //@TODO Log
-            //fprintf(stderr, "Preset <%s> has no rdfs:label\n",
             //lilv_node_as_string(lilv_nodes_get(presets, i)));
             continue;
 
@@ -102,6 +103,8 @@ vector<Audio::Preset*> PluginPreset::getAll() {
         audioPreset->name = lilv_node_as_string( label );
 
         presets.push_back( audioPreset );
+
+        std::cout << audioPreset->name;
 
         lilv_nodes_free( labels );
 

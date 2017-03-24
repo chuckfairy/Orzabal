@@ -8,6 +8,9 @@
 
 #include <lilv/lilv.h>
 
+#include <LV2/Preset.h>
+
+
 namespace LV2 {
 
 
@@ -31,10 +34,18 @@ class PresetDropdown : public QComboBox {
         Plugin * _Plugin;
         LilvNode * _preset;
 
+
     public:
 
         PresetDropdown( QWidget * parent );
         PresetDropdown( Plugin * plugin );
+
+
+        /**
+         * Main loader
+         */
+
+        void load();
 
 
     public slots:

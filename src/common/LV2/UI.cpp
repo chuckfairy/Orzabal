@@ -20,6 +20,7 @@
 #include <QLabel>
 
 #include "Port.h"
+#include "UI/PresetDropdown.h"
 #include "UI.h"
 #include "Plugin.h"
 #include "WindowLayout.h"
@@ -41,6 +42,8 @@ UI::UI( Plugin * p ) {
     setLilvWorld( p->getLilvWorld() );
 
     setLilvInstance( p->getLilvInstance() );
+
+    _PresetDropdown = new PresetDropdown( p );
 
 };
 
@@ -428,20 +431,34 @@ QWidget * UI::createControlWidget() {
 
         Port * port = (Port*)_Plugin->getPort( i );
 
-		if( port->type == Audio::TYPE_CONTROL ) {
+		if( port->type != Audio::TYPE_CONTROL ) {
 
-            PortContainer portContainer;
-            portContainer.ui = this;
-            portContainer.port = port;
-            portContainers.append( portContainer );
+            continue;
 
         }
+
+        PortContainer portContainer;
+        portContainer.ui = this;
+        portContainer.port = port;
+        portContainers.append( portContainer );
 
     }
 
     QWidget* grid = new QWidget();
     FlowLayout* flowLayout = new FlowLayout();
     QLayout* layout = flowLayout;
+
+
+    //Add dropdown
+
+    _PresetDropdown->load();
+
+    QHBoxLayout * dropdownLayout = new QHBoxLayout;
+    dropdownLayout->addWidget( _PresetDropdown );
+    layout->addItem( dropdownLayout );
+
+
+    //Create knobs for controls
 
     LilvNode * lastGroup = NULL;
     QHBoxLayout * groupLayout;
