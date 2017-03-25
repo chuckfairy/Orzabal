@@ -56,6 +56,8 @@ class PluginPreset {
 
         void setNodes();
 
+        void loadPresets();
+
 
     public:
 
@@ -73,7 +75,11 @@ class PluginPreset {
          * Main getters setters
          */
 
-        vector<Audio::Preset*> getAll();
+        vector<Audio::Preset*> getAll() {
+
+            return _presets;
+
+        };
 
 
         /**
@@ -98,6 +104,13 @@ class PluginPreset {
          */
 
         void applyPreset();
+
+
+        /**
+         * Apply from index at
+         */
+
+        void applyPreset( uint32_t );
 
 
         /**

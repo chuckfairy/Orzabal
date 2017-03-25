@@ -471,6 +471,17 @@ void Plugin::run() {
 
 
 /**
+ * Pause but not kill
+ */
+
+void Plugin::pause() {
+
+    ACTIVE = false;
+
+};
+
+
+/**
  * LilvURI stop
  */
 
@@ -737,6 +748,8 @@ LV2_Handle Plugin::getLV2Handle() {
  */
 
 void Plugin::updateJack( jack_nframes_t nframes ) {
+
+    if( ! ACTIVE ) { return; }
 
 	/* Get Jack transport position */
 

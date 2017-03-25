@@ -29,9 +29,12 @@ void PluginState::applyLilvState() {
 
     if( must_pause ) {
 
-        //play_state = Audio::PAUSE_REQUESTED;
+        _play_state = Audio::PAUSE_REQUESTED;
+
+        _Plugin->pause();
         //zix_sem_wait(&paused);
 
+        std::cout << "PAUSIN\n";
     }
 
 
@@ -50,9 +53,11 @@ void PluginState::applyLilvState() {
     if( must_pause ) {
 
         _Plugin->setRequestUpdate( true );
-        _play_state = Audio::RUNNING;
+        _Plugin->run();
 
     }
+
+    _play_state = Audio::RUNNING;
 
 };
 
@@ -80,7 +85,15 @@ void PluginState::setLilvState( Audio::Preset * preset ) {
 
     lilv_state_free( _state );
 
-    _state = ( (LV2::Preset*) preset )->state;
+    Preset * lv2Preset = (LV2::Preset*) preset;
+
+	lv2Preset->state = lilv_state_new_from_world(
+        _Plugin->getLilvWorld(),
+        _Plugin->getLV2Map(),
+        lv2Preset->lilvPreset
+    );
+
+    _state = lv2Preset->state;
 
 	applyLilvState();
 

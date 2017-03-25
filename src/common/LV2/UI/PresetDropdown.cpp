@@ -15,6 +15,14 @@ namespace LV2 {
 PresetDropdown::PresetDropdown( Plugin * p ) :
     _Plugin( p )
 {
+
+    connect(
+        this,
+        SIGNAL( currentIndexChanged( int ) ),
+        this,
+        SLOT( handleSelectionChanged( int ) )
+    );
+
 };
 
 
@@ -34,6 +42,8 @@ void PresetDropdown::load() {
 
     }
 
+    _LOADED = true;
+
 };
 
 
@@ -45,7 +55,11 @@ void PresetDropdown::load() {
 
 void PresetDropdown::handleSelectionChanged( int index ) {
 
-    //_Plugin->getPreset()->apply
+    if( ! _LOADED ) { return; }
+
+    std::cout << "CHANG DROPDOWn\n";
+
+    _Plugin->getPreset()->applyPreset( (uint32_t) index );
 
 };
 

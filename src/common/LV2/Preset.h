@@ -13,6 +13,8 @@ struct Preset : public Audio::Preset {
 
     LilvState * state;
 
+    const LilvNode * lilvPreset;
+
 };
 
 };

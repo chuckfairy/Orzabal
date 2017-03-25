@@ -241,6 +241,8 @@ class Plugin {
 
         virtual void run() {};
 
+        virtual void pause() {};
+
         virtual void stop() {};
 
 };

@@ -3,6 +3,8 @@
  */
 #include "Plugin.h"
 #include "PluginPreset.h"
+#include "PluginState.h"
+#include "Preset.h"
 
 namespace LV2 {
 
@@ -23,6 +25,8 @@ PluginPreset::PluginPreset( Plugin * plugin )
 void PluginPreset::setup() {
 
     setNodes();
+
+    loadPresets();
 
 };
 
@@ -53,10 +57,7 @@ void PluginPreset::setNodes() {
  * Get all plugin presets
  */
 
-vector<Audio::Preset*> PluginPreset::getAll() {
-
-    vector<Audio::Preset*> presets;
-
+void PluginPreset::loadPresets() {
 
     //Grab from lilv plugin
 
@@ -71,6 +72,7 @@ vector<Audio::Preset*> PluginPreset::getAll() {
 
 	LILV_FOREACH( nodes, i, lilvPresets ) {
 
+        Preset * audioPreset = new Preset;
 
         //Grab needed nodes
 
@@ -98,11 +100,12 @@ vector<Audio::Preset*> PluginPreset::getAll() {
 
         const LilvNode* label = lilv_nodes_get_first( labels );
 
-        Audio::Preset * audioPreset = new Audio::Preset;
 
         audioPreset->name = lilv_node_as_string( label );
 
-        presets.push_back( audioPreset );
+        audioPreset->lilvPreset = preset;
+
+        _presets.push_back( (Audio::Preset*) audioPreset );
 
         std::cout << audioPreset->name;
 
@@ -110,9 +113,8 @@ vector<Audio::Preset*> PluginPreset::getAll() {
 
     }
 
-    lilv_nodes_free( lilvPresets );
-
-    return presets;
+    //@TODO move to delete
+    //lilv_nodes_free( lilvPresets );
 
 };
 
@@ -121,7 +123,16 @@ vector<Audio::Preset*> PluginPreset::getAll() {
  * Main preset state applys
  */
 
+
 void PluginPreset::applyPreset() {
+
+    _Plugin->getState()->setLilvState( _preset );
+
+};
+
+void PluginPreset::applyPreset( uint32_t index ) {
+
+    applyPreset( _presets[ index ] );
 
 };
 

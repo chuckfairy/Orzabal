@@ -290,6 +290,8 @@ class Plugin : public Audio::Plugin {
 
         void run();
 
+        void pause();
+
         void stop();
 
         UI * getUI();

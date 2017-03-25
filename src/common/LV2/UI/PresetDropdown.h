@@ -34,6 +34,8 @@ class PresetDropdown : public QComboBox {
         Plugin * _Plugin;
         LilvNode * _preset;
 
+        bool _LOADED = false;
+
 
     public:
 
