@@ -24,7 +24,8 @@ qt5_add_resources(RESOURCES ./Resources.qrc)
 
 
 #links
-include_directories(${CMAKE_CURRENT_BINARY_DIR} ../common )
+
+include_directories(${CMAKE_CURRENT_BINARY_DIR} ../common /usr/local/lib )
 
 
 # tell CMake to compile every .cpp file in this directory and add it to an executable named `orzabal.qt`
@@ -41,7 +42,9 @@ file(
 
 add_executable(orzabal.qt ${orzabal.qt_SRC} ${common-ladspa} ${RESOURCES})
 
+
 target_link_libraries( orzabal.qt
+    PUBLIC
     dl
     orzabal-common-lv2 orzabal-common
     orzabal-common-jack
@@ -49,3 +52,18 @@ target_link_libraries( orzabal.qt
     Qt5::Widgets Qt5::Core
     Qt5::Qml
 )
+
+install( TARGETS
+   orzabal.qt
+
+   RUNTIME DESTINATION bin
+   LIBRARY DESTINATION lib
+   ARCHIVE DESTINATION lib
+)
+
+#Desktop file
+if (UNIX)
+	install(FILES orzabal.qt.desktop DESTINATION /usr/local/share/applications)
+	install(FILES ../assets/orzabal.png
+		DESTINATION /usr/local/share/icons)
+endif()

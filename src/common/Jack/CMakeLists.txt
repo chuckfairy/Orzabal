@@ -22,14 +22,24 @@ target_link_libraries( orzabal-common-jack PUBLIC
     asound orzabal-common orzabal-common-audio jack
 )
 
-target_include_directories( orzabal-common-jack PUBLIC "../" )
+include_directories( orzabal-common-jack INSTALL_INTERFACE "../" )
 
 set_target_properties( orzabal-common-jack PROPERTIES LINKER_LANGUAGE CXX )
 
-install(TARGETS orzabal-common-jack EXPORT orzabal-common-jack-export
-    RUNTIME DESTINATION bin
-    ARCHIVE DESTINATION lib
-    LIBRARY DESTINATION lib
-    DESTINATION "${ORZABAL_LIB_PATH}"
-    INCLUDES DESTINATION include
+#install(TARGETS orzabal-common-jack EXPORT orzabal-common-jack-export
+    #RUNTIME DESTINATION bin
+    #ARCHIVE DESTINATION lib
+    #LIBRARY DESTINATION lib
+    #DESTINATION "${ORZABAL_LIB_PATH}"
+    #INCLUDES DESTINATION include
+#)
+
+set_target_properties(orzabal-common-jack PROPERTIES INSTALL_RPATH_USE_LINK_PATH TRUE)
+
+install( TARGETS
+   orzabal-common-jack
+   EXPORT orzabal-common-jack
+   RUNTIME DESTINATION bin
+   LIBRARY DESTINATION lib
+   ARCHIVE DESTINATION lib
 )

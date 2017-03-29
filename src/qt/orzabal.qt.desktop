@@ -1,0 +1,11 @@
+#!/usr/bin/env xdg-open
+[Desktop Entry]
+Version=0.2
+Name=Orzabal.qt
+GenericName=Audio Software
+Exec=orzabal.qt
+Icon=orzabal.png
+Terminal=false
+Type=Application
+Categories=Audio;
+

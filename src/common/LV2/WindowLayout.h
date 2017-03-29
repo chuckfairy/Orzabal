@@ -75,9 +75,9 @@ class FlowLayout : public QLayout {
     public:
 
         FlowLayout(QWidget* parent,
-                int      margin   = -1,
-                int      hSpacing = -1,
-                int      vSpacing = -1);
+                int margin   = -1,
+                int hSpacing = -1,
+                int vSpacing = -1);
 
         FlowLayout(int margin = -1, int hSpacing = -1, int vSpacing = -1);
 

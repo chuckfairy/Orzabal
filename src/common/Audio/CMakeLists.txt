@@ -18,8 +18,16 @@ set_target_properties(orzabal-common-audio PROPERTIES LINKER_LANGUAGE CXX)
 ## Installing
 # add installation for target farweller
 
-install(TARGETS orzabal-common-audio
-    DESTINATION "${ORZABAL_LIB_PATH}"
+#install(TARGETS orzabal-common-audio
+    #DESTINATION "${ORZABAL_LIB_PATH}"
+#)
+
+install( TARGETS
+   orzabal-common-audio
+   EXPORT orzabal-common-audio
+   RUNTIME DESTINATION bin
+   LIBRARY DESTINATION lib
+   ARCHIVE DESTINATION lib
 )
 
 

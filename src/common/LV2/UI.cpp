@@ -16,6 +16,7 @@
 #include <QLayout>
 #include <QGroupBox>
 #include <QStyle>
+#include <QPushButton>
 #include <QDial>
 #include <QLabel>
 
@@ -431,11 +432,7 @@ QWidget * UI::createControlWidget() {
 
         Port * port = (Port*)_Plugin->getPort( i );
 
-		if( port->type != Audio::TYPE_CONTROL ) {
-
-            continue;
-
-        }
+		if( port->type != Audio::TYPE_CONTROL ) { continue; }
 
         PortContainer portContainer;
         portContainer.ui = this;
@@ -444,9 +441,15 @@ QWidget * UI::createControlWidget() {
 
     }
 
+    //Main layout
+    QLayout * fullLayout = new QVBoxLayout;
+    QWidget * fullWidget = new QWidget;
+
+
+    //Grid layout for controls
     QWidget* grid = new QWidget();
     FlowLayout* flowLayout = new FlowLayout();
-    QLayout* layout = flowLayout;
+    QLayout * layout = flowLayout;
 
 
     //Add dropdown
@@ -455,7 +458,11 @@ QWidget * UI::createControlWidget() {
 
     QHBoxLayout * dropdownLayout = new QHBoxLayout;
     dropdownLayout->addWidget( _PresetDropdown );
-    layout->addItem( dropdownLayout );
+    //dropdownLayout->addWidget( new QPushButton );
+
+    //Add items
+    fullLayout->addItem( dropdownLayout );
+    fullLayout->addItem( layout );
 
 
     //Create knobs for controls
@@ -508,11 +515,11 @@ QWidget * UI::createControlWidget() {
 
     }
 
-    grid->setLayout(layout);
+    fullWidget->setLayout( fullLayout );
 
-    lilv_node_free(pprop_notOnGUI);
+    lilv_node_free( pprop_notOnGUI );
 
-    return grid;
+    return fullWidget;
 
 };
 

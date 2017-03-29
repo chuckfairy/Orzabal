@@ -11,6 +11,8 @@ set( CMAKE_C_STANDARD 11 )
 
 set(CMAKE_CXX_FLAGS "-std=c++11 ${CMAKE_CXX_FLAGS} -g -ftest-coverage -fprofile-arcs")
 
+set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+
 INCLUDE( CPack )
 
 project(orzabal)
