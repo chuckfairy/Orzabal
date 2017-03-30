@@ -40,6 +40,17 @@ file(
     Settings/Events/*.cpp
 )
 
+
+# CMake Config type
+
+
+set( ORZABAL_QT_BUILD_TYPE "Pi" CACHE STRING "Version of libInterface" )
+
+configure_file(Config/BuildType.h.in Config/BuildType.h)
+
+
+# Main executable
+
 add_executable(orzabal.qt ${orzabal.qt_SRC} ${common-ladspa} ${RESOURCES})
 
 
