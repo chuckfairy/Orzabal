@@ -3,7 +3,7 @@
  */
 #pragma once
 
-namespace Qrza { Qt { Config {
+namespace Orza { namespace App { namespace Config {
 
 /**
  * Build types enum
@@ -14,6 +14,6 @@ enum BuildType {
     Pi
 };
 
-BuildType CONFIG_BUILD = ${ORZABAL_QT_BUILD_TYPE};
+static BuildType ORZA_BUILD_CONFIG = ${ORZABAL_QT_BUILD_TYPE};
 
 } } };

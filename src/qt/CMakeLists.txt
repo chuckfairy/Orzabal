@@ -25,7 +25,7 @@ qt5_add_resources(RESOURCES ./Resources.qrc)
 
 #links
 
-include_directories(${CMAKE_CURRENT_BINARY_DIR} ../common /usr/local/lib )
+include_directories( ${CMAKE_CURRENT_BINARY_DIR} ../common /usr/local/lib )
 
 
 # tell CMake to compile every .cpp file in this directory and add it to an executable named `orzabal.qt`
@@ -38,13 +38,19 @@ file(
     widget/*.cpp
     Settings/*.cpp
     Settings/Events/*.cpp
+    Pi/*.cpp
 )
 
 
 # CMake Config type
 
+add_definitions(-DORZA_BUILD_TYPE=${ORZA_BUILD_TYPE})
 
-set( ORZABAL_QT_BUILD_TYPE "Pi" CACHE STRING "Version of libInterface" )
+if( ORZA_BUILD_TYPE STREQUAL "Pi" )
+    set( ORZABAL_QT_BUILD_TYPE "Pi" )
+else()
+    set( ORZABAL_QT_BUILD_TYPE "Linux" )
+endif()
 
 configure_file(Config/BuildType.h.in Config/BuildType.h)
 

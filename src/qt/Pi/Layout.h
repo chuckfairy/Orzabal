@@ -3,7 +3,15 @@
  */
 #pragma once
 
-namespace Orza { Qt { Pi {
+
+/**
+ * Forwarding
+ */
+
+class MainWindow;
+
+
+namespace Orza { namespace App { namespace Pi {
 
 /**
  * Forwarding
@@ -25,10 +33,39 @@ class Layout {
 
         bool FULLSCREEN = false;
 
+        MainWindow * _App;
+
 
     public:
 
-        Layout();
+        Layout( MainWindow * );
+
+
+        /**
+         * Fullscreen Getter
+         */
+
+        bool isFullscreen() {
+
+            return FULLSCREEN;
+
+        };
+
+
+        /**
+         * Window actions
+         */
+
+        void goFullscreen();
+
+        void goWindowed();
+
+
+        /**
+         * Main toggle method
+         */
+
+        void toggleFullscreen();
 
 };
 

@@ -4,6 +4,7 @@
  */
 #include <QHBoxLayout>
 #include <QFile>
+#include <QTimer>
 #include <QIcon>
 
 #include <Jack/Midi.h>
@@ -72,6 +73,7 @@ MainWindow::MainWindow( QWidget * parent, Qt::WindowFlags flags ) :
     _Layout = new SimpleLayout( this );
 
 
+
     //Icon
 
     QIcon icon(":icon.png");
@@ -92,6 +94,13 @@ MainWindow::MainWindow( QWidget * parent, Qt::WindowFlags flags ) :
 
     _Server->run();
 
+    if( BUILD_TYPE == Config::Pi ) {
+
+        //QTimer::singleShot( 1000, this, SLOT( goFullscreen() ) );
+        goFullscreen();
+
+    }
+
 };
 
 /**
@@ -101,5 +110,19 @@ MainWindow::MainWindow( QWidget * parent, Qt::WindowFlags flags ) :
 Jack::Server * MainWindow::getServer() {
 
     return _Server;
+
+};
+
+
+/**
+ * Window actions
+ */
+
+void MainWindow::goFullscreen() {
+
+    setWindowFlags( Qt::CustomizeWindowHint );
+    setWindowFlags( Qt::FramelessWindowHint );
+
+    showFullScreen();
 
 };

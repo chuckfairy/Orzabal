@@ -10,6 +10,8 @@
 
 #include "ui_MainWindow.h"
 
+#include "Config/BuildType.h"
+
 #include "widget/InstrumentDropdown.h"
 #include "widget/EffectsList.h"
 #include "widget/SimpleLayout.h"
@@ -28,6 +30,7 @@ class Layout;
 
 
 using Orza::Qt::Settings::Layout;
+using namespace Orza::App;
 
 
 /**
@@ -84,6 +87,13 @@ class MainWindow : public QMainWindow {
         SimpleLayout * _Layout;
 
 
+        /**
+         * Orza build config
+         */
+
+        const Config::BuildType BUILD_TYPE = Config::ORZA_BUILD_CONFIG;
+
+
     public:
 
         //  override the constructor
@@ -109,5 +119,14 @@ class MainWindow : public QMainWindow {
             return &UI;
 
         };
+
+
+        /**
+         * Window actions
+         */
+
+        void goFullscreen();
+
+        void goWindowed();
 
 };
