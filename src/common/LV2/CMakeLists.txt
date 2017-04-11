@@ -12,14 +12,23 @@ project(orzabal-common-lv2 CXX)
 #find_package( JACK )
 find_package( Qt5Widgets REQUIRED )
 find_package( Qt5Core REQUIRED )
+find_package( Lilv REQUIRED )
+find_package( Sord REQUIRED )
+find_package( Serd REQUIRED )
+find_package( Suil REQUIRED )
+find_package( Sratom REQUIRED )
 
 #find_package(Lv2)
 #find_package(Lilv)
 
 
 #set( ORZABAL_LV2_INCLUDE_FILES )
-file( GLOB
-    ORZABAL_LV2_INCLUDE_FILES
+file( GLOB ORZABAL_LV2_INCLUDE_FILES
+    ${LILV_INCLUDE_FILES}
+    ${SRATOM_INCLUDE_FILES}
+    ${SORD_INCLUDE_FILES}
+    ${SERD_INCLUDE_FILES}
+    ${SUIL_INCLUDE_FILES}
     "include/*.h"
     "include/symap.c"
     "include/lv2_evbuf.c"
@@ -36,7 +45,7 @@ file( GLOB
     "PluginState.cpp"
     "PluginPreset.cpp"
     "UI.cpp"
-    "./UI/*.cpp"
+    "UI/*.cpp"
 )
 
 
@@ -54,17 +63,26 @@ install(TARGETS orzabal-common-lv2
     DESTINATION "${ORZABAL_LIB_PATH}"
 )
 
-include_directories( "/usr/local/lib" )
+set( ORZABAL_LV2_INCLUDE_DIRS
+    "/usr/local/lib"
+    ${LILV_INCLUDE_DIRS}
+    ${SRATOM_INCLUDE_DIRS}
+    ${SORD_INCLUDE_DIRS}
+    ${SERD_INCLUDE_DIRS}
+    ${SUIL_INCLUDE_DIRS}
+)
+
+include_directories( ${ORZABAL_LV2_INCLUDE_DIRS} )
 
 target_link_libraries( orzabal-common-lv2
-    lilv-0 suil-0 jack sratom-0 serd-0 sord-0
+    jack
     orzabal-common-jack
     Qt5::Widgets Qt5::Core
 )
 
-target_include_directories( orzabal-common-lv2
-    PUBLIC "/usr/local/include/lilv-0" "/usr/local/include/suil-0" "/usr/local/include/sratom-0"
-    "/usr/local/include/serd-0" "/usr/include/sord-0"
+target_include_directories( orzabal-common-lv2 PUBLIC
+    "/usr/local/include/suil-0"
+    "/usr/local/include/serd-0"
     ".."
     ${CMAKE_CURRENT_BINARY_DIR}
 )

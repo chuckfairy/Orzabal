@@ -64,7 +64,7 @@ MainWindow::MainWindow( QWidget * parent, Qt::WindowFlags flags ) :
 
     effects = new EffectsList();
 
-    midiDevices = new MidiDeviceDropdown();
+    midiDevices = new MidiDeviceDropdown( this );
 
 
     //@TODO Move to layout picker

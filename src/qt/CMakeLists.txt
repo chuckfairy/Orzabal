@@ -25,7 +25,12 @@ qt5_add_resources(RESOURCES ./Resources.qrc)
 
 #links
 
-include_directories( ${CMAKE_CURRENT_BINARY_DIR} ../common /usr/local/lib )
+include_directories(
+    ${CMAKE_CURRENT_BINARY_DIR}
+    ../common /usr/local/lib
+    "${ORZABAL_ROOT_PATH}/lib-src/sratom"
+    "${ORZABAL_ROOT_PATH}/lib-src/sord"
+)
 
 
 # tell CMake to compile every .cpp file in this directory and add it to an executable named `orzabal.qt`
@@ -65,7 +70,6 @@ target_link_libraries( orzabal.qt
     dl
     orzabal-common-lv2 orzabal-common
     orzabal-common-jack
-    "/usr/local/lib/liblilv-0.so"
     Qt5::Widgets Qt5::Core
     Qt5::Qml
 )

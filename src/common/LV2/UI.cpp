@@ -60,73 +60,8 @@ void UI::start() {
 
     _lilvUIS = lilv_plugin_get_uis( _lilvPlugin );
 
-    const LilvNode* native_ui_type = lilv_new_uri( _lilvWorld, _NATIVE_UI_TYPE );
-
-    LILV_FOREACH(uis, u, _lilvUIS) {
-
-        const LilvUI* this_ui = lilv_uis_get( _lilvUIS, u );
-
-        if( lilv_ui_is_supported( this_ui, suil_ui_supported, native_ui_type, &_uiType ) ) {
-            /* TODO: Multiple UI support */
-            _lilvUI = this_ui;
-            _HAS_LILV_UI = true;
-            break;
-        }
-
-    }
-
-    //} else {
-
-    //} REMOVE
-
-    //_lilvUI = lilv_uis_get( _lilvUIS, lilv_uis_begin( _lilvUIS ) );
-
-    if( ! _HAS_LILV_UI ) {
-
-        LILV_FOREACH( uis, u, _lilvUIS ) {
-
-            const LilvUI* ui = lilv_uis_get( _lilvUIS, u );
-
-            const LilvNodes* types = lilv_ui_get_classes(ui);
-
-            LILV_FOREACH( nodes, t, types ) {
-
-                const char * pt = lilv_node_as_uri( lilv_nodes_get( types, t ) );
-
-                if (!strcmp(pt, "http://kxstudio.sf.net/ns/lv2ext/external-ui#Widget")) {
-
-                    _EXTERNAL_UI = true;
-                    _lilvUI = ui;
-                    _uiType = getExternalKX();
-
-                } else if ( ! strcmp( pt, "http://lv2plug.in/ns/extensions/ui#external" ) ) {
-
-                    _EXTERNAL_UI = true;
-                    _lilvUI = ui;
-                    _uiType = getExternalLV2();
-
-                }
-
-            }
-
-        }
-
-    }
-
-
-    /* Create ringbuffers for UI if necessary */
-
-    if( _lilvUI ) {
-
-        //fprintf(stderr, "UI: %s\n", lilv_node_as_uri( lilv_ui_get_uri( _lilvUI ) ) );
-        //fprintf(stderr, "UI Type: %s\n", lilv_node_as_uri( _uiType ) );
-
-    } else {
-
-        fprintf(stderr, "UI: None\n");
-
-    }
-
+    //@TODO implement native
+    //setNativeUIData();
 
     //Create jack ring buffers @TODO move to plugin grab
 
@@ -238,6 +173,81 @@ void UI::createUI() {
     }
 
     createQt();
+
+};
+
+
+/**
+ * Native ui methods
+ */
+
+void UI::setNativeUIData() {
+
+    const LilvNode* native_ui_type = lilv_new_uri( _lilvWorld, _NATIVE_UI_TYPE );
+
+    LILV_FOREACH(uis, u, _lilvUIS) {
+
+        const LilvUI* this_ui = lilv_uis_get( _lilvUIS, u );
+
+        if( lilv_ui_is_supported( this_ui, suil_ui_supported, native_ui_type, &_uiType ) ) {
+            /* TODO: Multiple UI support */
+            _lilvUI = this_ui;
+            _HAS_LILV_UI = true;
+            break;
+        }
+
+    }
+
+    //} REMOVE
+
+    //_lilvUI = lilv_uis_get( _lilvUIS, lilv_uis_begin( _lilvUIS ) );
+
+    if( ! _HAS_LILV_UI ) {
+
+        LILV_FOREACH( uis, u, _lilvUIS ) {
+
+            const LilvUI* ui = lilv_uis_get( _lilvUIS, u );
+
+            const LilvNodes* types = lilv_ui_get_classes(ui);
+
+            LILV_FOREACH( nodes, t, types ) {
+
+                const char * pt = lilv_node_as_uri( lilv_nodes_get( types, t ) );
+
+                if (!strcmp(pt, "http://kxstudio.sf.net/ns/lv2ext/external-ui#Widget")) {
+
+                    _EXTERNAL_UI = true;
+                    _lilvUI = ui;
+                    _uiType = getExternalKX();
+
+                } else if ( ! strcmp( pt, _LV2_UI_EXTERNAL ) ) {
+
+                    _EXTERNAL_UI = true;
+                    _lilvUI = ui;
+                    _uiType = getExternalLV2();
+
+                }
+
+            }
+
+        }
+
+    }
+
+
+    /* Create ringbuffers for UI if necessary */
+
+    if( _lilvUI ) {
+
+        //fprintf(stderr, "UI: %s\n", lilv_node_as_uri( lilv_ui_get_uri( _lilvUI ) ) );
+        //fprintf(stderr, "UI Type: %s\n", lilv_node_as_uri( _uiType ) );
+
+    } else {
+
+        fprintf(stderr, "UI: None\n");
+
+    }
+
 
 };
 

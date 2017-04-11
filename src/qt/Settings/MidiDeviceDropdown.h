@@ -11,6 +11,13 @@
 
 
 /**
+ * Forwading
+ */
+
+class MainWindow;
+
+
+/**
  * Main class
  *
  */
@@ -19,11 +26,13 @@ class MidiDeviceDropdown : public QComboBox {
 
     private:
 
+        MainWindow * _App;
+
 
     public:
 
         MidiDeviceDropdown( QWidget * parent );
-        MidiDeviceDropdown();
+        MidiDeviceDropdown( MainWindow * );
 
 
         /**

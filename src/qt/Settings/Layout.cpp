@@ -16,9 +16,9 @@ namespace Orza { namespace Qt {  namespace Settings {
  * Construct
  */
 
-Layout::Layout( MainWindow * win ) {
-
-    _App = win;
+Layout::Layout( MainWindow * win ) :
+    _App( win )
+{
 
     setDropdowns();
     setEvents();

@@ -126,6 +126,13 @@ class UI : public Audio::UI {
         LV2_Feature options_feature      = { LV2_OPTIONS__options, NULL };
 
 
+        /**
+         * Native ui suil data
+         */
+
+        const char * _LV2_UI_EXTERNAL = "http://lv2plug.in/ns/extensions/ui#external";
+
+        void setNativeUIData();
 
     protected:
 
@@ -172,7 +179,6 @@ class UI : public Audio::UI {
             _lilvInstance = i;
 
         };
-
 
 
         /**

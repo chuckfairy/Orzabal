@@ -14,6 +14,6 @@ enum BuildType {
     Pi
 };
 
-static BuildType ORZA_BUILD_CONFIG = Pi;
+static BuildType ORZA_BUILD_CONFIG = Linux;
 
 } } };
