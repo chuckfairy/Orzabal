@@ -1,23 +1,26 @@
-# Future synth plugin
+# Meta Synth [Jack](http://jackaudio.org/) App
+
+![Main View](https://raw.githubusercontent.com/chuckfairy/Orzabal/master/screenshots/main_view.png)
+
+Currently will load [lv2](http://lv2plug.in/) plugins. Plans for mac and windows vst support soon.
 
 # Install
 
-```sh
-## Needs latest versions of these in local
-git clone http://git.drobilla.net/serd.git;
-git clone http://git.drobilla.net/sord.git;
-git clone http://git.drobilla.net/lilv.git;
-git clone http://git.drobilla.net/suil.git;
-git clone http://git.drobilla.net/sratom.git;
-## Install those /usr/local
+```shell
+# Make sure to have latest lv2 core
 
+# Also in ./bin/build_*
 cmake .
 make -j8
 
-#gui
-./src/qt/example
+#gui, only qt rn
+./src/qt/orzabal.qt
 ```
 
 # Jack
 
 Starting the app will start jack. I recommnend starting it elsewhere, `./bin/jack_startup.sh` is a sample startup. Midi will need to be enabled.
+
+# Pi
+
+Tested on usb device. Use `./bin/build_pi.sh` for a full screen use.
