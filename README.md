@@ -1,6 +1,6 @@
 # Meta Synth [Jack](http://jackaudio.org/) App
 
-![Main View](https://github.com/chuckfairy/Orzabal/tree/master/screenshots/main_view.png)
+![Main View](https://raw.githubusercontent.com/chuckfairy/Orzabal/master/screenshots/main_view.png)
 
 Currently will load [lv2](http://lv2plug.in/) plugins. Plans for mac and windows vst support soon.
 
