@@ -10,6 +10,7 @@
 #include <Jack/Midi.h>
 
 #include "Settings/Layout.h"
+#include "Pi/Layout.h"
 #include "MainWindow.h"
 #include "widget/EffectsList.h"
 #include "Settings/MidiDeviceDropdown.h"
@@ -20,7 +21,8 @@
  * @Override
  */
 MainWindow::MainWindow( QWidget * parent, Qt::WindowFlags flags ) :
-    QMainWindow( parent, 0 ) {
+    QMainWindow( parent, 0 )
+{
 
     UI.setupUi( this );
 
@@ -96,8 +98,9 @@ MainWindow::MainWindow( QWidget * parent, Qt::WindowFlags flags ) :
 
     if( BUILD_TYPE == Config::Pi ) {
 
+         _Pi = new Orza::App::Pi::Layout( this );
+
         //QTimer::singleShot( 1000, this, SLOT( goFullscreen() ) );
-        goFullscreen();
 
     }
 
@@ -124,5 +127,18 @@ void MainWindow::goFullscreen() {
     setWindowFlags( Qt::FramelessWindowHint );
 
     showFullScreen();
+
+};
+
+void MainWindow::goWindowed() {
+
+    Qt::WindowFlags flag = windowFlags();
+    flag = flag & (~Qt::CustomizeWindowHint) & (~Qt::FramelessWindowHint);
+
+    setWindowFlags( flag );
+
+    show();
+
+    showNormal();
 
 };

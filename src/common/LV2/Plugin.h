@@ -262,6 +262,8 @@ class Plugin : public Audio::Plugin {
 
         void deactivatePorts();
 
+        void _clearMidiBuffers( jack_nframes_t );
+
 
     protected:
 

@@ -41,8 +41,6 @@ void SimpleLayout::setEvents() {
 
 void SimpleLayout::handleChange( void * data ) {
 
-    std::cout << "TESTING CHANGE\n";
-
     LV2::Plugin * p = (LV2::Plugin*) data;
 
     Jack::Server * server = _App->getServer();

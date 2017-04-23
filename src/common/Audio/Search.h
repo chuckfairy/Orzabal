@@ -54,7 +54,7 @@ class Search {
 
             for( it = plugins.begin(); it != plugins.end(); ++ it ) {
 
-                if( (*it)->hasMidi() ) {
+                if( (*it)->hasMidi() && (*it)->hasAudio() ) {
 
                     midis.push_back( (*it) );
 

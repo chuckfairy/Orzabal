@@ -40,7 +40,7 @@ class PluginState {
 
         bool _safe_restore = false;
 
-        Audio::PlayState _play_state;
+        Audio::PlayState _play_state = Audio::PAUSED;
 
 
         /**
@@ -49,18 +49,43 @@ class PluginState {
 
         LilvState * _state;
 
+
     public:
 
         explicit PluginState( Plugin * );
 
 
         /**
-         * State enums
+         * Play state setters getters
          */
 
         Audio::PlayState getPlayState() {
 
             return _play_state;
+
+        };
+
+        void setPlayState( Audio::PlayState state ) {
+
+            _play_state = state;
+
+        };
+
+
+        /**
+         * State safe restore
+         *
+         */
+
+        bool getSafeRestore() {
+
+            return _safe_restore;
+
+        };
+
+        void setSafeRestore( bool restore ) {
+
+            _safe_restore = restore;
 
         };
 

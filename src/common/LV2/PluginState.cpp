@@ -29,10 +29,7 @@ void PluginState::applyLilvState() {
 
     if( must_pause ) {
 
-        _play_state = Audio::PAUSE_REQUESTED;
-
         _Plugin->pause();
-        //zix_sem_wait(&paused);
 
         std::cout << "PAUSIN\n";
     }
@@ -56,8 +53,6 @@ void PluginState::applyLilvState() {
         _Plugin->run();
 
     }
-
-    _play_state = Audio::RUNNING;
 
 };
 

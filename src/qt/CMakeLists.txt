@@ -12,7 +12,8 @@ find_package(Qt5Core REQUIRED)
 find_package(Qt5Qml REQUIRED)
 
 
-file(GLOB orzabal.qt_UIS MainWindow.ui)
+file(GLOB orzabal.qt_UIS MainWindow.ui Pi/PiTab.ui)
+
 file(GLOB common-ladspa ../common/LADSPA/*.cpp)
 
 qt5_wrap_ui(orzabal.qt_UIS ${orzabal.qt_UIS} )
@@ -37,13 +38,13 @@ include_directories(
 file(
     GLOB
     orzabal.qt_SRC
+    Pi/*.cpp
     MainWindow.cpp
     main.cpp
     ui_MainWindow.h
     widget/*.cpp
     Settings/*.cpp
     Settings/Events/*.cpp
-    Pi/*.cpp
 )
 
 

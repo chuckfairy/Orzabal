@@ -12,12 +12,16 @@ using namespace std;
 
 QApplication * app;
 
+MainWindow * win;
+
 
 //Signal handler if from CLI
 
 static void signal_handler( int ignored ) {
 
+    win->goWindowed();
     app->closeAllWindows();
+    app->quit();
 
 };
 
@@ -28,8 +32,9 @@ int main( int argc, char **argv ) {
 
     app = new QApplication(argc, argv);
 
-    MainWindow win;
-    win.show();
+    win = new MainWindow;
+
+    win->show();
 
 	signal( SIGINT, signal_handler );
 	signal( SIGTERM, signal_handler );

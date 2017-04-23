@@ -121,6 +121,39 @@ void Plugin::deactivatePorts() {
 
 
 /**
+ * Clear midi buffers when trying to pause
+ */
+
+void Plugin::_clearMidiBuffers( jack_nframes_t nframes ) {
+
+    uint32_t bufSize = nframes * sizeof( float );
+
+    for( uint32_t p = 0; p < _midiPorts.size(); ++p ) {
+
+        Port * port = (Port*) _midiPorts[ p ];
+
+        if( port->jack_port && port->flow == Audio::FLOW_OUTPUT ) {
+
+            void* buf = jack_port_get_buffer( port->jack_port, nframes );
+
+            if( port->type == Audio::TYPE_EVENT ) {
+
+                jack_midi_clear_buffer(buf);
+
+            } else {
+
+                memset( buf, '\0', bufSize );
+
+            }
+
+        }
+
+    }
+
+};
+
+
+/**
  * Lilv set plugin
  * sets name and other details
  *
@@ -266,6 +299,7 @@ void Plugin::start() {
 
 	zix_sem_init( &symap_lock, 1 );
 	zix_sem_init( &exit_sem, 0 );
+	zix_sem_init( &paused, 0 );
 
     uri_map_feature.data  = &uri_map;
     uri_map.callback_data = this;
@@ -334,6 +368,21 @@ void Plugin::start() {
         throw std::runtime_error( "Does not have required features" );
 
     }
+
+	LilvNode* state_threadSafeRestore = lilv_new_uri(
+		_lilvWorld,
+        LV2_STATE__threadSafeRestore
+    );
+
+
+    //Plugin state needs threaded restore
+
+	if (lilv_plugin_has_feature( _lilvPlugin, state_threadSafeRestore ) ) {
+
+        _State->setSafeRestore( true );
+
+	}
+
 
     //@ENDTODO
 
@@ -421,15 +470,22 @@ void Plugin::start() {
 
     /* Create workers if necessary */
 
-    if( lilv_plugin_has_feature( _lilvPlugin, work_schedule )
-            && lilv_plugin_has_extension_data(_lilvPlugin, work_interface)) {
+    if(
+        lilv_plugin_has_feature( _lilvPlugin, work_schedule )
+        && lilv_plugin_has_extension_data(_lilvPlugin, work_interface)
+    ) {
 
         _worker->init( _lilvInstance, true );
 
+
         //@TODO Implement save reloading
-        //if (safe_restore) {
-            //jalv_worker_init(&jalv, &jalv.state_worker, iface, false);
-        //}
+
+        if( _State->getSafeRestore() ) {
+
+            _stateWorker->init( _lilvInstance, false );
+
+        }
+
     }
 
 
@@ -465,6 +521,8 @@ void Plugin::start() {
 
 void Plugin::run() {
 
+    _State->setPlayState( Audio::RUNNING );
+
     ACTIVE = true;
 
 };
@@ -476,7 +534,9 @@ void Plugin::run() {
 
 void Plugin::pause() {
 
-    ACTIVE = false;
+    _State->setPlayState( Audio::PAUSE_REQUESTED );
+
+    zix_sem_wait( & paused );
 
 };
 
@@ -761,6 +821,30 @@ void Plugin::updateJack( jack_nframes_t nframes ) {
         jack_transport_query( jackClient, &pos ) == JackTransportRolling
     );
 
+
+    //Check playstate for other
+
+	switch ( _State->getPlayState() ) {
+
+        case Audio::PAUSE_REQUESTED:
+
+            _State->setPlayState( Audio::PAUSED );
+            zix_sem_post( & paused );
+
+            break;
+
+        case Audio::PAUSED:
+
+            _clearMidiBuffers( nframes );
+
+            return;
+
+        default:
+            break;
+
+	}
+
+
     /* If transport state is not as expected, then something has changed */
     xport_changed = (
         rolling != _transportRolling ||
@@ -877,14 +961,16 @@ void Plugin::updateJack( jack_nframes_t nframes ) {
 
     }
 
+
     /* Run plugin for this cycle */
     lilv_instance_run( _lilvInstance, nframes );
 
+
 	/* Process any worker replies. */
+
     _worker->emitResponses( _lilvInstance );
 
-    //@TODO Implement saved state
-	//_stateWorker->emitResponses( _lilvInstance );
+	_stateWorker->emitResponses( _lilvInstance );
 
     /* Notify the plugin the run() cycle is finished */
     if ( _worker->hasIfaceRun() ) {
@@ -905,7 +991,7 @@ void Plugin::updateJack( jack_nframes_t nframes ) {
     }
 
     /* Deliver MIDI output and UI events */
-    for (uint32_t p = 0; p < _numPorts; ++p) {
+    for( uint32_t p = 0; p < _numPorts; ++p ) {
 
         Port * port = (Port*) _ports[ p ];
 

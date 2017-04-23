@@ -22,11 +22,21 @@
 /**
  * Forwarding
  */
-namespace Orza { namespace Qt {  namespace Settings {
+namespace Orza {
 
-class Layout;
+    namespace App { namespace Pi {
 
-}; }; };
+        class Layout;
+
+    } }
+
+    namespace Qt {  namespace Settings {
+
+        class Layout;
+
+    }; };
+
+};
 
 
 using Orza::Qt::Settings::Layout;
@@ -38,6 +48,8 @@ using namespace Orza::App;
  */
 
 class MainWindow : public QMainWindow {
+
+    Q_OBJECT;
 
     private:
 
@@ -85,6 +97,13 @@ class MainWindow : public QMainWindow {
          */
 
         SimpleLayout * _Layout;
+
+
+        /**
+         * Pi module
+         */
+
+        Orza::App::Pi::Layout * _Pi;
 
 
         /**

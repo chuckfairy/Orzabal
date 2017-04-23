@@ -3,6 +3,10 @@
  */
 #pragma once
 
+#include <QtCore>
+#include <QWidget>
+
+#include <ui_PiTab.h>
 
 /**
  * Forwarding
@@ -22,8 +26,9 @@ namespace Orza { namespace App { namespace Pi {
  * Main class
  */
 
-class Layout {
+class Layout : public QWidget {
 
+    Q_OBJECT;
 
     private:
 
@@ -34,6 +39,10 @@ class Layout {
         bool FULLSCREEN = false;
 
         MainWindow * _App;
+
+        Ui_PiTab _Tab;
+
+        QWidget * _WidgetContent;
 
 
     public:
@@ -51,6 +60,8 @@ class Layout {
 
         };
 
+
+    public slots:
 
         /**
          * Window actions

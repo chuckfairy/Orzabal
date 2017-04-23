@@ -19,6 +19,7 @@ HEADERS  += MainWindow.h
 
 FORMS    += MainWindow.ui \
     UI/About.ui \
+    Pi/PiTab.ui \
     UI/SettingsForm.ui
 
 DISTFILES += \
