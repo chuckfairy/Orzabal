@@ -20,7 +20,8 @@ HEADERS  += MainWindow.h
 FORMS    += MainWindow.ui \
     UI/About.ui \
     Pi/PiTab.ui \
-    UI/SettingsForm.ui
+    UI/SettingsForm.ui \
+    UI/PatchBay.ui
 
 DISTFILES += \
     About.ui.qml \

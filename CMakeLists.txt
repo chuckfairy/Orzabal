@@ -42,8 +42,6 @@ add_subdirectory( src/common/Jack )
 
 add_subdirectory( src/common/LV2 )
 
-add_subdirectory( src/gui )
-
 add_subdirectory( src/qt )
 
 #add_subdirectory( src/include/jalv )

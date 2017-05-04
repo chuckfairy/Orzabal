@@ -5,6 +5,7 @@ project(orzabal-common-audio CXX)
 file( GLOB
     ORZABAL_AUDIO_INCLUDE_FILES
     "*.h"
+    "*.cpp"
 )
 
 
