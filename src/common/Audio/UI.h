@@ -8,15 +8,18 @@
 
 #include "Plugin.h"
 
-#include "UIDriver.h"
-
 
 namespace Audio {
 
+/**
+ * Forwarding
+ */
+
+class UIDriver;
+
 
 /**
- * Class header
- *
+ * Main Class
  */
 
 class UI {
@@ -26,8 +29,6 @@ class UI {
         Plugin * _Plugin;
 
         vector<UIDriver*> _drivers;
-
-        static vector<UIDriver*> DEFAULT_DRIVERS;
 
 
     public:
@@ -57,6 +58,21 @@ class UI {
             _Plugin = p;
 
         };
+
+
+        /**
+         * Audio driver methods
+         */
+
+        void addDriver( UIDriver * );
+
+        void addDrivers( vector<UIDriver*> );
+
+        void startDrivers();
+
+        void stopDrivers();
+
+        void updateDrivers();
 
 };
 

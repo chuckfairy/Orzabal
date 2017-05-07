@@ -39,13 +39,12 @@ file( GLOB ORZABAL_LV2_INCLUDE_FILES
     "Host.cpp"
     "Search.cpp"
     "JackCallbackEvent.cpp"
-    "WindowLayout.cpp"
     "Plugin.cpp"
     "PluginWorker.cpp"
     "PluginState.cpp"
     "PluginPreset.cpp"
     "UI.cpp"
-    "UI/*.cpp"
+    "UI/PresetDropdown.cpp"
 )
 
 

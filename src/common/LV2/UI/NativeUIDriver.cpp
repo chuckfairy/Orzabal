@@ -2,11 +2,12 @@
  *
  */
 #include <LV2/UI.h>
+#include <LV2/UI.h>
 #include "NativeUIDriver.h"
 
-namespace LV2 { namespace UI {
+namespace LV2 { namespace UIs {
 
-NativeUIDriver() {};
+NativeUIDriver::NativeUIDriver() {};
 
 
 /**
@@ -18,10 +19,9 @@ void NativeUIDriver::start() {
 
     // Get a plugin UI
 
-    _lilvUIS = lilv_plugin_get_uis( _lilvPlugin );
+    _lilvUIS = lilv_plugin_get_uis( _UI->getLilvPlugin() );
 
-    //@TODO implement native
-    //setNativeUIData();
+    setNativeUIData();
 
     //Create jack ring buffers @TODO move to plugin grab
 
@@ -37,7 +37,7 @@ void NativeUIDriver::start() {
  * Stop UI / take down
  */
 
-void UI::stop() {
+void NativeUIDriver::stop() {
 
     suil_host_free( _uiSuil );
     sratom_free( _uiSratom );
@@ -120,7 +120,10 @@ void NativeUIDriver::update() {
 
 void NativeUIDriver::setNativeUIData() {
 
-    const LilvNode* native_ui_type = lilv_new_uri( _lilvWorld, _NATIVE_UI_TYPE );
+    const LilvNode* native_ui_type = lilv_new_uri(
+        _UI->getLilvWorld(),
+        _NATIVE_UI_TYPE
+    );
 
     LILV_FOREACH(uis, u, _lilvUIS) {
 
@@ -153,13 +156,13 @@ void NativeUIDriver::setNativeUIData() {
 
                 if (!strcmp(pt, "http://kxstudio.sf.net/ns/lv2ext/external-ui#Widget")) {
 
-                    _EXTERNAL_UI = true;
+                    _HAS_EXTERNAL_UI = true;
                     _lilvUI = ui;
                     _uiType = getExternalKX();
 
                 } else if ( ! strcmp( pt, _LV2_UI_EXTERNAL ) ) {
 
-                    _EXTERNAL_UI = true;
+                    _HAS_EXTERNAL_UI = true;
                     _lilvUI = ui;
                     _uiType = getExternalLV2();
 
@@ -188,7 +191,7 @@ void NativeUIDriver::setNativeUIData() {
 
 };
 
-void NativeUIDriver::createNativeUI() {
+void NativeUIDriver::createUI() {
 
     _uiSuil = suil_host_new( NativeUIDriver::suilUIWrite, NativeUIDriver::suilPortIndex, NULL, NULL);
 
@@ -281,7 +284,7 @@ void NativeUIDriver::createNativeUI() {
 
         } else {
 
-            _EXTERNAL_UI = false;
+            _HAS_EXTERNAL_UI = false;
 
         }
 
@@ -333,6 +336,9 @@ void NativeUIDriver::createNativeUI() {
     lilv_free(bundle_path);
 
     /* Set initial control values on UI */
+
+    Plugin * _Plugin = _UI->getPlugin();
+
     if ( _uiInstance ) {
 
         for (uint32_t i = 0; i < _Plugin->getNumPorts(); ++i) {
@@ -358,6 +364,8 @@ void NativeUIDriver::createNativeUI() {
  */
 
 bool NativeUIDriver::hasResize() {
+
+    LilvWorld * _lilvWorld = _UI->getLilvWorld();
 
     const LilvNode * s = lilv_ui_get_uri( _lilvUI );
     LilvNode * p = lilv_new_uri( _lilvWorld, LV2_CORE__optionalFeature);
@@ -385,7 +393,10 @@ bool NativeUIDriver::hasResize() {
 
 LilvNode * NativeUIDriver::getExternalKX() {
 
-    return lilv_new_uri( _Plugin->getLilvWorld(), "http://kxstudio.sf.net/ns/lv2ext/external-ui#Widget" );
+    return lilv_new_uri(
+        _UI->getPlugin()->getLilvWorld(),
+        "http://kxstudio.sf.net/ns/lv2ext/external-ui#Widget"
+    );
 
 };
 
@@ -397,7 +408,10 @@ LilvNode * NativeUIDriver::getExternalKX() {
 
 LilvNode * NativeUIDriver::getExternalLV2() {
 
-    return lilv_new_uri( _Plugin->getLilvWorld(), "http://lv2plug.in/ns/extensions/ui#external" );
+    return lilv_new_uri(
+        _UI->getPlugin()->getLilvWorld(),
+        "http://lv2plug.in/ns/extensions/ui#external"
+    );
 
 };
 

@@ -255,6 +255,8 @@ class Plugin : public Audio::Plugin {
 
         int _bpm = 120.0f;
 
+        jack_ringbuffer_t * _uiPortEvents;
+
 
         /**
          * Port internal functions
@@ -298,6 +300,16 @@ class Plugin : public Audio::Plugin {
 
         UI * getUI();
 
+        /**
+         * Event data
+         */
+
+        jack_ringbuffer_t * getPortEvents() {
+
+            return _uiPortEvents;
+
+        };
+
 
         /**
          * Plugin object getters
@@ -310,13 +322,6 @@ class Plugin : public Audio::Plugin {
         };
 
         PluginPreset * getPreset();
-
-
-        /**
-         * UI Widget getter
-         */
-
-        QScrollArea * getUIWidget();
 
 
         /**

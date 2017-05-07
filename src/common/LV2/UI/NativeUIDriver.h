@@ -31,13 +31,13 @@
 #include <jack/jack.h>
 #include <jack/ringbuffer.h>
 
-#include <Audio/UI.h>
+#include <Audio/UIDriver.h>
 
+#include <LV2/Plugin.h>
 #include <LV2/include/types.h>
 
 
-namespace LV2 { namespace UI {
-
+namespace LV2 {
 
 /**
  * Forwarding
@@ -45,6 +45,9 @@ namespace LV2 { namespace UI {
  */
 
 class UI;
+
+
+namespace UIs {
 
 
 /**
@@ -56,7 +59,7 @@ class NativeUIDriver : public Audio::UIDriver {
 
     public:
 
-        UI( Plugin * );
+        NativeUIDriver();
 
 
         /**
@@ -95,6 +98,8 @@ class NativeUIDriver : public Audio::UIDriver {
 
 
     protected:
+
+        UI * _UI;
 
         /**
          * Node types grabs
@@ -136,15 +141,10 @@ class NativeUIDriver : public Audio::UIDriver {
 
         const char * _NATIVE_UI_TYPE = "http://lv2plug.in/ns/extensions/ui#Qt5UI";
 
+        void * win;
+
 
     private:
-
-        /**
-         * Widget object
-         */
-
-        PresetDropdown * _PresetDropdown;
-
 
         /**
          *  Lilv types

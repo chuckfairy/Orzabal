@@ -43,6 +43,7 @@ file(
     main.cpp
     ui_MainWindow.h
     widget/*.cpp
+    LV2/*.cpp
     Settings/*.cpp
     Settings/Events/*.cpp
 )

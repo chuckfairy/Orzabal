@@ -4,11 +4,13 @@
 
 #include "WindowLayout.h"
 
-#include "Port.h"
-#include "UI.h"
-#include <lilv/lilv.h>
+#include <LV2/UI.h>
+#include <LV2/Plugin.h>
 
-namespace LV2 {
+#include <lilv/lilv.h>
+#include <LV2/Port.h>
+
+namespace Orza { namespace App { namespace LV2UI {
 
 FlowLayout::FlowLayout(QWidget* parent, int margin, int hSpacing, int vSpacing)
     : QLayout(parent), m_hSpace(hSpacing), m_vSpace(vSpacing)
@@ -152,15 +154,15 @@ int FlowLayout::smartSpacing(QStyle::PixelMetric pm) const {
     }
 }
 
-Control::Control(PortContainer portContainer, QWidget* parent)
+Control::Control(LV2::PortContainer portContainer, QWidget* parent)
     : QGroupBox(parent)
     , dial(new QDial())
-    , plugin(portContainer. ui->getLilvPlugin())
+    , plugin(portContainer. ui->getPlugin()->getLilvPlugin())
     , port(portContainer.port)
       , label(new QLabel())
 {
     const LilvPort* lilvPort = port->lilv_port;
-    LilvWorld* world = portContainer.ui->getLilvWorld();
+    LilvWorld* world = portContainer.ui->getPlugin()->getLilvWorld();
 
     LilvNode* lv2_integer = lilv_new_uri(world, LV2_CORE__integer);
     LilvNode* lv2_toggled = lilv_new_uri(world, LV2_CORE__toggled);
@@ -341,4 +343,4 @@ Control::dialChanged(int dialValue)
     port->control = value;
 }
 
-};
+}; }; };

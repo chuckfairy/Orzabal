@@ -50,6 +50,8 @@ Plugin::Plugin( const LilvPlugin* p, Host * h ) {
 
     setLilvPlugin( p );
 
+    _UI = new UI( this );
+
     _worker = new PluginWorker( this );
     _stateWorker = new PluginWorker( this );
 
@@ -501,7 +503,8 @@ void Plugin::start() {
 
     activatePorts();
 
-    _UI = new UI( this );
+    _uiPortEvents = jack_ringbuffer_create( buffer_size );
+	jack_ringbuffer_mlock( _uiPortEvents );
 
     _UI->start();
 
@@ -573,6 +576,8 @@ void Plugin::stop() {
     zix_sem_destroy( &symap_lock );
 
     zix_sem_destroy( &exit_sem );
+
+    _UI->stop();
 
 };
 
@@ -781,18 +786,6 @@ PluginPreset * Plugin::getPreset() {
 
 
 /**
- * UI
- * @TODO Move this
- */
-
-QScrollArea * Plugin::getUIWidget() {
-
-    return _UI->getWidget();
-
-};
-
-
-/**
  * Get LV2 Handle from instalce
  */
 
@@ -906,56 +899,49 @@ void Plugin::updateJack( jack_nframes_t nframes ) {
     _request_update = false;
 
 
-    /* Read and apply control change events from UI */
+    //@TODO move
 
-    if( _UI || true ) {
+    ControlChange ev;
 
-        ControlChange ev;
+    const size_t readSpace = jack_ringbuffer_read_space( _uiPortEvents );
 
-        jack_ringbuffer_t * ui_events = _UI->getPortEvents();
+    for( size_t i = 0; i < readSpace; i += sizeof(ev) + ev.size ) {
 
-        const size_t readSpace = jack_ringbuffer_read_space( ui_events );
+        jack_ringbuffer_read( _uiPortEvents, (char*)&ev, sizeof(ev) );
+        char body[ev.size];
 
-        for( size_t i = 0; i < readSpace; i += sizeof(ev) + ev.size ) {
+        if (jack_ringbuffer_read( _uiPortEvents, body, ev.size ) != ev.size ) {
 
-            jack_ringbuffer_read(ui_events, (char*)&ev, sizeof(ev));
-            char body[ev.size];
+            fprintf(stderr, "error: Error reading from UI ring buffer\n");
+            break;
 
-            if (jack_ringbuffer_read(ui_events, body, ev.size) != ev.size) {
-                fprintf(stderr, "error: Error reading from UI ring buffer\n");
-                break;
-            }
+        }
 
-            //assert(ev.index < jalv->num_ports);
+        Port * port = (Port*) _ports[ev.index];
 
-            Port * port = (Port*) _ports[ev.index];
+        if (ev.protocol == 0) {
 
-            if (ev.protocol == 0) {
+            assert(ev.size == sizeof(float));
+            port->control = *(float*)body;
 
-                assert(ev.size == sizeof(float));
-                port->control = *(float*)body;
+        } else if (ev.protocol == atom_eventTransfer) {
 
-            } else if (ev.protocol == atom_eventTransfer) {
-
-                LV2_Evbuf_Iterator e = lv2_evbuf_end(port->evbuf);
-                const LV2_Atom* const atom = (const LV2_Atom*)body;
-                lv2_evbuf_write(
+            LV2_Evbuf_Iterator e = lv2_evbuf_end(port->evbuf);
+            const LV2_Atom* const atom = (const LV2_Atom*)body;
+            lv2_evbuf_write(
                     &e,
                     nframes,
                     0,
                     atom->type,
                     atom->size,
                     (const uint8_t*) LV2_ATOM_BODY_CONST(atom)
-                );
+                    );
 
-            } else {
+        } else {
 
-                throw std::runtime_error(
+            throw std::runtime_error(
                     "error: Unknown control change protocol %d\n"
-                    //ev.protocol);
-                );
-
-            }
+                    );
 
         }
 
