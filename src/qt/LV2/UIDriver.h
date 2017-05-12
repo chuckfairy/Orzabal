@@ -78,14 +78,6 @@ class UIDriver : public Audio::UIDriver {
 
         bool portGroupLessThan( const LV2::PortContainer &, const LV2::PortContainer & );
 
-
-        QScrollArea * getWidget() {
-
-            return _MainWidget;
-
-        };
-
-
         QWidget* getControlWidget() {
 
             return _controlWidget;
@@ -114,10 +106,6 @@ class UIDriver : public Audio::UIDriver {
         /**
          *  Lilv types
          */
-
-        const LilvPlugin * _lilvPlugin;
-
-        LilvWorld * _lilvWorld;
 
         LilvUIs * _lilvUIS;
 

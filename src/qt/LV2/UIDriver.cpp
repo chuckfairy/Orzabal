@@ -80,17 +80,7 @@ void UIDriver::update() {
 
 void UIDriver::createUI() {
 
-	_MainWidget = new QScrollArea();
-
-    //_controlWidget = createControlWidget();
-
-    //((QScrollArea*)_MainWidget)->setWidget(controlWidget);
-
-    ((QScrollArea*)_MainWidget)->setWidgetResizable(true);
-
-    _MainWidget->setMinimumWidth(800);
-
-    _MainWidget->setMinimumHeight(600);
+    _controlWidget = createControlWidget();
 
 };
 
@@ -137,7 +127,6 @@ QWidget * UIDriver::createControlWidget() {
 
     QHBoxLayout * dropdownLayout = new QHBoxLayout;
     dropdownLayout->addWidget( _PresetDropdown );
-    //dropdownLayout->addWidget( new QPushButton );
 
     //Add items
     fullLayout->addItem( dropdownLayout );
@@ -149,12 +138,12 @@ QWidget * UIDriver::createControlWidget() {
     LilvNode * lastGroup = NULL;
     QHBoxLayout * groupLayout;
 
+    const LilvPlugin * _lilvPlugin = _Plugin->getLilvPlugin();
+    LilvWorld * _lilvWorld = _Plugin->getLilvWorld();
+
     LilvNode * pg_group = lilv_new_uri( _lilvWorld, LV2_PORT_GROUPS__group);
     LilvNode * lv2_name = lilv_new_uri( _lilvWorld, LV2_CORE__name );
     LilvNode* pprop_notOnGUI = lilv_new_uri( _lilvWorld, LV2_PORT_PROPS__notOnGUI );
-
-    const LilvPlugin * _lilvPlugin = _Plugin->getLilvPlugin();
-    LilvWorld * _lilvWorld = _Plugin->getLilvWorld();
 
     for (int i = 0; i < portContainers.count(); ++i) {
 

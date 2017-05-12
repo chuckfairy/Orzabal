@@ -58,14 +58,14 @@ void SimpleLayout::handleChange( void * data ) {
 
     server->getPatchbay()->addPlugin( p );
 
-    //_App->getUI()
-        //->scrollArea
-        //->setWidget(
-            //p->getUI()->getControlWidget()
-        //);
-
     PLUGIN_SET = true;
 
     p->run();
+
+    _App->getUI()
+        ->scrollArea
+        ->setWidget(
+            driver->getControlWidget()
+        );
 
 };

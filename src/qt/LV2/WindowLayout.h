@@ -112,7 +112,7 @@ class Control : public QGroupBox {
         float   getValue();
 
         const LilvPlugin* plugin;
-        struct LV2::Port*      port;
+        struct LV2::Port* port;
 
         QLabel* label;
         QString name;

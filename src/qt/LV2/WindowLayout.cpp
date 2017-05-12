@@ -157,7 +157,7 @@ int FlowLayout::smartSpacing(QStyle::PixelMetric pm) const {
 Control::Control(LV2::PortContainer portContainer, QWidget* parent)
     : QGroupBox(parent)
     , dial(new QDial())
-    , plugin(portContainer. ui->getPlugin()->getLilvPlugin())
+    , plugin(portContainer.ui->getPlugin()->getLilvPlugin())
     , port(portContainer.port)
       , label(new QLabel())
 {
