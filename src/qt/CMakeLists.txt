@@ -12,7 +12,11 @@ find_package(Qt5Core REQUIRED)
 find_package(Qt5Qml REQUIRED)
 
 
-file(GLOB orzabal.qt_UIS MainWindow.ui Pi/PiTab.ui)
+file(GLOB orzabal.qt_UIS
+    MainWindow.ui
+    Pi/PiTab.ui
+    widget/PatchBay.ui
+)
 
 file(GLOB common-ladspa ../common/LADSPA/*.cpp)
 

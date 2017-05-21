@@ -9,10 +9,12 @@
 #include "SimpleChangeEvent.h"
 #include "SimpleLayout.h"
 
+#include "Patchbay.h"
+
 #include <LV2/UIDriver.h>
 
 using Orza::App::LV2UI::UIDriver;
-
+using Orza::App::Widget::Patchbay;
 
 SimpleLayout::SimpleLayout( MainWindow * app ) {
 
@@ -25,6 +27,7 @@ SimpleLayout::SimpleLayout( MainWindow * app ) {
     _App->getUI()
         ->horizontalLayout_4->insertWidget( 0, _Dropdown );
 
+    Patchbay * p = new Patchbay( _App );
 
 };
 

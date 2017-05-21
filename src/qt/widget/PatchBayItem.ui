@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Patchbay</class>
- <widget class="QDialog" name="Patchbay">
+ <class>PatchBay</class>
+ <widget class="QWidget" name="content">
   <property name="geometry">
    <rect>
     <x>0</x>
