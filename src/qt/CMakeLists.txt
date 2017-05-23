@@ -16,6 +16,7 @@ file(GLOB orzabal.qt_UIS
     MainWindow.ui
     Pi/PiTab.ui
     widget/PatchBay.ui
+    widget/PatchBayItem.ui
 )
 
 file(GLOB common-ladspa ../common/LADSPA/*.cpp)

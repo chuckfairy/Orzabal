@@ -6,6 +6,8 @@
 #include <QtCore>
 #include <QWidget>
 
+#include <ui_PatchBayItem.h>
+
 
 /**
  * Forwarding
@@ -32,19 +34,24 @@ class PatchbayPlugin : public QWidget {
 
     public:
 
-        PatchbayPlugin( Plugin * );
+        PatchbayPlugin( LV2::Plugin * );
+        PatchbayPlugin();
 
 
     public slots:
 
-        void handleAddClick( int index );
+        void handleSelectChange( int index );
 
-        void handleRemoveClick( int index );
+        void handleRemoveClick();
 
 
     private:
 
         LV2::Plugin * _Plugin;
+
+        QWidget * _WidgetContent;
+
+        Ui_PatchBayItem _UI;
 
 };
 

@@ -44,9 +44,9 @@ class Patchbay : public QWidget {
 
     public slots:
 
-        void handleAddClick( int index );
+        void handleAddClick();
 
-        void handleRemoveClick( int index );
+        void handleRemoveClick( bool );
 
     private:
 

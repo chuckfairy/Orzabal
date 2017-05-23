@@ -23,7 +23,7 @@ AbstractPluginDropdown::AbstractPluginDropdown( Jack::Server * s ) {
 
     connect( this, SIGNAL( currentIndexChanged( int ) ), this, SLOT( handleSelectionChanged( int ) ) );
 
-    addInstrument( &_placeholder );
+    addPlugin( &_placeholder );
 
     LV2::Host * host = _Server->getPatchbay();
 
@@ -40,7 +40,7 @@ AbstractPluginDropdown::AbstractPluginDropdown( Jack::Server * s ) {
             p->getURI()
         };
 
-        addInstrument( &opt );
+        addPlugin( &opt );
 
     }
 
@@ -71,7 +71,7 @@ const char * AbstractPluginDropdown::CHANGE_EVENT = "CHANGE";
  *
  */
 
-bool AbstractPluginDropdown::addInstrument( InstrumentOption *instrument, const int order ) {
+bool AbstractPluginDropdown::addPlugin( InstrumentOption *instrument, const int order ) {
 
     addItem( instrument->name );
 

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>PatchBay</class>
+ <class>PatchBayItem</class>
  <widget class="QWidget" name="content">
   <property name="geometry">
    <rect>

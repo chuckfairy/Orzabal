@@ -89,9 +89,9 @@ class AbstractPluginDropdown :
          * @param InstrumentOption instrument To be added
          *
          */
-        bool addInstrument( InstrumentOption *instrument ) {
+        bool addPlugin( InstrumentOption *instrument ) {
 
-            return addInstrument( instrument, -1 );
+            return addPlugin( instrument, -1 );
 
         };
 

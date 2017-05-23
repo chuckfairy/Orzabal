@@ -21,15 +21,22 @@ Patchbay::Patchbay( MainWindow * app ) :
 
     int index = app->getUI()->tabWidget->addTab( _WidgetContent, "Effects" );
 
+    connect(
+        _UI.pushButton,
+        SIGNAL( clicked() ),
+        this,
+        SLOT( handleAddClick() )
+   );
+
 };
 
-void Patchbay::handleAddClick( int index ) {
+void Patchbay::handleAddClick() {
+
+    std::cout << "ADD CLICK\n";
 
 };
 
-void Patchbay::handleRemoveClick( int index ) {
-
-    std::cout << index;
+void Patchbay::handleRemoveClick( bool checked ) {
 
 };
 
