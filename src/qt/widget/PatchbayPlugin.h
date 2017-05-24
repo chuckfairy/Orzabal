@@ -38,6 +38,17 @@ class PatchbayPlugin : public QWidget {
         PatchbayPlugin();
 
 
+        /**
+         * Getters
+         */
+
+        QWidget * getWidget() {
+
+            return _WidgetContent;
+
+        };
+
+
     public slots:
 
         void handleSelectChange( int index );

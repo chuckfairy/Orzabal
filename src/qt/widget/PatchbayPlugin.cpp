@@ -11,6 +11,8 @@ PatchbayPlugin::PatchbayPlugin() :
     _WidgetContent( new QWidget() )
 {
 
+    _UI.setupUi( _WidgetContent );
+
 };
 
 void PatchbayPlugin::handleSelectChange( int index ) {
