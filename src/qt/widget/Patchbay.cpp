@@ -21,7 +21,7 @@ Patchbay::Patchbay( MainWindow * app ) :
 
     _UI.horizontalLayout->insertWidget( 0, new InstrumentDropdown( _App->getServer() ) );
 
-    int index = app->getUI()->tabWidget->addTab( _WidgetContent, "Effects" );
+    app->getUI()->tabWidget->insertTab( 1, _WidgetContent, "Effects" );
 
     _Layout = new QGridLayout;
 
