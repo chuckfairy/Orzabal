@@ -10,6 +10,9 @@
 
 #include <ui_PatchBay.h>
 
+#include "EffectDropdown.h"
+
+
 using std::vector;
 
 
@@ -60,6 +63,8 @@ class Patchbay : public QWidget {
         MainWindow * _App;
 
         QWidget * _WidgetContent;
+
+        EffectDropdown * _Dropdown;
 
         Ui_PatchBay _UI;
 

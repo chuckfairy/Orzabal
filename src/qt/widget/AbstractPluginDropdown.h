@@ -23,6 +23,9 @@
 using std::vector;
 
 
+namespace Orza { namespace App { namespace Widget {
+
+
 /**
  * Instrument dropdown GUI
  *
@@ -35,13 +38,47 @@ class AbstractPluginDropdown :
 
     Q_OBJECT
 
-    private:
+
+    public:
+
+        AbstractPluginDropdown( QWidget * parent );
+        AbstractPluginDropdown( Jack::Server * );
+        ~AbstractPluginDropdown() {};
+
+
+        /**
+         * Add instrument append order
+         *
+         * @param InstrumentOption instrument To be added
+         *
+         */
+
+        bool addPlugin( InstrumentOption *instrument ) {
+
+            return addPlugin( instrument, -1 );
+
+        };
+
+
+        /**
+         * Add instrument
+         * will check for dups
+         *
+         * @param InstrumentOption instrument To be added
+         * @param int order Position to be added
+         *
+         */
+
+        bool addPlugin( InstrumentOption *instrument, const int order );
+
+
+    protected:
 
         /**
          * Instrument struct list
          *
          */
-        vector<const InstrumentOption*> Instruments;
+        vector<const InstrumentOption*> _plugins;
 
 
         /**
@@ -59,69 +96,6 @@ class AbstractPluginDropdown :
         InstrumentOption _placeholder { "-- Select Instrument --" };
 
 
-    public:
-
-        AbstractPluginDropdown( QWidget * parent );
-        AbstractPluginDropdown( Jack::Server * );
-        ~AbstractPluginDropdown() {};
-
-        /**
-         * Events
-         */
-
-        static const char * CHANGE_EVENT;
-
-
-        /**
-         * Main ui
-         */
-
-        void setupUI();
-
-        void update();
-
-        void checkInstruments();
-
-
-        /**
-         * Add instrument append order
-         *
-         * @param InstrumentOption instrument To be added
-         *
-         */
-        bool addPlugin( InstrumentOption *instrument ) {
-
-            return addPlugin( instrument, -1 );
-
-        };
-
-
-        /**
-         * Add instrument
-         * will check for dups
-         *
-         * @param InstrumentOption instrument To be added
-         * @param int order Position to be added
-         *
-         */
-        bool addPlugin( InstrumentOption *instrument, const int order );
-
-
-        /**
-         * has instrument
-         *
-         */
-        bool hasInstrument( InstrumentOption instrument );
-
-
-    public slots:
-
-
-        /**
-         * Change event
-         *
-         */
-
-        void handleSelectionChanged( int index );
-
 };
+
+} } };

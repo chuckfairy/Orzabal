@@ -6,20 +6,19 @@
 #include "PatchbayPlugin.h"
 #include "Patchbay.h"
 
-#include "InstrumentDropdown.h"
-
 
 namespace Orza { namespace App { namespace Widget {
 
 Patchbay::Patchbay( MainWindow * app ) :
     _App( app ),
     _WidgetContent( new QWidget() ),
-    _LayoutWidget( new QWidget() )
+    _LayoutWidget( new QWidget() ),
+    _Dropdown( new EffectDropdown( app->getServer() ) )
 {
 
     _UI.setupUi( _WidgetContent );
 
-    _UI.horizontalLayout->insertWidget( 0, new InstrumentDropdown( _App->getServer() ) );
+    _UI.horizontalLayout->insertWidget( 0, _Dropdown );
 
     app->getUI()->tabWidget->insertTab( 1, _WidgetContent, "Effects" );
 
@@ -46,6 +45,16 @@ Patchbay::Patchbay( MainWindow * app ) :
 void Patchbay::handleAddClick() {
 
     std::cout << "ADD CLICK\n";
+
+    int index = _Dropdown->currentIndex();
+
+    if ( index == 0 ) { return; }
+
+
+    //Create patchbay plugin ui
+
+    LV2::Host * h = _App->getServer()->getPatchbay();
+    Audio::Plugin * p = h->getPluginByIndex( index - 1 );
 
     PatchbayPlugin * plugin = new PatchbayPlugin();
 
