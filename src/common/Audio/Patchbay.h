@@ -19,6 +19,8 @@ class Patchbay : public Host {
 
         vector<Plugin*> _ActivePlugins;
 
+        vector<Plugin*> _ActiveEffects;
+
 };
 
 };

@@ -6,6 +6,8 @@
 #include <QtCore>
 #include <QWidget>
 
+#include <Audio/Plugin.h>
+
 #include <ui_PatchBayItem.h>
 
 
@@ -34,8 +36,8 @@ class PatchbayPlugin : public QWidget {
 
     public:
 
-        PatchbayPlugin( LV2::Plugin * );
-        PatchbayPlugin();
+        explicit PatchbayPlugin( Audio::Plugin * );
+        explicit PatchbayPlugin();
 
 
         /**
@@ -58,7 +60,7 @@ class PatchbayPlugin : public QWidget {
 
     private:
 
-        LV2::Plugin * _Plugin;
+        Audio::Plugin * _Plugin;
 
         QWidget * _WidgetContent;
 

@@ -45,7 +45,8 @@ foreach(testSrc ${TEST_SRCS})
     #link to Boost libraries AND your targets and dependencies
     target_link_libraries(${testName} ${Boost_LIBRARIES}
         orzabal-common-lv2 orzabal-common
-        jack 
+        jack
+        orzabal-common-audio
         orzabal-common-jack
         orzabal-common-lv2
     )

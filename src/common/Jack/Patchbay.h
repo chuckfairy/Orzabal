@@ -27,14 +27,32 @@ class Server;
 
 class Patchbay : public Audio::Patchbay, public ServerStandalone {
 
-    protected:
-
-        Server * _Server;
-
-
     public:
 
         explicit Patchbay( jack_client_t * );
+
+
+        /**
+         * Add plugin as instrument
+         * probably rename to addInstrument
+         */
+
+        void addPlugin( Audio::Plugin * );
+
+        void removePlugin( uint32_t );
+
+        void clearPlugins();
+
+
+        /**
+         * Audio effects related
+         */
+
+        void addAudioEffect( Audio::Plugin * );
+
+        void removeAudioEffects( uint32_t );
+
+        void clearAudioEffects();
 
 
         /**
@@ -76,6 +94,25 @@ class Patchbay : public Audio::Patchbay, public ServerStandalone {
         void connectPluginAudioPorts( Audio::Plugin * );
 
         void connectPluginMidiPorts( Audio::Plugin * );
+
+
+        /**
+         * Effect connectors
+         */
+
+        void connectAudioEffectPorts( Audio::Plugin * );
+
+
+    protected:
+
+        Server * _Server;
+
+
+        /**
+         * Effect connectors
+         */
+
+        void connectAudioEffectLastPort( Audio::Plugin * );
 
 };
 

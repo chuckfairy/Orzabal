@@ -35,6 +35,58 @@ void Patchbay::setServer( Server * s ) {
 
 
 /**
+ * Plugin starting
+ */
+
+void Patchbay::addPlugin( Audio::Plugin * p ) {
+
+    _ActivePlugins.push_back( p );
+
+    p->start();
+
+    connectPluginPorts( p );
+
+    p->run();
+
+};
+
+
+/**
+ * Remove active plugin
+ */
+
+void Patchbay::removePlugin( uint32_t index ) {
+
+    if( ! _ActivePlugins[ index ] ) { return; }
+
+    Audio::Plugin * p = _ActivePlugins[ index ];
+
+    _ActivePlugins.erase( _ActivePlugins.begin() + index );
+
+    p->stop();
+
+};
+
+
+/**
+ * Clear all plugins
+ */
+
+void Patchbay::clearPlugins() {
+
+    if( _ActivePlugins.empty() ) { return; }
+
+    while( ! _ActivePlugins.empty() ) {
+
+        removePlugin( 0 );
+
+    }
+
+}
+
+
+
+/**
  * Plugin port connector to server audio
  */
 
@@ -75,11 +127,9 @@ void Patchbay::connectPluginAudioPorts( Audio::Plugin * p ) {
             (*ports)[ 1 ]
         );
 
-        const char * leftName = audio->getPortFullName( portLeft->name );
-
         audio->connectInputTo(
             jack_port_name( portLeft->jack_port ),
-            audio->getPortFullName( portRight->name )
+            jack_port_name( portRight->jack_port )
         );
 
     } else {
@@ -89,7 +139,7 @@ void Patchbay::connectPluginAudioPorts( Audio::Plugin * p ) {
         );
 
         audio->connectInputTo(
-            audio->getPortFullName( portMono->name )
+            jack_port_name( portMono->jack_port )
         );
 
     }
@@ -129,5 +179,154 @@ void Patchbay::connectPluginMidiPorts( Audio::Plugin * p ) {
     }
 
 };
+
+
+/**
+ * Audio effects connection
+ */
+
+void Patchbay::connectAudioEffectPorts( Audio::Plugin * plugin ) {
+
+    Jack::Host * audio = _Server->getAudio();
+
+
+    //Connect last effect chain
+
+    if( ! _ActiveEffects.empty() ) {
+
+        connectAudioEffectLastPort( plugin );
+
+    }
+
+
+    //New plugins inputs
+
+    vector<long> * inputs = plugin->getInputPorts();
+
+    if( inputs->size() > 1 ) {
+
+        Jack::Port * portLeft = (Jack::Port*) plugin->getPort(
+            (*inputs)[ 0 ]
+        );
+
+        Jack::Port * portRight = (Jack::Port*) plugin->getPort(
+            (*inputs)[ 1 ]
+        );
+
+    } else {
+
+        Jack::Port * portMono = (Jack::Port*) plugin->getPort(
+            (*inputs)[ 0 ]
+        );
+
+    }
+
+    _ActiveEffects.push_back( plugin );
+
+};
+
+
+/**
+ * Connect last audio effect and connect to new plugin
+ * Will disconnect from last
+ */
+
+void Patchbay::connectAudioEffectLastPort( Audio::Plugin * plugin ) {
+
+    Jack::Host * audio = _Server->getAudio();
+
+    Audio::Plugin * lastEffect = _ActiveEffects.back();
+
+
+    //Disconnect last effect
+
+    vector<long> * outputs = lastEffect->getOutputPorts();
+
+    vector<long>::iterator it;
+
+    for( it = outputs->begin(); it != outputs->end(); ++ it )  {
+
+        Port * port = (Port*) plugin->getPort( (*it) );
+
+        audio->disconnectJackPort( port->jack_port );
+
+    }
+
+
+    //Get ports to connect
+
+    Jack::Port * effectOutputs[2];
+    Jack::Port * effectInputs[2];
+
+
+    //Last plugins outputs
+
+    if( outputs->size() > 1 ) {
+
+        Jack::Port * portLeft = (Jack::Port*) lastEffect->getPort(
+            (*outputs)[ 0 ]
+        );
+
+        Jack::Port * portRight = (Jack::Port*) lastEffect->getPort(
+            (*outputs)[ 1 ]
+        );
+
+        effectOutputs[0] =  portLeft;
+        effectOutputs[1] = portRight;
+
+    } else {
+
+        Jack::Port * portMono = (Jack::Port*) lastEffect->getPort(
+            (*outputs)[ 0 ]
+        );
+
+        effectOutputs[0] =  portMono;
+        effectOutputs[1] =  portMono;
+
+    }
+
+
+    //New plugins inputs
+
+    vector<long> * inputs = plugin->getInputPorts();
+
+    if( inputs->size() > 1 ) {
+
+        Jack::Port * portLeft = (Jack::Port*) plugin->getPort(
+            (*inputs)[ 0 ]
+        );
+
+        Jack::Port * portRight = (Jack::Port*) plugin->getPort(
+            (*inputs)[ 1 ]
+        );
+
+        effectInputs[0] =  portLeft;
+        effectInputs[1] = portRight;
+
+    } else {
+
+        Jack::Port * portMono = (Jack::Port*) plugin->getPort(
+            (*inputs)[ 0 ]
+        );
+
+        effectInputs[0] =  portMono;
+        effectInputs[1] =  portMono;
+
+    }
+
+
+    //Connect via audio api
+
+    audio->connectJackPort(
+        jack_port_name( effectOutputs[ 0 ]->jack_port ),
+        jack_port_name( effectInputs[ 0 ]->jack_port )
+    );
+
+    audio->connectJackPort(
+        jack_port_name( effectOutputs[ 1 ]->jack_port ),
+        jack_port_name( effectInputs[ 1 ]->jack_port )
+    );
+
+}
 
 };

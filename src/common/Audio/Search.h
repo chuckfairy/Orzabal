@@ -66,6 +66,28 @@ class Search {
 
         };
 
+        vector<Plugin*> findAudioEffects() {
+
+            vector<Plugin*> plugins = findAll();
+
+            vector<Plugin*> effects;
+
+            vector<Plugin*>::iterator it;
+
+            for( it = plugins.begin(); it != plugins.end(); ++ it ) {
+
+                if( (*it)->hasInputs() && (*it)->hasOutputs() ) {
+
+                    effects.push_back( (*it) );
+
+                }
+
+            }
+
+            return effects;
+
+        };
+
 };
 
 };

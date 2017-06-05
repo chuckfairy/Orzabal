@@ -72,13 +72,28 @@ class AbstractPluginDropdown :
         bool addPlugin( InstrumentOption *instrument, const int order );
 
 
+        /**
+         * Get current dropdown
+         * @TODO This will assume there is a index 0 of a placeholder
+         */
+
+        Audio::Plugin * getCurrentPlugin() {
+
+            int index = currentIndex() - 1;
+
+            return _plugins[ index ];
+
+        };
+
+
     protected:
 
         /**
          * Instrument struct list
          *
          */
-        vector<const InstrumentOption*> _plugins;
+        vector<Audio::Plugin*> _plugins;
+        vector<const InstrumentOption*> _dropdownOptions;
 
 
         /**

@@ -38,11 +38,9 @@ Host::Host( jack_client_t * j ) :
 
 
 Host::Host( Server * s ) :
-    ServerStandalone( s->getJackClient() )
+    ServerStandalone( s->getJackClient() ),
+    _Server( s )
 {
-
-    _Server = s;
-
 };
 
 
@@ -102,6 +100,7 @@ void Host::createPorts() {
 };
 
 
+
 /**
  * Interal port checker
  */
@@ -117,6 +116,7 @@ bool Host::isInternalPort( const char * name ) {
 
 };
 
+
 /**
  * Host back connection to private client
  *
@@ -128,6 +128,17 @@ int Host::connectJackPort( const char * source, const char * destination ) {
 
 };
 
+
+/**
+ * Host back connection to private client
+ *
+ */
+
+int Host::disconnectJackPort( jack_port_t * port ) {
+
+    return jack_port_disconnect( _jackClient, port );
+
+};
 
 /**
  * Connection to mono
@@ -199,14 +210,12 @@ bool Host::connectOutputTo( const char * inLeft, const char * inRight ) {
 
 void Host::disconnectInputs() {
 
-    jack_port_disconnect( _jackClient, _inputLeft );
-    jack_port_disconnect( _jackClient, _inputRight );
+    disconnectJackPort( _inputLeft );
+    disconnectJackPort( _inputRight );
 
 };
 
 void Host::disconnectOutputs() {
-
-    //std::cout << _lastOutputLeft->c_str() << _lastOutputRight->c_str() << " DICONNECTION \n";
 
     jack_disconnect(
         _jackClient,

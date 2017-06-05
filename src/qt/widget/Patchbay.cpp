@@ -54,9 +54,9 @@ void Patchbay::handleAddClick() {
     //Create patchbay plugin ui
 
     LV2::Host * h = _App->getServer()->getPatchbay();
-    Audio::Plugin * p = h->getPluginByIndex( index - 1 );
+    Audio::Plugin * p = _Dropdown->getCurrentPlugin();
 
-    PatchbayPlugin * plugin = new PatchbayPlugin();
+    PatchbayPlugin * plugin = new PatchbayPlugin( p );
 
     _plugins.push_back( plugin );
 

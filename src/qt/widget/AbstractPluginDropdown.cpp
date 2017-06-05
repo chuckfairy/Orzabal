@@ -24,6 +24,8 @@ AbstractPluginDropdown::AbstractPluginDropdown( Jack::Server * s ) :
     _Server( s )
 {
 
+    addPlugin( &_placeholder );
+
 };
 
 
@@ -47,7 +49,7 @@ bool AbstractPluginDropdown::addPlugin( InstrumentOption *instrument, const int 
 
     addItem( instrument->name );
 
-    _plugins.push_back( instrument );
+    _dropdownOptions.push_back( instrument );
 
     return true;
 

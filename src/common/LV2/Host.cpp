@@ -52,20 +52,8 @@ Host::Host( jack_client_t * c ) : Jack::Patchbay( c ) {
 
 
 /**
- * Plugin starting
+ * Add plugin impl with index
  */
-
-void Host::addPlugin( Audio::Plugin * p ) {
-
-    _ActivePlugins.push_back( p );
-
-    p->start();
-
-    connectPluginPorts( p );
-
-    ((LV2::Plugin*)p)->run();
-
-};
 
 void Host::addPluginByIndex( uint32_t i ) {
 
@@ -77,40 +65,6 @@ void Host::addPluginByIndex( uint32_t i ) {
     addPlugin( plugins[ i ] );
 
 };
-
-
-/**
- * Remove active plugin
- */
-
-void Host::removePlugin( uint32_t index ) {
-
-    if( ! _ActivePlugins[ index ] ) { return; }
-
-    Plugin * p = (Plugin*) _ActivePlugins[ index ];
-
-    _ActivePlugins.erase( _ActivePlugins.begin() + index );
-
-    p->stop();
-
-};
-
-
-/**
- * Clear all plugins
- */
-
-void Host::clearPlugins() {
-
-    if( _ActivePlugins.empty() ) { return; }
-
-    while( ! _ActivePlugins.empty() ) {
-
-        removePlugin( 0 );
-
-    }
-
-}
 
 
 /**

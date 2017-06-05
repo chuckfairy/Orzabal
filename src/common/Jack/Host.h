@@ -183,7 +183,9 @@ class Host :
          *
          */
 
-        int connectJackPort( const char *, const char * );
+        int connectJackPort( const char * source, const char * destination );
+
+        int disconnectJackPort( jack_port_t * );
 
 
         /**

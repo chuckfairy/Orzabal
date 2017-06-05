@@ -45,13 +45,6 @@ class Plugin;
 
 class Host : public Jack::Patchbay {
 
-    private:
-
-        LilvWorld * _lilvWorld;
-
-        JackCallbackEvent * _Callback;
-
-
     public:
 
         Host( Jack::Server * s );
@@ -69,17 +62,12 @@ class Host : public Jack::Patchbay {
 
         };
 
+
         /**
          * Plugin starting
          */
 
-        void addPlugin( Audio::Plugin * p );
-
         void addPluginByIndex( uint32_t );
-
-        void removePlugin( uint32_t );
-
-        void clearPlugins();
 
 
         /**
@@ -136,6 +124,13 @@ class Host : public Jack::Patchbay {
          */
 
         void setServerCallbacks();
+
+
+    private:
+
+        LilvWorld * _lilvWorld;
+
+        JackCallbackEvent * _Callback;
 
 };
 
