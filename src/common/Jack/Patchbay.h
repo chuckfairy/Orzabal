@@ -1,5 +1,5 @@
 /**
- * Jack host base
+ * Patchbay highest level connection audio to effects and plugins
  *
  */
 #pragma once
