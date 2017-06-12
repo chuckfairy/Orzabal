@@ -123,6 +123,17 @@ class StereoHostInterface : public ServerStandalone {
 
         vector<jack_port_t*> _inputPorts;
 
+        void redirectInput( jack_nframes_t );
+
+
+    private:
+
+        /**
+         * Main port constructor
+         */
+
+        void createPorts();
+
 };
 
 };

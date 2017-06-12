@@ -9,7 +9,7 @@
 #include <Audio/Patchbay.h>
 
 #include "Host.h"
-#include "ServerStandalone.h"
+#include "StereoHostInterface.h"
 
 
 namespace Jack {
@@ -26,9 +26,11 @@ class Server;
  * Construct
  */
 
-class PatchbayEffects : public Audio::Patchbay, public ServerStandalone {
+class PatchbayEffects : public Audio::Patchbay, public StereoHostInterface {
 
     public:
+
+        explicit PatchbayEffects( Server * );
 
         explicit PatchbayEffects( jack_client_t * );
 
@@ -55,17 +57,20 @@ class PatchbayEffects : public Audio::Patchbay, public ServerStandalone {
          * Connect via last port in chain
          */
 
-        void connectAudioEffectLastPort( Audio::Plugin * );
+        void connectEffectLastPort( Audio::Plugin * );
 
 
         /**
          * Main jack update
          */
 
-        void updateJack( jack_nfames_t );
+        void updateJack( jack_nframes_t );
 
 
-    protected:
+    private:
+
+        Server * _Server;
+
 
 };
 

@@ -33,33 +33,6 @@ class UI;
 
 class Plugin {
 
-    protected:
-
-        bool ACTIVE = false;
-
-        char TYPE[10];
-
-        uint32_t _portsNum;
-
-        map<long, Port*> _ports;
-
-        vector<long> _audioPorts;
-
-        vector<long> _inputs;
-
-        vector<long> _outputs;
-
-        vector<long> _midiPorts;
-
-        vector<long> _controlPorts;
-
-        char name[255];
-
-        int long _numPorts;
-
-        UI * _UI;
-
-
     public:
 
         Plugin() {};
@@ -220,6 +193,53 @@ class Plugin {
 
 
         /**
+         * Stereo port getters
+         * Will force mono to two places
+         * @TODO create errors
+         */
+
+        vector<long> getInputPortsStereo() {
+
+            vector<long> inputs;
+
+            if( _inputs.size() > 1 ) {
+
+                inputs.push_back( _inputs[ 0 ] );
+                inputs.push_back( _inputs[ 1 ] );
+
+            } else {
+
+                inputs.push_back( _inputs[ 0 ] );
+                inputs.push_back( _inputs[ 0 ] );
+
+            }
+
+            return inputs;
+
+        };
+
+        vector<long> getOutputPortsStereo() {
+
+            vector<long> outputs;
+
+            if( _outputs.size() > 1 ) {
+
+                outputs.push_back( _outputs[ 0 ] );
+                outputs.push_back( _outputs[ 1 ] );
+
+            } else {
+
+                outputs.push_back( _outputs[ 0 ] );
+                outputs.push_back( _outputs[ 0 ] );
+
+            }
+
+            return outputs;
+
+        };
+
+
+        /**
          * Create a port
          *
          */
@@ -244,6 +264,33 @@ class Plugin {
         virtual void pause() {};
 
         virtual void stop() {};
+
+
+    protected:
+
+        bool ACTIVE = false;
+
+        char TYPE[10];
+
+        uint32_t _portsNum;
+
+        map<long, Port*> _ports;
+
+        vector<long> _audioPorts;
+
+        vector<long> _inputs;
+
+        vector<long> _outputs;
+
+        vector<long> _midiPorts;
+
+        vector<long> _controlPorts;
+
+        char name[255];
+
+        int long _numPorts;
+
+        UI * _UI;
 
 };
 
