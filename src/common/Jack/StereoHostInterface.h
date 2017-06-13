@@ -70,6 +70,8 @@ class StereoHostInterface : public ServerStandalone {
 
         bool connectOutputTo( const char *, const char * );
 
+        void redirectInput( jack_nframes_t );
+
 
     protected:
 
@@ -122,8 +124,6 @@ class StereoHostInterface : public ServerStandalone {
         const char * _inputRightNameFull;
 
         vector<jack_port_t*> _inputPorts;
-
-        void redirectInput( jack_nframes_t );
 
 
     private:

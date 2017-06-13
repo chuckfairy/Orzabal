@@ -67,6 +67,13 @@ class PatchbayEffects : public Audio::Patchbay, public StereoHostInterface {
         void updateJack( jack_nframes_t );
 
 
+        /**
+         * Server set callbacks
+         */
+
+        void setServerCallbacks();
+
+
     private:
 
         Server * _Server;

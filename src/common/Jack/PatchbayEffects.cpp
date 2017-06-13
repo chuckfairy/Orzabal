@@ -4,6 +4,7 @@
 
 #include "Server.h"
 #include "PatchbayEffects.h"
+#include "Events/RedirectionEventStereo.h"
 
 namespace Jack {
 
@@ -59,6 +60,31 @@ void PatchbayEffects::connectEffectPorts( Audio::Plugin * plugin ) {
     );
 
     _ActiveEffects.push_back( plugin );
+
+};
+
+
+/**
+ * Server callback processing mainly redirection
+ * Will use Orzabal server or standalone use
+ *
+ */
+
+void PatchbayEffects::setServerCallbacks() {
+
+    Util::Event * e = new RedirectionEventStereo( this );
+
+
+    //Check on Server instance
+
+    Util::Dispatcher * dispatch = ( _Server == NULL )
+        ? (Util::Dispatcher*) this
+        : (Util::Dispatcher*) _Server;
+
+
+    //Setting
+
+    dispatch->on( Server::UPDATE_EVENT, e );
 
 };
 
