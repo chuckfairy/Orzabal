@@ -10,6 +10,7 @@
 #include <Audio/Plugin.h>
 
 #include "Host.h"
+#include "Plugin.h"
 #include "Search.h"
 #include "JackCallbackEvent.h"
 #include "Events/JackLatencyEvent.h"

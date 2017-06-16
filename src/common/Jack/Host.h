@@ -42,54 +42,6 @@ class Host :
     public Audio::Host, public ServerStandalone
 {
 
-    protected:
-
-        const char * _name = "orzabal-audio";
-
-
-        /**
-         * Host output ports
-         */
-
-        jack_port_t * _outputLeft;
-
-        jack_port_t * _outputRight;
-
-        const char * _outputLeftName = "output-L";
-
-        const char * _outputRightName = "output-R";
-
-        vector<jack_port_t*> _outputPorts;
-
-        /**
-         * Host input port
-         */
-
-        jack_port_t * _inputLeft;
-
-        jack_port_t * _inputRight;
-
-        const char * _inputLeftName = "input-L";
-
-        const char * _inputRightName = "input-R";
-
-        vector<jack_port_t*> _inputPorts;
-
-
-        //@TODO possibly remove
-
-        string * _lastOutputLeft;
-
-        string  * _lastOutputRight;
-
-
-        /**
-         * From orzabal server
-         */
-
-        Server * _Server = NULL;
-
-
     public:
 
         /**
@@ -223,6 +175,66 @@ class Host :
          */
 
         void setServerCallbacks();
+
+        /**
+         * Jack updateing
+         */
+
+        void updateJack( jack_nframes_t );
+
+        void updateJack( void * );
+
+        void updateJackLatency( void * );
+
+        void updateJackBufferSize( void * );
+
+
+    protected:
+
+        const char * _name = "orzabal-audio";
+
+
+        /**
+         * Host output ports
+         */
+
+        jack_port_t * _outputLeft;
+
+        jack_port_t * _outputRight;
+
+        const char * _outputLeftName = "output-L";
+
+        const char * _outputRightName = "output-R";
+
+        vector<jack_port_t*> _outputPorts;
+
+        /**
+         * Host input port
+         */
+
+        jack_port_t * _inputLeft;
+
+        jack_port_t * _inputRight;
+
+        const char * _inputLeftName = "input-L";
+
+        const char * _inputRightName = "input-R";
+
+        vector<jack_port_t*> _inputPorts;
+
+
+        //@TODO possibly remove
+
+        string * _lastOutputLeft;
+
+        string  * _lastOutputRight;
+
+
+        /**
+         * From orzabal server
+         */
+
+        Server * _Server = NULL;
 
 };
 

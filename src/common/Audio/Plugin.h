@@ -240,20 +240,6 @@ class Plugin {
 
 
         /**
-         * Create a port
-         *
-         */
-
-        virtual Port * createPort( long portNum ) {
-
-            Port * p = new Port;
-
-            return p;
-
-        };
-
-
-        /**
          * Start up for lv2
          */
 

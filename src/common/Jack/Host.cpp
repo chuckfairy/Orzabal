@@ -394,4 +394,91 @@ void Host::setServerCallbacks() {
 
 };
 
+
+/**
+ * Update jack host from jack frame pointer
+ */
+
+void Host::updateJack( jack_nframes_t nframes ) {
+
+    vector<Audio::Plugin*>::iterator it;
+
+    for( it = _ActivePlugins.begin(); it != _ActivePlugins.end(); ++ it ) {
+
+        Plugin * p = (Plugin*) (*it);
+
+        if( p->isActive() ) {
+
+            p->updateJack( nframes );
+
+        }
+
+    }
+
+};
+
+
+/**
+ * Update jack from possible void *
+ */
+
+void Host::updateJack( void * frameVoid ) {
+
+    return updateJack(
+        (jack_nframes_t) (uintptr_t) frameVoid
+    );
+
+};
+
+
+/**
+ * Update jack host from jack frame pointer
+ */
+
+void Host::updateJackBufferSize( void * bufferPtr ) {
+
+    std::cout << "BUFFER SIZE\n";
+
+    jack_nframes_t frames = (jack_nframes_t) (uintptr_t) bufferPtr;
+
+    vector<Audio::Plugin*>::iterator it;
+
+    for( it = _ActivePlugins.begin(); it != _ActivePlugins.end(); ++ it ) {
+
+        Plugin * p = (Plugin*) (*it);
+
+        if( p->isActive() ) {
+
+            p->updateJackBufferSize( frames );
+
+        }
+
+    }
+
+};
+
+
+/**
+ * Update jack latency host for plugin jack ports
+ */
+
+void Host::updateJackLatency( void * modePtr ) {
+
+    jack_latency_callback_mode_t mode = (jack_latency_callback_mode_t) (uintptr_t) modePtr;
+
+    vector<Audio::Plugin*>::iterator it;
+
+    for( it = _ActivePlugins.begin(); it != _ActivePlugins.end(); ++ it ) {
+
+        Plugin * p = (Plugin*) (*it);
+
+        if( p->isActive() ) {
+
+            p->updateJackLatency( mode );
+
+        }
+
+    }
+
+
 };
