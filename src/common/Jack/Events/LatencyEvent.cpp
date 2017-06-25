@@ -4,8 +4,8 @@
  */
 #include <jack/jack.h>
 
-#include "JackLatencyEvent.h"
-#include "Host.h"
+#include "LatencyEvent.h"
+#include <Jack/Patchbay.h>
 
 namespace Jack {
 

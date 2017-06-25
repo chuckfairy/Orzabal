@@ -29,6 +29,7 @@ using Events::PortRegistrationData;
 
 Server::Server() {
 
+    _client = jack_client_open( _clientName, JACK_OPTIONS, &JACK_STATUS );
 
 };
 
@@ -52,8 +53,6 @@ const char * Server::PORT_REGISTER_EVENT = "port-register";
 bool Server::start() {
 
 	// open a client connection to the JACK server
-
-    _client = jack_client_open( _clientName, JACK_OPTIONS, &JACK_STATUS );
 
     if( _client == NULL ) {
 
@@ -89,7 +88,7 @@ bool Server::start() {
 
     _Midi = new Midi( this );
 
-    _Host = new LV2::Host( _client );
+    _Host = new LV2::Host( this );
 
 
     //Register host classes

@@ -13,7 +13,7 @@ namespace Jack {
  * Class forwarding
  *
  */
-class Host;
+class Patchbay;
 
 
 /**
@@ -25,7 +25,7 @@ class BufferEvent : public Util::Event {
 
     private:
 
-        Host * _Patchbay;
+        Patchbay * _Patchbay;
 
 
     public:
@@ -34,7 +34,7 @@ class BufferEvent : public Util::Event {
          * Construct
          */
 
-        BufferEvent( Host * p ) : _Patchbay( p ) {};
+        BufferEvent( Patchbay * p ) : _Patchbay( p ) {};
 
         void run( void * o );
 

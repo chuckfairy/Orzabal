@@ -25,10 +25,19 @@ class Plugin : public Audio::Plugin {
     public:
 
         /**
-         * Jack related
+         * Jack virtual overloading for patchbay related
          */
 
         virtual void updateJack( jack_nframes_t ) {};
+
+        virtual void updateJackLatency( jack_latency_callback_mode_t ) {};
+
+        virtual void updateJackBufferSize( jack_nframes_t ) {};
+
+
+        /**
+         * virtual funcs
+         */
 
         void start() {};
 

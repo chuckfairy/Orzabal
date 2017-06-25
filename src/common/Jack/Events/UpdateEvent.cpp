@@ -4,7 +4,7 @@
  */
 #include <jack/jack.h>
 
-#include "BufferEvent.h"
+#include "UpdateEvent.h"
 #include <Jack/Patchbay.h>
 
 namespace Jack {
@@ -15,9 +15,9 @@ namespace Jack {
  *
  */
 
-void BufferEvent::run( void * o ) {
+void UpdateEvent::run( void * o ) {
 
-    _Patchbay->updateJackBufferSize( o );
+    _Patchbay->updateJack( (jack_nframes_t * ) o );
 
 };
 

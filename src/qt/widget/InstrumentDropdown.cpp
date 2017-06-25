@@ -27,7 +27,7 @@ InstrumentDropdown::InstrumentDropdown( Jack::Server * s ) {
 
     LV2::Host * host = _Server->getPatchbay();
 
-    vector<Plugin*> plugins = host->findAllInstruments();
+    vector<Plugin*> plugins = host->getSearch()->findMidiInstruments();
 
     vector<Plugin*>::iterator it;
 
@@ -94,13 +94,11 @@ void InstrumentDropdown::handleSelectionChanged( int index ) {
 
 
     LV2::Host * h = _Server->getPatchbay();
-    Audio::Plugin * p = h->getPluginByIndex( index - 1 );
+    vector<Audio::Plugin*> plugins = h->getSearch()->findMidiInstruments();
+    Audio::Plugin * p = plugins[ index - 1 ];
+
+    //std::cout << p->getName() << "\n";
 
     dispatch( CHANGE_EVENT, (void*) p );
-
-    //QMessageBox* msg = new QMessageBox();
-    //msg->setWindowTitle("Hello !");
-    //msg->setText( currentText() );
-    //msg->show();
 
 };

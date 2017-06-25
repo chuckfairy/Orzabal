@@ -47,9 +47,7 @@ class Host : public Jack::Patchbay {
 
     public:
 
-        Host( Jack::Server * s );
-
-        Host( jack_client_t * c );
+        explicit Host( Jack::Server * s );
 
 
         /**
@@ -61,20 +59,6 @@ class Host : public Jack::Patchbay {
             return _Plugins;
 
         };
-
-
-        /**
-         * Plugin starting
-         */
-
-        void addPluginByIndex( uint32_t );
-
-
-        /**
-         * Getter helpers
-         */
-
-        Audio::Plugin * getPluginByIndex( uint32_t i );
 
 
         /**
@@ -102,28 +86,6 @@ class Host : public Jack::Patchbay {
          */
 
         void updatePlugins();
-
-
-        /**
-         * Update callback and hosting
-         */
-
-        JackCallbackEvent * getEvent();
-
-        void updateJack( jack_nframes_t );
-
-        void updateJack( void * );
-
-        void updateJackLatency( void * );
-
-        void updateJackBufferSize( void * );
-
-
-        /**
-         * Server related
-         */
-
-        void setServerCallbacks();
 
 
     private:

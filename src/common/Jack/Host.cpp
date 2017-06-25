@@ -9,6 +9,10 @@
 #include <jack/types.h>
 
 #include "Events/RedirectionEvent.h"
+#include "Events/UpdateEvent.h"
+#include "Events/LatencyEvent.h"
+#include "Events/BufferEvent.h"
+
 #include "Server.h"
 #include "Host.h"
 
@@ -378,107 +382,17 @@ void Host::redirectInput( jack_nframes_t nframes ) {
 
 void Host::setServerCallbacks() {
 
-    Util::Event * e = new RedirectionEvent( this );
+    if( ! _Server ) {
 
-
-    //Check on Server instance
-
-    Util::Dispatcher * dispatch = ( _Server == NULL )
-        ? (Util::Dispatcher*) this
-        : (Util::Dispatcher*) _Server;
-
-
-    //Setting
-
-    dispatch->on( Server::UPDATE_EVENT, e );
-
-};
-
-
-/**
- * Update jack host from jack frame pointer
- */
-
-void Host::updateJack( jack_nframes_t nframes ) {
-
-    vector<Audio::Plugin*>::iterator it;
-
-    for( it = _ActivePlugins.begin(); it != _ActivePlugins.end(); ++ it ) {
-
-        Plugin * p = (Plugin*) (*it);
-
-        if( p->isActive() ) {
-
-            p->updateJack( nframes );
-
-        }
+        throw std::runtime_error( "No server set" );
 
     }
 
-};
 
+    Util::Event * updateEv = (Util::Event*) new RedirectionEvent( this );
 
-/**
- * Update jack from possible void *
- */
-
-void Host::updateJack( void * frameVoid ) {
-
-    return updateJack(
-        (jack_nframes_t) (uintptr_t) frameVoid
-    );
+    _Server->on( Jack::Server::UPDATE_EVENT, updateEv );
 
 };
-
-
-/**
- * Update jack host from jack frame pointer
- */
-
-void Host::updateJackBufferSize( void * bufferPtr ) {
-
-    std::cout << "BUFFER SIZE\n";
-
-    jack_nframes_t frames = (jack_nframes_t) (uintptr_t) bufferPtr;
-
-    vector<Audio::Plugin*>::iterator it;
-
-    for( it = _ActivePlugins.begin(); it != _ActivePlugins.end(); ++ it ) {
-
-        Plugin * p = (Plugin*) (*it);
-
-        if( p->isActive() ) {
-
-            p->updateJackBufferSize( frames );
-
-        }
-
-    }
-
-};
-
-
-/**
- * Update jack latency host for plugin jack ports
- */
-
-void Host::updateJackLatency( void * modePtr ) {
-
-    jack_latency_callback_mode_t mode = (jack_latency_callback_mode_t) (uintptr_t) modePtr;
-
-    vector<Audio::Plugin*>::iterator it;
-
-    for( it = _ActivePlugins.begin(); it != _ActivePlugins.end(); ++ it ) {
-
-        Plugin * p = (Plugin*) (*it);
-
-        if( p->isActive() ) {
-
-            p->updateJackLatency( mode );
-
-        }
-
-    }
-
 
 };

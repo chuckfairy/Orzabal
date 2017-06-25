@@ -1,5 +1,5 @@
 /**
- * Latency event for jack
+ * Callback event for jack
  *
  */
 #pragma once
@@ -21,7 +21,7 @@ class Patchbay;
  *
  */
 
-class LatencyEvent : public Util::Event {
+class UpdateEvent : public Util::Event {
 
     private:
 
@@ -34,7 +34,7 @@ class LatencyEvent : public Util::Event {
          * Construct
          */
 
-        LatencyEvent( Patchbay * p ) : _Patchbay( p ) {};
+        UpdateEvent( Patchbay * p ) : _Patchbay( p ) {}
 
         void run( void * o );
 

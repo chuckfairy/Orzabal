@@ -1134,7 +1134,6 @@ void Plugin::updateJackLatency( jack_latency_callback_mode_t mode ) {
 void Plugin::updateJackBufferSize( jack_nframes_t nframes ) {
 
 	block_length = nframes;
-	buf_size_set = true;
 
     midi_buf_size = _Host->getMidiBufferSize();
 

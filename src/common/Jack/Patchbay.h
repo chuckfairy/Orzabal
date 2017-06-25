@@ -29,7 +29,7 @@ class Patchbay : public Audio::Patchbay, public ServerStandalone {
 
     public:
 
-        explicit Patchbay( jack_client_t * );
+        explicit Patchbay( Server * );
 
 
         /**
@@ -101,6 +101,25 @@ class Patchbay : public Audio::Patchbay, public ServerStandalone {
          */
 
         void connectAudioEffectPorts( Audio::Plugin * );
+
+        /**
+         * Update callback and hosting
+         */
+
+        void updateJack( jack_nframes_t );
+
+        void updateJack( void * );
+
+        void updateJackLatency( void * );
+
+        void updateJackBufferSize( void * );
+
+
+        /**
+         * Server default callbacks
+         */
+
+        void setServerCallbacks();
 
 
     protected:
