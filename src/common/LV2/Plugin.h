@@ -37,7 +37,7 @@
 
 #include <QScrollArea>
 
-#include <Audio/Plugin.h>
+#include <Jack/Plugin.h>
 #include <Audio/PlayState.h>
 
 #include "include/types.h"
@@ -66,7 +66,7 @@ class PluginPreset;
  * Plugin Main fro Audio::Plugin
  */
 
-class Plugin : public Audio::Plugin {
+class Plugin : public Jack::Plugin {
 
     private:
 

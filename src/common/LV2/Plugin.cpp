@@ -802,7 +802,7 @@ LV2_Handle Plugin::getLV2Handle() {
 
 void Plugin::updateJack( jack_nframes_t nframes ) {
 
-    if( ! ACTIVE ) { return; }
+    if( ! isActive() ) { return; }
 
 	/* Get Jack transport position */
 

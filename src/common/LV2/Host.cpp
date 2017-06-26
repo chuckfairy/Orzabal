@@ -31,8 +31,6 @@ Host::Host( Jack::Server * s ) : Jack::Patchbay( s ) {
     _lilvWorld = lilv_world_new();
     lilv_world_load_all( _lilvWorld );
 
-    setServer( s );
-
     _Search = new Search( this );
 
 };
