@@ -74,6 +74,19 @@ class PatchbayEffects : public Audio::Patchbay, public StereoHostInterface {
         void setServerCallbacks();
 
 
+    protected:
+
+        /**
+         * Prefix virtual
+         */
+
+        const char * getPrefix() {
+
+            return "effects";
+
+        };
+
+
     private:
 
         Server * _Server;

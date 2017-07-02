@@ -45,8 +45,6 @@ MainWindow::MainWindow( QWidget * parent, Qt::WindowFlags flags ) :
 
     LV2::Host * host = _Server->getPatchbay();
 
-    host->setServer( _Server );
-
     host->setServerCallbacks();
 
 

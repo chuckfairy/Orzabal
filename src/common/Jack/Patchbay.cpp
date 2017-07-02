@@ -9,6 +9,7 @@
 #include "Midi.h"
 #include "Port.h"
 #include "Plugin.h"
+#include "PatchbayEffects.h"
 
 #include "Events/UpdateEvent.h"
 #include "Events/LatencyEvent.h"
@@ -24,18 +25,16 @@ namespace Jack {
 
 Patchbay::Patchbay( Server * s ) :
     ServerStandalone( s->getJackClient() ),
-    _Server( s )
+    _Server( s ),
+    _PatchbayEffects( new PatchbayEffects( s ) )
 {
-};
 
+    _Server->getAudio()->connectInputTo(
+        _PatchbayEffects->getOutputNameLeft(),
+        _PatchbayEffects->getOutputNameRight()
+    );
 
-/**
- * Server related
- */
-
-void Patchbay::setServer( Server * s ) {
-
-    _Server = s;
+    _PatchbayEffects->setServerCallbacks();
 
 };
 
@@ -119,8 +118,6 @@ void Patchbay::connectPluginAudioPorts( Audio::Plugin * p ) {
     if( ports->empty() ) { return; }
 
 
-    Jack::Host * audio = _Server->getAudio();
-
     //Stereo check
 
     if( ports->size() > 1 ) {
@@ -133,7 +130,7 @@ void Patchbay::connectPluginAudioPorts( Audio::Plugin * p ) {
             (*ports)[ 1 ]
         );
 
-        audio->connectInputTo(
+        _PatchbayEffects->connectInputTo(
             jack_port_name( portLeft->jack_port ),
             jack_port_name( portRight->jack_port )
         );
@@ -144,7 +141,7 @@ void Patchbay::connectPluginAudioPorts( Audio::Plugin * p ) {
             (*ports)[ 0 ]
         );
 
-        audio->connectInputTo(
+        _PatchbayEffects->connectInputTo(
             jack_port_name( portMono->jack_port )
         );
 

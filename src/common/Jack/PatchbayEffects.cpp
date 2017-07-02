@@ -17,6 +17,8 @@ PatchbayEffects::PatchbayEffects( Server * server ) :
     _Server( server )
 {
 
+    createPorts();
+
 };
 
 

@@ -45,6 +45,9 @@ Host::Host( Server * s ) :
     ServerStandalone( s->getJackClient() ),
     _Server( s )
 {
+
+    createPorts();
+
 };
 
 

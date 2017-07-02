@@ -20,6 +20,8 @@ namespace Jack {
 
 class Server;
 
+class PatchbayEffects;
+
 
 /**
  * Construct
@@ -53,13 +55,6 @@ class Patchbay : public Audio::Patchbay, public ServerStandalone {
         void removeAudioEffects( uint32_t );
 
         void clearAudioEffects();
-
-
-        /**
-         * Server related
-         */
-
-        void setServer( Server * );
 
 
         /**
@@ -132,6 +127,15 @@ class Patchbay : public Audio::Patchbay, public ServerStandalone {
          */
 
         void connectAudioEffectLastPort( Audio::Plugin * );
+
+
+    private:
+
+        /**
+         * Patchbay effects rack
+         */
+
+        PatchbayEffects * _PatchbayEffects;
 
 };
 

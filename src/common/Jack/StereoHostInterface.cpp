@@ -14,9 +14,6 @@ namespace Jack {
 StereoHostInterface::StereoHostInterface( jack_client_t * c ) :
     ServerStandalone( c )
 {
-
-    createPorts();
-
 };
 
 
@@ -26,9 +23,9 @@ StereoHostInterface::StereoHostInterface( jack_client_t * c ) :
 
 const char * StereoHostInterface::getPortFullName( const char * name ) {
 
-    char * c = (char*) malloc(180);
+    char * c = (char*) malloc( 255 );
 
-    sprintf( c, "%s:%s", PREFIX, name );
+    sprintf( c, "%s:%s", getPrefix(), name );
 
     return c;
 
@@ -114,8 +111,8 @@ int StereoHostInterface::disconnectJackPort( jack_port_t * port ) {
 
 bool StereoHostInterface::connectInputTo( const char * out ) {
 
-    connectJackPort( out, getPortFullName( _inputLeftName ) );
-    connectJackPort( out, getPortFullName( _inputRightName ) );
+    connectJackPort( out, getInputNameLeft() );
+    connectJackPort( out, getInputNameRight() );
 
     return true;
 
@@ -130,8 +127,8 @@ bool StereoHostInterface::connectInputTo( const char * outLeft, const char * out
 
     std::cout << "\n" << outLeft << " " << outRight;
 
-    connectJackPort( outLeft, getPortFullName( _inputLeftName ) );
-    connectJackPort( outRight, getPortFullName( _inputRightName ) );
+    connectJackPort( outLeft, getInputNameLeft() );
+    connectJackPort( outRight, getInputNameRight() );
 
     return true;
 
@@ -144,8 +141,8 @@ bool StereoHostInterface::connectInputTo( const char * outLeft, const char * out
 
 bool StereoHostInterface::connectOutputTo( const char * input ) {
 
-    connectJackPort( getPortFullName( _outputLeftName ), input );
-    connectJackPort( getPortFullName( _outputRightName ), input );
+    connectJackPort( getOutputNameLeft(), input );
+    connectJackPort( getOutputNameRight(), input );
 
     return true;
 
@@ -158,8 +155,8 @@ bool StereoHostInterface::connectOutputTo( const char * input ) {
 
 bool StereoHostInterface::connectOutputTo( const char * inLeft, const char * inRight ) {
 
-    connectJackPort( getPortFullName( _outputLeftName ), inLeft );
-    connectJackPort( getPortFullName( _outputRightName ), inRight );
+    connectJackPort( getOutputNameLeft(), inLeft );
+    connectJackPort( getOutputNameRight(), inRight );
 
     return true;
 

@@ -46,6 +46,53 @@ class StereoHostInterface : public ServerStandalone {
 
         };
 
+        jack_port_t * getInputPortLeft() {
+
+            return _inputLeft;
+
+        };
+
+        jack_port_t * getInputPortRight() {
+
+            return _inputRight;
+
+        };
+
+        jack_port_t * getOutputPortLeft() {
+
+            return _outputLeft;
+
+        };
+
+        jack_port_t * getOutputPortRight() {
+
+            return _outputRight;
+
+        };
+
+        const char * getInputNameLeft() {
+
+            return jack_port_name( _inputLeft );
+
+        };
+
+        const char * getInputNameRight() {
+
+            return jack_port_name( _inputRight );
+
+        };
+
+        const char * getOutputNameLeft() {
+
+            return jack_port_name( _outputLeft );
+
+        };
+
+        const char * getOutputNameRight() {
+
+            return jack_port_name( _outputRight );
+
+        };
 
         /**
          * Abstract jack port connection method
@@ -86,7 +133,7 @@ class StereoHostInterface : public ServerStandalone {
          * Name prefix
          */
 
-        const char * PREFIX;
+        virtual const char * getPrefix() { return ""; };
 
 
         /**
@@ -125,8 +172,6 @@ class StereoHostInterface : public ServerStandalone {
 
         vector<jack_port_t*> _inputPorts;
 
-
-    private:
 
         /**
          * Main port constructor

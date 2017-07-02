@@ -79,7 +79,10 @@ bool Server::start() {
         (void*)(this)
     );
 
-	//jack_set_session_callback( _client, &jack_buffer_size_cb, (void*)(this) );
+
+    //Register host classes
+
+    jack_activate( _client );
 
 
     //Host starting
@@ -90,12 +93,6 @@ bool Server::start() {
 
     _Host = new LV2::Host( this );
 
-
-    //Register host classes
-
-    jack_activate( _client );
-
-    JackRegisterPorts();
 
     return true;
 
@@ -146,10 +143,6 @@ bool Server::connect() {
  */
 
 void Server::JackRegisterPorts() {
-
-    _Audio->setJackClient( _client );
-
-    _Audio->createPorts();
 
 };
 
