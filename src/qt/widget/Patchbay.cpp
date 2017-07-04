@@ -3,6 +3,8 @@
  */
 #include <MainWindow.h>
 
+#include <Jack/PatchbayEffects.h>
+
 #include "PatchbayPlugin.h"
 #include "Patchbay.h"
 
@@ -55,6 +57,8 @@ void Patchbay::handleAddClick() {
 
     LV2::Host * h = _App->getServer()->getPatchbay();
     Audio::Plugin * p = _Dropdown->getCurrentPlugin();
+
+    h->getEffects()->addEffect( p );
 
     PatchbayPlugin * plugin = new PatchbayPlugin( p );
 

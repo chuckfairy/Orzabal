@@ -117,6 +117,13 @@ class Patchbay : public Audio::Patchbay, public ServerStandalone {
         void setServerCallbacks();
 
 
+        /**
+         * Audio Effects
+         */
+
+        PatchbayEffects * getEffects();
+
+
     protected:
 
         Server * _Server;

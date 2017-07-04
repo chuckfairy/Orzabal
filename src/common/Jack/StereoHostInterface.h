@@ -117,7 +117,18 @@ class StereoHostInterface : public ServerStandalone {
 
         bool connectOutputTo( const char *, const char * );
 
+
+        /**
+         * Redirection and helpers
+         */
+
         void redirectInput( jack_nframes_t );
+
+        static void redirectInputPort(
+            jack_port_t * output,
+            jack_port_t * input,
+            jack_nframes_t nframes
+        );
 
 
     protected:

@@ -168,34 +168,38 @@ bool StereoHostInterface::connectOutputTo( const char * inLeft, const char * inR
 
 void StereoHostInterface::redirectInput( jack_nframes_t nframes ) {
 
-    jack_default_audio_sample_t
-        * inLeft,
-        * inRight,
-        * outLeft,
-        * outRight;
+    StereoHostInterface::redirectInputPort( _outputLeft, _inputLeft, nframes );
+    StereoHostInterface::redirectInputPort( _outputRight, _inputRight, nframes );
+
+};
+
+/**
+ * Port redirection
+ */
+
+void StereoHostInterface::redirectInputPort(
+    jack_port_t * output,
+    jack_port_t * input,
+    jack_nframes_t nframes
+) {
+
+    jack_default_audio_sample_t * inBuffer, * outBuffer;
 
     size_t bufSize = sizeof( jack_default_audio_sample_t ) * (nframes);
 
 
     //Port buffer getting
 
-    inLeft = (jack_default_audio_sample_t*)
-        jack_port_get_buffer( _inputLeft, nframes );
+    inBuffer = (jack_default_audio_sample_t*)
+        jack_port_get_buffer( input, nframes );
 
-    inRight = (jack_default_audio_sample_t*)
-        jack_port_get_buffer( _inputRight, nframes);
-
-    outLeft = (jack_default_audio_sample_t*)
-        jack_port_get_buffer( _outputLeft, nframes );
-
-    outRight = (jack_default_audio_sample_t*)
-        jack_port_get_buffer( _outputRight, nframes );
+    outBuffer = (jack_default_audio_sample_t*)
+        jack_port_get_buffer( output, nframes );
 
 
     //Buffer copy redirection
 
-    memcpy( outLeft, inLeft, bufSize );
-    memcpy( outRight, inRight, bufSize );
+    memcpy( outBuffer, inBuffer, bufSize );
 
 };
 

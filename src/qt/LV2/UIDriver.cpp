@@ -39,6 +39,12 @@ UIDriver::UIDriver( LV2::UI * ui ) :
 
     _PresetDropdown = new PresetDropdown( ui->getPlugin() );
 
+    if ( _UI->getPlugin()->isActive() ) {
+
+        start();
+
+    }
+
 };
 
 

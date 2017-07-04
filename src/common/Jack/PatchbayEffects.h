@@ -74,6 +74,13 @@ class PatchbayEffects : public Audio::Patchbay, public StereoHostInterface {
         void setServerCallbacks();
 
 
+        /**
+         * Redirect overwrite over hostinterface
+         */
+
+        void redirectInput( jack_nframes_t );
+
+
     protected:
 
         /**

@@ -23,6 +23,23 @@ PatchbayEffects::PatchbayEffects( Server * server ) :
 
 
 /**
+ * Main audio add
+ */
+
+void PatchbayEffects::addEffect( Audio::Plugin * p ) {
+
+    p->start();
+
+    connectEffectPorts( p );
+
+    _ActiveEffects.push_back( p );
+
+    p->run();
+
+};
+
+
+/**
  * Audio effects connection
  */
 
@@ -30,38 +47,76 @@ void PatchbayEffects::connectEffectPorts( Audio::Plugin * plugin ) {
 
     //Connect last effect chain
 
-    if( ! _ActiveEffects.empty() ) {
+    if ( ! _ActiveEffects.empty() ) {
 
         connectEffectLastPort( plugin );
 
+    };
+
+};
+
+
+/**
+ * Connect last audio effect and connect to new plugin
+ * Will disconnect from last
+ */
+
+void PatchbayEffects::connectEffectLastPort( Audio::Plugin * plugin ) {
+
+    //Use last effect
+
+    Audio::Plugin * lastEffect = _ActiveEffects.back();
+
+
+    //Disconnect last effect
+
+    vector<long> outputs = lastEffect->getOutputPortsStereo();
+
+    vector<long>::iterator it;
+
+    for( it = outputs.begin(); it != outputs.end(); ++ it )  {
+
+        Port * port = (Port*) plugin->getPort( (*it) );
+
+        disconnectJackPort( port->jack_port );
+
     }
 
-    Jack::Host * audio = _Server->getAudio();
 
+    //Get ports to connect
 
-    //New plugins inputs
+    vector<long> effectInputs = lastEffect->getInputPortsStereo();
 
-    vector<long> outputs = plugin->getInputPortsStereo();
-
-    Jack::Port * portLeft = (Jack::Port*) plugin->getPort(
-        outputs[ 0 ]
+    Port * effectInputPortLeft = (Port*) lastEffect->getPort(
+        effectInputs[ 0 ]
+    );
+    Port * effectInputPortRight = (Port*) lastEffect->getPort(
+        effectInputs[ 1 ]
     );
 
-    Jack::Port * portRight = (Jack::Port*) plugin->getPort(
-        outputs[ 1 ]
+    //Last effect outputs
+
+    vector<long> lastOutputs = plugin->getOutputPortsStereo();
+
+    Port * lastOutputPortLeft = (Port*) plugin->getPort(
+        lastOutputs[ 0 ]
+    );
+    Port * lastOutputPortRight = (Port*) plugin->getPort(
+        lastOutputs[ 1 ]
     );
 
-    audio->connectJackPort(
-        jack_port_name( portLeft->jack_port ),
-        jack_port_name( _inputLeft )
+
+    //Connect via audio api
+
+    connectJackPort(
+        jack_port_name( lastOutputPortLeft->jack_port ),
+        jack_port_name( effectInputPortLeft->jack_port )
     );
 
-    audio->connectJackPort(
-        jack_port_name( portRight->jack_port ),
-        jack_port_name( _outputRight )
+    connectJackPort(
+        jack_port_name( lastOutputPortRight->jack_port ),
+        jack_port_name( effectInputPortRight->jack_port )
     );
-
-    _ActiveEffects.push_back( plugin );
 
 };
 
@@ -92,40 +147,34 @@ void PatchbayEffects::setServerCallbacks() {
 
 
 /**
- * Connect last audio effect and connect to new plugin
- * Will disconnect from last
+ * Redirect to first effect input
  */
 
-void PatchbayEffects::connectEffectLastPort( Audio::Plugin * plugin ) {
+void PatchbayEffects::redirectInput( jack_nframes_t nframes ) {
 
-    Jack::Host * audio = _Server->getAudio();
+    if ( _ActiveEffects.empty() ) {
 
-    Audio::Plugin * lastEffect = _ActiveEffects.back();
+        StereoHostInterface::redirectInput( nframes );
 
-
-    //Disconnect last effect
-
-    vector<long> outputs = lastEffect->getOutputPortsStereo();
-
-    vector<long>::iterator it;
-
-    for( it = outputs.begin(); it != outputs.end(); ++ it )  {
-
-        Port * port = (Port*) plugin->getPort( (*it) );
-
-        audio->disconnectJackPort( port->jack_port );
+        return;
 
     }
 
 
+    //Redirect plugin effects
+
+    Audio::Plugin * firstEffect = _ActiveEffects.front();
+    Audio::Plugin * lastEffect = _ActiveEffects.back();
+
+
     //Get ports to connect
 
-    vector<long> effectInputs = plugin->getInputPortsStereo();
+    vector<long> effectInputs = firstEffect->getInputPortsStereo();
 
-    Port * effectInputPortLeft = (Port*) plugin->getPort(
+    Port * effectInputPortLeft = (Port*) firstEffect->getPort(
         effectInputs[ 0 ]
     );
-    Port * effectInputPortRight = (Port*) plugin->getPort(
+    Port * effectInputPortRight = (Port*) firstEffect->getPort(
         effectInputs[ 1 ]
     );
 
@@ -141,16 +190,31 @@ void PatchbayEffects::connectEffectLastPort( Audio::Plugin * plugin ) {
     );
 
 
-    //Connect via audio api
+    //Redirect effects input to first effect
+    //and last input to main output
 
-    audio->connectJackPort(
-        jack_port_name( lastOutputPortLeft->jack_port ),
-        jack_port_name( effectInputPortLeft->jack_port )
+    redirectInputPort(
+        _inputLeft,
+        effectInputPortLeft->jack_port,
+        nframes
     );
 
-    audio->connectJackPort(
-        jack_port_name( lastOutputPortRight->jack_port ),
-        jack_port_name( effectInputPortRight->jack_port )
+    redirectInputPort(
+        _inputRight,
+        effectInputPortRight->jack_port,
+        nframes
+    );
+
+    redirectInputPort(
+        lastOutputPortLeft->jack_port,
+        _outputLeft,
+        nframes
+    );
+
+    redirectInputPort(
+        lastOutputPortRight->jack_port,
+        _outputRight,
+        nframes
     );
 
 };

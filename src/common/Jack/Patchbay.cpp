@@ -90,6 +90,16 @@ void Patchbay::clearPlugins() {
 }
 
 
+/**
+ * Effects list
+ */
+
+PatchbayEffects * Patchbay::getEffects() {
+
+    return _PatchbayEffects;
+
+};
+
 
 /**
  * Plugin port connector to server audio
