@@ -1,7 +1,7 @@
 /**
  * Patchbay effects impl
  */
-
+#include "Plugin.h"
 #include "Server.h"
 #include "PatchbayEffects.h"
 #include "Events/RedirectionEventStereo.h"
@@ -122,6 +122,29 @@ void PatchbayEffects::connectEffectLastPort( Audio::Plugin * plugin ) {
 
 
 /**
+ * Update jack host from jack frame pointer
+ */
+
+void PatchbayEffects::updateJack( jack_nframes_t nframes ) {
+
+    vector<Audio::Plugin*>::iterator it;
+
+    for( it = _ActiveEffects.begin(); it != _ActiveEffects.end(); ++ it ) {
+
+        Plugin * p = (Plugin*) (*it);
+
+        if( p->isActive() ) {
+
+            p->updateJack( nframes );
+
+        }
+
+    }
+
+};
+
+
+/**
  * Server callback processing mainly redirection
  * Will use Orzabal server or standalone use
  *
@@ -129,7 +152,7 @@ void PatchbayEffects::connectEffectLastPort( Audio::Plugin * plugin ) {
 
 void PatchbayEffects::setServerCallbacks() {
 
-    Util::Event * e = new RedirectionEventStereo( this );
+    Util::Event * e = new RedirectionEventStereo<PatchbayEffects>( this );
 
 
     //Check on Server instance
@@ -204,6 +227,10 @@ void PatchbayEffects::redirectInput( jack_nframes_t nframes ) {
         effectInputPortRight->jack_port,
         nframes
     );
+
+
+    updateJack( nframes );
+
 
     redirectInputPort(
         lastOutputPortLeft->jack_port,
