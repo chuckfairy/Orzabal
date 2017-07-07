@@ -30,11 +30,9 @@ Patchbay::Patchbay( Server * s ) :
 {
 
     _Server->getAudio()->connectInputTo(
-        _PatchbayEffects->getOutputNameLeft(),
-        _PatchbayEffects->getOutputNameRight()
+        _PatchbayEffects->getPatchbayOutput()->getOutputNameLeft(),
+        _PatchbayEffects->getPatchbayOutput()->getOutputNameRight()
     );
-
-    _PatchbayEffects->setServerCallbacks();
 
 };
 

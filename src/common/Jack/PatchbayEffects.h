@@ -10,6 +10,7 @@
 
 #include "Host.h"
 #include "StereoHostInterface.h"
+#include "PatchbayEffectsOutput.h"
 
 
 namespace Jack {
@@ -23,7 +24,7 @@ class Server;
 
 
 /**
- * Construct
+ * Main class
  */
 
 class PatchbayEffects : public Audio::Patchbay, public StereoHostInterface {
@@ -33,6 +34,17 @@ class PatchbayEffects : public Audio::Patchbay, public StereoHostInterface {
         explicit PatchbayEffects( Server * );
 
         explicit PatchbayEffects( jack_client_t * );
+
+
+        /**
+         * Getters
+         */
+
+        PatchbayEffectsOutput * getPatchbayOutput() {
+
+            return _Output;
+
+        };
 
 
         /**
@@ -97,6 +109,10 @@ class PatchbayEffects : public Audio::Patchbay, public StereoHostInterface {
     private:
 
         Server * _Server;
+
+        PatchbayEffectsOutput * _Output;
+
+        void redirectEffects( jack_nframes_t );
 
 
 };

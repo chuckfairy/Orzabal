@@ -12,6 +12,7 @@
 
 #include "Midi.h"
 #include "Server.h"
+#include "PatchbayEffects.h"
 #include "Events/PortRegistrationData.h"
 
 

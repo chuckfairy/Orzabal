@@ -14,10 +14,18 @@ namespace Jack {
 
 PatchbayEffects::PatchbayEffects( Server * server ) :
     StereoHostInterface( server->getJackClient() ),
-    _Server( server )
+    _Server( server ),
+    _Output( new PatchbayEffectsOutput( server->getJackClient() ) )
 {
 
     createPorts();
+
+    connectOutputTo(
+       _Output->getInputNameLeft(),
+       _Output->getInputNameRight()
+    );
+
+    setServerCallbacks();
 
 };
 
@@ -52,6 +60,35 @@ void PatchbayEffects::connectEffectPorts( Audio::Plugin * plugin ) {
         connectEffectLastPort( plugin );
 
     };
+
+    vector<long> lastInputs = plugin->getInputPortsStereo();
+
+    Port * lastInputPortLeft = (Port*) plugin->getPort(
+        lastInputs[ 0 ]
+    );
+    Port * lastInputPortRight = (Port*) plugin->getPort(
+        lastInputs[ 1 ]
+    );
+
+    connectOutputTo(
+        jack_port_name( lastInputPortLeft->jack_port ),
+        jack_port_name( lastInputPortRight->jack_port )
+    );
+
+
+    vector<long> lastOutputs = plugin->getOutputPortsStereo();
+
+    Port * lastOutputPortLeft = (Port*) plugin->getPort(
+        lastOutputs[ 0 ]
+    );
+    Port * lastOutputPortRight = (Port*) plugin->getPort(
+        lastOutputs[ 1 ]
+    );
+
+//    _Output->connectInputTo(
+//        jack_port_name( lastOutputPortLeft->jack_port ),
+//        jack_port_name( lastOutputPortRight->jack_port )
+//    );
 
 };
 
@@ -154,17 +191,7 @@ void PatchbayEffects::setServerCallbacks() {
 
     Util::Event * e = new RedirectionEventStereo<PatchbayEffects>( this );
 
-
-    //Check on Server instance
-
-    Util::Dispatcher * dispatch = ( _Server == NULL )
-        ? (Util::Dispatcher*) this
-        : (Util::Dispatcher*) _Server;
-
-
-    //Setting
-
-    dispatch->on( Server::UPDATE_EVENT, e );
+    _Server->on( Server::UPDATE_EVENT, e );
 
 };
 
@@ -175,13 +202,29 @@ void PatchbayEffects::setServerCallbacks() {
 
 void PatchbayEffects::redirectInput( jack_nframes_t nframes ) {
 
-    if ( _ActiveEffects.empty() ) {
+    StereoHostInterface::redirectInput( nframes );
 
-        StereoHostInterface::redirectInput( nframes );
+    //Redirect effects input to first effect
+    //and last input to main output
 
-        return;
+    if( ! _ActiveEffects.empty() ) {
+
+        redirectEffects( nframes );
 
     }
+
+    _Output->redirectInput( nframes );
+
+};
+
+
+/**
+ * Patchbay redirect of active effects output to other input
+ */
+
+void PatchbayEffects::redirectEffects( jack_nframes_t nframes ) {
+
+    updateJack( nframes );
 
 
     //Redirect plugin effects
@@ -213,24 +256,6 @@ void PatchbayEffects::redirectInput( jack_nframes_t nframes ) {
     );
 
 
-    //Redirect effects input to first effect
-    //and last input to main output
-
-    redirectInputPort(
-        _inputLeft,
-        effectInputPortLeft->jack_port,
-        nframes
-    );
-
-    redirectInputPort(
-        _inputRight,
-        effectInputPortRight->jack_port,
-        nframes
-    );
-
-
-    updateJack( nframes );
-
 
     redirectInputPort(
         lastOutputPortLeft->jack_port,
@@ -244,6 +269,7 @@ void PatchbayEffects::redirectInput( jack_nframes_t nframes ) {
         nframes
     );
 
-};
+
+}
 
 };
