@@ -10,8 +10,7 @@
 #include <Audio/Plugin.h>
 #include <Audio/PlayState.h>
 
-
-#define NS_EXT "http://lv2plug.in/ns/ext/"
+#include "Port.h"
 
 
 namespace Jack {
@@ -46,6 +45,51 @@ class Plugin : public Audio::Plugin {
         void pause() {};
 
         void stop() {};
+
+
+        /**
+         * Jack port getters helper
+         */
+
+        vector<jack_port_t*> getInputJackPorts() {
+
+            vector<long> inputss = getInputPortsStereo();
+
+            Port * portLeft = (Port*) getPort(
+                inputss[ 0 ]
+            );
+            Port * portRight = (Port*) getPort(
+                inputss[ 1 ]
+            );
+
+            vector<jack_port_t*> ports = {
+                portLeft->jack_port,
+                portRight->jack_port
+            };
+
+            return ports;
+
+        };
+
+        vector<jack_port_t*> getOutputJackPorts() {
+
+            vector<long> outputs = getOutputPortsStereo();
+
+            Port * portLeft = (Port*) getPort(
+                outputs[ 0 ]
+            );
+            Port * portRight = (Port*) getPort(
+                outputs[ 1 ]
+            );
+
+            vector<jack_port_t*> ports = {
+                portLeft->jack_port,
+                portRight->jack_port
+            };
+
+            return ports;
+
+        };
 
 };
 

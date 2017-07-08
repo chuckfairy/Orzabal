@@ -53,7 +53,7 @@ void PatchbayEffects::addEffect( Audio::Plugin * p ) {
 
 void PatchbayEffects::connectEffectPorts( Audio::Plugin * plugin ) {
 
-    //Connect last effect chain
+    //@TODO Actually support this
 
     if ( ! _ActiveEffects.empty() ) {
 
@@ -61,34 +61,34 @@ void PatchbayEffects::connectEffectPorts( Audio::Plugin * plugin ) {
 
     };
 
-    vector<long> lastInputs = plugin->getInputPortsStereo();
+    Plugin * jackPlugin = (Plugin*) plugin;
 
-    Port * lastInputPortLeft = (Port*) plugin->getPort(
-        lastInputs[ 0 ]
-    );
-    Port * lastInputPortRight = (Port*) plugin->getPort(
-        lastInputs[ 1 ]
-    );
+    vector<jack_port_t*> inputs = jackPlugin->getInputJackPorts();
+    vector<jack_port_t*> outputs = jackPlugin->getOutputJackPorts();
+
+    vector<jack_port_t*> * patchbayOutInputs = _Output->getInputPorts();
+
+    //Disconnect redirector
+
+    disconnectJackPort( _outputLeft );
+    disconnectJackPort( _outputRight );
+
+    disconnectJackPort(  patchbayOutInputs->at( 0 ) );
+    disconnectJackPort( patchbayOutInputs->at( 1 ) );
+
+
+    //Connect patchbay to inputs
+    //And output stereo to plugin outputs
 
     connectOutputTo(
-        jack_port_name( lastInputPortLeft->jack_port ),
-        jack_port_name( lastInputPortRight->jack_port )
+        jack_port_name( inputs[0] ),
+        jack_port_name( inputs[1] )
     );
 
-
-    vector<long> lastOutputs = plugin->getOutputPortsStereo();
-
-    Port * lastOutputPortLeft = (Port*) plugin->getPort(
-        lastOutputs[ 0 ]
+    _Output->connectInputTo(
+        jack_port_name( outputs[0] ),
+        jack_port_name( outputs[1] )
     );
-    Port * lastOutputPortRight = (Port*) plugin->getPort(
-        lastOutputs[ 1 ]
-    );
-
-//    _Output->connectInputTo(
-//        jack_port_name( lastOutputPortLeft->jack_port ),
-//        jack_port_name( lastOutputPortRight->jack_port )
-//    );
 
 };
 
@@ -220,56 +220,13 @@ void PatchbayEffects::redirectInput( jack_nframes_t nframes ) {
 
 /**
  * Patchbay redirect of active effects output to other input
+ * @TODO support multiple effects
  */
 
 void PatchbayEffects::redirectEffects( jack_nframes_t nframes ) {
 
     updateJack( nframes );
 
-
-    //Redirect plugin effects
-
-    Audio::Plugin * firstEffect = _ActiveEffects.front();
-    Audio::Plugin * lastEffect = _ActiveEffects.back();
-
-
-    //Get ports to connect
-
-    vector<long> effectInputs = firstEffect->getInputPortsStereo();
-
-    Port * effectInputPortLeft = (Port*) firstEffect->getPort(
-        effectInputs[ 0 ]
-    );
-    Port * effectInputPortRight = (Port*) firstEffect->getPort(
-        effectInputs[ 1 ]
-    );
-
-    //Last effect outputs
-
-    vector<long> lastOutputs = lastEffect->getOutputPortsStereo();
-
-    Port * lastOutputPortLeft = (Port*) lastEffect->getPort(
-        lastOutputs[ 0 ]
-    );
-    Port * lastOutputPortRight = (Port*) lastEffect->getPort(
-        lastOutputs[ 1 ]
-    );
-
-
-
-    redirectInputPort(
-        lastOutputPortLeft->jack_port,
-        _outputLeft,
-        nframes
-    );
-
-    redirectInputPort(
-        lastOutputPortRight->jack_port,
-        _outputRight,
-        nframes
-    );
-
-
-}
+};
 
 };
