@@ -62,7 +62,7 @@ class PatchbayEffects : public Audio::Patchbay, public StereoHostInterface {
          * Effect connectors
          */
 
-        void connectEffectPorts( Audio::Plugin * );
+        void connectEffectPorts();
 
 
         /**
@@ -113,6 +113,9 @@ class PatchbayEffects : public Audio::Patchbay, public StereoHostInterface {
         PatchbayEffectsOutput * _Output;
 
         void redirectEffects( jack_nframes_t );
+
+        void disconnectEffectPorts();
+
 
 
 };

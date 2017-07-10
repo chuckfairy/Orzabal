@@ -114,11 +114,10 @@ void Host::createPorts() {
 
 bool Host::isInternalPort( const char * name ) {
 
+    const char * clientName =  jack_get_client_name( _jackClient );
+
     return (
-        strcmp( getPortFullName( _inputLeftName ), name  ) == 0
-        || strcmp( getPortFullName( _inputRightName ), name  ) == 0
-        || strcmp( getPortFullName( _outputLeftName ), name  ) == 0
-        || strcmp( getPortFullName( _outputRightName ), name  ) == 0
+        strncmp( clientName, name,  sizeof( clientName ) ) == 0
     );
 
 };
