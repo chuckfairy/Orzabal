@@ -50,9 +50,23 @@ PatchbayPlugin::PatchbayPlugin( Audio::Plugin * p ) :
 
     _UI.scrollArea->setWidget( driver->getControlWidget() );
 
+
+    //Event setting
+
+    connect(
+        _UI.view_btn,
+        SIGNAL( clicked() ),
+        this,
+        SLOT( handleViewClick() )
+   );
+
 };
 
-void PatchbayPlugin::handleSelectChange( int index ) {
+void PatchbayPlugin::handleViewClick() {
+
+    _UI.scrollArea->isVisible()
+        ?  _UI.scrollArea->hide()
+        : _UI.scrollArea->show();
 
 };
 

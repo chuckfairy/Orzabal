@@ -53,7 +53,7 @@ class PatchbayPlugin : public QWidget {
 
     public slots:
 
-        void handleSelectChange( int index );
+        void handleViewClick();
 
         void handleRemoveClick();
 

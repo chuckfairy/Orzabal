@@ -31,9 +31,7 @@ class Repository : Util::Repository<Audio::Plugin> {
 
     public:
 
-        Repository();
-
-        Repository( Host * h );
+        explicit Repository( Host * h );
 
         vector<Audio::Plugin*> findAll();
 

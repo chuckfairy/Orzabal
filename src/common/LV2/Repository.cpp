@@ -17,9 +17,7 @@ namespace LV2 {
 
 Repository();
 
-Repository( Host * h ) {
-
-    setHost( h );
+Repository( Host * h ) : _Host( h ) {
 
 };
 
