@@ -4,6 +4,7 @@
 #include "Plugin.h"
 #include "Server.h"
 #include "PatchbayEffects.h"
+#include "PluginRepository.h"
 #include "Events/RedirectionEventStereo.h"
 
 namespace Jack {
@@ -15,7 +16,8 @@ namespace Jack {
 PatchbayEffects::PatchbayEffects( Server * server ) :
     StereoHostInterface( server->getJackClient() ),
     _Server( server ),
-    _Output( new PatchbayEffectsOutput( server->getJackClient() ) )
+    _Output( new PatchbayEffectsOutput( server->getJackClient() ) ),
+    _Repo( new PluginRepository )
 {
 
     createPorts();
@@ -37,9 +39,33 @@ void PatchbayEffects::addEffect( Audio::Plugin * p ) {
 
     p->run();
 
-    _ActiveEffects.push_back( p );
+    _Repo->add( (Plugin*) p );
 
     connectEffectPorts();
+
+};
+
+
+/**
+ * Remove effect and stop
+ */
+
+void PatchbayEffects::removeEffect( Audio::Plugin * p ) {
+
+    _Repo->remove( (Plugin*) p );
+
+    p->stop();
+
+};
+
+
+/**
+ * Pause plugin keep in repo
+ */
+
+void PatchbayEffects::pauseEffect( Audio::Plugin * p ) {
+
+    p->pause();
 
 };
 
@@ -63,7 +89,7 @@ void PatchbayEffects::connectEffectPorts() {
 
     //If empty just redirect to output
 
-    if ( _ActiveEffects.empty() ) {
+    if ( _Repo->empty() ) {
 
         connectOutputTo(
            _Output->getInputNameLeft(),
@@ -75,11 +101,15 @@ void PatchbayEffects::connectEffectPorts() {
     }
 
 
-    //Connect chain
+    //Disconnect all previous connections
 
     disconnectEffectPorts();
 
-    vector<Audio::Plugin*>::iterator it;
+    //Connect chain
+
+    vector<Plugin*> _ActiveEffects = _Repo->getAll();
+
+    vector<Plugin*>::iterator it;
 
     for( it = _ActiveEffects.begin(); it != _ActiveEffects.end(); ++ it ) {
 
@@ -146,11 +176,13 @@ void PatchbayEffects::disconnectEffectPorts() {
 
     //Connect chain
 
-    vector<Audio::Plugin*>::iterator it;
+    vector<Plugin*>::iterator it;
+
+    vector<Plugin*> _ActiveEffects = _Repo->getAll();
 
     for( it = _ActiveEffects.begin(); it != _ActiveEffects.end(); ++ it ) {
 
-        Plugin * p = (Plugin*) (*it);
+        Plugin * p = (*it);
 
         if( ! p->isActive() ) { continue; }
 
@@ -176,7 +208,9 @@ void PatchbayEffects::disconnectEffectPorts() {
 
 void PatchbayEffects::updateJack( jack_nframes_t nframes ) {
 
-    vector<Audio::Plugin*>::iterator it;
+    vector<Plugin*>::iterator it;
+
+    vector<Plugin*> _ActiveEffects = _Repo->getAll();
 
     for( it = _ActiveEffects.begin(); it != _ActiveEffects.end(); ++ it ) {
 
@@ -220,7 +254,7 @@ void PatchbayEffects::redirectInput( jack_nframes_t nframes ) {
     //Redirect effects input to first effect
     //and last input to main output
 
-    if( ! _ActiveEffects.empty() ) {
+    if( ! _Repo->empty() ) {
 
         redirectEffects( nframes );
 

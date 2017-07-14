@@ -240,7 +240,7 @@ class Plugin {
 
 
         /**
-         * Start up for lv2
+         * Main virtuals
          */
 
         virtual void start() {};
@@ -254,9 +254,21 @@ class Plugin {
 
     protected:
 
+        /**
+         * Shared props
+         */
+
         bool ACTIVE = false;
 
         char TYPE[10];
+
+        char name[255];
+
+
+
+        /**
+         * Ports
+         */
 
         uint32_t _portsNum;
 
@@ -272,9 +284,13 @@ class Plugin {
 
         vector<long> _controlPorts;
 
-        char name[255];
-
         int long _numPorts;
+
+
+        /**
+         * UI
+         * @TODO Possibly remove
+         */
 
         UI * _UI;
 

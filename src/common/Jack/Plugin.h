@@ -42,7 +42,7 @@ class Plugin : public Audio::Plugin {
 
         void run() {};
 
-        void pause() {};
+        void pause() { ACTIVE = false; };
 
         void stop() {};
 

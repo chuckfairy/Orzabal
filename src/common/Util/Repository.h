@@ -65,7 +65,21 @@ class Repository : public Dispatcher {
 
         void add( T * toAdd ) {
 
-            _items.push( toAdd );
+            _items.push_back( toAdd );
+
+        };
+
+
+        /**
+         * Removeal from items
+         */
+
+        void remove( T * removal ) {
+
+            _items.erase(
+                std::remove( _items.begin(), _items.end(), removal ),
+                _items.end()
+            );
 
         };
 
@@ -74,9 +88,11 @@ class Repository : public Dispatcher {
          * Has an item
          */
 
-        bool has( T * ) {
+        bool has( T * item ) {
 
-            return ( std::find( v.begin(), v.end(), x )  != v.end() );
+            return (
+                std::find( _items.begin(), _items.end(), item )  != _items.end()
+            );
 
         };
 
@@ -91,9 +107,20 @@ class Repository : public Dispatcher {
 
             int it = getIndex( item );
 
-            std::rotate( it, it + 1, v.end() );
+            std::rotate( it, it + 1, _items.end() );
 
         };
+
+
+        /**
+         * Empty proxy
+         */
+
+        bool empty() const {
+
+            return _items.empty();
+
+        }
 
 
         /**
@@ -111,11 +138,11 @@ class Repository : public Dispatcher {
          * Get iterator
          */
 
-        vector<Plugin>::iterator getIterator() {
+        //vector<T*>::iterator getItemIterator() {
 
-            return _items.begin();
+            //return _items.begin();
 
-        };
+        //};
 
 
         /**
@@ -127,13 +154,14 @@ class Repository : public Dispatcher {
 
         int getIndex( T * item ) {
 
-            vector<T*>::iterator it = std::find(
-                _itemss.begin(),
-                _itemss.end(),
+            typename vector<T*>::iterator itemFind;
+            itemFind = std::find(
+                _items.begin(),
+                _items.end(),
                 item
             );
 
-            if( it == _itemss.end() ) {
+            if( itemFind == _items.end() ) {
 
                 throw std::runtime_error(
                     "Repository::getIndex item not found"
@@ -141,7 +169,7 @@ class Repository : public Dispatcher {
 
             }
 
-            int index = std::distance(_itemss.begin(), it);
+            int index = std::distance( _items.begin(), itemFind );
 
             return index;
 

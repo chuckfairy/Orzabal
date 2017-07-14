@@ -21,6 +21,7 @@ namespace Jack {
  */
 
 class Server;
+class PluginRepository;
 
 
 /**
@@ -53,7 +54,9 @@ class PatchbayEffects : public Audio::Patchbay, public StereoHostInterface {
 
         void addEffect( Audio::Plugin * );
 
-        void removeEffects( uint32_t );
+        void removeEffect( Audio::Plugin * );
+
+        void pauseEffect( Audio::Plugin * );
 
         void clearEffects();
 
@@ -115,6 +118,8 @@ class PatchbayEffects : public Audio::Patchbay, public StereoHostInterface {
         void redirectEffects( jack_nframes_t );
 
         void disconnectEffectPorts();
+
+        PluginRepository * _Repo;
 
 
 
