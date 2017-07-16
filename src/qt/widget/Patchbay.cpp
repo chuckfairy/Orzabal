@@ -5,6 +5,7 @@
 
 #include <Jack/PatchbayEffects.h>
 
+#include "Events/RemoveClickEvent.h"
 #include "PatchbayPlugin.h"
 #include "Patchbay.h"
 
@@ -56,7 +57,7 @@ void Patchbay::handleAddClick() {
     //Create patchbay plugin ui
 
     LV2::Host * h = _App->getServer()->getPatchbay();
-    Audio::Plugin * p = _Dropdown->getCurrentPlugin();
+    Audio::Plugin * p = _Dropdown->getCurrentPlugin()->clone();
 
     h->getEffects()->addEffect( p );
 
@@ -66,9 +67,22 @@ void Patchbay::handleAddClick() {
 
     _Layout->addWidget( plugin->getWidget() );
 
+
+    //Set plugin events
+
+    Util::Event * e = new RemoveClickEvent<Patchbay, PatchbayPlugin>( this );
+
+    plugin->on( PatchbayPlugin::REMOVE_EVENT, e );
+
 };
 
-void Patchbay::handleRemoveClick( bool checked ) {
+void Patchbay::handleRemoveClick( PatchbayPlugin * plugin ) {
+
+    LV2::Host * h = _App->getServer()->getPatchbay();
+
+    h->getEffects()->removeEffect( plugin->getPlugin() );
+
+    delete plugin;
 
 };
 

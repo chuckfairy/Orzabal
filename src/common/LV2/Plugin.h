@@ -296,6 +296,9 @@ class Plugin : public Jack::Plugin {
 
         void stop();
 
+        Audio::Plugin * clone();
+
+
         UI * getUI();
 
         /**

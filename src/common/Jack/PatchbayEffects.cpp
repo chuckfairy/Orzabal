@@ -56,6 +56,8 @@ void PatchbayEffects::removeEffect( Audio::Plugin * p ) {
 
     p->stop();
 
+    connectEffectPorts();
+
 };
 
 
@@ -66,6 +68,8 @@ void PatchbayEffects::removeEffect( Audio::Plugin * p ) {
 void PatchbayEffects::pauseEffect( Audio::Plugin * p ) {
 
     p->pause();
+
+    connectEffectPorts();
 
 };
 

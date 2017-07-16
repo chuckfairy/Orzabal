@@ -32,7 +32,7 @@ PatchbayPlugin::PatchbayPlugin() :
  * Construct from audio plugin
  */
 
-PatchbayPlugin::PatchbayPlugin( Audio::Plugin * p ) :
+PatchbayPlugin::PatchbayPlugin( Audio::Plugin * const p ) :
     _Plugin( p ),
     _WidgetContent( new QWidget() )
 {
@@ -53,6 +53,8 @@ PatchbayPlugin::PatchbayPlugin( Audio::Plugin * p ) :
 
     //Event setting
 
+    //View button
+
     connect(
         _UI.view_btn,
         SIGNAL( clicked() ),
@@ -60,7 +62,40 @@ PatchbayPlugin::PatchbayPlugin( Audio::Plugin * p ) :
         SLOT( handleViewClick() )
    );
 
+
+    //Delete button
+
+    connect(
+        _UI.delete_btn,
+        SIGNAL( clicked() ),
+        this,
+        SLOT( handleRemoveClick() )
+   );
+
 };
+
+
+/**
+ * Deletion
+ */
+
+PatchbayPlugin::~PatchbayPlugin() {
+
+    delete _WidgetContent;
+
+};
+
+
+/**
+ * Remove event char
+ */
+
+const char * PatchbayPlugin::REMOVE_EVENT = "REMOVE";
+
+
+/**
+ * View toggle handler
+ */
 
 void PatchbayPlugin::handleViewClick() {
 
@@ -70,7 +105,14 @@ void PatchbayPlugin::handleViewClick() {
 
 };
 
+
+/**
+ * Remove click dispatch
+ */
+
 void PatchbayPlugin::handleRemoveClick() {
+
+    dispatch( REMOVE_EVENT, this );
 
 };
 

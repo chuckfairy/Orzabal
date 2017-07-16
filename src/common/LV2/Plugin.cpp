@@ -583,6 +583,17 @@ void Plugin::stop() {
 
 
 /**
+ * Clone overload
+ */
+
+Audio::Plugin * Plugin::clone() {
+
+    return new Plugin( _lilvPlugin, _Host );
+
+};
+
+
+/**
  * Port activations
  */
 

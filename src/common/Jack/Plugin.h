@@ -46,6 +46,12 @@ class Plugin : public Audio::Plugin {
 
         void stop() {};
 
+        Audio::Plugin * clone() {
+
+            return new Plugin();
+
+        };
+
 
         /**
          * Jack port getters helper

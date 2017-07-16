@@ -7,6 +7,7 @@
 #include <QWidget>
 
 #include <Audio/Plugin.h>
+#include <Util/Dispatcher.h>
 
 #include <ui_PatchBayItem.h>
 
@@ -30,14 +31,16 @@ namespace Orza { namespace App { namespace Widget {
  * Main class
  */
 
-class PatchbayPlugin : public QWidget {
+class PatchbayPlugin : public QWidget, public Util::Dispatcher {
 
     Q_OBJECT;
 
     public:
 
-        explicit PatchbayPlugin( Audio::Plugin * );
+        explicit PatchbayPlugin( Audio::Plugin * const );
         explicit PatchbayPlugin();
+
+        ~PatchbayPlugin();
 
 
         /**
@@ -50,12 +53,30 @@ class PatchbayPlugin : public QWidget {
 
         };
 
+        static const char * REMOVE_EVENT;
 
     public slots:
 
         void handleViewClick();
 
         void handleRemoveClick();
+
+
+        /**
+         * Getters
+         */
+
+        Ui_PatchBayItem * getUI() {
+
+            return &_UI;
+
+        };
+
+        Audio::Plugin * getPlugin() {
+
+            return _Plugin;
+
+        };
 
 
     private:

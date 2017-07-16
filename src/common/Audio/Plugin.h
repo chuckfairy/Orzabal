@@ -251,6 +251,11 @@ class Plugin {
 
         virtual void stop() {};
 
+        virtual Plugin * clone() {
+
+            return new Plugin();
+
+        };
 
     protected:
 
