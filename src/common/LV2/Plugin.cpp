@@ -10,6 +10,7 @@
 #include <sys/types.h>
 #include <unistd.h>
 
+#include <Util/Random.h>
 #include <Audio/Host.h>
 #include <Audio/Port.h>
 
@@ -46,6 +47,8 @@ namespace LV2 {
 
 Plugin::Plugin( const LilvPlugin* p, Host * h ) {
 
+    Util::random_string( (char *)_hash, HASH_LENGTH );
+
     setHost( h );
 
     setLilvPlugin( p );
@@ -59,6 +62,13 @@ Plugin::Plugin( const LilvPlugin* p, Host * h ) {
     _Preset = new PluginPreset( this );
 
 };
+
+
+/**
+ * Statics
+ */
+
+const unsigned int Plugin::HASH_LENGTH = 8;
 
 
 /**
@@ -332,28 +342,23 @@ void Plugin::start() {
         LV2_MIDI__MidiEvent
     );
 
+
+    //Atom symaps
+
     atom_Object = symap_map(_symap, LV2_ATOM__Object);
-    //jalv.urids.atom_Path            = symap_map(_symap, LV2_ATOM__Path);
-    //jalv.urids.atom_String          = symap_map(_symap, LV2_ATOM__String);
-
     atom_eventTransfer = symap_map(_symap, LV2_ATOM__eventTransfer);
-
 	atom_Chunk = lilv_new_uri( _Host->getLilvWorld(), LV2_ATOM__Chunk );
 	atom_Sequence = lilv_new_uri( _Host->getLilvWorld(), LV2_ATOM__Sequence );
+
+    //Bufsz
 
     bufsz_maxBlockLength = symap_map(_symap, LV2_BUF_SIZE__maxBlockLength);
     bufsz_minBlockLength = symap_map(_symap, LV2_BUF_SIZE__minBlockLength);
     bufsz_sequenceSize = symap_map(_symap, LV2_BUF_SIZE__sequenceSize);
-    //jalv.urids.log_Error            = symap_map(_symap, LV2_LOG__Error);
-    //jalv.urids.log_Trace            = symap_map(_symap, LV2_LOG__Trace);
-    //jalv.urids.log_Warning          = symap_map(_symap, LV2_LOG__Warning);
+
+    //Params
+
     param_sampleRate = symap_map(_symap, LV2_PARAMETERS__sampleRate);
-    //jalv.urids.patch_Get            = symap_map(_symap, LV2_PATCH__Get);
-    //jalv.urids.patch_Put            = symap_map(_symap, LV2_PATCH__Put);
-    //jalv.urids.patch_Set            = symap_map(_symap, LV2_PATCH__Set);
-    //jalv.urids.patch_body           = symap_map(_symap, LV2_PATCH__body);
-    //jalv.urids.patch_property       = symap_map(_symap, LV2_PATCH__property);
-    //jalv.urids.patch_value          = symap_map(_symap, LV2_PATCH__value);
     patch_Get = symap_map(_symap, LV2_PATCH__Get);
 
     _time_position = symap_map(_symap, LV2_TIME__Position);
@@ -613,9 +618,9 @@ void Plugin::activatePort( long portNum ) {
 
     const LilvNode* sym = lilv_port_get_symbol( _lilvPlugin, port->lilv_port );
 
-    char nameChar[25];
+    char nameChar[60];
 
-    sprintf( nameChar, "%s[%s]", name, lilv_node_as_string( sym ) );
+    sprintf( nameChar, "%s-%s[%s]", name, _hash, lilv_node_as_string( sym ) );
 
     port->nameString = nameChar;
     port->name = port->nameString.c_str();

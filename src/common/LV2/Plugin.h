@@ -88,6 +88,15 @@ class Plugin : public Jack::Plugin {
 
 
         /**
+         * Hashing for unique ness
+         */
+
+        static const unsigned int HASH_LENGTH;
+
+        char _hash[8];
+
+
+        /**
          *  LV2 Feature options
          */
 
