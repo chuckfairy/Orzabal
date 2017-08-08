@@ -13,6 +13,8 @@
 
 #include <LV2/UIDriver.h>
 
+using nlohmann::json;
+
 using Orza::App::LV2UI::UIDriver;
 using Orza::App::Widget::Patchbay;
 
@@ -49,7 +51,16 @@ void SimpleLayout::setEvents() {
 
 void SimpleLayout::handleChange( void * data ) {
 
-    LV2::Plugin * p = (LV2::Plugin*) data;
+    setPlugin( (LV2::Plugin*) data );
+
+};
+
+
+/**
+ * Set plugin
+ */
+
+void SimpleLayout::setPlugin( LV2::Plugin * p ) {
 
     UIDriver * driver = new UIDriver( p->getUI() );
 
@@ -70,5 +81,26 @@ void SimpleLayout::handleChange( void * data ) {
         ->setWidget(
             driver->getControlWidget()
         );
+
+};
+
+
+/**
+ * Main layout load
+ */
+
+void  SimpleLayout::load( json j ) {
+
+    // Plugins
+
+    for( json::iterator it = j["data"]["effects"].begin(); it != j["data"]["effects"].end(); ++it ) {
+
+        json effect = *it;
+
+        /// get by ideffect["id"]
+
+        // setPlugin
+
+    }
 
 };

@@ -32,7 +32,10 @@ find_package(Boost COMPONENTS unit_test_framework REQUIRED)
 include_directories (${Boost_INCLUDE_DIRS})
 
 #I like to keep test files in a separate source directory called test
-file(GLOB TEST_SRCS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} Jack/*.cpp)
+file(GLOB TEST_SRCS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
+    Jack/*.cpp
+    JSON/*.cpp
+)
 
 #Run through each source
 foreach(testSrc ${TEST_SRCS})
@@ -54,8 +57,9 @@ foreach(testSrc ${TEST_SRCS})
     target_include_directories( ${testName}
         PUBLIC
         "../../src/common"
-	"${ORZABAL_ROOT_PATH}/lib-src/sratom"
-	"${ORZABAL_ROOT_PATH}/lib-src/sord"
+        "${ORZABAL_ROOT_PATH}/lib-src"
+        "${ORZABAL_ROOT_PATH}/lib-src/sratom"
+        "${ORZABAL_ROOT_PATH}/lib-src/sord"
     )
 
     #I like to move testing binaries into a testBin directory

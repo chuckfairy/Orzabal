@@ -34,6 +34,7 @@ qt5_add_resources(RESOURCES ./Resources.qrc)
 include_directories(
     ${CMAKE_CURRENT_BINARY_DIR}
     ../common /usr/local/lib
+    "${ORZABAL_ROOT_PATH}/lib-src"
     "${ORZABAL_ROOT_PATH}/lib-src/sratom"
     "${ORZABAL_ROOT_PATH}/lib-src/sord"
 )

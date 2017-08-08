@@ -1,0 +1,24 @@
+{
+    "layout": "simple-effects",
+
+    "name": "test",
+
+    "data": {
+        "instrument": {
+            "id": ""
+        },
+
+        "effects": [
+            {
+                "id": "",
+                "ports": [
+                    {
+                        "id": 0,
+                        "value": ""
+                    }
+                ]
+            }
+        ]
+    }
+
+}

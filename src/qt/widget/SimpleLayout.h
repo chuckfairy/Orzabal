@@ -3,11 +3,17 @@
  */
 #pragma once
 
+#include <json/json.hpp>
+
+#include <Audio/PatchbayPresetLoader.h>
+
 #include <LV2/Plugin.h>
 #include <LV2/UI.h>
 #include <Util/Dispatcher.h>
 
 #include "InstrumentDropdown.h"
+
+using nlohmann::json;
 
 /**
  * Forwarding
@@ -15,7 +21,18 @@
 
 class MainWindow;
 
-class SimpleLayout {
+class SimpleLayout : public Audio::PatchbayPresetLoader {
+
+    public:
+
+        SimpleLayout( MainWindow * );
+
+        void setEvents();
+
+        void handleChange( void * );
+
+        void load( json settings );
+
 
     private:
 
@@ -30,12 +47,10 @@ class SimpleLayout {
         MainWindow * _App;
 
 
-    public:
+        /**
+         * Main plugin setter
+         */
 
-        SimpleLayout( MainWindow * );
-
-        void setEvents();
-
-        void handleChange( void * );
+        void setPlugin( LV2::Plugin * );
 
 };
