@@ -28,9 +28,6 @@ MainWindow::MainWindow( QWidget * parent, Qt::WindowFlags flags ) :
 
     setWindowTitle( "Orzabal" );
 
-    //setWindowFlags(Qt::CustomizeWindowHint);
-    //setWindowFlags(Qt::FramelessWindowHint);
-
 
     //Jack Startup
 

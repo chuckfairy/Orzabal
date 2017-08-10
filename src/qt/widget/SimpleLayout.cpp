@@ -18,6 +18,7 @@ using nlohmann::json;
 using Orza::App::LV2UI::UIDriver;
 using Orza::App::Widget::Patchbay;
 
+
 SimpleLayout::SimpleLayout( MainWindow * app ) {
 
     _App = app;
@@ -32,6 +33,11 @@ SimpleLayout::SimpleLayout( MainWindow * app ) {
     Patchbay * p = new Patchbay( _App );
 
 };
+
+
+/**
+ * Event setter internal
+ */
 
 void SimpleLayout::setEvents() {
 

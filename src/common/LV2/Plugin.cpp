@@ -185,6 +185,8 @@ void Plugin::setLilvPlugin( const LilvPlugin * p ) {
 
     setName( nodeName );
 
+    setID( _lilvURI );
+
     lilv_node_free( n );
 
     setPorts();

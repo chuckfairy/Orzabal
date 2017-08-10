@@ -9,8 +9,7 @@
 #include <iostream>
 
 #include "Plugin.h"
-#include <Audio/Plugin.h>
-#include <Util/Repository.h>
+#include <Audio/PluginRepository.h>
 
 using std::vector;
 
@@ -22,7 +21,7 @@ namespace Jack {
  * Search extension
  */
 
-class PluginRepository : public Util::Repository<Plugin> {
+class PluginRepository : public Audio::PluginRepository<Plugin> {
 
     public:
 

@@ -23,6 +23,14 @@ enum PortType {
 	TYPE_CV
 };
 
+enum PortValueType {
+	VALUE_FLOAT,
+	VALUE_DOUBLE,
+	VALUE_INT,
+	VALUE_LONG,
+	VALUE_UNKNOWN
+};
+
 struct Port {
 
     const char * name;

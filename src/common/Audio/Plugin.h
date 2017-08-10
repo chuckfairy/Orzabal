@@ -72,6 +72,23 @@ class Plugin {
 
 
         /**
+         * Id related
+         */
+
+        char * getID() {
+
+            return id;
+
+        };
+
+        void setID( const char * s ) {
+
+            strcpy( id, s );
+
+        };
+
+
+        /**
          * Is on / connected
          *
          */
@@ -266,6 +283,8 @@ class Plugin {
         bool ACTIVE = false;
 
         char TYPE[10];
+
+        char id[255];
 
         char name[255];
 
