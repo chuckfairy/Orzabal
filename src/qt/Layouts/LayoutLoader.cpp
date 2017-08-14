@@ -14,15 +14,13 @@ namespace Orza { namespace App { namespace Layout {
 
 void LayoutLoader::load( json * setting ) {
 
-    if( setting["type"] ) {
+    //if( setting["type"] ) {
 
-        throw std::runtime_error(
-            "no type in JSON"
-        );
+        //throw std::runtime_error(
+            //"no type in JSON"
+        //);
 
-    }
-
-
+    //}
 
 };
 

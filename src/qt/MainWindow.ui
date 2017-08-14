@@ -37,7 +37,7 @@
        <bool>false</bool>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="tab">
        <attribute name="title">
@@ -70,8 +70,19 @@
        <attribute name="title">
         <string>Settings</string>
        </attribute>
-       <layout class="QGridLayout" name="gridLayout">
-        <item row="1" column="0">
+       <layout class="QVBoxLayout" name="verticalLayout_2">
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_5">
+          <item>
+           <widget class="QLabel" name="label_5">
+            <property name="text">
+             <string>Output Device</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
          <layout class="QHBoxLayout" name="horizontalLayout_6">
           <item>
            <widget class="QLabel" name="label_7">
@@ -88,18 +99,35 @@
           </item>
          </layout>
         </item>
-        <item row="0" column="0">
-         <layout class="QHBoxLayout" name="horizontalLayout_5">
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_2">
           <item>
-           <widget class="QLabel" name="label_5">
+           <widget class="QComboBox" name="load_layout_dropdown"/>
+          </item>
+          <item>
+           <widget class="QPushButton" name="load_layout_btn">
             <property name="text">
-             <string>Output Device</string>
+             <string>Load Layout</string>
             </property>
            </widget>
           </item>
          </layout>
         </item>
-        <item row="2" column="0">
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout">
+          <item>
+           <widget class="QLineEdit" name="save_layout_input"/>
+          </item>
+          <item>
+           <widget class="QPushButton" name="save_layout_btn">
+            <property name="text">
+             <string>Save Layout</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
          <spacer name="verticalSpacer">
           <property name="orientation">
            <enum>Qt::Vertical</enum>

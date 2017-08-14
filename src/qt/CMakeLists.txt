@@ -50,12 +50,15 @@ file(
     ui_MainWindow.h
     widget/*.cpp
     LV2/*.cpp
+    Layouts/*.cpp
     Settings/*.cpp
     Settings/Events/*.cpp
 )
 
 
 # CMake Config type
+# Pi for fullscreen
+# Linux default
 
 add_definitions(-DORZA_BUILD_TYPE=${ORZA_BUILD_TYPE})
 

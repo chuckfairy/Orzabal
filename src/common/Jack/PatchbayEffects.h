@@ -49,6 +49,17 @@ class PatchbayEffects : public Audio::Patchbay, public StereoHostInterface {
 
 
         /**
+         * Get repo
+         */
+
+        PluginRepository * getRepo() {
+
+            return _Repo;
+
+        };
+
+
+        /**
          * Audio effects related
          */
 

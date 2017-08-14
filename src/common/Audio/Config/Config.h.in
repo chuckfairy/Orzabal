@@ -1,0 +1,14 @@
+/**
+ * Build type in config
+ */
+#pragma once
+
+namespace Audio { namespace Config {
+
+/**
+ * File directory config
+ */
+
+static const char * DataDirectory = "${ORZABAL_DATA_PATH}";
+
+}; };

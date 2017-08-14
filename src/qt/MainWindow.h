@@ -30,7 +30,7 @@ namespace Orza {
 
     } }
 
-    namespace Qt {  namespace Settings {
+    namespace App {  namespace Settings {
 
         class Layout;
 
@@ -39,8 +39,8 @@ namespace Orza {
 };
 
 
-using Orza::Qt::Settings::Layout;
 using namespace Orza::App;
+using Orza::App::Settings::Layout;
 
 
 /**
@@ -132,6 +132,18 @@ class MainWindow : public QMainWindow {
          */
 
         Jack::Server * getServer();
+
+
+        /**
+         * Layout @TODO use better base
+         */
+
+        SimpleLayout * getLayout();
+
+
+        /**
+         * Qt UI
+         */
 
         Ui_MainWindow * getUI() {
 

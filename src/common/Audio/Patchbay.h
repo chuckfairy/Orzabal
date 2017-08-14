@@ -13,6 +13,15 @@ namespace Audio {
 
 class Patchbay : public Host {
 
+    public:
+
+        vector<Plugin*> getActivePlugins() {
+
+            return _ActivePlugins;
+
+        };
+
+
     protected:
 
         vector<Plugin*> _Plugins;

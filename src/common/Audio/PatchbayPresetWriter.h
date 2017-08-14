@@ -7,10 +7,12 @@
 
 #include <json/json.hpp>
 
-#include "Plugin.h"
-
 #include <Util/JSON.h>
 #include <Util/File.h>
+
+#include "Config/Config.h"
+#include "Plugin.h"
+
 
 using std::string;
 using std::vector;
@@ -23,8 +25,8 @@ class PatchbayPresetWriter {
 
     public:
 
-         PatchbayPresetWriter();
-         ~PatchbayPresetWriter();
+         PatchbayPresetWriter() {};
+         ~PatchbayPresetWriter() {};
 
 
         /**
@@ -33,7 +35,24 @@ class PatchbayPresetWriter {
 
         void saveToFile( const char * const fileName, string data ) {
 
-            Util::File::setContents( fileName, data );
+            char * fullPath = (char*) malloc(
+                sizeof( fileName )
+                + sizeof( Config::DataDirectory )
+                + 50
+            );
+
+            sprintf( fullPath, "%s/%s.json", Config::DataDirectory, fileName );
+
+            std::cout << fullPath << "\n";
+
+            Util::File::setContents( fullPath, data );
+
+        };
+
+
+        void saveToFile( const char * const fileName, json data ) {
+
+            saveToFile( fileName, data.dump( 4 ) );
 
         };
 
@@ -48,7 +67,7 @@ class PatchbayPresetWriter {
 
             output["id"] = p->getID();
 
-            output["ports"] = getPortsJSON();
+            output["ports"] = getPortsJSON( p );
 
             return output;
 
@@ -67,7 +86,7 @@ class PatchbayPresetWriter {
 
             for( it = plugins.begin(); it < plugins.end(); ++ it ) {
 
-                output.push_back( getJSON( it ) );
+                output.push_back( getJSON( (*it) ) );
 
             }
 
@@ -84,8 +103,6 @@ class PatchbayPresetWriter {
 
             json output;
 
-            vector<long> ports = p->getPorts();
-
             int len = p->getNumPorts();
 
             for( int i = 0; i < len; ++ i ) {
@@ -95,6 +112,8 @@ class PatchbayPresetWriter {
                 Port * port = p->getPort( i );
 
                 portJSON["id"] = i;
+
+                portJSON["value"] = port->control;
 
                 output.push_back( portJSON );
 

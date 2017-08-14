@@ -4,9 +4,21 @@ project(orzabal-common-audio CXX)
 
 file( GLOB
     ORZABAL_AUDIO_INCLUDE_FILES
+    "Config/*.h"
     "*.h"
     "*.cpp"
 )
+
+
+# Configure app data path
+
+add_definitions(-DORZA_DATA_PATH=${ORZA_BUILD_TYPE})
+
+if( "${ORZA_DATA_PATH}" STREQUAL "" )
+    set( ORZABAL_DATA_PATH "${ORZABAL_ROOT_PATH}/data" )
+endif()
+
+configure_file(Config/Config.h.in Config/Config.h)
 
 
 ## Building

@@ -9,6 +9,10 @@
 
 namespace Audio {
 
+/**
+ * Port types
+ */
+
 enum PortFlow {
 	FLOW_UNKNOWN,
 	FLOW_INPUT,
@@ -31,9 +35,21 @@ enum PortValueType {
 	VALUE_UNKNOWN
 };
 
+
+/**
+ * Main port struct
+ */
+
 struct Port {
 
     const char * name;
+
+    std::string nameString;
+
+
+    /**
+     * Flags
+     */
 
     bool isAudio;
 
@@ -43,19 +59,29 @@ struct Port {
 
     bool isOutput;
 
-	enum PortType type;
 
-	enum PortFlow flow;
+    /**
+     * Value and value type
+     */
 
 	float control;
+
+    PortValueType valueType;
+
+	enum PortType type;
+
+    enum PortFlow flow;
 
     float lowerBound;
 
     float upperBound;
 
-    uint32_t index;
 
-    std::string nameString;
+    /**
+     * Bound index
+     */
+
+    uint32_t index;
 
 };
 

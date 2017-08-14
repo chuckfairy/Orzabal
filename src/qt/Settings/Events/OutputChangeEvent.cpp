@@ -6,7 +6,7 @@
 #include "OutputChangeEvent.h"
 
 
-namespace Orza { namespace Qt {  namespace Settings {
+namespace Orza { namespace App {  namespace Settings {
 
 /**
  * Construct

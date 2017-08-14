@@ -1,7 +1,11 @@
 /**
  * Settings layout tab
  */
+#include <string>
+#include <vector>
 #include <iostream>
+
+#include <QtCore>
 
 #include <MainWindow.h>
 
@@ -9,7 +13,11 @@
 #include "Layout.h"
 
 
-namespace Orza { namespace Qt {  namespace Settings {
+using std::string;
+using std::vector;
+
+
+namespace Orza { namespace App {  namespace Settings {
 
 
 /**
@@ -17,7 +25,8 @@ namespace Orza { namespace Qt {  namespace Settings {
  */
 
 Layout::Layout( MainWindow * win ) :
-    _App( win )
+    _App( win ),
+    _LayoutWriter( new Orza::App::Layouts::LayoutWriter )
 {
 
     setDropdowns();
@@ -38,26 +47,83 @@ void Layout::setDropdowns() {
 
     _RightOutput->setCurrentIndex( 1 );
 
+
+     //Settings
+
+    QComboBox * dropdown = _App->getUI()->load_layout_dropdown;
+
+    vector<string> fileNames = _App->getLayout()->getFileNames();
+
+    vector<string>::const_iterator it;
+
+    for( it = fileNames.begin(); it < fileNames.end(); ++ it ) {
+
+        dropdown->addItem( it->c_str() );
+
+    }
+
 };
 
 
 void Layout::setEvents() {
+
+    //Output changing
 
     _Event = (Util::Event*) new OutputChangeEvent( this );
 
     _LeftOutput->on( OutputDropdown::CHANGE_EVENT, _Event );
     _RightOutput->on( OutputDropdown::CHANGE_EVENT, _Event );
 
+
+    //Save click
+
+    connect(
+        _App->getUI()->save_layout_btn,
+        SIGNAL( clicked() ),
+        this,
+        SLOT( handleSaveClick() )
+   );
+
 };
 
 /**
- * Appp UI setting
+ * App UI setting
  */
 
 void Layout::setAppUI() {
 
     _App->getUI()->horizontalLayout_5->addWidget( _LeftOutput );
     _App->getUI()->horizontalLayout_5->addWidget( _RightOutput );
+
+};
+
+
+/**
+ * Save layout
+ */
+
+void Layout::saveLayout() {
+
+    std::string layoutName = _App->getUI()
+        ->save_layout_input
+        ->text()
+        .toStdString();
+
+    _LayoutWriter->writeLayoutToFile(
+        layoutName,
+        _App->getServer()->getPatchbay()
+    );
+
+};
+
+
+/**
+ * Qt handler for save click
+ */
+
+void Layout::handleSaveClick() {
+
+    saveLayout();
 
 };
 

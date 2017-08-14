@@ -113,6 +113,17 @@ Jack::Server * MainWindow::getServer() {
 
 
 /**
+ * Layout @TODO use better base
+ */
+
+SimpleLayout * MainWindow::getLayout() {
+
+    return _Layout;
+
+};
+
+
+/**
  * Window actions
  */
 

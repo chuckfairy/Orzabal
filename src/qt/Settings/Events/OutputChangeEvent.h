@@ -7,7 +7,7 @@
 
 #include <Jack/Server.h>
 
-namespace Orza { namespace Qt {  namespace Settings {
+namespace Orza { namespace App {  namespace Settings {
 
 /**
  * Forwarding
@@ -21,15 +21,15 @@ class Layout;
 
 class OutputChangeEvent : Util::Event {
 
-    private:
-
-        Layout * _Layout;
-
     public:
 
         OutputChangeEvent( Layout * );
 
         void run( void * );
+
+    private:
+
+        Layout * _Layout;
 
 };
 
