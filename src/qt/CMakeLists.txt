@@ -31,12 +31,15 @@ qt5_add_resources(RESOURCES ./Resources.qrc)
 
 #links
 
+FIND_PACKAGE(Boost)
+
 include_directories(
     ${CMAKE_CURRENT_BINARY_DIR}
     ../common /usr/local/lib
     "${ORZABAL_ROOT_PATH}/lib-src"
     "${ORZABAL_ROOT_PATH}/lib-src/sratom"
     "${ORZABAL_ROOT_PATH}/lib-src/sord"
+    ${Boost_INCLUDE_DIR}
 )
 
 
@@ -75,6 +78,7 @@ configure_file(Config/BuildType.h.in Config/BuildType.h)
 
 add_executable(orzabal.qt ${orzabal.qt_SRC} ${common-ladspa} ${RESOURCES})
 
+find_package( Boost 1.45.0 COMPONENTS filesystem regex )
 
 target_link_libraries( orzabal.qt
     PUBLIC
@@ -83,6 +87,7 @@ target_link_libraries( orzabal.qt
     orzabal-common-jack
     Qt5::Widgets Qt5::Core
     Qt5::Qml
+    Boost::regex
 )
 
 install( TARGETS

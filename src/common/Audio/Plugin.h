@@ -77,7 +77,7 @@ class Plugin {
 
         char * getID() {
 
-            return id;
+            return (char*) &id;
 
         };
 

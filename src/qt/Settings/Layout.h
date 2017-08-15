@@ -35,15 +35,19 @@ class Layout : public QWidget {
         void updateOutputPorts();
 
         /**
-         * Save layout
+         * Save preset layout
          */
 
         void saveLayout();
+
+        void loadPreset();
 
 
     public slots:
 
         void handleSaveClick();
+
+        void handlePresetLoadClick();
 
 
     private:

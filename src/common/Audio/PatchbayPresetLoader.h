@@ -13,6 +13,7 @@
 
 #include <Util/File.h>
 #include <Util/JSON.h>
+#include <Util/String.h>
 
 using std::string;
 using std::vector;
@@ -47,7 +48,19 @@ class PatchbayPresetLoader {
 
         };
 
-        void loadFromName( const char * const name );
+        void loadFromName( const char * const name ) {
+
+            char * fullPath = (char*) malloc(
+                sizeof( Config::DataDirectory )
+                + sizeof( name )
+                + 50
+            );
+
+            sprintf( fullPath, "%s/%s.json", Config::DataDirectory, name );
+
+            loadFromJSON( fullPath );
+
+        };
 
 
         /**
@@ -62,8 +75,6 @@ class PatchbayPresetLoader {
             );
 
             sprintf( fullPath, "%s/*.json", Config::DataDirectory );
-
-            std::cout << fullPath;
 
             return Util::File::getGlob( fullPath );
 
@@ -82,7 +93,14 @@ class PatchbayPresetLoader {
 
             for( unsigned int i=0; i < glob_result.gl_pathc; ++i ){
 
-                ret.push_back( string( glob_result.gl_pathv[i] ) );
+                string filePath( glob_result.gl_pathv[i] );
+
+                //@TODO make better
+                filePath = Util::String::RegexReplace( Config::DataDirectory, "", filePath );
+                filePath = Util::String::RegexReplace( "^/", "", filePath );
+                filePath = Util::String::RegexReplace( ".json$", "", filePath );
+
+                ret.push_back( filePath );
 
             }
 

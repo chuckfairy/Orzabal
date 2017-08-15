@@ -7,6 +7,7 @@
 #include <vector>
 
 #include "Plugin.h"
+#include "PluginRepository.h"
 
 using std::vector;
 
@@ -21,19 +22,21 @@ namespace Audio {
 
 class Search {
 
-    protected:
-
-        const char * _path;
-
-
     public:
 
-        Search() {};
-        ~Search() {};
+        /**
+         * Get repo
+         */
+
+        PluginRepository<Plugin> * getRepo() {
+
+            return & _Repo;
+
+        };
+
 
         /**
          * Search All
-         *
          */
 
         virtual vector<Plugin*> findAll() {
@@ -87,6 +90,39 @@ class Search {
             return effects;
 
         };
+
+        Plugin * findById( const char * id ) {
+
+            vector<Plugin*> plugins = findAll();
+
+            vector<Plugin*>::iterator it;
+
+            for( it = plugins.begin(); it != plugins.end(); ++ it ) {
+
+                Plugin * p = (*it);
+
+                if( strncmp( p->getID(), id, 500 ) == 0 ) {
+
+                    return p;
+
+                }
+
+            }
+
+        };
+
+
+    protected:
+
+        const char * _path;
+
+        Search() {};
+        ~Search() {};
+
+
+    private:
+
+        PluginRepository<Plugin> _Repo;
 
 };
 

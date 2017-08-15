@@ -1,10 +1,13 @@
 /**
  * Simple layout start
  */
+#include <string>
 #include <Jack/Server.h>
 #include <LV2/UIDriver.h>
 
 #include <MainWindow.h>
+
+#include <Audio/PluginRepository.h>
 
 #include "SimpleChangeEvent.h"
 #include "SimpleLayout.h"
@@ -30,7 +33,7 @@ SimpleLayout::SimpleLayout( MainWindow * app ) {
     _App->getUI()
         ->horizontalLayout_4->insertWidget( 0, _Dropdown );
 
-    Patchbay * p = new Patchbay( _App );
+    _Patchbay = new Patchbay( _App );
 
 };
 
@@ -97,15 +100,40 @@ void SimpleLayout::setPlugin( LV2::Plugin * p ) {
 
 void  SimpleLayout::load( json j ) {
 
-    // Plugins
+    //@TODO remove LV2 make normal host
 
-    for( json::iterator it = j["data"]["effects"].begin(); it != j["data"]["effects"].end(); ++it ) {
+    LV2::Host * host = _App->getServer()->getPatchbay();
 
-        json effect = *it;
+    if( ! j["instruments"].empty() ) {
 
-        /// get by ideffect["id"]
+        json instrument = j["instruments" ][ 0 ];
 
-        // setPlugin
+        std::string id = instrument["id"];
+
+        Audio::Plugin * p = host->getSearch()->findById( id.c_str() );
+
+        setPlugin( (LV2::Plugin*) p );
+
+    }
+
+
+    // Plugin effects
+
+    _Patchbay->clearPlugins();
+
+    if( ! j["effects"].empty() ) {
+
+        for( json::iterator it = j["effects"].begin(); it != j["effects"].end(); ++it ) {
+
+            json effect = *it;
+
+            std::string id = effect["id"];
+
+            Audio::Plugin * p = host->getSearch()->findById( id.c_str() );
+
+            _Patchbay->addPlugin( p->clone() );
+
+        }
 
     }
 

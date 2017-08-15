@@ -82,7 +82,15 @@ void Layout::setEvents() {
         SIGNAL( clicked() ),
         this,
         SLOT( handleSaveClick() )
-   );
+    );
+
+
+    connect(
+        _App->getUI()->load_layout_btn,
+        SIGNAL( clicked() ),
+        this,
+        SLOT( handlePresetLoadClick() )
+    );
 
 };
 
@@ -118,12 +126,34 @@ void Layout::saveLayout() {
 
 
 /**
+ * load preset from dropdown
+ */
+
+void Layout::loadPreset() {
+
+    std::string layoutName = _App->getUI()
+        ->load_layout_dropdown
+        ->currentText()
+        .toStdString();
+
+    _App->getLayout()->loadFromName( layoutName.c_str() );
+
+};
+
+
+/**
  * Qt handler for save click
  */
 
 void Layout::handleSaveClick() {
 
     saveLayout();
+
+};
+
+void Layout::handlePresetLoadClick() {
+
+    loadPreset();
 
 };
 

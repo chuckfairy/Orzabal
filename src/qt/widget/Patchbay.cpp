@@ -56,8 +56,20 @@ void Patchbay::handleAddClick() {
 
     //Create patchbay plugin ui
 
-    LV2::Host * h = _App->getServer()->getPatchbay();
     Audio::Plugin * p = _Dropdown->getCurrentPlugin()->clone();
+
+    addPlugin( p );
+
+};
+
+
+/**
+ * Add plugin
+ */
+
+void Patchbay::addPlugin( Audio::Plugin * p ) {
+
+    LV2::Host * h = _App->getServer()->getPatchbay();
 
     h->getEffects()->addEffect( p );
 
@@ -76,7 +88,12 @@ void Patchbay::handleAddClick() {
 
 };
 
-void Patchbay::handleRemoveClick( PatchbayPlugin * plugin ) {
+
+/**
+ * Remove plugin
+ */
+
+void Patchbay::removePlugin( PatchbayPlugin * plugin ) {
 
     LV2::Host * h = _App->getServer()->getPatchbay();
 
@@ -85,5 +102,31 @@ void Patchbay::handleRemoveClick( PatchbayPlugin * plugin ) {
     delete plugin;
 
 };
+
+
+void Patchbay::handleRemoveClick( PatchbayPlugin * plugin ) {
+
+    removePlugin( plugin );
+
+};
+
+
+/**
+ * Clear all plugins
+ */
+
+void Patchbay::clearPlugins() {
+
+    vector<PatchbayPlugin*>::iterator it;
+
+    for( it = _plugins.begin(); it != _plugins.end(); ++ it ) {
+
+        removePlugin( (*it) );
+
+    }
+
+}
+
+
 
 } } };

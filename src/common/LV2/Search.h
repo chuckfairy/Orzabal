@@ -39,6 +39,8 @@ class Search : public Audio::Search {
 
         vector<Audio::Plugin*> findAll();
 
+        void update();
+
 };
 
 };

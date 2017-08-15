@@ -11,9 +11,14 @@
 #include <LV2/UI.h>
 #include <Util/Dispatcher.h>
 
+#include "Patchbay.h"
+
 #include "InstrumentDropdown.h"
 
 using nlohmann::json;
+
+using Orza::App::Widget::Patchbay;
+
 
 /**
  * Forwarding
@@ -37,6 +42,8 @@ class SimpleLayout : public Audio::PatchbayPresetLoader {
     private:
 
         InstrumentDropdown * _Dropdown;
+
+        Patchbay * _Patchbay;
 
         Util::Event * _ChangeEvent;
 

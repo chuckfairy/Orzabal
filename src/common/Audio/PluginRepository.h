@@ -38,17 +38,21 @@ class PluginRepository : public Util::Repository<T> {
          * Main id getter
          */
 
-        Plugin * getById( const char * const id ) {
+        Plugin * getById( const char * id ) {
 
             vector<Plugin*>::iterator it;
 
-            vector<T*> _items = this.getAll();
+            vector<T*> items = this->getAll();
 
-            for( it = _items.begin(); it != _items.end(); ++ it ) {
+            for( it = items.begin(); it != items.end(); ++ it ) {
 
-                Plugin * p = (Plugin*)(*it);
+                Plugin * p = (*it);
 
-                if( strncmp( p->getID(), id, sizeof( id ) == 0 ) ) {
+                std::cout << "\n" << (*it)->getName();
+
+                return nullptr;
+
+                if( strncmp( p->getID(), id, 500 ) == 0 ) {
 
                     return p;
 

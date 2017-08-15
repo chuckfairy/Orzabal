@@ -49,7 +49,11 @@ class Patchbay : public QWidget {
 
         void movePlugin();
 
-        void removePlugin();
+        void removePlugin( PatchbayPlugin * );
+
+        void clearPlugins();
+
+        void addPlugin( Audio::Plugin * );
 
 
     public slots:

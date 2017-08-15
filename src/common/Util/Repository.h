@@ -51,6 +51,12 @@ class Repository : public Dispatcher {
 
         };
 
+        unsigned int size() {
+
+            return _items.size();
+
+        };
+
 
         /**
          * Optional update manevour
@@ -116,11 +122,17 @@ class Repository : public Dispatcher {
          * Empty proxy
          */
 
-        bool empty() const {
+        bool empty() {
 
             return _items.empty();
 
-        }
+        };
+
+        void clear() {
+
+            _items.clear();
+
+        };
 
 
         /**
@@ -143,6 +155,12 @@ class Repository : public Dispatcher {
             //return _items.begin();
 
         //};
+
+        T * getByIndex( int index ) {
+
+            return _items[ index ];
+
+        };
 
 
         /**

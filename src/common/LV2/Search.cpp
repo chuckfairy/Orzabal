@@ -9,6 +9,7 @@
 #include <lilv/lilv.h>
 
 #include <Audio/Plugin.h>
+#include <Audio/PluginRepository.h>
 
 #include "Search.h"
 #include "Plugin.h"
@@ -34,6 +35,25 @@ Search::Search( Host * h ) {
 
 vector<Audio::Plugin*> Search::findAll() {
 
+    if( getRepo()->empty() ) {
+
+        update();
+
+    }
+
+    return getRepo()->getAll();
+
+};
+
+
+/**
+ * Main update
+ */
+
+void Search::update() {
+
+    getRepo()->clear();
+
     const LilvWorld * _lilvWorld = _Host->getLilvWorld();
 
     vector<Audio::Plugin*> pluginList;
@@ -42,15 +62,15 @@ vector<Audio::Plugin*> Search::findAll() {
 
     LILV_FOREACH( plugins, i, plugins ) {
 
-        const LilvPlugin* p = lilv_plugins_get(plugins, i);
+        const LilvPlugin* p = lilv_plugins_get( plugins, i );
 
         Audio::Plugin * d = new Plugin( p, _Host );
 
         pluginList.push_back( d );
 
-    }
+        getRepo()->add( d );
 
-    return pluginList;
+    }
 
 };
 

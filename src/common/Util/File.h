@@ -91,7 +91,7 @@ inline string basenameOf( const string& from, const string& to ) {
 
     }
 
-    str.replace( start_pos, from.length(), str );
+    str.replace( start_pos, from.length(), "" );
 
     return str;
 
