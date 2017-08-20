@@ -548,6 +548,8 @@ void Plugin::pause() {
 
     zix_sem_wait( & paused );
 
+    ACTIVE = false;
+
 };
 
 

@@ -60,7 +60,7 @@ PatchbayPlugin::PatchbayPlugin( Audio::Plugin * const p ) :
         SIGNAL( clicked() ),
         this,
         SLOT( handleViewClick() )
-   );
+    );
 
 
     //Delete button
@@ -70,7 +70,14 @@ PatchbayPlugin::PatchbayPlugin( Audio::Plugin * const p ) :
         SIGNAL( clicked() ),
         this,
         SLOT( handleRemoveClick() )
-   );
+    );
+
+    connect(
+        _UI.active_btn,
+        SIGNAL( clicked() ),
+        this,
+        SLOT( handleActiveClick() )
+    );
 
 };
 
@@ -91,6 +98,52 @@ PatchbayPlugin::~PatchbayPlugin() {
  */
 
 const char * PatchbayPlugin::REMOVE_EVENT = "REMOVE";
+const char * PatchbayPlugin::ACTIVATE_EVENT = "ACTIVATION";
+
+
+/**
+ * Active methods
+ */
+
+void PatchbayPlugin::setActive() {
+
+    if( ! _Plugin->isActive() ) {
+
+        _Plugin->run();
+
+    }
+
+    _UI.active_btn->setStyleSheet( "color: #FFF " );
+
+    _UI.active_btn->setText( "Active" );
+
+    dispatch( ACTIVATE_EVENT, this );
+
+};
+
+void PatchbayPlugin::setInactive() {
+
+    if( _Plugin->isActive() ) {
+
+        _Plugin->pause();
+
+    }
+
+    _UI.active_btn->setStyleSheet( "color: #DEDEDE" );
+
+    _UI.active_btn->setText( "Inactive" );
+
+    dispatch( ACTIVATE_EVENT, this );
+
+};
+
+void PatchbayPlugin::toggleActive() {
+
+    _Plugin->isActive()
+        ? setInactive()
+        : setActive();
+
+};
 
 
 /**
@@ -102,6 +155,19 @@ void PatchbayPlugin::handleViewClick() {
     _UI.scrollArea->isVisible()
         ?  _UI.scrollArea->hide()
         : _UI.scrollArea->show();
+
+};
+
+
+/**
+ * Set inactive
+ */
+
+void PatchbayPlugin::handleActiveClick() {
+
+    std::cout << "TEST\n";
+
+    toggleActive();
 
 };
 

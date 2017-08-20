@@ -192,15 +192,6 @@ void Patchbay::connectPluginMidiPorts( Audio::Plugin * p ) {
 };
 
 
-/**
- * Audio effects connection
- */
-
-void Patchbay::connectAudioEffectPorts( Audio::Plugin * plugin ) {
-
-
-};
-
 /*
  * Server related
  *

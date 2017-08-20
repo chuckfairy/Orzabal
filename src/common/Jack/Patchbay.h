@@ -92,12 +92,6 @@ class Patchbay : public Audio::Patchbay, public ServerStandalone {
 
 
         /**
-         * Effect connectors
-         */
-
-        void connectAudioEffectPorts( Audio::Plugin * );
-
-        /**
          * Update callback and hosting
          */
 

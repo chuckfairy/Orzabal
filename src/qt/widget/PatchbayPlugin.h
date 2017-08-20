@@ -53,11 +53,32 @@ class PatchbayPlugin : public QWidget, public Util::Dispatcher {
 
         };
 
+
+        /**
+         * Event
+         */
+
         static const char * REMOVE_EVENT;
+
+        static const char * ACTIVATE_EVENT;
+
+
+        /**
+         * Active related
+         */
+
+        void setActive();
+
+        void setInactive();
+
+        void toggleActive();
+
 
     public slots:
 
         void handleViewClick();
+
+        void handleActiveClick();
 
         void handleRemoveClick();
 

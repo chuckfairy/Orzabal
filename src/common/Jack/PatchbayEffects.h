@@ -9,6 +9,7 @@
 #include <Audio/Patchbay.h>
 
 #include "Host.h"
+#include "Plugin.h"
 #include "StereoHostInterface.h"
 #include "PatchbayEffectsOutput.h"
 

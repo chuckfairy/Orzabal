@@ -6,6 +6,7 @@
 #include <Jack/PatchbayEffects.h>
 
 #include "Events/RemoveClickEvent.h"
+#include "Events/ActivateClickEvent.h"
 #include "PatchbayPlugin.h"
 #include "Patchbay.h"
 
@@ -83,8 +84,10 @@ void Patchbay::addPlugin( Audio::Plugin * p ) {
     //Set plugin events
 
     Util::Event * e = new RemoveClickEvent<Patchbay, PatchbayPlugin>( this );
+    Util::Event * activeEvent = new ActivateClickEvent<Patchbay, PatchbayPlugin>( this );
 
     plugin->on( PatchbayPlugin::REMOVE_EVENT, e );
+    plugin->on( PatchbayPlugin::ACTIVATE_EVENT, activeEvent );
 
 };
 
@@ -104,9 +107,21 @@ void Patchbay::removePlugin( PatchbayPlugin * plugin ) {
 };
 
 
+/**
+ * Event handlers
+ */
+
 void Patchbay::handleRemoveClick( PatchbayPlugin * plugin ) {
 
     removePlugin( plugin );
+
+};
+
+void Patchbay::handleActivateClick( PatchbayPlugin * plugin ) {
+
+    LV2::Host * h = _App->getServer()->getPatchbay();
+
+    h->getEffects()->connectEffectPorts();
 
 };
 

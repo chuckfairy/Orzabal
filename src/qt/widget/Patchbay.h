@@ -62,6 +62,8 @@ class Patchbay : public QWidget {
 
         void handleRemoveClick( PatchbayPlugin * );
 
+        void handleActivateClick( PatchbayPlugin * );
+
 
     private:
 

@@ -109,11 +109,16 @@ void PatchbayEffects::connectEffectPorts() {
 
     disconnectEffectPorts();
 
+
     //Connect chain
 
     vector<Plugin*> _ActiveEffects = _Repo->getAll();
 
     vector<Plugin*>::iterator it;
+
+    bool isFirst = true;
+
+    Plugin * lastPlugin = nullptr;
 
     for( it = _ActiveEffects.begin(); it != _ActiveEffects.end(); ++ it ) {
 
@@ -130,42 +135,50 @@ void PatchbayEffects::connectEffectPorts() {
 
         //First one connect to internal out
 
-        if( (*it) == _ActiveEffects.front() ) {
+        if( isFirst ) {
 
             connectOutputTo(
                 jack_port_name( inputs[0] ),
                 jack_port_name( inputs[1] )
             );
 
-        }
-
-
-        //Send to output or next plugin
-
-        if( (*it) == _ActiveEffects.back() ) {
-
-            _Output->connectInputTo(
-                jack_port_name( outputs[0] ),
-                jack_port_name( outputs[1] )
-            );
+            isFirst = false;
 
         } else {
 
-            Plugin * nextPlugin = (Plugin*) (*(it + 1));
-
-            vector<jack_port_t*> nextInputs = nextPlugin->getInputJackPorts();
+            vector<jack_port_t*> lastOutputs = lastPlugin->getInputJackPorts();
 
             connectJackPort(
-                jack_port_name( outputs[0] ),
-                jack_port_name( nextInputs[0] )
+                jack_port_name( lastOutputs[0] ),
+                jack_port_name( inputs[0] )
             );
 
             connectJackPort(
-                jack_port_name( outputs[1] ),
-                jack_port_name( nextInputs[1] )
+                jack_port_name( lastOutputs[1] ),
+                jack_port_name( inputs[1] )
             );
 
         }
+
+        lastPlugin = p;
+
+    }
+
+    if( lastPlugin != nullptr ) {
+
+        vector<jack_port_t*> outputs = lastPlugin->getOutputJackPorts();
+
+        _Output->connectInputTo(
+            jack_port_name( outputs[0] ),
+            jack_port_name( outputs[1] )
+        );
+
+    } else {
+
+        connectOutputTo(
+           _Output->getInputNameLeft(),
+           _Output->getInputNameRight()
+        );
 
     }
 

@@ -99,6 +99,8 @@ MainWindow::MainWindow( QWidget * parent, Qt::WindowFlags flags ) :
 
     }
 
+    getUI()->tabWidget->setCurrentIndex( 0 );
+
 };
 
 /**
