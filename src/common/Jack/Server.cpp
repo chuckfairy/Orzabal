@@ -3,6 +3,8 @@
  *
  */
 #include <iostream>
+#include <stdexcept>
+
 #include <jack/jack.h>
 #include <jack/midiport.h>
 #include <jack/session.h>
@@ -23,14 +25,16 @@ namespace Jack {
 
 using Events::PortRegistrationData;
 
+
 /**
  * Construct
  *
  */
 
-Server::Server() {
+Server::Server() :
+    _client( jack_client_open( Server::JACK_CLIENT_NAME, JACK_OPTIONS, &JACK_STATUS ) )
+{
 
-    _client = jack_client_open( _clientName, JACK_OPTIONS, &JACK_STATUS );
 
 };
 
@@ -38,6 +42,7 @@ Server::Server() {
 /**
  * Static sets
  */
+const char * Server::JACK_CLIENT_NAME = "orzabal-client";
 
 const char * Server::UPDATE_EVENT = "update";
 const char * Server::SHUTDOWN_EVENT = "shutdown";
@@ -57,9 +62,7 @@ bool Server::start() {
 
     if( _client == NULL ) {
 
-        printf( "NO CLIENT OPEN" );
-
-        return false;
+        throw std::runtime_error( "NO CLIENT OPEN" );
 
     }
 

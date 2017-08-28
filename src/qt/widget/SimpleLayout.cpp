@@ -1,7 +1,10 @@
 /**
  * Simple layout start
  */
-#include <string>
+#include <string.h>
+
+#include <json/json.hpp>
+
 #include <Jack/Server.h>
 #include <LV2/UIDriver.h>
 
@@ -98,11 +101,14 @@ void SimpleLayout::setPlugin( LV2::Plugin * p ) {
  * Main layout load
  */
 
-void  SimpleLayout::load( json j ) {
+void SimpleLayout::load( json j ) {
 
     //@TODO remove LV2 make normal host
 
     LV2::Host * host = _App->getServer()->getPatchbay();
+
+    host->setActive( false );
+
 
     if( ! j["instruments"].empty() ) {
 
@@ -111,10 +117,17 @@ void  SimpleLayout::load( json j ) {
         std::string id = instrument["id"];
 
         Audio::Plugin * p = host->getSearch()->findById( id.c_str() );
+        LV2::Plugin * clone = (LV2::Plugin*) p->clone();
 
-        setPlugin( (LV2::Plugin*) p );
+        setPortsFromJSON( clone, instrument );
+
+        setPlugin( clone );
 
     }
+
+    host->setActive( true );
+
+    return;
 
 
     // Plugin effects
@@ -132,6 +145,8 @@ void  SimpleLayout::load( json j ) {
             Audio::Plugin * p = host->getSearch()->findById( id.c_str() );
 
             _Patchbay->addPlugin( p->clone() );
+
+            setPortsFromJSON( p, effect );
 
         }
 

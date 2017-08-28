@@ -51,37 +51,37 @@ struct Port {
      * Flags
      */
 
-    bool isAudio;
+    bool isAudio = false;
 
-    bool isControl;
+    bool isControl = false;
 
-    bool isInput;
+    bool isInput = false;
 
-    bool isOutput;
+    bool isOutput = false;
 
 
     /**
      * Value and value type
      */
 
-	float control;
+	float control = 0;
 
-    PortValueType valueType;
+    PortValueType valueType = VALUE_UNKNOWN;
 
-	enum PortType type;
+	enum PortType type = TYPE_UNKNOWN;
 
-    enum PortFlow flow;
+    enum PortFlow flow = FLOW_UNKNOWN;
 
-    float lowerBound;
+    float lowerBound = 0;
 
-    float upperBound;
+    float upperBound = 0;
 
 
     /**
      * Bound index
      */
 
-    uint32_t index;
+    uint32_t index = 0;
 
 };
 

@@ -162,6 +162,13 @@ class Plugin {
 
 
         /**
+         * Set port value virtual
+         */
+
+        virtual void setPortValue( Port * p, float value ) {};
+
+
+        /**
          * Has port type methods
          */
 

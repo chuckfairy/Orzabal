@@ -235,21 +235,21 @@ class Plugin : public Jack::Plugin {
          * Timing props
          */
 
-        LV2_Atom* lv2_pos;
+        LV2_Atom * lv2_pos;
 
         LilvNode * lv2_reportsLatency;
 
-        bool _request_update;
+        bool _request_update = false;
 
-        int sample_rate;
+        int sample_rate = 0;
 
-        float ui_update_hz;
+        float ui_update_hz = 0.0;
 
         int midi_buf_size = 1024;
 
-        uint32_t midi_event_id;
+        uint32_t midi_event_id = 0;
 
-        uint32_t plugin_latency;
+        uint32_t plugin_latency = 0;
 
         bool xport_changed = false;
 
@@ -257,7 +257,7 @@ class Plugin : public Jack::Plugin {
 
         bool _transportRolling = false;
 
-        unsigned int buffer_size;
+        unsigned int buffer_size = 4096;
 
         int _position = 0;
 
@@ -369,10 +369,17 @@ class Plugin : public Jack::Plugin {
 
 
         /**
+         * Port value setter
+         */
+
+        void setPortValue( Audio::Port * p, float value );
+
+
+        /**
          * Port value setting
          */
 
-        static void setPortValue(
+        static void setPortValueLilv(
             const char * port_symbol,
             void * user_data,
             const void * value,

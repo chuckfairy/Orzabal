@@ -208,7 +208,6 @@ Audio::Port * Plugin::createPort( int long portNum ) {
     port->lilv_port = lilv_plugin_get_port_by_index( _lilvPlugin, portNum );
 
 	port->jack_port = NULL;
-    port->evbuf = NULL;
 	port->buf_size  = 0;
 	port->index = portNum;
 	port->control = 0.0f;
@@ -752,7 +751,11 @@ void Plugin::allocatePortBuffer( uint32_t i ) {
 
         case Audio::TYPE_EVENT: {
 
-            lv2_evbuf_free( port->evbuf );
+            if( port->evbuf != nullptr ) {
+
+                lv2_evbuf_free( port->evbuf );
+
+            }
 
             const size_t buf_size = port->buf_size > 0
                 ? port->buf_size
@@ -1377,10 +1380,38 @@ bool Plugin::lilvFeaturesIsSupported( const char * uri ) {
 
 
 /**
+ * Port value setter func
+ */
+
+void Plugin::setPortValue( Audio::Port * port, float value ) {
+
+    std::cout << "Port VALUE LV2 " << value << "\n";
+
+    port->control = value;
+
+    if( getState()->getPlayState() == Audio::RUNNING ) {
+
+        // Send value to running plugin
+        //plugin_ui_write(plugin, port->index, sizeof(fvalue), 0, &fvalue);
+
+        //char buf[sizeof(ControlChange) + sizeof(value)];
+        //ControlChange* ev = (ControlChange*)buf;
+        //ev->index    = port->index;
+        //ev->protocol = 0;
+        //ev->size     = sizeof(value);
+        //*(float*)ev->body = value;
+        //jack_ringbuffer_write( _uiPortEvents, buf, sizeof(buf) );
+
+    }
+
+};
+
+
+/**
  * Static lilv state apply
  */
 
-void Plugin::setPortValue(
+void Plugin::setPortValueLilv(
     const char* port_symbol,
     void*       user_data,
     const void* value,
@@ -1390,14 +1421,16 @@ void Plugin::setPortValue(
 
 	Plugin * plugin = (Plugin*) user_data;
 
-	struct Port* port = plugin->getPortBySymbol( port_symbol );
+	struct Port * port = plugin->getPortBySymbol( port_symbol );
 
-	if (!port) {
-		fprintf(stderr, "error: Preset port `%s' is missing\n", port_symbol);
-		return;
+	if( ! port ) {
+
+        throw std::runtime_error( "error: Preset port `%s' is missing\n" );
+		// port_symbol);
 	}
 
 	float fvalue;
+
 	if (type == plugin->_forge.Float) {
 		fvalue = *(const float*)value;
 	} else if (type == plugin->_forge.Double) {
@@ -1407,30 +1440,15 @@ void Plugin::setPortValue(
 	} else if (type == plugin->_forge.Long) {
 		fvalue = *(const int64_t*)value;
 	} else {
-		fprintf(stderr, "error: Preset `%s' value has bad type <%s>\n",
-		        port_symbol, plugin->unmap.unmap(plugin->unmap.handle, type));
-		return;
+
+        throw std::runtime_error( "error: Preset `%s' value has bad type <%s>" );
+        //port_symbol, plugin->unmap.unmap(plugin->unmap.handle, type));
+
 	}
 
-    if (plugin->getState()->getPlayState() != Audio::RUNNING) {
-		// Set value on port struct directly
-	} else {
-		// Send value to running plugin
-		//plugin_ui_write(plugin, port->index, sizeof(fvalue), 0, &fvalue);
-	}
+    // Set value from member func
 
-    port->control = fvalue;
-
-//	if (plugin->has_ui) {
-//		// Update UI
-//		char buf[sizeof(ControlChange) + sizeof(fvalue)];
-//		ControlChange* ev = (ControlChange*)buf;
-//		ev->index    = port->index;
-//		ev->protocol = 0;
-//		ev->size     = sizeof(fvalue);
-//		*(float*)ev->body = fvalue;
-//		jack_ringbuffer_write(plugin->plugin_events, buf, sizeof(buf));
-//	}
+    plugin->setPortValue( port, fvalue );
 
 };
 

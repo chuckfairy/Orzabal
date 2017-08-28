@@ -15,7 +15,8 @@ if( NOT LILV_INCLUDE_DIRS )
     )
 
     set(LILV_INCLUDE_FILES
-      "${ORZABAL_ROOT_PATH}/lib-src/lilv/src/*/*.c"
+      "${ORZABAL_ROOT_PATH}/lib-src/lilv/src/*.c"
+      "${ORZABAL_ROOT_PATH}/lib-src/lilv/src/zix/*.c"
     )
 
     message( "${LILV_INCLUDE_DIR}" )

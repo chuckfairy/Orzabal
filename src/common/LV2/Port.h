@@ -30,7 +30,7 @@ struct Port : public Jack::Port {
 
     // For MIDI ports, otherwise NULL
 
-    LV2_Evbuf * evbuf;
+    LV2_Evbuf * evbuf = nullptr;
 
 
     void * widget;

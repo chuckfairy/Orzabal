@@ -2,6 +2,7 @@
  * Jack host impl
  *
  */
+#include <vector>
 #include <jack/jack.h>
 
 #include "Server.h"
@@ -15,6 +16,7 @@
 #include "Events/LatencyEvent.h"
 #include "Events/BufferEvent.h"
 
+using std::vector;
 
 namespace Jack {
 
@@ -33,6 +35,27 @@ Patchbay::Patchbay( Server * s ) :
         _PatchbayEffects->getPatchbayOutput()->getOutputNameLeft(),
         _PatchbayEffects->getPatchbayOutput()->getOutputNameRight()
     );
+
+
+    //@TODO determine place
+    run();
+
+};
+
+
+/**
+ * Control overrides
+ */
+
+void Patchbay::run() {
+
+    setActive( true );
+
+};
+
+void Patchbay::pause() {
+
+    setActive( false );
 
 };
 
@@ -228,6 +251,11 @@ void Patchbay::setServerCallbacks() {
 
 void Patchbay::updateJack( jack_nframes_t nframes ) {
 
+    if( ! isActive() ) { return; }
+
+
+    //@TODO move to more like patchbay effects
+
     vector<Audio::Plugin*>::iterator it;
 
     for( it = _ActivePlugins.begin(); it != _ActivePlugins.end(); ++ it ) {
@@ -241,6 +269,8 @@ void Patchbay::updateJack( jack_nframes_t nframes ) {
         }
 
     }
+
+    _PatchbayEffects->redirectInput( nframes );
 
 };
 

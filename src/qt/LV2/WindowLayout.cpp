@@ -264,9 +264,7 @@ Control::Control(LV2::PortContainer portContainer, QWidget* parent)
     lilv_node_free(comment);
 }
 
-    void
-Control::setValue(float value)
-{
+void Control::setValue(float value) {
     float step;
 
     if (isInteger) {
@@ -320,9 +318,7 @@ Control::setRange(float minRange, float maxRange)
     dial->setRange(minRange, maxRange);
 }
 
-    float
-Control::getValue()
-{
+float Control::getValue() {
     if (isEnum) {
         return scalePoints[dial->value()];
     } else if (isInteger) {

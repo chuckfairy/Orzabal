@@ -3,6 +3,7 @@
  */
 #pragma once
 
+#include <stdexcept>
 #include <vector>
 #include <iostream>
 #include <string>
@@ -10,6 +11,7 @@
 #include <json/json.hpp>
 
 #include "Config/Config.h"
+#include "Plugin.h"
 
 #include <Util/File.h>
 #include <Util/JSON.h>
@@ -44,7 +46,9 @@ class PatchbayPresetLoader {
 
         void loadFromJSON( const char * const fileName ) {
 
-            load( Util::JSON::getFromFile( fileName ) );
+            json file = Util::JSON::getFromFile( fileName );
+
+            load( file );
 
         };
 
@@ -91,7 +95,7 @@ class PatchbayPresetLoader {
 
             vector<string> ret;
 
-            for( unsigned int i=0; i < glob_result.gl_pathc; ++i ){
+            for( unsigned int i = 0; i < glob_result.gl_pathc; ++i ){
 
                 string filePath( glob_result.gl_pathv[i] );
 
@@ -107,6 +111,27 @@ class PatchbayPresetLoader {
             globfree( &glob_result );
 
             return ret;
+
+        };
+
+
+        /**
+         * Set ports from value
+         */
+
+        void setPortsFromJSON( Plugin * p, json pluginJSON ) {
+
+            json::iterator it;
+
+            for( it = pluginJSON["ports"].begin(); it != pluginJSON["ports"].end(); ++ it ) {
+
+                json portJSON = (*it);
+
+                Port * port = p->getPort( portJSON["id"] );
+
+                p->setPortValue( port, (float) portJSON["value"] );
+
+            }
 
         };
 

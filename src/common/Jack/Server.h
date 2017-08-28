@@ -59,7 +59,7 @@ class Server : public Audio::Server {
          * Jack client pointer
          */
 
-        jack_client_t * _client;
+        jack_client_t * _client = 0;
 
 
         /**
@@ -111,6 +111,8 @@ class Server : public Audio::Server {
         /**
          * Event specific
          */
+
+        static const char * JACK_CLIENT_NAME;
 
         static const char * UPDATE_EVENT;
         static const char * SHUTDOWN_EVENT;

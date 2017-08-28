@@ -40,7 +40,7 @@ void PluginState::applyLilvState() {
     lilv_state_restore(
         _state,
         _Plugin->getLilvInstance(),
-        Plugin::setPortValue,
+        Plugin::setPortValueLilv,
         _Plugin,
         0,
         &state_features

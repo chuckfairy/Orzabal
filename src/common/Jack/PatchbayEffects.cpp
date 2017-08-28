@@ -24,8 +24,6 @@ PatchbayEffects::PatchbayEffects( Server * server ) :
 
     connectEffectPorts();
 
-    setServerCallbacks();
-
 };
 
 

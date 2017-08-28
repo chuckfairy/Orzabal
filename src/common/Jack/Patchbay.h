@@ -7,6 +7,7 @@
 #include <jack/jack.h>
 
 #include <Audio/Patchbay.h>
+#include <Audio/ControlInterface.h>
 
 #include "Host.h"
 #include "ServerStandalone.h"
@@ -27,11 +28,27 @@ class PatchbayEffects;
  * Construct
  */
 
-class Patchbay : public Audio::Patchbay, public ServerStandalone {
+class Patchbay :
+    public Audio::Patchbay,
+    public Audio::ControlInterface,
+    public ServerStandalone
+{
 
     public:
 
         explicit Patchbay( Server * );
+
+
+        /**
+         * Control methods
+         * @TODO start and stop maybe
+         */
+
+        void start() {};
+        void stop() {};
+
+        void run();
+        void pause();
 
 
         /**

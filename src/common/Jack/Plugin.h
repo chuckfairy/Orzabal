@@ -52,6 +52,8 @@ class Plugin : public Audio::Plugin {
 
         };
 
+        virtual void setPortValue( Audio::Port * p, float value ) {};
+
 
         /**
          * Jack port getters helper

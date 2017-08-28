@@ -3,10 +3,14 @@
  */
 #pragma once
 
+#include <string>
+
 #include <json/json.hpp>
 
 #include "File.h"
 
+
+using std::string;
 
 using nlohmann::json;
 
@@ -19,7 +23,9 @@ namespace Util { namespace JSON {
 
 inline json getFromFile( const char * const fileName ) {
 
-    json output = json::parse( File::getContents( fileName ) );
+    string file = File::getContents( fileName );
+
+    json output = json::parse( file );
 
     return output;
 
