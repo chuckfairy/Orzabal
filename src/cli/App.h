@@ -3,6 +3,9 @@
  */
 #pragma once
 
+#include <cxxopts/cxxopts.hpp>
+
+
 namespace Orza { namespace CLI {
 
 
@@ -16,31 +19,54 @@ class App {
 
         explicit App( int argc, char **argv );
 
-        ~App();
+        /**
+         * Static program specific
+         */
+
+        static const char * NAME;
+
+        static const char * NAME_ASCII;
+
+        static const char * DESCRIPTION;
+
+        static const char * VERSION_PADDING;
 
 
         /**
          * Display bases
          */
 
-        bool displayHelp();
+        void displayDefault();
 
-        bool displayList();
+        void displayHeader();
+
+        void displayHelp();
+
+        void displayList();
+
+        void displayPluginTypes();
 
 
         /**
          * Bool interface
          */
 
-        const bool isHelp();
+        const bool isHelp() const;
 
-        const bool isList();
+        const bool isList() const;
 
-        const bool isMainProgram();
+        const bool isPluginTypes() const;
+
+        const bool isMainProgram() const;
 
 
     private:
 
+        /**
+         * cxxopts usage
+         */
+
+        cxxopts::Options _Options;
 
 };
 

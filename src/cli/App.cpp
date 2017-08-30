@@ -1,10 +1,171 @@
 /**
- * char
+ * CLI base app impl
  */
+#include <iostream>
+#include <string>
+#include <vector>
+
+#include <common/Config/Config.h>
+#include <common/Config/PluginTypes.h>
+#include <Util/String.h>
+
 #include "App.h"
+
+using std::string;
+using std::vector;
 
 namespace Orza { namespace CLI {
 
 
+/**
+ * Static app chars
+ */
+
+const char * App::NAME = "Orzabal";
+
+const char * App::NAME_ASCII = R"(
+   ____                _           _
+  / __ \              | |         | |
+ | |  | |_ __ ______ _| |__   __ _| |
+ | |  | | '__|_  / _` | '_ \ / _` | |
+ | |__| | |   / / (_| | |_) | (_| | |
+  \____/|_|  /___\__,_|_.__/ \__,_|_|
+)";
+
+const char * App::DESCRIPTION = "Meta Synth App";
+
+const char * App::VERSION_PADDING = "                               ";
+
+
+/**
+ * Construct
+ */
+
+App::App( int argc, char **argv ) :
+    _Options( cxxopts::Options( App::NAME, App::DESCRIPTION ) )
+{
+
+    _Options.add_options()
+        ( "l,list", "List of plugins" )
+        ( "p,plugin-types", "Plugin Types Installed" )
+        ( "h,help", "Display this message" )
+    ;
+
+    _Options.parse( argc, argv );
+
+};
+
+
+/**
+ * default show
+ * show help over list till list help
+ */
+
+void App::displayDefault() {
+
+    if( isHelp() ) {
+
+        return displayHelp();
+
+    } else if( isList() ) {
+
+        return displayList();
+
+    } else if( isPluginTypes() ) {
+
+        return displayPluginTypes();
+
+    }
+
+};
+
+
+/**
+ * Ascii header
+ */
+
+void App::displayHeader() {
+
+    std::cout << App::NAME_ASCII << "\n";
+    std::cout << App::VERSION_PADDING
+        << Orza::Config::VERSION;
+
+};
+
+
+/**
+ * Display bases
+ */
+
+void App::displayHelp() {
+
+    displayHeader();
+
+    std::cout << "\n\n" << _Options.help() << "\n";
+
+};
+
+
+/**
+ * Display plugin types and ids
+ */
+
+void App::displayList() {
+
+};
+
+/**
+ * Plugin types list
+ */
+
+void App::displayPluginTypes() {
+
+    std::cout << App::NAME << " Version "
+        << Orza::Config::VERSION << "\n"
+        << "Plugin Types:\n";
+
+    vector<string> types = Util::String::split(
+        Orza::Config::PLUGIN_TYPES,
+        ";"
+    );
+
+    vector<string>::iterator it;
+
+    for( it = types.begin(); it != types.end(); ++ it ) {
+
+        std::cout << (*it) << "\n";
+
+    }
+
+};
+
+
+/**
+ * Bool interface
+ */
+
+const bool App::isHelp() const {
+
+    return _Options["help"].as<bool>();
+
+};
+
+const bool App::isList() const {
+
+    return _Options["list"].as<bool>();
+
+};
+
+const bool App::isPluginTypes() const {
+
+    return _Options["plugin-types"].as<bool>();
+
+};
+
+const bool App::isMainProgram() const {
+
+    return ! isHelp() && ! isList() && !isPluginTypes();
+
+};
 
 }; };

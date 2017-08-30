@@ -2,13 +2,17 @@
 project(orzabal-common CXX)
 
 
+# Main config
+configure_file(Config/Config.h.in Config/Config.h)
+
+configure_file(Config/PluginTypes.h.in Config/PluginTypes.h)
+
+
 #set( ORZABAL_GUI_INCLUDE_FILES )
 file( GLOB
     ORZABAL_COMMON_INCLUDE_FILES
     "*.cpp"
     "*.h"
-    #"LADSPA/*.h"
-    #"LADSPA/*.cpp"
 
     "Util/Dispatcher.h"
 
@@ -59,10 +63,10 @@ install(TARGETS orzabal-common EXPORT orzabal-common-export
 
 
 # copy public include files
-install(FILES
-    LADSPA/LADSPAPort.h
-    DESTINATION "${ORZABAL_LIB_PATH}/orzabal-common"
-)
+#install(FILES
+    #LADSPA/LADSPAPort.h
+    #DESTINATION "${ORZABAL_LIB_PATH}/orzabal-common"
+#)
 
 
 ## create export file which can be imported by other cmake projects

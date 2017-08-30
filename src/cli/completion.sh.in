@@ -1,0 +1,10 @@
+# Orza cli completion
+
+
+_${PROGRAM_NAME}() {
+
+    COMPREPLY=( $( compgen -W "--help --list --plugin-types ${PROGRAM_COMPLETION}" ) )
+
+}
+
+complete -F _${PROGRAM_NAME} ${PROGRAM_LOCATION}

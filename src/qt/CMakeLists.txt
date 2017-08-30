@@ -39,6 +39,9 @@ include_directories(
     "${ORZABAL_ROOT_PATH}/lib-src"
     "${ORZABAL_ROOT_PATH}/lib-src/sratom"
     "${ORZABAL_ROOT_PATH}/lib-src/sord"
+
+    "${ORZABAL_ROOT_PATH}/src"
+
     ${Boost_INCLUDE_DIR}
 )
 
@@ -85,6 +88,7 @@ target_link_libraries( orzabal.qt
     dl
     orzabal-common-lv2 orzabal-common
     orzabal-common-jack
+    orzabal-cli
     Qt5::Widgets Qt5::Core
     Qt5::Qml
     Boost::regex

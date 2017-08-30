@@ -1,9 +1,11 @@
 # CLI common lib
 project(orzabal-cli CXX)
 
+find_package( CXXOpts REQUIRED )
 
 file( GLOB
     ORZABAL_CLI_INCLUDE_FILES
+    ${CXXOPTS_INCLUDE_FILES}
     "*.h"
     "*.cpp"
 )
@@ -14,6 +16,15 @@ file( GLOB
 add_library(orzabal-cli SHARED ${ORZABAL_CLI_INCLUDE_FILES} )
 
 set_target_properties(orzabal-cli PROPERTIES LINKER_LANGUAGE CXX)
+
+set( ORZABAL_CLI_INCLUDE_DIRS
+    "${ORZABAL_ROOT_PATH}/lib-src"
+    "${ORZABAL_ROOT_PATH}/src"
+    "${ORZABAL_ROOT_PATH}/src/common"
+    ${CXXOPTS_INCLUDE_DIRS}
+)
+
+include_directories( ${ORZABAL_CLI_INCLUDE_DIRS} )
 
 
 ## Installing

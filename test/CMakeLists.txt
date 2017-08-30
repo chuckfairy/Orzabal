@@ -35,6 +35,7 @@ include_directories (${Boost_INCLUDE_DIRS})
 file(GLOB TEST_SRCS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
     Jack/*.cpp
     JSON/*.cpp
+    CLI/*.cpp
 )
 
 #Run through each source
@@ -47,16 +48,17 @@ foreach(testSrc ${TEST_SRCS})
 
     #link to Boost libraries AND your targets and dependencies
     target_link_libraries(${testName} ${Boost_LIBRARIES}
-        orzabal-common-lv2 orzabal-common
         jack
+        orzabal-common-lv2 orzabal-common
         orzabal-common-audio
         orzabal-common-jack
         orzabal-common-lv2
+        orzabal-cli
     )
 
     target_include_directories( ${testName}
         PUBLIC
-        "../../src/common"
+        "${ORZABAL_ROOT_PATH}/src"
         "${ORZABAL_ROOT_PATH}/lib-src"
         "${ORZABAL_ROOT_PATH}/lib-src/sratom"
         "${ORZABAL_ROOT_PATH}/lib-src/sord"

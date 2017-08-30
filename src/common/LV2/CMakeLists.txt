@@ -12,7 +12,9 @@ project(orzabal-common-lv2 CXX)
 #find_package( JACK )
 find_package( Qt5Widgets REQUIRED )
 find_package( Qt5Core REQUIRED )
-find_package( Lilv REQUIRED )
+find_package( Lilv REQUIRED
+)
+
 find_package( Sord REQUIRED )
 find_package( Serd REQUIRED )
 find_package( Suil REQUIRED )

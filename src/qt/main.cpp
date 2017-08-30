@@ -6,6 +6,7 @@
 
 #include <signal.h>
 #include <QApplication>
+#include <cli/App.h>
 #include "MainWindow.h"
 
 using namespace std;
@@ -29,6 +30,21 @@ static void signal_handler( int ignored ) {
 //Main startup using MainWindow
 
 int main( int argc, char **argv ) {
+
+    Orza::CLI::App * cli = new Orza::CLI::App( argc, argv );
+
+    cli->displayDefault();
+
+    if( ! cli->isMainProgram() ) {
+
+        return 0;
+
+    }
+
+    cli->displayHeader();
+
+
+    // Qt app
 
     app = new QApplication(argc, argv);
 
