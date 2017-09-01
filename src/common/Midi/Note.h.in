@@ -1,0 +1,46 @@
+/**
+ * Midi note constants
+ */
+#pragma once
+
+#include <map>
+#include <cmath>
+#include <ctgmath>
+
+using std::map;
+
+
+namespace Orza { namespace Midi {
+
+/**
+ * Notes enum
+ */
+
+enum NoteNumber {
+${ORZABAL_MIDI_NAMES_ARRAY}
+};
+
+
+/**
+ * Note names map
+ */
+
+const map<NoteNumber, const char *> NoteNames;
+
+
+//Note helper
+const enum NoteNumber NOTE_MIN = A0;
+const enum NoteNumber NOTE_MAX = ${ORZABAL_MIDI_NAME_LAST};
+
+
+/**
+ * Note number
+ */
+
+NoteNumber getNoteOctave( enum NoteNumber note ) {
+
+    return (NoteNumber) floor( ( note - NOTE_MIN ) / 12 );
+
+};
+
+}; };

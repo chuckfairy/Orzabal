@@ -2,9 +2,9 @@
  * Jack audio mod
  *
  */
+#include <string>
 #include <vector>
 #include <iostream>
-#include <string>
 
 #include <jack/types.h>
 

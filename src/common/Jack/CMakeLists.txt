@@ -1,5 +1,7 @@
 project(orzabal-common-jack CXX)
 
+set(CMAKE_EXPORT_COMPILE_COMMANDS "ON")
+
 find_package( JACK )
 #find_package( orzabal-common )
 set_package_properties( JACK PROPERTIES TYPE REQUIRED PURPOSE "Enables JACK plugin" )
