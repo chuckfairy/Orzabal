@@ -60,7 +60,7 @@ class PatchbayPresetLoader {
                 + 50
             );
 
-            sprintf( fullPath, "%s/%s.json", Config::DataDirectory, name );
+            sprintf( fullPath, "%s/%s.json", Audio::Config::DataDirectory, name );
 
             loadFromJSON( fullPath );
 

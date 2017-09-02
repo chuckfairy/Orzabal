@@ -82,8 +82,6 @@ target_link_libraries( orzabal-common-lv2
 )
 
 target_include_directories( orzabal-common-lv2 PUBLIC
-    "/usr/local/include/suil-0"
-    "/usr/local/include/serd-0"
     ".."
     ${CMAKE_CURRENT_BINARY_DIR}
 )

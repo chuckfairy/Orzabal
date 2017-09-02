@@ -2,7 +2,7 @@
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 # Instruct CMake to run moc automatically when needed.
-set(CMAKE_AUTOMOC ON)
+#set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
 set( AUTOGEN_TARGET_DEPENDS ON )
 
@@ -37,10 +37,14 @@ include_directories(
     ${CMAKE_CURRENT_BINARY_DIR}
     ../common /usr/local/lib
     "${ORZABAL_ROOT_PATH}/lib-src"
+    "${ORZABAL_ROOT_PATH}/lib-src/lilv"
     "${ORZABAL_ROOT_PATH}/lib-src/sratom"
     "${ORZABAL_ROOT_PATH}/lib-src/sord"
+    "${ORZABAL_ROOT_PATH}/lib-src/suil"
+    "${ORZABAL_ROOT_PATH}/lib-src/serd"
 
     "${ORZABAL_ROOT_PATH}/src"
+    "${ORZABAL_ROOT_PATH}/src/common/Audio"
 
     ${Boost_INCLUDE_DIR}
 )

@@ -14,8 +14,7 @@
 
 #include <Audio/Server.h>
 #include "Host.h"
-
-#include <LV2/Host.h>
+#include "Patchbay.h"
 
 
 namespace Jack {
@@ -82,7 +81,7 @@ class Server : public Audio::Server {
          * @TODO rename to more patchbay
          */
 
-        LV2::Host * _Host;
+        Jack::Patchbay * _Host;
 
 
     protected:
@@ -150,7 +149,7 @@ class Server : public Audio::Server {
          *
          */
 
-        Host * getAudio() {
+        Jack::Host * getAudio() {
 
             return _Audio;
 
@@ -162,7 +161,7 @@ class Server : public Audio::Server {
 
         Midi * getMidi();
 
-        LV2::Host * getPatchbay();
+        Jack::Patchbay * getPatchbay();
 
 
         /**
