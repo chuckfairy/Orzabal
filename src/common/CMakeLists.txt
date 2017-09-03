@@ -42,10 +42,9 @@ target_link_libraries( orzabal-common dl )
 #target_include_directories( orzabal-common PUBLIC LV2 )
 
 target_link_libraries( orzabal-common
-    "/usr/local/lib/liblilv-0.so"
 )
 
-target_include_directories( orzabal-common PUBLIC "/usr/local/include/lilv-0" )
+target_include_directories( orzabal-common PUBLIC )
 
 set_target_properties(orzabal-common PROPERTIES LINKER_LANGUAGE CXX)
 

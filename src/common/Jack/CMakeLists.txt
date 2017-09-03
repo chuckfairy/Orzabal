@@ -36,7 +36,7 @@ set_target_properties( orzabal-common-jack PROPERTIES LINKER_LANGUAGE CXX )
     #INCLUDES DESTINATION include
 #)
 
-set_target_properties(orzabal-common-jack PROPERTIES INSTALL_RPATH_USE_LINK_PATH TRUE)
+#set_target_properties(orzabal-common-jack PROPERTIES INSTALL_RPATH_USE_LINK_PATH TRUE)
 
 install( TARGETS
    orzabal-common-jack

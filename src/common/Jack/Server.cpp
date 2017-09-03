@@ -95,7 +95,7 @@ bool Server::start() {
 
     _Midi = new Midi( this );
 
-    _Host = new LV2::Host( this );
+    _Host = new Jack::Patchbay( this );
 
 
     return true;
@@ -175,7 +175,7 @@ Midi * Server::getMidi() {
  * Get patchbay
  */
 
-LV2::Host * Server::getPatchbay() {
+Jack::Patchbay * Server::getPatchbay() {
 
     return _Host;
 
