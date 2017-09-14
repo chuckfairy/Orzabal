@@ -37,8 +37,6 @@ UI::UI( Plugin * p ) {
 
     setPlugin( p );
 
-    _PresetDropdown = new PresetDropdown( p );
-
 };
 
 

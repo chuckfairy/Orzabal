@@ -48,6 +48,8 @@ Host::Host( Server * s ) :
 
     createPorts();
 
+    setServerCallbacks();
+
 };
 
 

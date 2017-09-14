@@ -3,8 +3,12 @@
  */
 #pragma once
 
+#cmakedefine ORZABAL_HAS_LV2 ${ORZABAL_HAS_LV2}
+
 namespace Orza { namespace Config {
 
-const char * PLUGIN_TYPES = "${ORZABAL_PLUGIN_TYPES}";
+const bool HAS_LV2 = ${ORZABAL_HAS_LV2};
+
+static const char * PLUGIN_TYPES = "${ORZABAL_PLUGIN_TYPES}";
 
 }; };

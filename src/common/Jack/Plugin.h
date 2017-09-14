@@ -23,6 +23,9 @@ class Plugin : public Audio::Plugin {
 
     public:
 
+        static const char * TYPE;
+
+
         /**
          * Jack virtual overloading for patchbay related
          */
@@ -52,7 +55,9 @@ class Plugin : public Audio::Plugin {
 
         };
 
-        virtual void setPortValue( Audio::Port * p, float value ) {};
+        const char * getType();
+
+        void setPortValue( Audio::Port * p, float value ) {};
 
 
         /**
@@ -98,6 +103,11 @@ class Plugin : public Audio::Plugin {
             return ports;
 
         };
+
+
+    protected:
+
+        jack_client_t * _jackClient;
 
 };
 

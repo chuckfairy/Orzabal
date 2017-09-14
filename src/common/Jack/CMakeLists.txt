@@ -8,16 +8,17 @@ set_package_properties( JACK PROPERTIES TYPE REQUIRED PURPOSE "Enables JACK plug
 
 
 file( GLOB
-    ORZABAL_BACKEND_AUDIO_INCLUDE_FILES
+    ORZABAL_JACK_INCLUDE_FILES
     "*.cpp"
     "*.h"
     "Events/*.cpp"
+    "Resource/*.cpp"
 )
 
 
 ## Building
 # create orzabal-backend-common library
-add_library( orzabal-common-jack SHARED ${ORZABAL_BACKEND_AUDIO_INCLUDE_FILES} )
+add_library( orzabal-common-jack SHARED ${ORZABAL_JACK_INCLUDE_FILES} )
 
 
 target_link_libraries( orzabal-common-jack PUBLIC

@@ -12,8 +12,7 @@ project(orzabal-common-lv2 CXX)
 #find_package( JACK )
 find_package( Qt5Widgets REQUIRED )
 find_package( Qt5Core REQUIRED )
-find_package( Lilv REQUIRED
-)
+find_package( Lilv REQUIRED )
 
 find_package( Sord REQUIRED )
 find_package( Serd REQUIRED )
@@ -26,16 +25,18 @@ find_package( Sratom REQUIRED )
 
 #set( ORZABAL_LV2_INCLUDE_FILES )
 file( GLOB ORZABAL_LV2_INCLUDE_FILES
-    ${LILV_INCLUDE_FILES}
     ${SRATOM_INCLUDE_FILES}
     ${SORD_INCLUDE_FILES}
     ${SERD_INCLUDE_FILES}
     ${SUIL_INCLUDE_FILES}
+    ${LILV_INCLUDE_FILES}
+    ${ORZABAL_JACK_INCLUDE_FILES}
     "include/*.h"
     "include/symap.c"
     "include/lv2_evbuf.c"
     "include/symap.c"
     "include/zix_thread.c"
+    "Resource/*"
     "Events/JackLatencyEvent.cpp"
     "Events/JackBufferEvent.cpp"
     "Host.cpp"
@@ -52,7 +53,7 @@ file( GLOB ORZABAL_LV2_INCLUDE_FILES
 
 ## Building
 # create orzabal-common-lv2 library
-add_library(orzabal-common-lv2 SHARED ${ORZABAL_LV2_INCLUDE_FILES} )
+add_library(orzabal-common-lv2 STATIC ${ORZABAL_LV2_INCLUDE_FILES} )
 
 set_target_properties(orzabal-common-lv2 PROPERTIES LINKER_LANGUAGE CXX)
 
@@ -65,7 +66,6 @@ install(TARGETS orzabal-common-lv2
 )
 
 set( ORZABAL_LV2_INCLUDE_DIRS
-    "/usr/local/lib"
     ${LILV_INCLUDE_DIRS}
     ${SRATOM_INCLUDE_DIRS}
     ${SORD_INCLUDE_DIRS}
@@ -78,6 +78,7 @@ include_directories( ${ORZABAL_LV2_INCLUDE_DIRS} )
 target_link_libraries( orzabal-common-lv2
     jack
     orzabal-common-jack
+    pthread
     Qt5::Widgets Qt5::Core
 )
 

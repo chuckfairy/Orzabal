@@ -1,9 +1,14 @@
 /**
  * Plugin state usage on lv2 Plugin
  */
+#include <iostream>
+
 #include "Plugin.h"
 #include "Preset.h"
 #include "PluginState.h"
+
+#include "Resource/World.h"
+
 
 namespace LV2 {
 
@@ -32,6 +37,7 @@ void PluginState::applyLilvState() {
         _Plugin->pause();
 
         std::cout << "PAUSIN\n";
+
     }
 
 
@@ -64,7 +70,7 @@ void PluginState::applyLilvState() {
 void PluginState::setStateDefault() {
 
     _state = lilv_state_new_from_world(
-        _Plugin->getLilvWorld(),
+        Resource::World::getResource(),
         _Plugin->getLV2Map(),
         lilv_plugin_get_uri( _Plugin->getLilvPlugin() )
     );
@@ -83,7 +89,7 @@ void PluginState::setLilvState( Audio::Preset * preset ) {
     Preset * lv2Preset = (LV2::Preset*) preset;
 
 	lv2Preset->state = lilv_state_new_from_world(
-        _Plugin->getLilvWorld(),
+        Resource::World::getResource(),
         _Plugin->getLV2Map(),
         lv2Preset->lilvPreset
     );

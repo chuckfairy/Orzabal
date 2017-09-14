@@ -8,13 +8,10 @@
 #include <stdio.h>
 #include <string.h>
 #include <iostream>
-#include <lilv/lilv.h>
 
 #include <Audio/Host.h>
 #include <Audio/Plugin.h>
 #include <Audio/Search.h>
-
-#include "Plugin.h"
 
 using std::vector;
 
@@ -28,18 +25,16 @@ namespace LV2 {
 
 class Search : public Audio::Search {
 
-    private:
-
-        LV2::Host * _Host;
-
-
     public:
 
-        Search( Host * h );
+        Search();
 
         vector<Audio::Plugin*> findAll();
 
         void update();
+
+
+    private:
 
 };
 

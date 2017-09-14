@@ -13,7 +13,8 @@ file( GLOB
 
 ## Building
 # create orzabal-gui library
-add_library(orzabal-cli SHARED ${ORZABAL_CLI_INCLUDE_FILES} )
+add_library(orzabal-cli STATIC ${ORZABAL_CLI_INCLUDE_FILES} )
+add_executable(orzabal-cli-app "Main/main.cpp" ${ORZABAL_CLI_INCLUDE_FILES} )
 
 set_target_properties(orzabal-cli PROPERTIES LINKER_LANGUAGE CXX)
 
@@ -25,6 +26,14 @@ set( ORZABAL_CLI_INCLUDE_DIRS
 )
 
 include_directories( ${ORZABAL_CLI_INCLUDE_DIRS} )
+
+target_link_libraries( orzabal-cli
+    orzabal-common-plugin
+)
+
+target_link_libraries( orzabal-cli-app
+    orzabal-common-plugin
+)
 
 
 ## Installing

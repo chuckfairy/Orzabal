@@ -9,6 +9,8 @@
 #include <common/Config/PluginTypes.h>
 #include <Util/String.h>
 
+#include "PluginList.h"
+
 #include "App.h"
 
 using std::string;
@@ -112,7 +114,10 @@ void App::displayHelp() {
 
 void App::displayList() {
 
+    PluginList();
+
 };
+
 
 /**
  * Plugin types list

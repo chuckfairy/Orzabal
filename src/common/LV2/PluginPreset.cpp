@@ -1,6 +1,10 @@
 /**
  * Get all presets
  */
+#include <iostream>
+#include <stdexcept>
+
+#include "Resource/World.h"
 #include "Plugin.h"
 #include "PluginPreset.h"
 #include "PluginState.h"
@@ -37,7 +41,7 @@ void PluginPreset::setup() {
 
 void PluginPreset::setNodes() {
 
-    LilvWorld * world = _Plugin->getLilvWorld();
+    LilvWorld * world = Resource::World::getResource();
 
     if( ! world ) {
 
@@ -66,7 +70,7 @@ void PluginPreset::loadPresets() {
         _pset_Preset
     );
 
-    LilvWorld * world = _Plugin->getLilvWorld();
+    LilvWorld * world = Resource::World::getResource();
 
     std::cout << "PRESET SETTING";
 

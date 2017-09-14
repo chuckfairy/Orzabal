@@ -42,12 +42,11 @@ class Plugin {
 
         /**
          * Get type
-         *
          */
 
-        const char * getType() {
+        virtual const char * getType() {
 
-            return TYPE;
+            return "";
 
         };
 
@@ -288,8 +287,6 @@ class Plugin {
          */
 
         bool ACTIVE = false;
-
-        char TYPE[10];
 
         char id[255];
 

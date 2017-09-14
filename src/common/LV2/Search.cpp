@@ -11,6 +11,9 @@
 #include <Audio/Plugin.h>
 #include <Audio/PluginRepository.h>
 
+#include <Jack/Resource/Client.h>
+
+#include "Resource/World.h"
 #include "Search.h"
 #include "Plugin.h"
 
@@ -22,10 +25,7 @@ namespace LV2  {
  * Construct
  */
 
-Search::Search( Host * h ) {
-
-    _Host = h;
-
+Search::Search() {
 };
 
 
@@ -54,7 +54,7 @@ void Search::update() {
 
     getRepo()->clear();
 
-    const LilvWorld * _lilvWorld = _Host->getLilvWorld();
+    const LilvWorld * _lilvWorld = Resource::World::getResource();
 
     vector<Audio::Plugin*> pluginList;
 
@@ -64,7 +64,10 @@ void Search::update() {
 
         const LilvPlugin* p = lilv_plugins_get( plugins, i );
 
-        Audio::Plugin * d = new Plugin( p, _Host );
+        Audio::Plugin * d = new Plugin(
+            p,
+            Jack::Resource::Client::getInstance()
+        );
 
         pluginList.push_back( d );
 

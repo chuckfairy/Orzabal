@@ -7,21 +7,28 @@
 
 namespace Jack { namespace Resource {
 
+/**
+ * Static props
+ */
 
-static jack_client_t * Client::CLIENT = nullptr;
+const char * Client::JACK_CLIENT_NAME = "orzabal";
 
-static jack_options_t Client::JACK_OPTIONS = JackNullOption;
+jack_client_t * Client::CLIENT = nullptr;
+
+jack_options_t Client::JACK_OPTIONS = JackNullOption;
+
+jack_status_t Client::JACK_STATUS;
 
 
 /**
  * Singleton method
  */
 
-static jack_client_t * Client::getInstance() {
+jack_client_t * Client::getInstance() {
 
     if( Client::CLIENT == nullptr ) {
 
-        _client = jack_client_open(
+        Client::CLIENT = jack_client_open(
             Client::JACK_CLIENT_NAME,
             Client::JACK_OPTIONS,
             &Client::JACK_STATUS
@@ -29,7 +36,7 @@ static jack_client_t * Client::getInstance() {
 
     }
 
-    return Client::Client;
+    return Client::CLIENT;
 
 };
 

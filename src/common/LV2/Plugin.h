@@ -44,7 +44,6 @@
 #include "include/types.h"
 #include "include/symap.h"
 #include "include/semaphone.h"
-#include "Host.h"
 #include "Port.h"
 
 #define NS_EXT "http://lv2plug.in/ns/ext/"
@@ -148,8 +147,6 @@ class Plugin : public Jack::Plugin {
         /**
          *  Instances
          */
-
-        Host * _Host;
 
         size_t longest_sym = 0;
 
@@ -277,8 +274,6 @@ class Plugin : public Jack::Plugin {
 
     protected:
 
-        const char * TYPE = "LV2";
-
         UI * _UI;
 
         jack_ringbuffer_t * _ringBuffer;
@@ -288,7 +283,13 @@ class Plugin : public Jack::Plugin {
 
     public:
 
-        explicit Plugin( const LilvPlugin * p, Host * h );
+        explicit Plugin( const LilvPlugin * p, jack_client_t * );
+
+        /**
+         * Static props
+         */
+
+        static const char * TYPE;
 
 
         /**
@@ -307,6 +308,9 @@ class Plugin : public Jack::Plugin {
         void stop();
 
         Audio::Plugin * clone();
+
+        const char * getType();
+
 
 
         UI * getUI();
@@ -422,34 +426,8 @@ class Plugin : public Jack::Plugin {
 
 
         /**
-         * Host related
-         */
-
-        void setHost( Host * h ) {
-
-            _Host = h;
-
-            setLilvWorld( h->getLilvWorld() );
-
-        };
-
-
-        /**
          * lilv world related
-         *
          */
-
-        LilvWorld * getLilvWorld() {
-
-            return _lilvWorld;
-
-        };
-
-        void setLilvWorld( LilvWorld * w ) {
-
-            _lilvWorld = w;
-
-        };
 
         LilvInstance * getLilvInstance() {
 

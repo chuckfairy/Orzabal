@@ -47,23 +47,6 @@ class UI : public Audio::UI {
 
     private:
 
-        /**
-         * Widget object
-         */
-
-        QMainWindow * win;
-
-        QScrollArea * _MainWidget;
-
-        QWidget* _controlWidget;
-
-        PresetDropdown * _PresetDropdown;
-
-
-        /**
-         *  Lilv types
-         */
-
 
     protected:
 

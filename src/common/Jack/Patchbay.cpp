@@ -36,6 +36,8 @@ Patchbay::Patchbay( Server * s ) :
         _PatchbayEffects->getPatchbayOutput()->getOutputNameRight()
     );
 
+    setServerCallbacks();
+
 
     //@TODO determine place
     run();

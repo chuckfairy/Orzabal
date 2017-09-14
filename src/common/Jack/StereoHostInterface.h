@@ -94,6 +94,7 @@ class StereoHostInterface : public ServerStandalone {
 
         };
 
+
         /**
          * Abstract jack port connection method
          *

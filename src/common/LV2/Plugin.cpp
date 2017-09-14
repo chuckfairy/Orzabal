@@ -22,6 +22,9 @@
 #include <jack/metadata.h>
 #include <jack/ringbuffer.h>
 
+#include <Jack/Resource/Client.h>
+
+#include "Resource/World.h"
 #include "include/symap.c"
 #include "include/semaphone.h"
 #include "include/lv2_evbuf.h"
@@ -32,7 +35,6 @@
 #include "UI.h"
 #include "Port.h"
 #include "ControlChange.h"
-#include "Host.h"
 
 
 using std::string;
@@ -45,11 +47,13 @@ namespace LV2 {
  * Lilv plugin instance place
  */
 
-Plugin::Plugin( const LilvPlugin* p, Host * h ) {
+Plugin::Plugin( const LilvPlugin* p, jack_client_t * c ):
+    _lilvWorld( Resource::World::getResource() )
+{
+
+    _jackClient = c;
 
     Util::random_string( (char *)_hash, HASH_LENGTH );
-
-    setHost( h );
 
     setLilvPlugin( p );
 
@@ -67,6 +71,8 @@ Plugin::Plugin( const LilvPlugin* p, Host * h ) {
 /**
  * Statics
  */
+
+const char * Plugin::TYPE = "LV2";
 
 const unsigned int Plugin::HASH_LENGTH = 8;
 
@@ -107,7 +113,7 @@ void Plugin::setPorts() {
 
 void Plugin::deactivatePorts() {
 
-    jack_client_t * jack_client = _Host->getJackClient();
+    jack_client_t * jack_client = _jackClient;
 
     for( uint32_t i = 0; i < _numPorts; ++i ) {
 
@@ -346,10 +352,12 @@ void Plugin::start() {
 
     //Atom symaps
 
+    LilvWorld * world = Resource::World::getResource();
+
     atom_Object = symap_map(_symap, LV2_ATOM__Object);
     atom_eventTransfer = symap_map(_symap, LV2_ATOM__eventTransfer);
-	atom_Chunk = lilv_new_uri( _Host->getLilvWorld(), LV2_ATOM__Chunk );
-	atom_Sequence = lilv_new_uri( _Host->getLilvWorld(), LV2_ATOM__Sequence );
+	atom_Chunk = lilv_new_uri( world, LV2_ATOM__Chunk );
+	atom_Sequence = lilv_new_uri( world, LV2_ATOM__Sequence );
 
     //Bufsz
 
@@ -404,19 +412,19 @@ void Plugin::start() {
 	state_sched_feature.data = &ssched;
 
     LV2_URID ui_updateRate = symap_map(_symap, LV2_UI__updateRate);
-    LilvNode * work_interface = lilv_new_uri( _Host->getLilvWorld(), LV2_WORKER__interface );
-    LilvNode * work_schedule = lilv_new_uri( _Host->getLilvWorld(), LV2_WORKER__schedule );
+    LilvNode * work_interface = lilv_new_uri( world, LV2_WORKER__interface );
+    LilvNode * work_schedule = lilv_new_uri( world, LV2_WORKER__schedule );
 
 
     //Buffer and data setting
 
-    lv2_reportsLatency = lilv_new_uri( _Host->getLilvWorld(), LV2_CORE__reportsLatency );
+    lv2_reportsLatency = lilv_new_uri( world, LV2_CORE__reportsLatency );
 
-    block_length = _Host->getBufferSize();
+    block_length = Jack::Resource::Client::getBufferSize( _jackClient );
 
-    midi_buf_size = _Host->getMidiBufferSize();
+    midi_buf_size = Jack::Resource::Client::getMidiBufferSize( _jackClient );
 
-    sample_rate = _Host->getSampleRate();
+    sample_rate = Jack::Resource::Client::getSampleRate( _jackClient );
 
     ui_update_hz = (float) sample_rate / midi_buf_size * 2.0f;
 
@@ -596,7 +604,18 @@ void Plugin::stop() {
 
 Audio::Plugin * Plugin::clone() {
 
-    return new Plugin( _lilvPlugin, _Host );
+    return new Plugin( _lilvPlugin, _jackClient );
+
+};
+
+
+/**
+ * Type overload
+ */
+
+const char * Plugin::getType() {
+
+    return Plugin::TYPE;
 
 };
 
@@ -643,7 +662,7 @@ void Plugin::activatePort( long portNum ) {
 		? JackPortIsInput
 		: JackPortIsOutput;
 
-    jack_client_t * jack_client = _Host->getJackClient();
+    jack_client_t * jack_client = _jackClient;
 
     const LilvNode * midi_MidiEvent = lilv_new_uri( _lilvWorld, LV2_MIDI__MidiEvent );
 
@@ -829,7 +848,7 @@ void Plugin::updateJack( jack_nframes_t nframes ) {
 
 	/* Get Jack transport position */
 
-    jack_client_t * jackClient = _Host->getJackClient();
+    jack_client_t * jackClient = _jackClient;
 
     jack_position_t pos;
 
@@ -1158,7 +1177,7 @@ void Plugin::updateJackBufferSize( jack_nframes_t nframes ) {
 
 	block_length = nframes;
 
-    midi_buf_size = _Host->getMidiBufferSize();
+    midi_buf_size = Jack::Resource::Client::getMidiBufferSize( _jackClient );
 
     allocatePortBuffers();
 
