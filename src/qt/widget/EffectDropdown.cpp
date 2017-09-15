@@ -1,32 +1,33 @@
 /**
  * Effects plugin dropdown
  */
+#include <Audio/Plugin.h>
 
 #include "EffectDropdown.h"
+
+using Orza::PluginSearch::LoadedPlugins;
 
 
 namespace Orza { namespace App { namespace Widget {
 
 
-EffectDropdown::EffectDropdown( Jack::Server * s ) :
-    AbstractPluginDropdown( s )
+EffectDropdown::EffectDropdown( LoadedPlugins * plugins ) :
+    AbstractPluginDropdown()
 {
 
     //connect( this, SIGNAL( currentIndexChanged( int ) ), this, SLOT( handleSelectionChanged( int ) ) );
 
-    LV2::Host * host = _Server->getPatchbay();
-
-    _plugins = host->getSearch()->findAudioEffects();
+    _plugins = plugins->getAudioEffects();
 
     vector<Audio::Plugin*>::iterator it;
 
     for( it = _plugins.begin(); it != _plugins.end(); ++it ) {
 
-        LV2::Plugin * p = (LV2::Plugin*) (*it);
+        Audio::Plugin * p = (Audio::Plugin*) (*it);
 
         InstrumentOption opt = {
             p->getName(),
-            p->getURI()
+            p->getID()
         };
 
         addPlugin( &opt );

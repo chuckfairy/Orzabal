@@ -58,7 +58,9 @@ void OutputDropdown::updateOptions() {
  *
  */
 
-OutputDropdown::OutputDropdown( QWidget * parent ) : QComboBox( parent ) {};
+OutputDropdown::OutputDropdown( QWidget * parent ) : QComboBox( parent ) {
+
+};
 
 
 /**

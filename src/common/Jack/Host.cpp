@@ -38,6 +38,7 @@ namespace Jack {
 Host::Host( jack_client_t * j ) :
     ServerStandalone( j )
 {
+
 };
 
 
@@ -45,10 +46,6 @@ Host::Host( Server * s ) :
     ServerStandalone( s->getJackClient() ),
     _Server( s )
 {
-
-    createPorts();
-
-    setServerCallbacks();
 
 };
 

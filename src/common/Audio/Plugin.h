@@ -114,7 +114,11 @@ class Plugin {
          * UI related
          */
 
-        UI * getUI();
+        virtual UI * getUI() {
+
+            return nullptr;
+
+        };
 
 
         /**

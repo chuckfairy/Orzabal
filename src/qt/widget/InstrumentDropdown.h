@@ -18,9 +18,13 @@
 #include <Util/Dispatcher.h>
 #include <Jack/Server.h>
 
+#include <PluginSearch/LoadedPlugins.h>
+
 #include "InstrumentOption.h"
 
 using std::vector;
+
+using Orza::PluginSearch::LoadedPlugins;
 
 
 /**
@@ -48,7 +52,7 @@ class InstrumentDropdown :
          * Jack server
          */
 
-        Jack::Server * _Server;
+        LoadedPlugins * _PluginSearch;
 
 
         /**
@@ -62,7 +66,7 @@ class InstrumentDropdown :
     public:
 
         InstrumentDropdown( QWidget * parent );
-        InstrumentDropdown( Jack::Server * );
+        InstrumentDropdown( LoadedPlugins * );
         ~InstrumentDropdown() {};
 
         /**

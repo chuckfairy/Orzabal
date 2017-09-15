@@ -57,13 +57,6 @@ class UI : public Audio::UI {
 
         LV2::Plugin * _Plugin;
 
-        void setPlugin( Plugin * p ) {
-
-            _Plugin = p;
-
-        };
-
-
         static Port * portBySymbol( Plugin *, const char * );
 
 
@@ -111,11 +104,7 @@ class UI : public Audio::UI {
          * LV2 plugin overwrite
          */
 
-        Plugin * getPlugin() {
-
-            return _Plugin;
-
-        };
+        Plugin * getPlugin();
 
 };
 

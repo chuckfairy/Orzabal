@@ -90,7 +90,8 @@ void App::displayHeader() {
 
     std::cout << App::NAME_ASCII << "\n";
     std::cout << App::VERSION_PADDING
-        << Orza::Config::VERSION;
+        << Orza::Config::VERSION
+        << "\n";
 
 };
 

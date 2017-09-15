@@ -11,33 +11,33 @@
 
 using Audio::Plugin;
 
+using Orza::PluginSearch::LoadedPlugins;
+
 
 /**
  * Constructor test
  *
  */
 
-InstrumentDropdown::InstrumentDropdown( Jack::Server * s ) {
-
-    _Server = s;
+InstrumentDropdown::InstrumentDropdown( LoadedPlugins * p ) :
+    _PluginSearch( p )
+{
 
     connect( this, SIGNAL( currentIndexChanged( int ) ), this, SLOT( handleSelectionChanged( int ) ) );
 
     addInstrument( &_placeholder );
 
-    LV2::Host * host = _Server->getPatchbay();
-
-    vector<Plugin*> plugins = host->getSearch()->findMidiInstruments();
+    vector<Plugin*> plugins = _PluginSearch->getMidiInstruments();
 
     vector<Plugin*>::iterator it;
 
     for( it = plugins.begin(); it != plugins.end(); ++it ) {
 
-        LV2::Plugin * p = (LV2::Plugin*) (*it);
+        Audio::Plugin * p = (*it);
 
         InstrumentOption opt = {
             p->getName(),
-            p->getURI()
+            p->getID()
         };
 
         addInstrument( &opt );
@@ -93,9 +93,7 @@ void InstrumentDropdown::handleSelectionChanged( int index ) {
     if( index == 0 ) { return; }
 
 
-    LV2::Host * h = _Server->getPatchbay();
-    vector<Audio::Plugin*> plugins = h->getSearch()->findMidiInstruments();
-    Audio::Plugin * p = plugins[ index - 1 ];
+    Audio::Plugin * p = _PluginSearch->getById( Instruments[ index ]->id );
 
     //std::cout << p->getName() << "\n";
 

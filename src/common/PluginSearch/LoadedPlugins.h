@@ -8,6 +8,8 @@
 
 using std::vector;
 
+using Audio::Plugin;
+
 namespace Orza { namespace PluginSearch {
 
 /**
@@ -18,6 +20,8 @@ class LoadedPlugins {
 
     public:
 
+        LoadedPlugins() {};
+
         /**
          * API
          */
@@ -26,9 +30,23 @@ class LoadedPlugins {
 
         static void update();
 
-        static vector<Audio::Plugin*> getAll();
+        static vector<Audio::Plugin*> getAllGlobal();
 
         static void addSearch( Audio::Search * );
+
+
+        /**
+         * Class methods
+         */
+
+        vector<Audio::Plugin*> getAll();
+
+        vector<Plugin*> getMidiInstruments();
+
+        vector<Plugin*> getAudioEffects();
+
+        Plugin * getById( const char * id );
+
 
     private:
 

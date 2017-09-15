@@ -11,7 +11,12 @@
 
 #include "AbstractPluginDropdown.h"
 
+#include <PluginSearch/LoadedPlugins.h>
+
+using std::vector;
 using std::map;
+
+using Orza::PluginSearch::LoadedPlugins;
 
 
 namespace Orza { namespace App { namespace Widget {
@@ -26,7 +31,7 @@ class EffectDropdown : public AbstractPluginDropdown {
     public:
 
         EffectDropdown( QWidget * parent );
-        EffectDropdown( Jack::Server * );
+        EffectDropdown( LoadedPlugins * );
         EffectDropdown();
 
         void setupUI();

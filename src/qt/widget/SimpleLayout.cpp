@@ -6,6 +6,9 @@
 #include <json/json.hpp>
 
 #include <Jack/Server.h>
+
+#include <Jack/Patchbay.h>
+
 #include <LV2/UIDriver.h>
 
 #include <MainWindow.h>
@@ -29,7 +32,7 @@ SimpleLayout::SimpleLayout( MainWindow * app ) {
 
     _App = app;
 
-    _Dropdown = new InstrumentDropdown( _App->getServer() );
+    _Dropdown = new InstrumentDropdown( _App->getPluginSearch() );
 
     setEvents();
 
@@ -63,7 +66,7 @@ void SimpleLayout::setEvents() {
 
 void SimpleLayout::handleChange( void * data ) {
 
-    setPlugin( (LV2::Plugin*) data );
+    setPlugin( (Audio::Plugin*) data );
 
 };
 
@@ -72,9 +75,9 @@ void SimpleLayout::handleChange( void * data ) {
  * Set plugin
  */
 
-void SimpleLayout::setPlugin( LV2::Plugin * p ) {
+void SimpleLayout::setPlugin( Audio::Plugin * p ) {
 
-    UIDriver * driver = new UIDriver( p->getUI() );
+    UIDriver * driver = new UIDriver( (LV2::UI*) p->getUI() );
 
     p->getUI()->addDriver( driver );
 
@@ -105,7 +108,7 @@ void SimpleLayout::load( json j ) {
 
     //@TODO remove LV2 make normal host
 
-    LV2::Host * host = _App->getServer()->getPatchbay();
+    Jack::Patchbay * host = _App->getServer()->getPatchbay();
 
     host->setActive( false );
 
@@ -116,8 +119,8 @@ void SimpleLayout::load( json j ) {
 
         std::string id = instrument["id"];
 
-        Audio::Plugin * p = host->getSearch()->findById( id.c_str() );
-        LV2::Plugin * clone = (LV2::Plugin*) p->clone();
+        Audio::Plugin * p = _App->getPluginSearch()->getById( id.c_str() );
+        Audio::Plugin * clone = (Audio::Plugin*) p->clone();
 
         setPortsFromJSON( clone, instrument );
 
@@ -142,7 +145,7 @@ void SimpleLayout::load( json j ) {
 
             std::string id = effect["id"];
 
-            Audio::Plugin * p = host->getSearch()->findById( id.c_str() );
+            Audio::Plugin * p = _App->getPluginSearch()->getById( id.c_str() );
 
             _Patchbay->addPlugin( p->clone() );
 

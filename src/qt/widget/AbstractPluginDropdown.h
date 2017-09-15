@@ -36,13 +36,10 @@ class AbstractPluginDropdown :
     public Util::Dispatcher
 {
 
-    Q_OBJECT
-
-
     public:
 
         AbstractPluginDropdown( QWidget * parent );
-        AbstractPluginDropdown( Jack::Server * );
+        AbstractPluginDropdown();
         ~AbstractPluginDropdown() {};
 
 
@@ -94,13 +91,6 @@ class AbstractPluginDropdown :
          */
         vector<Audio::Plugin*> _plugins;
         vector<const InstrumentOption*> _dropdownOptions;
-
-
-        /**
-         * Jack server
-         */
-
-        Jack::Server * _Server;
 
 
         /**

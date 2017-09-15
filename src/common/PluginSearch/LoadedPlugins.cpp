@@ -16,6 +16,8 @@
 
 using std::vector;
 
+using Audio::Plugin;
+
 
 namespace Orza { namespace PluginSearch {
 
@@ -27,7 +29,7 @@ vector<Audio::Search*> LoadedPlugins::PLUGIN_SEARCHS;
  * API
  */
 
-vector<Audio::Plugin*> LoadedPlugins::getAll() {
+vector<Audio::Plugin*> LoadedPlugins::getAllGlobal() {
 
     return LoadedPlugins::ALL_PLUGINS;
 
@@ -67,6 +69,8 @@ void LoadedPlugins::update() {
 
     //Loop searches and append to main vector
 
+    ALL_PLUGINS.clear();
+
     vector<Audio::Search*>::iterator it;
 
     for( it = PLUGIN_SEARCHS.begin(); it != PLUGIN_SEARCHS.end(); ++it ) {
@@ -74,6 +78,81 @@ void LoadedPlugins::update() {
         vector<Audio::Plugin*> plugins = (*it)->findAll();
 
         Util::Vector::append<Audio::Plugin*>( &ALL_PLUGINS, plugins );
+
+    }
+
+};
+
+
+/**
+ * Getters
+ */
+
+vector<Audio::Plugin*> LoadedPlugins::getAll() {
+
+    return getAllGlobal();
+
+};
+
+vector<Plugin*> LoadedPlugins::getMidiInstruments() {
+
+    vector<Plugin*> plugins = getAll();
+
+    vector<Plugin*> midis;
+
+    vector<Plugin*>::iterator it;
+
+    for( it = plugins.begin(); it != plugins.end(); ++ it ) {
+
+        if( (*it)->hasMidi() && (*it)->hasAudio() ) {
+
+            midis.push_back( (*it) );
+
+        }
+
+    }
+
+    return midis;
+
+};
+
+vector<Plugin*> LoadedPlugins::getAudioEffects() {
+
+    vector<Plugin*> plugins = getAll();
+
+    vector<Plugin*> effects;
+
+    vector<Plugin*>::iterator it;
+
+    for( it = plugins.begin(); it != plugins.end(); ++ it ) {
+
+        if( (*it)->hasInputs() && (*it)->hasOutputs() ) {
+
+            effects.push_back( (*it) );
+
+        }
+
+    }
+
+    return effects;
+
+};
+
+Plugin * LoadedPlugins::getById( const char * id ) {
+
+    vector<Plugin*> plugins = getAll();
+
+    vector<Plugin*>::iterator it;
+
+    for( it = plugins.begin(); it != plugins.end(); ++ it ) {
+
+        Plugin * p = (*it);
+
+        if( strncmp( p->getID(), id, 500 ) == 0 ) {
+
+            return p;
+
+        }
 
     }
 

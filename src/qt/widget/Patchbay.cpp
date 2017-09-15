@@ -3,6 +3,7 @@
  */
 #include <MainWindow.h>
 
+#include <Jack/Patchbay.h>
 #include <Jack/PatchbayEffects.h>
 
 #include "Events/RemoveClickEvent.h"
@@ -17,7 +18,7 @@ Patchbay::Patchbay( MainWindow * app ) :
     _App( app ),
     _WidgetContent( new QWidget() ),
     _LayoutWidget( new QWidget() ),
-    _Dropdown( new EffectDropdown( app->getServer() ) )
+    _Dropdown( new EffectDropdown( app->getPluginSearch() ) )
 {
 
     _UI.setupUi( _WidgetContent );
@@ -70,7 +71,7 @@ void Patchbay::handleAddClick() {
 
 void Patchbay::addPlugin( Audio::Plugin * p ) {
 
-    LV2::Host * h = _App->getServer()->getPatchbay();
+    Jack::Patchbay * h = _App->getServer()->getPatchbay();
 
     h->getEffects()->addEffect( p );
 
@@ -98,7 +99,7 @@ void Patchbay::addPlugin( Audio::Plugin * p ) {
 
 void Patchbay::removePlugin( PatchbayPlugin * plugin ) {
 
-    LV2::Host * h = _App->getServer()->getPatchbay();
+    Jack::Patchbay * h = _App->getServer()->getPatchbay();
 
     h->getEffects()->removeEffect( plugin->getPlugin() );
 
@@ -119,7 +120,7 @@ void Patchbay::handleRemoveClick( PatchbayPlugin * plugin ) {
 
 void Patchbay::handleActivateClick( PatchbayPlugin * plugin ) {
 
-    LV2::Host * h = _App->getServer()->getPatchbay();
+    Jack::Patchbay * h = _App->getServer()->getPatchbay();
 
     h->getEffects()->connectEffectPorts();
 

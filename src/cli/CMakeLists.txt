@@ -1,6 +1,8 @@
 # CLI common lib
 project(orzabal-cli CXX)
 
+set(CMAKE_EXPORT_COMPILE_COMMANDS "ON")
+
 find_package( CXXOpts REQUIRED )
 
 file( GLOB

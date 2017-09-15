@@ -92,6 +92,8 @@ bool Server::start() {
     //Host starting
 
     _Audio = new Host( this );
+    _Audio->createPorts();
+    _Audio->setServerCallbacks();
 
     _Midi = new Midi( this );
 

@@ -57,6 +57,12 @@ class Plugin : public Audio::Plugin {
 
         const char * getType();
 
+        Audio::UI * getUI() {
+
+            return nullptr;
+
+        };
+
         void setPortValue( Audio::Port * p, float value ) {};
 
 

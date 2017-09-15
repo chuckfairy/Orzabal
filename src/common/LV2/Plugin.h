@@ -45,6 +45,7 @@
 #include "include/symap.h"
 #include "include/semaphone.h"
 #include "Port.h"
+#include "UI.h"
 
 #define NS_EXT "http://lv2plug.in/ns/ext/"
 
@@ -56,7 +57,6 @@ namespace LV2 {
  * class forward
  */
 
-class UI;
 class PluginWorker;
 class PluginState;
 class PluginPreset;
@@ -274,7 +274,7 @@ class Plugin : public Jack::Plugin {
 
     protected:
 
-        UI * _UI;
+        UI _UI;
 
         jack_ringbuffer_t * _ringBuffer;
 
@@ -404,6 +404,12 @@ class Plugin : public Jack::Plugin {
         /**
          * Lilv plugin related
          */
+
+        LilvWorld * getLilvWorld() {
+
+            return _lilvWorld;
+
+        };
 
         const LilvPlugin * getLilvPlugin() {
 

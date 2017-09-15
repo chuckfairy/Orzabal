@@ -8,6 +8,7 @@
 #include <vector>
 
 #include <QtCore>
+#include <QtGui>
 #include <QComboBox>
 
 #include <Util/Dispatcher.h>
@@ -42,7 +43,9 @@ class OutputDropdown : public QComboBox, public Util::Dispatcher {
     public:
 
         OutputDropdown( QWidget * parent );
-        OutputDropdown( Jack::Server * );
+        explicit OutputDropdown( Jack::Server * );
+
+        virtual ~OutputDropdown() {};
 
 
         /**

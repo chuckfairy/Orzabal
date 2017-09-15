@@ -7,6 +7,7 @@
 #include <QtCore>
 #include <Qt>
 #include <Jack/Server.h>
+#include <PluginSearch/LoadedPlugins.h>
 
 #include "ui_MainWindow.h"
 
@@ -42,6 +43,8 @@ namespace Orza {
 using namespace Orza::App;
 using Orza::App::Settings::Layout;
 
+using Orza::PluginSearch::LoadedPlugins;
+
 
 /**
  * Main class
@@ -50,6 +53,61 @@ using Orza::App::Settings::Layout;
 class MainWindow : public QMainWindow {
 
     Q_OBJECT;
+
+    public:
+
+        //  override the constructor
+
+        MainWindow(QWidget * parent = 0, ::Qt::WindowFlags flags = 0);
+
+
+        /**
+         * Qt Window UI
+         */
+
+        Ui_MainWindow UI;
+
+
+        /**
+         * Getters
+         */
+
+        Jack::Server * getServer();
+
+
+        /**
+         * Layout @TODO use better base
+         */
+
+        SimpleLayout * getLayout();
+
+
+        /**
+         * Plugin search getter
+         */
+
+        LoadedPlugins * getPluginSearch();
+
+
+        /**
+         * Qt UI
+         */
+
+        Ui_MainWindow * getUI() {
+
+            return &UI;
+
+        };
+
+
+        /**
+         * Window actions
+         */
+
+        void goFullscreen();
+
+        void goWindowed();
+
 
     private:
 
@@ -86,6 +144,13 @@ class MainWindow : public QMainWindow {
 
 
         /**
+         * Plugin search
+         */
+
+        LoadedPlugins _PluginSearch;
+
+
+        /**
          * Settings layout
          */
 
@@ -111,53 +176,5 @@ class MainWindow : public QMainWindow {
          */
 
         const Config::BuildType BUILD_TYPE = Config::ORZA_BUILD_CONFIG;
-
-
-    public:
-
-        //  override the constructor
-
-        MainWindow(QWidget * parent = 0, ::Qt::WindowFlags flags = 0);
-
-
-        /**
-         * Qt Window UI
-         */
-
-        Ui_MainWindow UI;
-
-
-        /**
-         * Getters
-         */
-
-        Jack::Server * getServer();
-
-
-        /**
-         * Layout @TODO use better base
-         */
-
-        SimpleLayout * getLayout();
-
-
-        /**
-         * Qt UI
-         */
-
-        Ui_MainWindow * getUI() {
-
-            return &UI;
-
-        };
-
-
-        /**
-         * Window actions
-         */
-
-        void goFullscreen();
-
-        void goWindowed();
 
 };

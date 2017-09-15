@@ -20,7 +20,7 @@ void PluginList() {
 
     PluginSearch::LoadedPlugins::load();
 
-    vector<Audio::Plugin*> plugins = PluginSearch::LoadedPlugins::getAll();
+    vector<Audio::Plugin*> plugins = PluginSearch::LoadedPlugins::getAllGlobal();
 
     vector<Audio::Plugin*>::iterator it;
 

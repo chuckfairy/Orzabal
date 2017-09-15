@@ -7,6 +7,7 @@
 #include <jack/jack.h>
 
 #include <Audio/Patchbay.h>
+#include <Audio/ControlInterface.h>
 
 #include "Host.h"
 #include "Plugin.h"
@@ -29,7 +30,11 @@ class PluginRepository;
  * Main class
  */
 
-class PatchbayEffects : public Audio::Patchbay, public StereoHostInterface {
+class PatchbayEffects :
+    public Audio::Patchbay,
+    public StereoHostInterface,
+    public Audio::ControlInterface
+{
 
     public:
 

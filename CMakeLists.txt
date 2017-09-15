@@ -67,6 +67,6 @@ add_subdirectory( src/common/PluginSearch )
 
 add_subdirectory( src/cli )
 
-#add_subdirectory( src/qt )
+add_subdirectory( src/qt )
 
 add_subdirectory( test )

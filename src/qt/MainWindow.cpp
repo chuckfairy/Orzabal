@@ -21,8 +21,16 @@
  * @Override
  */
 MainWindow::MainWindow( QWidget * parent, Qt::WindowFlags flags ) :
-    QMainWindow( parent, 0 )
+    QMainWindow( parent, 0 ),
+    _PluginSearch()
 {
+
+    //Main plugins loader
+
+    LoadedPlugins::load();
+
+
+    //QT ui from creator
 
     UI.setupUi( this );
 
@@ -38,18 +46,7 @@ MainWindow::MainWindow( QWidget * parent, Qt::WindowFlags flags ) :
     _Server->connectDefault();
 
 
-    //@TODO Probably move this construction
-
-    LV2::Host * host = _Server->getPatchbay();
-
-    host->setServerCallbacks();
-
-
-    //Audio setup
-
-    Jack::Host * audio = _Server->getAudio();
-
-    audio->setServerCallbacks();
+    //Midi setup
 
     Jack::Midi * midi = _Server->getMidi();
     midi->connectDefaults();
@@ -57,7 +54,7 @@ MainWindow::MainWindow( QWidget * parent, Qt::WindowFlags flags ) :
 
     //Widget creation
 
-    dropdown = new InstrumentDropdown( _Server );
+    dropdown = new InstrumentDropdown( getPluginSearch() );
 
     effects = new EffectsList();
 
@@ -89,7 +86,18 @@ MainWindow::MainWindow( QWidget * parent, Qt::WindowFlags flags ) :
     //UI.horizontalLayout_3->addWidget( effects );
     UI.horizontalLayout_6->addWidget( midiDevices );
 
+
+    //First tab default
+
+    getUI()->tabWidget->setCurrentIndex( 0 );
+
+
+    //Main startup
+
     _Server->run();
+
+
+    //Pi full screen startup
 
     if( BUILD_TYPE == Config::Pi ) {
 
@@ -98,8 +106,6 @@ MainWindow::MainWindow( QWidget * parent, Qt::WindowFlags flags ) :
         //QTimer::singleShot( 1000, this, SLOT( goFullscreen() ) );
 
     }
-
-    getUI()->tabWidget->setCurrentIndex( 0 );
 
 };
 
@@ -110,6 +116,17 @@ MainWindow::MainWindow( QWidget * parent, Qt::WindowFlags flags ) :
 Jack::Server * MainWindow::getServer() {
 
     return _Server;
+
+};
+
+
+/**
+ * Plugin search
+ */
+
+LoadedPlugins * MainWindow::getPluginSearch() {
+
+    return &_PluginSearch;
 
 };
 

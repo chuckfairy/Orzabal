@@ -33,6 +33,8 @@ PatchbayEffects::PatchbayEffects( Server * server ) :
 
 void PatchbayEffects::addEffect( Audio::Plugin * p ) {
 
+    setActive( false );
+
     p->start();
 
     p->run();
@@ -40,6 +42,8 @@ void PatchbayEffects::addEffect( Audio::Plugin * p ) {
     _Repo->add( (Plugin*) p );
 
     connectEffectPorts();
+
+    setActive( true );
 
 };
 
@@ -222,6 +226,8 @@ void PatchbayEffects::disconnectEffectPorts() {
  */
 
 void PatchbayEffects::updateJack( jack_nframes_t nframes ) {
+
+    if( ! isActive() ) { return; }
 
     vector<Plugin*>::iterator it;
 

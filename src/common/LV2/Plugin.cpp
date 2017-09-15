@@ -48,7 +48,8 @@ namespace LV2 {
  */
 
 Plugin::Plugin( const LilvPlugin* p, jack_client_t * c ):
-    _lilvWorld( Resource::World::getResource() )
+    _lilvWorld( Resource::World::getResource() ),
+    _UI( this )
 {
 
     _jackClient = c;
@@ -56,8 +57,6 @@ Plugin::Plugin( const LilvPlugin* p, jack_client_t * c ):
     Util::random_string( (char *)_hash, HASH_LENGTH );
 
     setLilvPlugin( p );
-
-    _UI = new UI( this );
 
     _worker = new PluginWorker( this );
     _stateWorker = new PluginWorker( this );
@@ -520,7 +519,7 @@ void Plugin::start() {
     _uiPortEvents = jack_ringbuffer_create( buffer_size );
 	jack_ringbuffer_mlock( _uiPortEvents );
 
-    _UI->start();
+    _UI.start();
 
     //if( jalv.opts.controls ) {
         //for( char** c = jalv.opts.controls; *c; ++c ) {
@@ -593,7 +592,7 @@ void Plugin::stop() {
 
     zix_sem_destroy( &exit_sem );
 
-    _UI->stop();
+    _UI.stop();
 
 };
 
@@ -816,7 +815,7 @@ void Plugin::allocatePortBuffer( uint32_t i ) {
 
 UI * Plugin::getUI() {
 
-    return _UI;
+    return &_UI;
 
 };
 
@@ -982,8 +981,8 @@ void Plugin::updateJack( jack_nframes_t nframes ) {
         } else {
 
             throw std::runtime_error(
-                    "error: Unknown control change protocol %d\n"
-                    );
+                "error: Unknown control change protocol %d\n"
+            );
 
         }
 
@@ -1066,7 +1065,7 @@ void Plugin::updateJack( jack_nframes_t nframes ) {
 
                 /* TODO: Be more disciminate about what to send */
 
-                if( _UI  && ! port->old_api ) {
+                if( ! port->old_api ) {
 
                     char evbuf[sizeof(ControlChange) + sizeof(LV2_Atom)];
                     ControlChange* ev = (ControlChange*)evbuf;

@@ -33,9 +33,9 @@ namespace LV2 {
  * construct
  */
 
-UI::UI( Plugin * p ) {
-
-    setPlugin( p );
+UI::UI( Plugin * p ) :
+   _Plugin( p )
+{
 
 };
 
@@ -72,6 +72,12 @@ void UI::stop() {
 void UI::update() {
 
     updateDrivers();
+
+};
+
+Plugin * UI::getPlugin() {
+
+    return _Plugin;
 
 };
 

@@ -20,9 +20,7 @@ namespace Orza { namespace App { namespace Widget {
  *
  */
 
-AbstractPluginDropdown::AbstractPluginDropdown( Jack::Server * s ) :
-    _Server( s )
-{
+AbstractPluginDropdown::AbstractPluginDropdown() {
 
     addPlugin( &_placeholder );
 

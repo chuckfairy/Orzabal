@@ -4,7 +4,7 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 # Instruct CMake to run moc automatically when needed.
 #set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
-set( AUTOGEN_TARGET_DEPENDS ON )
+set(AUTOGEN_TARGET_DEPENDS ON)
 
 # find the location of Qt header files and libraries
 find_package(Qt5Widgets REQUIRED)
@@ -57,6 +57,8 @@ file(
     Pi/*.cpp
     MainWindow.cpp
     main.cpp
+    **/moc_*.cpp
+    *.moc
     ui_MainWindow.h
     widget/*.cpp
     LV2/*.cpp
@@ -64,6 +66,9 @@ file(
     Settings/*.cpp
     Settings/Events/*.cpp
 )
+
+
+QT5_WRAP_CPP( ${orzabal.qt_SRC} )
 
 
 # CMake Config type
@@ -90,10 +95,13 @@ find_package( Boost 1.45.0 COMPONENTS filesystem regex )
 target_link_libraries( orzabal.qt
     PUBLIC
     dl
-    orzabal-common-lv2 orzabal-common
+    orzabal-common
     orzabal-common-jack
+    orzabal-common-plugin
     orzabal-cli
-    Qt5::Widgets Qt5::Core
+    Qt5::Widgets
+    Qt5::Core
+    Qt5::Gui
     Qt5::Qml
     Boost::regex
 )
