@@ -1,5 +1,3 @@
-/* WARNING! All changes made to this file will be lost! */
-
 #ifndef W_SERD_CONFIG_H_WAF
 #define W_SERD_CONFIG_H_WAF
 
@@ -15,4 +13,3 @@
 #define SERD_VERSION "0.26.0"
 
 #endif /* W_SERD_CONFIG_H_WAF */
-

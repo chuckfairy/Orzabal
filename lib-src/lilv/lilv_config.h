@@ -1,7 +1,5 @@
 //Cache of file
 
-/* WARNING! All changes made to this file will be lost! */
-
 #ifndef W_LILV_CONFIG_H_WAF
 #define W_LILV_CONFIG_H_WAF
 
@@ -13,7 +11,12 @@
 #define LILV_VERSION "0.24.2"
 #define LILV_PATH_SEP ":"
 #define LILV_DIR_SEP "/"
+
+#if __APPLE__
+#define LILV_DEFAULT_LV2_PATH "~/.lv2:/usr/lib/lv2:/usr/local/lib/lv2:/Library/Audio/Plug-Ins/LV2/"
+#else
 #define LILV_DEFAULT_LV2_PATH "~/.lv2:/usr/lib/lv2:/usr/local/lib/lv2"
 
-#endif /* W_LILV_CONFIG_H_WAF */
+#endif
 
+#endif /* W_LILV_CONFIG_H_WAF */
