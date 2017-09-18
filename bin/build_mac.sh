@@ -1,0 +1,3 @@
+#!/bin/bash
+
+cmake . -DCMAKE_BUILD_TYPE=Debug -DORZA_BUILD_TYPE=Linux -DCMAKE_PREFIX_PATH=/usr/local/Cellar/ -DBOOST_ROOT=/usr/local/Cellar/boost/1.58.0/ -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DHAVE_POSIX_FADVISE=0

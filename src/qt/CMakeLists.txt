@@ -19,7 +19,7 @@ file(GLOB orzabal.qt_UIS
     widget/PatchBayItem.ui
 )
 
-file(GLOB common-ladspa ../common/LADSPA/*.cpp)
+#file(GLOB common-ladspa ../common/LADSPA/*.cpp)
 
 qt5_wrap_ui(orzabal.qt_UIS ${orzabal.qt_UIS} )
 
@@ -67,8 +67,12 @@ file(
     Settings/Events/*.cpp
 )
 
+FILE( GLOB moc_files
+    **/*.h
+    MainWindow.h
+)
 
-QT5_WRAP_CPP( ${orzabal.qt_SRC} )
+QT5_WRAP_CPP( MY_MOCED_FILES ${moc_files} )
 
 
 # CMake Config type
@@ -88,7 +92,7 @@ configure_file(Config/BuildType.h.in Config/BuildType.h)
 
 # Main executable
 
-add_executable(orzabal.qt ${orzabal.qt_SRC} ${common-ladspa} ${RESOURCES})
+add_executable(orzabal.qt ${orzabal.qt_SRC} ${RESOURCES} ${MY_MOCED_FILES} )
 
 find_package( Boost 1.45.0 COMPONENTS filesystem regex )
 

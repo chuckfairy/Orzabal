@@ -22,7 +22,10 @@ add_library( orzabal-common-jack SHARED ${ORZABAL_JACK_INCLUDE_FILES} )
 
 
 target_link_libraries( orzabal-common-jack PUBLIC
-    asound orzabal-common orzabal-common-audio jack
+    #asound
+    orzabal-common
+    orzabal-common-audio
+    jack
 )
 
 include_directories( orzabal-common-jack INSTALL_INTERFACE "../" )

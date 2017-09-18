@@ -6,6 +6,24 @@ Currently will load [lv2](http://lv2plug.in/) plugins. Plans for mac and windows
 
 # Install
 
+
+## Mac
+
+```shell
+# Install Qt from https://qt.io
+
+# Following installs
+
+# building
+brew install cmake
+
+# brew install jack # From http://www.jackosx.com
+brew install boost lv2
+```
+
+
+## Cmake Install
+
 ```shell
 # Make sure to have latest lv2 core
 

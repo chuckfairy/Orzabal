@@ -1,3 +1,6 @@
 ./Config/BuildType.h
+
 *.autosave
+
 moc_*
+qrc_*

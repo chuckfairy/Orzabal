@@ -16,12 +16,6 @@ file( GLOB
 
     "Util/Dispatcher.h"
 
-    "LADSPA/LADSPAPlugin.cpp"
-    "LADSPA/LADSPAPlugin.h"
-    "LADSPA/LADSPASearch.cpp"
-    "LADSPA/LADSPASearch.h"
-    "LADSPA/LADSPAPort.h"
-
     "Audio/Plugin.cpp"
     "Audio/Plugin.h"
     "Audio/Search.cpp"
@@ -35,7 +29,7 @@ file( GLOB
 
 ## Building
 # create orzabal-gui library
-add_library( orzabal-common ${ORZABAL_COMMON_INCLUDE_FILES} )
+add_library( orzabal-common SHARED ${ORZABAL_COMMON_INCLUDE_FILES} )
 
 target_link_libraries( orzabal-common dl )
 

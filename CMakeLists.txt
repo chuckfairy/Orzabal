@@ -1,6 +1,6 @@
 # Jack cmake
 
-project(orzabal-all CXX)
+project( orzabal-all CXX )
 
 cmake_minimum_required( VERSION 2.7 )
 
@@ -11,11 +11,21 @@ set( CMAKE_C_STANDARD 11 )
 
 set(CMAKE_CXX_FLAGS "-std=c++11 ${CMAKE_CXX_FLAGS} -g -ftest-coverage -fprofile-arcs")
 
-set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+
+# RPATH
+set( CMAKE_MACOSX_RPATH 1 )
+
+set( CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE )
+
+
+# CPack
 
 INCLUDE( CPack )
 
-project(orzabal)
+
+# Main setup
+
+project( orzabal )
 
 set( CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH}" "${PROJECT_SOURCE_DIR}/CMake" )
 

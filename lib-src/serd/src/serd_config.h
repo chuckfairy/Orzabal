@@ -5,7 +5,12 @@
 
 #define HAVE_GCOV 1
 #define HAVE_POSIX_MEMALIGN 1
+
+
+#if ! __APPLE__
 #define HAVE_POSIX_FADVISE 1
+#endif
+
 #define HAVE_FILENO 1
 #define SERD_VERSION "0.26.0"
 

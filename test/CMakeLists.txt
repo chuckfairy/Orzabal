@@ -7,24 +7,26 @@ project(orzabal-tests CXX)
 enable_testing()
 
 
-## LADSPA
 
-add_executable( ladspalist LADSPA.cpp )
+## LADSPA Inactive ATM ###
+
+#add_executable( ladspalist LADSPA.cpp )
 
 # We have to link
-target_link_libraries( ladspalist
-    PUBLIC orzabal-common
-)
+#target_link_libraries( ladspalist
+    #PUBLIC orzabal-common
+#)
 
-target_include_directories( ladspalist PUBLIC "../src/common" )
+#target_include_directories( ladspalist PUBLIC "../src/common" )
 
-install( TARGETS
-   ladspalist
+#install( TARGETS
+   #ladspalist
 
-   RUNTIME DESTINATION bin
-   LIBRARY DESTINATION lib
-   ARCHIVE DESTINATION lib
-)
+   #RUNTIME DESTINATION bin
+   #LIBRARY DESTINATION lib
+   #ARCHIVE DESTINATION lib
+#)
+####
 
 
 #Prep ourselves for compiling boost

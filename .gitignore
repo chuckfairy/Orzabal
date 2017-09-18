@@ -9,13 +9,18 @@ CTestTestfile.cmake
 CMakeScripts
 compile_commands.json
 
+CPack*
+
 doc/
+
+*.dylib
 
 src/include
 src/qt/ui_*
 src/qt/example
 *_automoc.cpp
 moc_*.cpp
+*_autogen
 
 test/testBin
 
