@@ -19,7 +19,11 @@ brew install cmake
 
 # brew install jack # From http://www.jackosx.com
 brew install boost lv2
-# brew install mda-lv2 # lv2 plugins
+
+# lv2 plugins
+# brew install mda-lv2
+# brew tap david0/homebrew-audio
+# brew install --HEAD calf
 ```
 
 
