@@ -35,12 +35,12 @@ InstrumentDropdown::InstrumentDropdown( LoadedPlugins * p ) :
 
         Audio::Plugin * p = (*it);
 
-        InstrumentOption opt = {
-            p->getName(),
-            p->getID()
-        };
+        InstrumentOption * opt = new InstrumentOption();
 
-        addInstrument( &opt );
+        opt->name = p->getName();
+        opt->id = p->getID();
+
+        addInstrument( opt );
 
     }
 
@@ -92,8 +92,9 @@ void InstrumentDropdown::handleSelectionChanged( int index ) {
 
     if( index == 0 ) { return; }
 
+    std::cout << Instruments[ index ]->name << "\n";
 
-    Audio::Plugin * p = _PluginSearch->getById( Instruments[ index ]->id );
+    Audio::Plugin * p = _PluginSearch->getById( Instruments[ index ]->id.c_str() );
 
     //std::cout << p->getName() << "\n";
 

@@ -4,6 +4,9 @@
  */
 #pragma once
 
+#include <string>
+
+using std::string;
 
 /**
  * Instrument option struct
@@ -13,6 +16,6 @@ struct InstrumentOption {
 
     const char * name;
 
-    char * id;
+    string id;
 
 };
