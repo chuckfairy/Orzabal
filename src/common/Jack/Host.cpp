@@ -165,7 +165,7 @@ bool Host::connectInputTo( const char * out ) {
 
 bool Host::connectInputTo( const char * outLeft, const char * outRight ) {
 
-    std::cout << "\n" << outLeft << " " << outRight;
+    std::cout << "\n" << outLeft << " " << outRight << "\n";
 
     connectJackPort( outLeft, getPortFullName( _inputLeftName ) );
     connectJackPort( outRight, getPortFullName( _inputRightName ) );

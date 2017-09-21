@@ -5,12 +5,13 @@
 #pragma once
 
 #include <Util/Dispatcher.h>
+#include "ControlInterface.h"
 
 
 namespace Audio {
 
 
-class Server : public Util::Dispatcher {
+class Server : public Util::Dispatcher, public ControlInterface {
 
     protected:
 
@@ -22,9 +23,9 @@ class Server : public Util::Dispatcher {
 
     public:
 
-        virtual bool start() { return false; };
+        virtual void start() {};
 
-        virtual bool stop() { return false; };
+        virtual void stop() {};
 
         virtual bool connect() { return false; };
 

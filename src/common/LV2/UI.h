@@ -6,7 +6,6 @@
 
 #include <lilv/lilv.h>
 #include <suil/suil.h>
-#include <sratom/sratom.h>
 
 #include <jack/jack.h>
 #include <jack/ringbuffer.h>

@@ -10,6 +10,7 @@
 #include <Util/String.h>
 
 #include "PluginList.h"
+#include "PluginLoader.h"
 
 #include "App.h"
 
@@ -51,6 +52,8 @@ App::App( int argc, char **argv ) :
         ( "l,list", "List of plugins" )
         ( "p,plugin-types", "Plugin Types Installed" )
         ( "h,help", "Display this message" )
+        ( "run", "Run raw midi instrument from CLI", cxxopts::value<std::string>() )
+        ( "load", "Load JSON setting", cxxopts::value<std::string>() )
     ;
 
     _Options.parse( argc, argv );
@@ -76,6 +79,10 @@ void App::displayDefault() {
     } else if( isPluginTypes() ) {
 
         return displayPluginTypes();
+
+    } else if( isPluginRun() ) {
+
+        return runPlugin();
 
     }
 
@@ -147,6 +154,17 @@ void App::displayPluginTypes() {
 
 
 /**
+ * Run plugin midi by id
+ */
+
+void App::runPlugin() {
+
+    PluginLoader( _Options["run"].as<string>().c_str() );
+
+}
+
+
+/**
  * Bool interface
  */
 
@@ -168,9 +186,19 @@ const bool App::isPluginTypes() const {
 
 };
 
+const bool App::isPluginRun() const {
+
+    return ! _Options["run"].as<string>().empty();
+
+};
+
 const bool App::isMainProgram() const {
 
-    return ! isHelp() && ! isList() && !isPluginTypes();
+    return ! isHelp()
+        && ! isList()
+        && ! isPluginTypes()
+        && ! isPluginRun()
+    ;
 
 };
 

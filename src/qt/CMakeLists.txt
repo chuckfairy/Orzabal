@@ -57,8 +57,8 @@ file(
     Pi/*.cpp
     MainWindow.cpp
     main.cpp
-    **/moc_*.cpp
-    *.moc
+    #**/moc_*.cpp
+    #*.moc
     ui_MainWindow.h
     widget/*.cpp
     LV2/*.cpp
@@ -67,8 +67,18 @@ file(
     Settings/Events/*.cpp
 )
 
+
+# Qt Objects
+
 FILE( GLOB moc_files
-    **/*.h
+    Pi/Layout.h
+    widget/InstrumentDropdown.h
+    widget/Patchbay.h
+    widget/PatchbayPlugin.h
+    widget/SimpleLayout.h
+    LV2/PresetDropdown.h
+    LV2/WindowLayout.h
+    Settings/OutputDropdown.h
     MainWindow.h
 )
 

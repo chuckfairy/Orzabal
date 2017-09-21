@@ -78,7 +78,7 @@ class Plugin : public Jack::Plugin {
 
         LilvWorld * _lilvWorld;
 
-        LilvInstance * _lilvInstance;
+        LilvInstance * _lilvInstance = nullptr;
 
         const LV2_Descriptor * _lilvDescriptor;
 

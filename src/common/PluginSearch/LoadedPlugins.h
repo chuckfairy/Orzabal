@@ -48,6 +48,12 @@ class LoadedPlugins {
         Plugin * getById( const char * id );
 
 
+        /**
+         * Search getters
+         */
+        static vector<Audio::Search*> getAllSearches();
+
+
     private:
 
         void addVector( vector<Audio::Plugin*> source, vector<Audio::Plugin*> dest );

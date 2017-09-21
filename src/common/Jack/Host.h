@@ -108,7 +108,7 @@ class Host :
 
             char * c = (char*) malloc(180);
 
-            sprintf( c, "orzabal-client:%s", name );
+            sprintf( c, "orzabal:%s", name );
 
             return c;
 

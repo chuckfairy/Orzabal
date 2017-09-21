@@ -58,18 +58,20 @@ void Search::update() {
 
     vector<Audio::Plugin*> pluginList;
 
-    const LilvPlugins* plugins = lilv_world_get_all_plugins( _lilvWorld );
+    _lilvPlugins = lilv_world_get_all_plugins( _lilvWorld );
 
-    LILV_FOREACH( plugins, i, plugins ) {
+    LILV_FOREACH( plugins, i, _lilvPlugins ) {
 
-        const LilvPlugin* p = lilv_plugins_get( plugins, i );
+        const LilvPlugin* p = lilv_plugins_get( _lilvPlugins, i );
 
-        Audio::Plugin * d = new Plugin(
+        Plugin * d = new Plugin(
             p,
             Jack::Resource::Client::getInstance()
         );
 
-        pluginList.push_back( d );
+        //_lv2s.push_back( *d );
+
+        //pluginList.push_back( d );
 
         getRepo()->add( d );
 

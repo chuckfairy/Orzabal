@@ -567,6 +567,8 @@ void Plugin::stop() {
 
     /* Terminate the worker */
 
+    std::cout << "Stopping plugin\n";
+
     ACTIVE = false;
 
     _worker->finish();
@@ -646,7 +648,7 @@ void Plugin::activatePort( long portNum ) {
     port->nameString = nameChar;
     port->name = port->nameString.c_str();
 
-    std::cout << "\n" << port->name;
+    std::cout << "\n ACTIVATE PORT " << port->name << "\n";
 
 
 	//Connect unsupported ports to NULL (known to be optional by this point)
@@ -678,6 +680,9 @@ void Plugin::activatePort( long portNum ) {
             port->jack_port = jack_port_register(
                     jack_client, port->name,
                     JACK_DEFAULT_AUDIO_TYPE, jack_flags, 0);
+
+            port->hasJackPort = true;
+
             break;
 
         case Audio::TYPE_CV:
@@ -687,6 +692,8 @@ void Plugin::activatePort( long portNum ) {
                     JACK_DEFAULT_AUDIO_TYPE, jack_flags, 0);
 
             if (port->jack_port) {
+
+                port->hasJackPort = true;
 
                 jack_set_property(
                     jack_client,
@@ -706,6 +713,7 @@ void Plugin::activatePort( long portNum ) {
                 port->jack_port = jack_port_register(
                         jack_client, port->name,
                         JACK_DEFAULT_MIDI_TYPE, jack_flags, 0);
+                port->hasJackPort = true;
             }
             break;
 
@@ -1246,12 +1254,16 @@ void Plugin::updatePort(
 
         }
 
-        if( port->jack_port ) {
+        std::cout << port->name << " Port Update\n";
+
+        if( port->hasJackPort ) {
 
             /* Write Jack MIDI input */
             void * buf = jack_port_get_buffer(port->jack_port, nframes);
 
-            for (uint32_t i = 0; i < jack_midi_get_event_count(buf); ++i) {
+            if( ! buf ) { return; }
+
+            for (uint32_t i = 0; i < jack_midi_get_event_count( buf ); ++i) {
 
                 jack_midi_event_t ev;
                 jack_midi_event_get( &ev, buf, i );

@@ -9,15 +9,19 @@
 #include <string.h>
 #include <iostream>
 
+#include <lilv/lilv.h>
+
 #include <Audio/Host.h>
 #include <Audio/Plugin.h>
 #include <Audio/Search.h>
+
 
 using std::vector;
 
 
 namespace LV2 {
 
+class Plugin;
 
 /**
  * Search extension
@@ -35,6 +39,11 @@ class Search : public Audio::Search {
 
 
     private:
+
+        vector<Plugin> _lv2s;
+
+        const LilvPlugins * _lilvPlugins;
+
 
 };
 

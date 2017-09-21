@@ -9,6 +9,12 @@ int main( int argc, char **argv ) {
 
     cli->displayDefault();
 
+    if( cli->isMainProgram() ) {
+
+        cli->displayHelp();
+
+    }
+
     return 0;
 
 };

@@ -94,11 +94,11 @@ class Server : public Audio::Server {
 
         Server();
 
-        bool start();
+        void start();
 
         void run();
 
-        bool stop();
+        void stop();
 
         bool connect();
 

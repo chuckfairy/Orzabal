@@ -11,7 +11,9 @@ namespace Jack {
 
 struct Port : public Audio::Port {
 
-    jack_port_t * jack_port;
+    jack_port_t * jack_port = nullptr;
+
+    bool hasJackPort = false;
 
     size_t buf_size;
 

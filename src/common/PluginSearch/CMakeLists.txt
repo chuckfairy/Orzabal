@@ -28,6 +28,11 @@ if( ORZABAL_HAS_LV2 )
 
     set( ORZABAL_PLUGIN_SEARCH_INCLUDE_DIRS
         ${ORZABAL_LV2_INCLUDE_DIRS}
+        ${ORZABAL_ROOT_PATH}/lib-src/lilv
+        ${ORZABAL_ROOT_PATH}/lib-src/suil
+        ${ORZABAL_ROOT_PATH}/lib-src/sord
+        ${ORZABAL_ROOT_PATH}/lib-src/serd
+        ${ORZABAL_ROOT_PATH}/lib-src/sratom
         ".."
     )
 

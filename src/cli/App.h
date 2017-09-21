@@ -46,6 +46,8 @@ class App {
 
         void displayPluginTypes();
 
+        void runPlugin();
+
 
         /**
          * Bool interface
@@ -56,6 +58,8 @@ class App {
         const bool isList() const;
 
         const bool isPluginTypes() const;
+
+        const bool isPluginRun() const;
 
         const bool isMainProgram() const;
 

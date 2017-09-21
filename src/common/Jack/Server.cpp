@@ -16,6 +16,7 @@
 #include "Server.h"
 #include "PatchbayEffects.h"
 #include "Events/PortRegistrationData.h"
+#include "Resource/Client.h"
 
 
 using Audio::Port;
@@ -31,40 +32,9 @@ using Events::PortRegistrationData;
  *
  */
 
-Server::Server() :
-    _client( jack_client_open( Server::JACK_CLIENT_NAME, JACK_OPTIONS, &JACK_STATUS ) )
-{
+Server::Server() {
 
-
-};
-
-
-/**
- * Static sets
- */
-const char * Server::JACK_CLIENT_NAME = "orzabal-client";
-
-const char * Server::UPDATE_EVENT = "update";
-const char * Server::SHUTDOWN_EVENT = "shutdown";
-const char * Server::LATENCY_EVENT = "latency";
-const char * Server::BUFFER_SIZE_EVENT = "buffer-size";
-const char * Server::PORT_REGISTER_EVENT = "port-register";
-
-
-/**
- * Jack C server api start
- *
- */
-
-bool Server::start() {
-
-	// open a client connection to the JACK server
-
-    if( _client == NULL ) {
-
-        throw std::runtime_error( "NO CLIENT OPEN" );
-
-    }
+    _client = Resource::Client::getInstance();
 
 
     // Set jack callbacks
@@ -99,8 +69,37 @@ bool Server::start() {
 
     _Host = new Jack::Patchbay( this );
 
+};
 
-    return true;
+
+/**
+ * Static sets
+ */
+const char * Server::JACK_CLIENT_NAME = "orzabal-client";
+
+const char * Server::UPDATE_EVENT = "update";
+const char * Server::SHUTDOWN_EVENT = "shutdown";
+const char * Server::LATENCY_EVENT = "latency";
+const char * Server::BUFFER_SIZE_EVENT = "buffer-size";
+const char * Server::PORT_REGISTER_EVENT = "port-register";
+
+
+/**
+ * Jack C server api start
+ *
+ */
+
+void Server::start() {
+
+	// open a client connection to the JACK server
+
+    if( _client == NULL ) {
+
+        throw std::runtime_error( "NO CLIENT OPEN" );
+
+    }
+
+    setActive( true );
 
 };
 
@@ -120,13 +119,11 @@ void Server::run() {
  *
  */
 
-bool Server::stop() {
+void Server::stop() {
 
     jack_deactivate( _client );
 
-    jack_client_close( _client );
-
-    return true;
+    setActive( false );
 
 };
 
@@ -274,7 +271,7 @@ void Server::JackOnPortResgistration(
 
     PortRegistrationData * data = new PortRegistrationData( id, registry );
 
-    s->dispatch( Server::PORT_REGISTER_EVENT, (void*) data );
+    //s->dispatch( Server::PORT_REGISTER_EVENT, (void*) data );
 
 };
 

@@ -24,6 +24,8 @@ moc_*.cpp
 
 test/testBin
 
+tmp/
+
 data/*
 
 *.sw[po]

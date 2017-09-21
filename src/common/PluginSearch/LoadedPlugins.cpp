@@ -1,6 +1,8 @@
 /**
  * Loaded plugins search grab
  */
+#include <stdexcept>
+
 #include <vector>
 
 #include <common/Config/PluginTypes.h>
@@ -32,6 +34,12 @@ vector<Audio::Search*> LoadedPlugins::PLUGIN_SEARCHS;
 vector<Audio::Plugin*> LoadedPlugins::getAllGlobal() {
 
     return LoadedPlugins::ALL_PLUGINS;
+
+};
+
+vector<Audio::Search*> LoadedPlugins::getAllSearches() {
+
+    return LoadedPlugins::PLUGIN_SEARCHS;
 
 };
 
@@ -155,6 +163,10 @@ Plugin * LoadedPlugins::getById( const char * id ) {
         }
 
     }
+
+    throw std::runtime_error(
+        id
+    );
 
 };
 

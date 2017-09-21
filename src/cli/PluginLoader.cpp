@@ -9,6 +9,9 @@
 #include <Jack/Server.h>
 #include <Jack/Midi.h>
 
+#include <LV2/Plugin.h>
+#include <LV2/Search.h>
+
 #include <PluginSearch/LoadedPlugins.h>
 
 namespace Orza { namespace CLI {
@@ -21,6 +24,8 @@ using PluginSearch::LoadedPlugins;
  */
 
 void PluginLoader( const char * id ) {
+
+    std::cout << "Loading by ID " << id << "\n";
 
     LoadedPlugins::load();
 
@@ -36,7 +41,7 @@ void PluginLoader( const char * id ) {
 
         std::cout << "Could not load plugin " << id << "\n";
 
-        return;
+        //return;
 
     }
 
@@ -46,6 +51,7 @@ void PluginLoader( const char * id ) {
     server->start();
     server->connectDefault();
 
+    //server->getAudio()->connectDefaults();
 
     //Midi setup
 
@@ -58,5 +64,20 @@ void PluginLoader( const char * id ) {
 
 };
 
-}; };
 
+/**
+ * test run app
+ */
+
+void loadTest() {
+
+    LV2::Plugin * newP = (LV2::Plugin*) LoadedPlugins::getAllSearches()[0]->findAll()[78];
+
+    newP->start();
+    newP->run();
+    newP->updateJackBufferSize( 1024 );
+    newP->updateJack( 1024 );
+
+};
+
+}; };
