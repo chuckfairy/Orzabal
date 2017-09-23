@@ -68,7 +68,7 @@ file(
 )
 
 
-# Qt Objects
+# Qt Objects / mocs
 
 FILE( GLOB moc_files
     Pi/Layout.h
@@ -80,6 +80,7 @@ FILE( GLOB moc_files
     LV2/PresetDropdown.h
     LV2/WindowLayout.h
     Settings/OutputDropdown.h
+    Settings/Layout.h
     MainWindow.h
 )
 
