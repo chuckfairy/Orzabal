@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>PatchBay</class>
+ <class>SingleInstrument</class>
  <widget class="QWidget" name="content">
   <property name="geometry">
    <rect>
@@ -26,7 +26,7 @@
     </layout>
    </item>
    <item row="1" column="0">
-    <widget class="QScrollArea" name="patchbay_scroll_area">
+    <widget class="QScrollArea" name="singleinstrument_scroll_area">
      <property name="widgetResizable">
       <bool>true</bool>
      </property>

@@ -66,6 +66,7 @@ QTabWidget:focus, QCheckBox:focus, QRadioButton:focus, QSlider:focus {
     border: none;
 }
 
+
 QLineEdit {
     background-color: #161B26;
     padding: 5px;
@@ -854,4 +855,17 @@ LV2--PresetDropdown {
     border: none;
     border-bottom: 1px solid #1E6AD1;
     border-radius: 0;
+}
+
+
+/** Patchbay **/
+
+QScrollArea#patchbay_scroll_area,
+QScrollArea#patchbay_scroll_area > QWidget, QScrollArea#patchbay_scroll_area > QWidget > QWidget,
+QScrollArea#patchbay_scroll_area QGridLayout
+{
+    padding: 0px;
+    margin: 0px;
+    border: none;
+    background-color: transparent;
 }

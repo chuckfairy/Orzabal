@@ -56,6 +56,17 @@ class Patchbay : public QWidget {
         void addPlugin( Audio::Plugin * );
 
 
+        /**
+         * Getters
+         */
+
+        QWidget * getWidgetContainer() {
+
+            return _WidgetContent;
+
+        };
+
+
     public slots:
 
         void handleAddClick();

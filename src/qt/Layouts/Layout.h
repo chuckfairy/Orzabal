@@ -21,7 +21,7 @@ class Layout {
 
         string getName() {
 
-            return name;
+            return _name;
 
         };
 
@@ -38,7 +38,7 @@ class Layout {
         Layout();
         ~Layout();
 
-        string name;
+        string _name;
 
 };
 

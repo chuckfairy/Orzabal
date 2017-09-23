@@ -18,6 +18,8 @@
 #include "SimpleChangeEvent.h"
 #include "SimpleLayout.h"
 
+#include "SingleInstrument.h"
+
 #include "Patchbay.h"
 
 #include <LV2/UIDriver.h>
@@ -26,6 +28,7 @@ using nlohmann::json;
 
 using Orza::App::LV2UI::UIDriver;
 using Orza::App::Widget::Patchbay;
+using Orza::App::Widget::SingleInstrument;
 
 
 SimpleLayout::SimpleLayout( MainWindow * app ) {
@@ -39,7 +42,13 @@ SimpleLayout::SimpleLayout( MainWindow * app ) {
     _App->getUI()
         ->horizontalLayout_4->insertWidget( 0, _Dropdown );
 
+
+    //Patchbay setup
+
     _Patchbay = new Patchbay( _App );
+
+    _App->getUI()
+        ->tabWidget->insertTab( 1, _Patchbay->getWidgetContainer(), "Effects" );
 
 };
 
@@ -50,7 +59,7 @@ SimpleLayout::SimpleLayout( MainWindow * app ) {
 
 void SimpleLayout::setEvents() {
 
-    _ChangeEvent = new SimpleChangeEvent( this );
+    _ChangeEvent = new SimpleChangeEvent<SimpleLayout>( this );
 
     _Dropdown->on(
         InstrumentDropdown::CHANGE_EVENT,

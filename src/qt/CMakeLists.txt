@@ -76,6 +76,7 @@ FILE( GLOB moc_files
     widget/Patchbay.h
     widget/PatchbayPlugin.h
     widget/SimpleLayout.h
+    widget/SingleInstrument.h
     LV2/PresetDropdown.h
     LV2/WindowLayout.h
     Settings/OutputDropdown.h

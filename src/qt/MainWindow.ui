@@ -79,11 +79,28 @@
          </widget>
         </item>
         <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_7">
+          <item>
+           <widget class="QLabel" name="label_8">
+            <property name="maximumSize">
+             <size>
+              <width>689</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>Input</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
          <layout class="QHBoxLayout" name="horizontalLayout_5">
           <item>
            <widget class="QLabel" name="label_5">
             <property name="text">
-             <string>Output Device</string>
+             <string>Output</string>
             </property>
            </widget>
           </item>
@@ -100,7 +117,7 @@
              </size>
             </property>
             <property name="text">
-             <string>Midi Device</string>
+             <string>Midi</string>
             </property>
            </widget>
           </item>
@@ -114,6 +131,27 @@
          </widget>
         </item>
         <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_3">
+          <item>
+           <widget class="QComboBox" name="load_layout_dropdown_2"/>
+          </item>
+          <item>
+           <widget class="QPushButton" name="load_layout_btn_2">
+            <property name="text">
+             <string>Load</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <widget class="QLabel" name="label_4">
+          <property name="text">
+           <string>Preset</string>
+          </property>
+         </widget>
+        </item>
+        <item>
          <layout class="QHBoxLayout" name="horizontalLayout_2">
           <item>
            <widget class="QComboBox" name="load_layout_dropdown"/>
@@ -121,7 +159,7 @@
           <item>
            <widget class="QPushButton" name="load_layout_btn">
             <property name="text">
-             <string>Load Layout</string>
+             <string>Load</string>
             </property>
            </widget>
           </item>
@@ -135,7 +173,7 @@
           <item>
            <widget class="QPushButton" name="save_layout_btn">
             <property name="text">
-             <string>Save Layout</string>
+             <string>Save</string>
             </property>
            </widget>
           </item>

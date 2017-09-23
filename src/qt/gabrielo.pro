@@ -22,7 +22,8 @@ FORMS    += MainWindow.ui \
     Pi/PiTab.ui \
     UI/SettingsForm.ui \
     widget/PatchBay.ui \
-    widget/PatchBayItem.ui
+    widget/PatchBayItem.ui \
+    widget/SingleInstrument.ui
 
 DISTFILES += \
     About.ui.qml \

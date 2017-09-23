@@ -6,21 +6,24 @@
 
 #include <Util/Dispatcher.h>
 
-/**
- * Forwarding
- */
-class SimpleLayout;
+template <typename T>
 
 class SimpleChangeEvent : public Util::Event {
 
     private:
 
-        SimpleLayout * _Layout;
+        T * _Layout;
 
     public:
 
-        SimpleChangeEvent( SimpleLayout * );
+        SimpleChangeEvent( T * t ) :
+            _Layout( t )
+        {};
 
-        void run( void * );
+        void run( void * data ) {
+
+            _Layout->handleChange( data );
+
+        };
 
 };

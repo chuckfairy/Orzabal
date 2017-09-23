@@ -25,13 +25,15 @@ Patchbay::Patchbay( MainWindow * app ) :
 
     _UI.horizontalLayout->insertWidget( 0, _Dropdown );
 
-    app->getUI()->tabWidget->insertTab( 1, _WidgetContent, "Effects" );
-
     _Layout = new QGridLayout;
+    _Layout->setSpacing( 0 );
+
+    _Layout->setSpacing( 0 );
+    _Layout->setMargin( 0 );
 
     _LayoutWidget->setLayout( _Layout );
 
-    _UI.scrollArea->setWidget( _LayoutWidget );
+    _UI.patchbay_scroll_area->setWidget( _LayoutWidget );
 
     connect(
         _UI.pushButton,

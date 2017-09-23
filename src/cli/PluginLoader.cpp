@@ -41,7 +41,7 @@ void PluginLoader( const char * id ) {
 
         std::cout << "Could not load plugin " << id << "\n";
 
-        //return;
+        return;
 
     }
 
@@ -51,7 +51,6 @@ void PluginLoader( const char * id ) {
     server->start();
     server->connectDefault();
 
-    //server->getAudio()->connectDefaults();
 
     //Midi setup
 

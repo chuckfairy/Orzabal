@@ -1254,8 +1254,6 @@ void Plugin::updatePort(
 
         }
 
-        std::cout << port->name << " Port Update\n";
-
         if( port->hasJackPort ) {
 
             /* Write Jack MIDI input */
@@ -1357,6 +1355,7 @@ const bool Plugin::portIsCV( Port * p ) {
     return portIs( p, LV2_CORE__CVPort );
 
 };
+
 
 /**
  * Check required lilv features
