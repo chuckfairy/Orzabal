@@ -5,13 +5,19 @@
 
 #include <string>
 
+#include <Audio/PatchbayPresetLoader.h>
 
 using std::string;
 
 
-namespace Orza { namespace App { namespace Layout {
+namespace Orza { namespace App { namespace Layouts {
 
-class Layout {
+
+/**
+ * Main interface
+ */
+
+class Layout : public Audio::PatchbayPresetLoader {
 
     public:
 
@@ -27,16 +33,19 @@ class Layout {
 
 
         /**
-         * char
+         * Virtuals
          */
 
+        virtual void setup() {};
+
+        virtual void takedown() {};
 
 
 
     protected:
 
-        Layout();
-        ~Layout();
+        Layout() {};
+        ~Layout() {};
 
         string _name;
 

@@ -9,11 +9,16 @@
 
 #include <Jack/Midi.h>
 
+#include "Layouts/LayoutLoader.h"
+
 #include "Settings/Layout.h"
 #include "Pi/Layout.h"
 #include "MainWindow.h"
-#include "widget/EffectsList.h"
 #include "Settings/MidiDeviceDropdown.h"
+
+
+using Orza::App::Layouts::LayoutLoader;
+
 
 /**
  * Window construct
@@ -54,17 +59,14 @@ MainWindow::MainWindow( QWidget * parent, Qt::WindowFlags flags ) :
 
     //Widget creation
 
-    dropdown = new InstrumentDropdown( getPluginSearch() );
-
-    effects = new EffectsList();
-
     midiDevices = new MidiDeviceDropdown( this );
 
 
     //@TODO Move to layout picker
 
     _SettingsLayout = new Layout( this );
-    _Layout = new SimpleLayout( this );
+
+    _LayoutLoader = new LayoutLoader( this );
 
 
 
@@ -87,11 +89,6 @@ MainWindow::MainWindow( QWidget * parent, Qt::WindowFlags flags ) :
     UI.horizontalLayout_6->addWidget( midiDevices );
 
 
-    //First tab default
-
-    getUI()->tabWidget->setCurrentIndex( 0 );
-
-
     //Main startup
 
     _Server->run();
@@ -101,7 +98,7 @@ MainWindow::MainWindow( QWidget * parent, Qt::WindowFlags flags ) :
 
     if( BUILD_TYPE == Config::Pi ) {
 
-         _Pi = new Orza::App::Pi::Layout( this );
+        _Pi = new Orza::App::Pi::Layout( this );
 
         //QTimer::singleShot( 1000, this, SLOT( goFullscreen() ) );
 
@@ -135,9 +132,9 @@ LoadedPlugins * MainWindow::getPluginSearch() {
  * Layout @TODO use better base
  */
 
-SimpleLayout * MainWindow::getLayout() {
+LayoutLoader * MainWindow::getLayoutLoader() {
 
-    return _Layout;
+    return _LayoutLoader;
 
 };
 

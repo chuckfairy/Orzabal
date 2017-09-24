@@ -13,9 +13,8 @@
 
 #include "Config/BuildType.h"
 
-#include "widget/InstrumentDropdown.h"
-#include "widget/EffectsList.h"
-#include "widget/SimpleLayout.h"
+#include "Widget/InstrumentDropdown.h"
+#include "Widget/EffectsList.h"
 
 #include "Settings/MidiDeviceDropdown.h"
 
@@ -29,13 +28,22 @@ namespace Orza {
 
         class Layout;
 
-    } }
-
-    namespace App {  namespace Settings {
-
-        class Layout;
-
     }; };
+
+    namespace App {
+
+        namespace Layouts {
+
+            class LayoutLoader;
+
+        };
+
+        namespace Settings {
+
+            class Layout;
+
+        };
+    };
 
 };
 
@@ -44,6 +52,8 @@ using namespace Orza::App;
 using Orza::App::Settings::Layout;
 
 using Orza::PluginSearch::LoadedPlugins;
+
+using Orza::App::Layouts::LayoutLoader;
 
 
 /**
@@ -56,125 +66,108 @@ class MainWindow : public QMainWindow {
 
     public:
 
-        //  override the constructor
+    //  override the constructor
 
-        MainWindow(QWidget * parent = 0, ::Qt::WindowFlags flags = 0);
-
-
-        /**
-         * Qt Window UI
-         */
-
-        Ui_MainWindow UI;
+    MainWindow(QWidget * parent = 0, ::Qt::WindowFlags flags = 0);
 
 
-        /**
-         * Getters
-         */
+    /**
+     * Qt Window UI
+     */
 
-        Jack::Server * getServer();
-
-
-        /**
-         * Layout @TODO use better base
-         */
-
-        SimpleLayout * getLayout();
+    Ui_MainWindow UI;
 
 
-        /**
-         * Plugin search getter
-         */
+    /**
+     * Getters
+     */
 
-        LoadedPlugins * getPluginSearch();
-
-
-        /**
-         * Qt UI
-         */
-
-        Ui_MainWindow * getUI() {
-
-            return &UI;
-
-        };
+    Jack::Server * getServer();
 
 
-        /**
-         * Window actions
-         */
+    /**
+     * Plugin search getter
+     */
 
-        void goFullscreen();
+    LoadedPlugins * getPluginSearch();
 
-        void goWindowed();
+
+    /**
+     * Layout loader getter
+     */
+
+    LayoutLoader * getLayoutLoader();
+
+
+    /**
+     * Qt UI
+     */
+
+    Ui_MainWindow * getUI() {
+
+        return &UI;
+
+    };
+
+
+    /**
+     * Window actions
+     */
+
+    void goFullscreen();
+
+    void goWindowed();
 
 
     private:
 
-        /**
-         * Main audio server
-         *
-         */
+    /**
+     * Main audio server
+     *
+     */
 
-        Jack::Server * _Server;
-
-
-        /**
-         * Instrument dropdown
-         *
-         */
-
-        InstrumentDropdown * dropdown;
+    Jack::Server * _Server;
 
 
-        /**
-         * Effect dropdown
-         *
-         */
+    /**
+     * Midi keyboard device dropdown
+     *
+     */
 
-        EffectsList *effects;
-
-
-        /**
-         * Midi keyboard device dropdown
-         *
-         */
-
-        MidiDeviceDropdown *midiDevices;
+    MidiDeviceDropdown *midiDevices;
 
 
-        /**
-         * Plugin search
-         */
+    /**
+     * Plugin search
+     */
 
-        LoadedPlugins _PluginSearch;
-
-
-        /**
-         * Settings layout
-         */
-
-        Layout * _SettingsLayout;
+    LoadedPlugins _PluginSearch;
 
 
-        /**
-         * Layout future layouter
-         */
+    /**
+     * Settings layout
+     */
 
-        SimpleLayout * _Layout;
+    Layout * _SettingsLayout;
+
+    /**
+     * Layout loader
+     */
+
+    LayoutLoader * _LayoutLoader;
 
 
-        /**
-         * Pi module
-         */
+    /**
+     * Pi module
+     */
 
-        Orza::App::Pi::Layout * _Pi;
+    Orza::App::Pi::Layout * _Pi;
 
 
-        /**
-         * Orza build config
-         */
+    /**
+     * Orza build config
+     */
 
-        const Config::BuildType BUILD_TYPE = Config::ORZA_BUILD_CONFIG;
+    const Config::BuildType BUILD_TYPE = Config::ORZA_BUILD_CONFIG;
 
 };

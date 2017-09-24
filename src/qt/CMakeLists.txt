@@ -15,8 +15,8 @@ find_package(Qt5Qml REQUIRED)
 file(GLOB orzabal.qt_UIS
     MainWindow.ui
     Pi/PiTab.ui
-    widget/PatchBay.ui
-    widget/PatchBayItem.ui
+    Widget/PatchBay.ui
+    Widget/PatchBayItem.ui
 )
 
 #file(GLOB common-ladspa ../common/LADSPA/*.cpp)
@@ -60,8 +60,9 @@ file(
     #**/moc_*.cpp
     #*.moc
     ui_MainWindow.h
-    widget/*.cpp
+    Widget/*.cpp
     LV2/*.cpp
+    Layouts/**/*.cpp
     Layouts/*.cpp
     Settings/*.cpp
     Settings/Events/*.cpp
@@ -100,6 +101,20 @@ else()
 endif()
 
 configure_file(Config/BuildType.h.in Config/BuildType.h)
+
+
+# Default layout
+
+add_definitions(-DORZABAL_QT_DEFAULT_LAYOUT=${ORZABAL_QT_DEFAULT_LAYOUT})
+
+if( "${ORZABAL_QT_DEFAULT_LAYOUT}" STREQUAL "" )
+    set( ORZABAL_QT_DEFAULT_LAYOUT "InstrumentEffect" )
+endif()
+
+
+# Defaults configure
+
+configure_file(Config/Defaults.h.in Config/Defaults.h)
 
 
 # Main executable

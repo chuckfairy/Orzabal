@@ -1,12 +1,24 @@
 /**
- * Effect layout
+ * Simple layout start
  */
 #pragma once
 
 #include <Layouts/Layout.h>
+
+#include <json/json.hpp>
+
+#include <Audio/PatchbayPresetLoader.h>
+
+#include <Util/Dispatcher.h>
+
 #include <Widget/Patchbay.h>
 
+#include <Widget/SingleInstrument.h>
+
+using nlohmann::json;
+
 using Orza::App::Widget::Patchbay;
+using Orza::App::Widget::SingleInstrument;
 
 
 /**
@@ -18,11 +30,15 @@ class MainWindow;
 
 namespace Orza { namespace App { namespace Layouts {
 
-class EffectLayout : public Layout {
+
+class InstrumentEffect : public Layout {
 
     public:
 
-        EffectLayout( MainWindow * );
+        InstrumentEffect( MainWindow * );
+
+        void load( json settings );
+
 
         /**
          * Virtuals
@@ -36,6 +52,8 @@ class EffectLayout : public Layout {
     private:
 
         Patchbay * _Patchbay;
+
+        SingleInstrument * _SingleInstrument;
 
         MainWindow * _App;
 

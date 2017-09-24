@@ -9,6 +9,8 @@
 
 #include <MainWindow.h>
 
+#include <Layouts/LayoutLoader.h>
+
 #include "Events/OutputChangeEvent.h"
 #include "Layout.h"
 
@@ -52,7 +54,7 @@ void Layout::setDropdowns() {
 
     QComboBox * dropdown = _App->getUI()->load_layout_dropdown;
 
-    vector<string> fileNames = _App->getLayout()->getFileNames();
+    vector<string> fileNames = _App->getLayoutLoader()->getFileNames();
 
     vector<string>::const_iterator it;
 
@@ -136,7 +138,7 @@ void Layout::loadPreset() {
         ->currentText()
         .toStdString();
 
-    _App->getLayout()->loadFromName( layoutName.c_str() );
+    //_App->getLayoutLoader()->getCurrent()->loadFromName( layoutName.c_str() );
 
 };
 

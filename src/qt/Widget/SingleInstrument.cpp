@@ -30,6 +30,8 @@ SingleInstrument::SingleInstrument( MainWindow * app ) :
 
     _UI.setupUi( _WidgetContent );
 
+    _UI.item_area->addWidget( _Dropdown );
+
     setEvents();
 
 };
