@@ -46,23 +46,10 @@ set_target_properties(orzabal-common PROPERTIES LINKER_LANGUAGE CXX)
 ## Installing
 # add installation for target farweller
 
-install(TARGETS orzabal-common EXPORT orzabal-common-export
-    RUNTIME DESTINATION bin
-    ARCHIVE DESTINATION lib
-    LIBRARY DESTINATION lib
-    DESTINATION "${ORZABAL_LIB_PATH}"
-    INCLUDES DESTINATION include
-)
-
-
-# copy public include files
-#install(FILES
-    #LADSPA/LADSPAPort.h
-    #DESTINATION "${ORZABAL_LIB_PATH}/orzabal-common"
-#)
-
-
-## create export file which can be imported by other cmake projects
-install(EXPORT orzabal-common-export
-    DESTINATION lib/cmake/orzabal-common-lib
+install( TARGETS
+   orzabal-common
+   EXPORT orzabal-common
+   RUNTIME DESTINATION bin
+   LIBRARY DESTINATION lib
+   ARCHIVE DESTINATION lib
 )
