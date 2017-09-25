@@ -126,7 +126,6 @@ find_package( Boost 1.45.0 COMPONENTS filesystem regex )
 target_link_libraries( orzabal.qt
     PUBLIC
     dl
-    orzabal-common
     orzabal-common-jack
     orzabal-common-plugin
     orzabal-cli

@@ -80,6 +80,7 @@ target_link_libraries( orzabal-common-lv2
     orzabal-common-jack
     pthread
     pcre
+    dl
     Qt5::Widgets Qt5::Core
 )
 
