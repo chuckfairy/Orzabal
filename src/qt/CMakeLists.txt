@@ -73,11 +73,11 @@ file(
 
 FILE( GLOB moc_files
     Pi/Layout.h
-    widget/InstrumentDropdown.h
-    widget/Patchbay.h
-    widget/PatchbayPlugin.h
-    widget/SimpleLayout.h
-    widget/SingleInstrument.h
+    Widget/InstrumentDropdown.h
+    Widget/Patchbay.h
+    Widget/PatchbayPlugin.h
+    Widget/SimpleLayout.h
+    Widget/SingleInstrument.h
     LV2/PresetDropdown.h
     LV2/WindowLayout.h
     Settings/OutputDropdown.h
