@@ -116,7 +116,7 @@ bool Host::isInternalPort( const char * name ) {
     const char * clientName =  jack_get_client_name( _jackClient );
 
     return (
-        strncmp( clientName, name,  sizeof( clientName ) ) == 0
+        strncmp( clientName, name,  strlen( clientName ) ) == 0
     );
 
 };

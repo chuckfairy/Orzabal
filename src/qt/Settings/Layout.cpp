@@ -49,8 +49,11 @@ void Layout::setDropdowns() {
 
     _RightOutput->setCurrentIndex( 1 );
 
+    _InputDropdown = new InputDropdown( _App->getServer() );
 
-     //Settings
+
+
+    //Settings
 
     QComboBox * dropdown = _App->getUI()->load_layout_dropdown;
 
@@ -104,6 +107,8 @@ void Layout::setAppUI() {
 
     _App->getUI()->horizontalLayout_5->addWidget( _LeftOutput );
     _App->getUI()->horizontalLayout_5->addWidget( _RightOutput );
+
+    _App->getUI()->input_layout->addWidget( _InputDropdown );
 
 };
 

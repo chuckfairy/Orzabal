@@ -9,6 +9,7 @@
 #include <Layouts/LayoutWriter.h>
 
 #include "OutputDropdown.h"
+#include <Widget/InputDropdown.h>
 
 
 /**
@@ -62,6 +63,8 @@ class Layout : public QWidget {
 
         OutputDropdown * _LeftOutput;
         OutputDropdown * _RightOutput;
+
+        InputDropdown * _InputDropdown;
 
 
         /**
