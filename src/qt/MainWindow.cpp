@@ -127,6 +127,15 @@ LoadedPlugins * MainWindow::getPluginSearch() {
 
 };
 
+/**
+ * Plugin search
+ */
+
+Layout * MainWindow::getSettingsLayout() {
+
+    return _SettingsLayout;
+
+};
 
 /**
  * Layout @TODO use better base

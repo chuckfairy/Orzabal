@@ -43,6 +43,11 @@ class Layout : public QWidget {
 
         void loadPreset();
 
+        InputDropdown * getInputDropdown() {
+
+            return _InputDropdown;
+
+        };
 
     public slots:
 

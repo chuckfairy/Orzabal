@@ -91,6 +91,12 @@ class MainWindow : public QMainWindow {
 
     LoadedPlugins * getPluginSearch();
 
+    /**
+     * Settings layout
+     */
+
+    Layout * getSettingsLayout();
+
 
     /**
      * Layout loader getter

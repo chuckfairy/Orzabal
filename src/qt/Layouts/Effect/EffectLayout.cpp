@@ -5,6 +5,10 @@
 
 #include "EffectLayout.h"
 
+#include <Jack/PatchbayEffects.h>
+#include <Settings/Layout.h>
+
+
 using Orza::App::Widget::Patchbay;
 
 namespace Orza { namespace App { namespace Layouts {
@@ -33,6 +37,21 @@ void EffectLayout::setup() {
         ->tabWidget->insertTab( 0, _Patchbay->getWidgetContainer(), "Effects" );
 
     _App->getUI()->tabWidget->setCurrentIndex( 0 );
+
+
+    //Connect default first input
+
+    vector<Jack::Port> outputs = _App->getServer()->getAudio()->getOutputPorts();
+
+    if( ! outputs.empty() ) {
+
+        _App->getServer()->getPatchbay()->getEffects()->connectInputTo(
+            outputs[0].name
+        );
+
+        _App->getSettingsLayout()->getInputDropdown()->setCurrentIndex( 1 );
+
+    }
 
 };
 
