@@ -25,6 +25,20 @@ QComboBox:on {
     selection-background-color: #1E6AD1;
 }
 
+QDial {
+    background-color: #00184A;
+    font-size: 10px;
+    margin-top: 5px;
+}
+
+QDial::handle {
+    color: red;
+}
+
+QIcon {
+    color: #FFF;
+}
+
 QComboBox:hover,
 QPushButton:hover,
 QAbstractSpinBox:hover,
@@ -34,7 +48,7 @@ QPlainTextEdit:hover,
 QAbstractView:hover,
 QGroupBox:hover,
 QTreeView:hover {
-    border: 1px solid #3daee9;
+    border: 1px solid #1E6AD1;
     color: #eff0f1;
 }
 

@@ -314,6 +314,8 @@ void Patchbay::updateJackBufferSize( void * bufferPtr ) {
 
     }
 
+    _PatchbayEffects->updateJackBufferSize( frames );
+
 };
 
 
@@ -338,6 +340,8 @@ void Patchbay::updateJackLatency( void * modePtr ) {
         }
 
     }
+
+    _PatchbayEffects->updateJackLatency( mode );
 
 };
 

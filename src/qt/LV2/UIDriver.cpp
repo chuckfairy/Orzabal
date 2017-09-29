@@ -20,6 +20,7 @@
 #include "WindowLayout.h"
 #include "WindowLayout.h"
 
+#include "PortContainer.h"
 #include "UIDriver.h"
 #include "WindowLayout.h"
 
@@ -77,6 +78,31 @@ void UIDriver::stop() {
 
 void UIDriver::update() {
 
+    //Check ports
+
+    Audio::Plugin * p = _UI->getPlugin();
+
+    for( int i = 0; i < portContainer.size(); ++ i ) {
+
+        updatePort( portContainer[ i ] );
+
+    }
+
+};
+
+
+/**
+ * Update port check if change
+ */
+
+void UIDriver::updatePort( PortContainer container ) {
+
+    if( container.port->control != container.controlWidget->getValue() ) {
+
+        container.controlWidget->setValue( container.port->control );
+
+    }
+
 };
 
 
@@ -97,8 +123,6 @@ void UIDriver::createUI() {
 
 QWidget * UIDriver::createControlWidget() {
 
-	QList<LV2::PortContainer> portContainers;
-
     LV2::Plugin * _Plugin = _UI->getPlugin();
 
     int numPorts = _Plugin->getNumPorts();
@@ -109,10 +133,10 @@ QWidget * UIDriver::createControlWidget() {
 
 		if( port->type != Audio::TYPE_CONTROL ) { continue; }
 
-        LV2::PortContainer portContainer;
-        portContainer.ui = _UI;
-        portContainer.port = port;
-        portContainers.append( portContainer );
+        PortContainer container;
+        container.ui = _UI;
+        container.port = port;
+        portContainer.push_back( container );
 
     }
 
@@ -151,12 +175,14 @@ QWidget * UIDriver::createControlWidget() {
     LilvNode * lv2_name = lilv_new_uri( _lilvWorld, LV2_CORE__name );
     LilvNode* pprop_notOnGUI = lilv_new_uri( _lilvWorld, LV2_PORT_PROPS__notOnGUI );
 
-    for (int i = 0; i < portContainers.count(); ++i) {
+    for (int i = 0; i < portContainer.size(); ++i) {
 
-        LV2::PortContainer portContainer = portContainers[i];
-        LV2::Port* port = portContainer.port;
+        PortContainer * container = &portContainer[i];
+        LV2::Port * port = container->port;
 
-        Control *  control = new Control( portContainer );
+        Control *  control = new Control( *container );
+
+        container->controlWidget = control;
 
         LilvNode* group = lilv_port_get(
             _lilvPlugin,

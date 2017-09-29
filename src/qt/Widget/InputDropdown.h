@@ -34,10 +34,6 @@ class InputDropdown : public QComboBox, public Util::Dispatcher {
 
     Q_OBJECT
 
-    private:
-
-        Jack::Host * _Host;
-
 
     public:
 
@@ -97,6 +93,14 @@ class InputDropdown : public QComboBox, public Util::Dispatcher {
 
 
         /**
+         * Current jack port from index
+         */
+
+        const char * getCurrentJackPort();
+
+
+
+        /**
          * has Port
          *
          * @return bool
@@ -113,6 +117,13 @@ class InputDropdown : public QComboBox, public Util::Dispatcher {
          */
 
         void handleSelectionChanged( int index );
+
+
+    private:
+
+        Jack::Host * _Host;
+
+        vector<Jack::Port> _ports;
 
 };
 

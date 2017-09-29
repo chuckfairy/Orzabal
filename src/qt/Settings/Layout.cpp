@@ -12,6 +12,7 @@
 #include <Layouts/LayoutLoader.h>
 
 #include "Events/OutputChangeEvent.h"
+#include "Events/InputChangeEvent.h"
 #include "Layout.h"
 
 
@@ -36,6 +37,7 @@ Layout::Layout( MainWindow * win ) :
     setAppUI();
 
 };
+
 
 
 /**
@@ -79,6 +81,10 @@ void Layout::setEvents() {
     _LeftOutput->on( OutputDropdown::CHANGE_EVENT, _Event );
     _RightOutput->on( OutputDropdown::CHANGE_EVENT, _Event );
 
+    Util::Event * inputEvent = new InputChangeEvent<Layout>( this );
+
+    _InputDropdown->on( InputDropdown::CHANGE_EVENT, inputEvent );
+
 
     //Save click
 
@@ -109,6 +115,12 @@ void Layout::setAppUI() {
     _App->getUI()->horizontalLayout_5->addWidget( _RightOutput );
 
     _App->getUI()->input_layout->addWidget( _InputDropdown );
+
+
+    //Add layout options
+    //@TODO
+
+    //_App->getUI()->load_
 
 };
 
@@ -161,6 +173,42 @@ void Layout::handleSaveClick() {
 void Layout::handlePresetLoadClick() {
 
     loadPreset();
+
+};
+
+
+/**
+ * Input change
+ */
+
+void Layout::handleInputChange( void * data ) {
+
+    const int index = _InputDropdown->currentIndex();
+
+    _App->getServer()
+        ->getPatchbay()
+        ->getEffects()->clearInputs();
+
+
+    //Clear all if 0 or none
+
+    if( index == 0 ) {
+
+        return;
+
+    }
+
+
+    //Change input
+
+    _App->getServer()->
+        getPatchbay()->
+        getEffects()->connectInputTo(
+            _InputDropdown->getCurrentJackPort()
+    );
+
+    std::cout << "Connected to " 
+        <<_InputDropdown->getCurrentJackPort() << "\n";
 
 };
 

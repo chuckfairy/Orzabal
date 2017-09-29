@@ -3,6 +3,7 @@
  */
 #include "PatchbayPlugin.h"
 
+#include <Resource/Icons.h>
 
 #include <LV2/Plugin.h>
 
@@ -10,6 +11,7 @@
 
 
 using Orza::App::LV2UI::UIDriver;
+using Orza::App::Resource::Icons;
 
 
 namespace Orza { namespace App { namespace Widget {
@@ -39,7 +41,25 @@ PatchbayPlugin::PatchbayPlugin( Audio::Plugin * const p ) :
 
     _UI.setupUi( _WidgetContent );
 
+    //Font
+    QFont iconFont = Icons::getFont( 20 );
+
+    //Button setup
+
+    _UI.active_btn->setFont( iconFont );
+    setActive();
+
+    _UI.view_btn->setFont( iconFont );
+    _UI.view_btn->setText( QChar( fa::eye ) );
+
+    _UI.delete_btn->setFont( iconFont );
+    _UI.delete_btn->setText( QChar( fa::trash ) );
+
+
+    //Label setup
+
     _UI.label->setText( _Plugin->getName() );
+
 
     //@TODO multi plugin useage
     LV2::Plugin * plugin = (LV2::Plugin*) _Plugin;
@@ -115,7 +135,7 @@ void PatchbayPlugin::setActive() {
 
     _UI.active_btn->setStyleSheet( "color: #FFF " );
 
-    _UI.active_btn->setText( "Active" );
+    _UI.active_btn->setText( QChar( fa::microphone ) );
 
     dispatch( ACTIVATE_EVENT, this );
 
@@ -129,9 +149,9 @@ void PatchbayPlugin::setInactive() {
 
     }
 
-    _UI.active_btn->setStyleSheet( "color: #DEDEDE" );
+    _UI.active_btn->setStyleSheet( "color: #AAA" );
 
-    _UI.active_btn->setText( "Inactive" );
+    _UI.active_btn->setText( QChar( fa::microphoneslash ) );
 
     dispatch( ACTIVATE_EVENT, this );
 
@@ -152,9 +172,23 @@ void PatchbayPlugin::toggleActive() {
 
 void PatchbayPlugin::handleViewClick() {
 
-    _UI.scrollArea->isVisible()
-        ?  _UI.scrollArea->hide()
-        : _UI.scrollArea->show();
+    if( _UI.scrollArea->isVisible() ) {
+
+        _UI.scrollArea->hide();
+
+        _UI.view_btn->setStyleSheet( "color: #AAA" );
+
+        _UI.view_btn->setText( QChar( fa::eyeslash ) );
+
+    } else {
+
+        _UI.scrollArea->show();
+
+        _UI.view_btn->setStyleSheet( "color: #FFF" );
+
+        _UI.view_btn->setText( QChar( fa::eye ) );
+
+    }
 
 };
 

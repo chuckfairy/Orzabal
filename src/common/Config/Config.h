@@ -5,6 +5,6 @@
 
 namespace Orza { namespace Config {
 
-const char * VERSION = "0.6.0";
+const char * VERSION = "0.6.1";
 
 }; };

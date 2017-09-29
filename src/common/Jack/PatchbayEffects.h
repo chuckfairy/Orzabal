@@ -93,10 +93,14 @@ class PatchbayEffects :
 
 
         /**
-         * Main jack update
+         * Main jack updates
          */
 
         void updateJack( jack_nframes_t );
+
+        void updateJackBufferSize( jack_nframes_t );
+
+        void updateJackLatency( jack_latency_callback_mode_t );
 
 
         /**

@@ -54,7 +54,9 @@ include_directories(
 file(
     GLOB
     orzabal.qt_SRC
+    "${ORZABAL_ROOT_PATH}/lib-src/QtAwesome/*.cpp"
     Pi/*.cpp
+    Resource/*.cpp
     MainWindow.cpp
     main.cpp
     #**/moc_*.cpp
@@ -73,6 +75,7 @@ file(
 
 FILE( GLOB moc_files
     Pi/Layout.h
+    "${ORZABAL_ROOT_PATH}/lib-src/QtAwesome/*.h"
     Widget/InstrumentDropdown.h
     Widget/Patchbay.h
     Widget/PatchbayPlugin.h

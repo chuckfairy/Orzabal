@@ -48,7 +48,7 @@ int main( int argc, char **argv ) {
 
     app = new QApplication(argc, argv);
 
-    win = new MainWindow;
+    win = new MainWindow( app );
 
     win->show();
 

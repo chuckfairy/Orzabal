@@ -249,6 +249,55 @@ void PatchbayEffects::updateJack( jack_nframes_t nframes ) {
 
 
 /**
+ * Update jack host from jack frame pointer
+ */
+
+void PatchbayEffects::updateJackBufferSize( jack_nframes_t frames ) {
+
+    vector<Plugin*>::iterator it;
+
+    vector<Plugin*> effects = _Repo->getAll();
+
+    for( it = effects.begin(); it != effects.end(); ++ it ) {
+
+        Plugin * p = (*it);
+
+        if( p->isActive() ) {
+
+            p->updateJackBufferSize( frames );
+
+        }
+
+    }
+
+};
+
+
+/**
+ * Update jack latency host for plugin jack ports
+ */
+
+void PatchbayEffects::updateJackLatency( jack_latency_callback_mode_t mode ) {
+
+    vector<Plugin*>::iterator it;
+
+    vector<Plugin*> effects = _Repo->getAll();
+
+    for( it = effects.begin(); it != effects.end(); ++ it ) {
+
+        Plugin * p = (*it);
+
+        if( p->isActive() ) {
+
+            p->updateJackLatency( mode );
+
+        }
+
+    }
+
+};
+
+/**
  * Server callback processing mainly redirection
  * Will use Orzabal server or standalone use
  *

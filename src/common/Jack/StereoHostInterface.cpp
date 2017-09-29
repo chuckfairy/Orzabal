@@ -162,6 +162,26 @@ bool StereoHostInterface::connectOutputTo( const char * inLeft, const char * inR
 
 };
 
+
+/**
+ * Clear methods
+ */
+
+void StereoHostInterface::clearInputs() {
+
+    disconnectJackPort( _inputLeft );
+    disconnectJackPort( _inputRight );
+
+};
+
+void StereoHostInterface::clearOutputs() {
+
+    disconnectJackPort( _outputLeft );
+    disconnectJackPort( _outputRight );
+
+};
+
+
 /**
  * Port redirection
  */

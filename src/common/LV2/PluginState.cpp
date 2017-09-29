@@ -56,6 +56,9 @@ void PluginState::applyLilvState() {
     if( must_pause ) {
 
         _Plugin->setRequestUpdate( true );
+
+        _Plugin->getUI()->updateDrivers();
+
         _Plugin->run();
 
     }

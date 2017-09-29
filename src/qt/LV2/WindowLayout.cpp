@@ -154,13 +154,14 @@ int FlowLayout::smartSpacing(QStyle::PixelMetric pm) const {
     }
 }
 
-Control::Control(LV2::PortContainer portContainer, QWidget* parent)
+Control::Control(PortContainer portContainer, QWidget* parent)
     : QGroupBox(parent)
     , dial(new QDial())
     , plugin(portContainer.ui->getPlugin()->getLilvPlugin())
     , port(portContainer.port)
       , label(new QLabel())
 {
+
     const LilvPort* lilvPort = port->lilv_port;
     LilvWorld* world = portContainer.ui->getPlugin()->getLilvWorld();
 
@@ -221,10 +222,15 @@ Control::Control(LV2::PortContainer portContainer, QWidget* parent)
     setRange(lilv_node_as_float(nmin), lilv_node_as_float(nmax));
     setValue(defaultValue);
 
+    if( isInteger || isEnum ) {
+        dial->setNotchesVisible( true );
+    }
+
+
     // Fill layout
     QVBoxLayout* layout = new QVBoxLayout();
-    layout->addWidget(label, 0, Qt::AlignHCenter);
     layout->addWidget(dial, 0, Qt::AlignHCenter);
+    layout->addWidget(label, 0, Qt::AlignHCenter);
     setLayout(layout);
 
     setMinimumWidth( CONTROL_WIDTH );
@@ -330,13 +336,13 @@ float Control::getValue() {
     }
 }
 
-    void
-Control::dialChanged(int dialValue)
-{
+void Control::dialChanged(int dialValue) {
+
     float value = getValue();
 
     label->setText(getValueLabel(value));
     port->control = value;
+
 }
 
 }; }; };
