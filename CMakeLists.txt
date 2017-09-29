@@ -40,6 +40,17 @@ set( ORZABAL_SRC_PATH "${PROJECT_SOURCE_DIR}/src" )
 
 set( ORZABAL_LIB_PATH "${CMAKE_MODULE_PATH}" "${PROJECT_SOURCE_DIR}/lib" )
 
+
+# CMake Config type [Linux, Pi]
+# Linux default
+
+add_definitions(-DORZA_BUILD_TYPE=${ORZA_BUILD_TYPE})
+
+if( ORZA_BUILD_TYPE STREQUAL "" )
+    set( ORZA_BUILD_TYPE "Linux" )
+endif()
+
+
 # @TODO add possible OS check
 
 set( ORZABAL_HAS_LV2 true )
@@ -76,6 +87,10 @@ add_subdirectory( src/common/LV2 )
 add_subdirectory( src/common/PluginSearch )
 
 add_subdirectory( src/cli )
+
+if( ORZA_BUILD_TYPE STREQUAL "Pi" )
+    add_subdirectory( src/pi )
+endif()
 
 add_subdirectory( src/qt )
 

@@ -96,8 +96,6 @@ QT5_WRAP_CPP( MY_MOCED_FILES ${moc_files} )
 # Pi for fullscreen
 # Linux default
 
-add_definitions(-DORZA_BUILD_TYPE=${ORZA_BUILD_TYPE})
-
 if( ORZA_BUILD_TYPE STREQUAL "Pi" )
     set( ORZABAL_QT_BUILD_TYPE "Pi" )
 else()

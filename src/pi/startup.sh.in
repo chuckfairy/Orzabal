@@ -2,6 +2,6 @@
 
 sudo mount -o remount,size=128M /dev/shm;
 
-nohup /usr/bin/jackd -dalsa -dhw:0 -r48000 -p1024 -n2 -Xseq;
+nohup /usr/bin/jackd -dalsa -dhw:Device,0 -r48000 -p1024 -n2 -Xseq;
 
 nohup ${ORZA_PI_EXEC_PATH};

@@ -46,6 +46,15 @@ class Layout : public QWidget {
         };
 
 
+        /**
+         * Hardware commands
+         */
+
+        void shutdown();
+
+        void restart();
+
+
     public slots:
 
         /**
@@ -62,6 +71,15 @@ class Layout : public QWidget {
          */
 
         void toggleFullscreen();
+
+
+        /**
+         * Hardware command slots
+         */
+
+        void handleShutdown();
+
+        void handleRestart();
 
 
     private:
