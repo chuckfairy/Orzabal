@@ -29,6 +29,8 @@
 #include <LV2/Port.h>
 #include <LV2/UI.h>
 
+#include "PortContainer.h"
+
 #define CONTROL_WIDTH 150
 #define DIAL_STEPS    10000
 
@@ -98,18 +100,19 @@ class Control : public QGroupBox {
     Q_OBJECT
 
     public:
-        Control(LV2::PortContainer portContainer, QWidget* parent = 0);
+        Control(PortContainer portContainer, QWidget* parent = 0);
 
         Q_SLOT void dialChanged(int value);
 
         void setValue(float value);
+
+        float getValue();
 
         QDial* dial;
 
     private:
         void    setRange(float min, float max);
         QString getValueLabel(float value);
-        float   getValue();
 
         const LilvPlugin* plugin;
         struct LV2::Port* port;

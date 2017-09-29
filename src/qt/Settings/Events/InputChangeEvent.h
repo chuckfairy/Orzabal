@@ -14,7 +14,7 @@ namespace Orza { namespace App {  namespace Settings {
 
 template<typename T>
 
-class InputChangeEvent : Util::Event {
+class InputChangeEvent : public Util::Event {
 
     public:
 

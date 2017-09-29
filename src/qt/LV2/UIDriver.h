@@ -20,25 +20,19 @@
 #include <LV2/UI.h>
 #include <LV2/Plugin.h>
 #include <LV2/include/types.h>
+#include <LV2/Port.h>
 
 #include "PresetDropdown.h"
+
+
+namespace Orza { namespace App { namespace LV2UI {
 
 
 /**
  * Forwarding
  */
 
-namespace LV2 {
-
 class PortContainer;
-
-class Port;
-
-}
-
-
-namespace Orza { namespace App { namespace LV2UI {
-
 
 class PresetDropdown;
 
@@ -65,6 +59,8 @@ class UIDriver : public Audio::UIDriver {
 
         void update();
 
+        void updatePort( PortContainer );
+
         void resize();
 
 
@@ -76,7 +72,7 @@ class UIDriver : public Audio::UIDriver {
 
         QWidget * createControlWidget();
 
-        bool portGroupLessThan( const LV2::PortContainer &, const LV2::PortContainer & );
+        bool portGroupLessThan( const PortContainer &, const PortContainer & );
 
         QWidget* getControlWidget() {
 
@@ -112,6 +108,13 @@ class UIDriver : public Audio::UIDriver {
         const LilvUI * _lilvUI;
 
         const LilvNode * _uiType;
+
+
+        /**
+         * Port containers
+         */
+
+        vector<PortContainer> portContainer;
 
 };
 

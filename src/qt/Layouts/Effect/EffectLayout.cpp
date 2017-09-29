@@ -45,9 +45,11 @@ void EffectLayout::setup() {
 
     if( ! outputs.empty() ) {
 
-        _App->getServer()->getPatchbay()->getEffects()->connectInputTo(
-            outputs[0].name
-        );
+        _App->getServer()
+            ->getPatchbay()
+            ->getEffects()->connectInputTo(
+                outputs[0].name
+            );
 
         _App->getSettingsLayout()->getInputDropdown()->setCurrentIndex( 1 );
 

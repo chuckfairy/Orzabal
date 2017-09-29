@@ -30,8 +30,6 @@ namespace LV2 {
 
 class Plugin;
 
-class PortContainer;
-
 class Port;
 
 class PresetDropdown;
@@ -95,8 +93,6 @@ class UI : public Audio::UI {
         void createNativeUI();
 
         QWidget * createControlWidget();
-
-        bool portGroupLessThan( const PortContainer &p1, const PortContainer &p2 );
 
 
         /**

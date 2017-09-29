@@ -2,7 +2,7 @@
 <RCC version="1.0">
 <qresource>
     <file>Styles/MainStyle.qss</file>
-    <file>../assets/fonts/fontawesome-4.7.0.ttf</file>
+    <file alias="/fonts/fontawesome-4.7.0.ttf">../assets/fonts/fontawesome-4.7.0.ttf</file>
     <file alias="icon.png">../assets/icon.png</file>
 </qresource>
 <qresource prefix="/qss_icons/rc">

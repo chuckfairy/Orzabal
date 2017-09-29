@@ -40,6 +40,17 @@ InputDropdown::InputDropdown( Jack::Server * server ) {
 
 
 /**
+ * Get jack port name
+ */
+
+const char * InputDropdown::getCurrentJackPort() {
+
+    return _ports[ currentIndex() ].name;
+
+};
+
+
+/**
  * Update ports from host and dropdown options
  */
 
@@ -82,6 +93,8 @@ const char * InputDropdown::CHANGE_EVENT = "CHANGE";
 void InputDropdown::addInput( Jack::Port port, const int order ) {
 
     addItem( port.name );
+
+    _ports.push_back( port );
 
     //Inputs.push_back( device );
 

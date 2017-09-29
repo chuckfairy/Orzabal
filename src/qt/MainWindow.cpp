@@ -15,9 +15,11 @@
 #include "Pi/Layout.h"
 #include "MainWindow.h"
 #include "Settings/MidiDeviceDropdown.h"
+#include "Resource/Icons.h"
 
 
 using Orza::App::Layouts::LayoutLoader;
+using Orza::App::Resource::Icons;
 
 
 /**
@@ -25,7 +27,7 @@ using Orza::App::Layouts::LayoutLoader;
  *
  * @Override
  */
-MainWindow::MainWindow( QWidget * parent, Qt::WindowFlags flags ) :
+MainWindow::MainWindow( QApplication * app, QWidget * parent, Qt::WindowFlags flags ) :
     QMainWindow( parent, 0 ),
     _PluginSearch()
 {
@@ -33,6 +35,11 @@ MainWindow::MainWindow( QWidget * parent, Qt::WindowFlags flags ) :
     //Main plugins loader
 
     LoadedPlugins::load();
+
+
+    //Icons setup
+
+    Icons::setResource( app );
 
 
     //QT ui from creator

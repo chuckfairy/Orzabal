@@ -132,6 +132,15 @@ class StereoHostInterface : public ServerStandalone {
         );
 
 
+        /**
+         * Connection clear methods
+         */
+
+        void clearInputs();
+
+        void clearOutputs();
+
+
     protected:
 
         /**

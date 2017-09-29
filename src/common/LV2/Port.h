@@ -39,14 +39,4 @@ struct Port : public Jack::Port {
 
 };
 
-
-/**
- * Conatiner
- */
-
-struct PortContainer {
-	UI * ui;
-	Port* port;
-};
-
 };

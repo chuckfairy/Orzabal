@@ -49,6 +49,14 @@ class Layout : public QWidget {
 
         };
 
+
+        /**
+         * Input change handle
+         */
+
+        void handleInputChange( void * data );
+
+
     public slots:
 
         void handleSaveClick();

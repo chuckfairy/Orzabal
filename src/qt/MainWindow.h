@@ -68,7 +68,9 @@ class MainWindow : public QMainWindow {
 
     //  override the constructor
 
-    MainWindow(QWidget * parent = 0, ::Qt::WindowFlags flags = 0);
+    //MainWindow(QWidget * parent = 0, ::Qt::WindowFlags flags = 0);
+
+    explicit MainWindow(QApplication *, QWidget * parent = 0, ::Qt::WindowFlags flags = 0);
 
 
     /**
