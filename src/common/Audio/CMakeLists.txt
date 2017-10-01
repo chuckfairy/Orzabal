@@ -13,7 +13,7 @@ include_directories( "${CMAKE_CURRENT_BINARY_DIR}")
 
 # Configure app data path
 
-add_definitions(-DORZA_DATA_PATH=${ORZA_BUILD_TYPE})
+add_definitions(-DORZA_DATA_PATH=${ORZA_DATA_PATH})
 
 if( "${ORZA_DATA_PATH}" STREQUAL "" )
     set( ORZABAL_DATA_PATH "${ORZABAL_ROOT_PATH}/data" )

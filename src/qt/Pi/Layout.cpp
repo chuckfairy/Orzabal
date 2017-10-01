@@ -1,6 +1,10 @@
 /**
  * Pi layout
  */
+#include <stdlib.h>
+
+#include <pi/Config/Commands.h>
+
 #include <QtCore>
 
 #include <MainWindow.h>
@@ -37,7 +41,28 @@ Layout::Layout( MainWindow * app ) :
 
     connect( _Tab.windowed, SIGNAL( clicked() ), this, SLOT( toggleFullscreen() ) );
 
+    connect( _Tab.restart_btn, SIGNAL( clicked() ), this, SLOT( handleRestart() ) );
+
+    connect( _Tab.shutdown_btn, SIGNAL( clicked() ), this, SLOT( handleShutdown() ) );
+
     goFullscreen();
+
+};
+
+
+/**
+ * Hardware commands
+ */
+
+void Layout::shutdown() {
+
+    system( Orza::Pi::Config::SHUTDOWN_COMMAND );
+
+};
+
+void Layout::restart() {
+
+    system( Orza::Pi::Config::SHUTDOWN_COMMAND );
 
 };
 
@@ -83,6 +108,23 @@ void Layout::toggleFullscreen() {
         goFullscreen();
 
     }
+
+};
+
+
+/**
+ * Hardware command slots
+ */
+
+void Layout::handleShutdown() {
+
+    shutdown();
+
+};
+
+void Layout::handleRestart() {
+
+    restart();
 
 };
 

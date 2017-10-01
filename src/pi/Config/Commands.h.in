@@ -1,0 +1,12 @@
+/**
+ * Pi commands for system
+ */
+#pragma once
+
+namespace Orza { namespace Pi { namespace Config {
+
+const char * SHUTDOWN_COMMAND = "${ORZA_PI_SHUTDOWN_CMD}";
+
+const char * RESTART_COMMAND = "${ORZA_PI_RESTART_CMD}";
+
+}; }; };
