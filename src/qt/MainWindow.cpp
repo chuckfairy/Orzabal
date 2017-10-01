@@ -6,6 +6,7 @@
 #include <QFile>
 #include <QTimer>
 #include <QIcon>
+#include <QDesktopWidget>
 
 #include <Jack/Midi.h>
 
@@ -104,6 +105,10 @@ MainWindow::MainWindow( QApplication * app, QWidget * parent, Qt::WindowFlags fl
     //Pi full screen startup
 
     if( BUILD_TYPE == Config::Pi ) {
+
+        QRect rec = app->desktop()->screenGeometry();
+
+        resize( rec.size() );
 
         _Pi = new Orza::App::Pi::Layout( this );
 

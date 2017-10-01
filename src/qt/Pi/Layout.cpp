@@ -62,7 +62,7 @@ void Layout::shutdown() {
 
 void Layout::restart() {
 
-    system( Orza::Pi::Config::SHUTDOWN_COMMAND );
+    system( Orza::Pi::Config::RESTART_COMMAND );
 
 };
 
