@@ -6,14 +6,20 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>726</width>
-    <height>583</height>
+    <width>442</width>
+    <height>479</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralWidget">
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Ignored" vsizetype="Preferred">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
    <layout class="QVBoxLayout" name="verticalLayout">
     <item alignment="Qt::AlignRight">
      <widget class="QLabel" name="label">
@@ -55,12 +61,6 @@
          <layout class="QHBoxLayout" name="input_layout">
           <item>
            <widget class="QLabel" name="label_8">
-            <property name="maximumSize">
-             <size>
-              <width>689</width>
-              <height>16777215</height>
-             </size>
-            </property>
             <property name="text">
              <string>Input</string>
             </property>
@@ -83,12 +83,6 @@
          <layout class="QHBoxLayout" name="horizontalLayout_6">
           <item>
            <widget class="QLabel" name="label_7">
-            <property name="maximumSize">
-             <size>
-              <width>689</width>
-              <height>16777215</height>
-             </size>
-            </property>
             <property name="text">
              <string>Midi</string>
             </property>

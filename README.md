@@ -40,10 +40,18 @@ make -j8
 ./src/qt/orzabal.qt
 ```
 
-# Jack
-
-Starting the app will start jack. I recommnend starting it elsewhere, `./bin/jack_startup.sh` is a sample startup. Midi will need to be enabled.
 
 # Pi
 
-Tested on usb device. Use `./bin/build_pi.sh` for a full screen use.
+```shell
+sudo apt-get install x11vncserver wiringPi
+```
+
+Tested on usb audio device. Use `./bin/build_pi.sh` for a full screen use. Other build types with default startups.
+
+- `./bin/build_pi_effects.sh` // Effects rack
+
+
+# Jack
+
+Starting the app will start jack. I recommnend starting it elsewhere, `./bin/jack_startup.sh` is a sample startup. Midi will need to be enabled.

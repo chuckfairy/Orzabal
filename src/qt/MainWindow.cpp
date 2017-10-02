@@ -106,10 +106,6 @@ MainWindow::MainWindow( QApplication * app, QWidget * parent, Qt::WindowFlags fl
 
     if( BUILD_TYPE == Config::Pi ) {
 
-        QRect rec = app->desktop()->screenGeometry();
-
-        resize( rec.size() );
-
         _Pi = new Orza::App::Pi::Layout( this );
 
         //QTimer::singleShot( 1000, this, SLOT( goFullscreen() ) );
