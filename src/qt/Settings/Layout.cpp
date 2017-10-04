@@ -155,7 +155,7 @@ void Layout::loadPreset() {
         ->currentText()
         .toStdString();
 
-    //_App->getLayoutLoader()->getCurrent()->loadFromName( layoutName.c_str() );
+    _App->getLayoutLoader()->getCurrent()->loadFromName( layoutName.c_str() );
 
 };
 

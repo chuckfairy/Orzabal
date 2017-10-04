@@ -3,8 +3,13 @@
  */
 #pragma once
 
+#include <json/json.hpp>
+
 #include <Layouts/Layout.h>
 #include <Widget/Patchbay.h>
+
+
+using nlohmann::json;
 
 using Orza::App::Widget::Patchbay;
 
@@ -31,6 +36,8 @@ class EffectLayout : public Layout {
         void setup();
 
         void takedown();
+
+        void load( json j );
 
 
     private:

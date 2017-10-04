@@ -40,6 +40,7 @@ class Layout : public Audio::PatchbayPresetLoader {
 
         virtual void takedown() {};
 
+        virtual void load( json j ) = 0;
 
 
     protected:

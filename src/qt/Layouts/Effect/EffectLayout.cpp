@@ -9,7 +9,10 @@
 #include <Settings/Layout.h>
 
 
+using nlohmann::json;
+
 using Orza::App::Widget::Patchbay;
+
 
 namespace Orza { namespace App { namespace Layouts {
 
@@ -66,6 +69,44 @@ void EffectLayout::takedown() {
 
     _App->getUI()
         ->tabWidget->removeTab( 0 );
+
+};
+
+
+/**
+ * Load effect preset
+ */
+
+void EffectLayout::load( json j ) {
+
+    Jack::Patchbay * host = _App->getServer()->getPatchbay();
+
+    host->setActive( false );
+
+
+    // Plugin effects
+
+    _Patchbay->clearPlugins();
+
+    if( ! j["effects"].empty() ) {
+
+        for( json::iterator it = j["effects"].begin(); it != j["effects"].end(); ++it ) {
+
+            json effect = *it;
+
+            std::string id = effect["id"];
+
+            Audio::Plugin * p = _App->getPluginSearch()->getById( id.c_str() );
+
+            _Patchbay->addPlugin( p->clone() );
+
+            setPortsFromJSON( p, effect );
+
+        }
+
+    }
+
+    host->setActive( true );
 
 };
 

@@ -68,7 +68,9 @@ void SingleInstrument::clearPlugin() {
  * Set plugin and driver
  */
 
-void SingleInstrument::setPlugin( Audio::Plugin * p ) {
+void SingleInstrument::setPlugin( Audio::Plugin * plug ) {
+
+    Audio::Plugin * p = plug->clone();
 
     UIDriver * driver = new UIDriver( (LV2::UI*) p->getUI() );
 

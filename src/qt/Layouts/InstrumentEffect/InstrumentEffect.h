@@ -37,8 +37,6 @@ class InstrumentEffect : public Layout {
 
         InstrumentEffect( MainWindow * );
 
-        void load( json settings );
-
 
         /**
          * Virtuals
@@ -47,6 +45,8 @@ class InstrumentEffect : public Layout {
         void setup();
 
         void takedown();
+
+        void load( json settings );
 
 
     private:

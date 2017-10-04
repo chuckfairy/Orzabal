@@ -7,6 +7,8 @@
 
 #include "InstrumentEffect.h"
 
+#include <Audio/UI.h>
+
 #include <MainWindow.h>
 
 
@@ -85,7 +87,6 @@ void InstrumentEffect::load( json j ) {
 
     }
 
-    host->setActive( true );
 
 
     // Plugin effects
@@ -106,9 +107,13 @@ void InstrumentEffect::load( json j ) {
 
             setPortsFromJSON( p, effect );
 
+            p->getUI()->updateDrivers();
+
         }
 
     }
+
+    host->setActive( true );
 
 };
 
