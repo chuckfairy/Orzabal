@@ -85,6 +85,8 @@ void InstrumentEffect::load( json j ) {
 
         setPortsFromJSON( clone, instrument );
 
+        clone->getUI()->updateDrivers();
+
     }
 
 
@@ -101,9 +103,11 @@ void InstrumentEffect::load( json j ) {
 
             std::string id = effect["id"];
 
-            Audio::Plugin * p = _App->getPluginSearch()->getById( id.c_str() );
+            Audio::Plugin * plug = _App->getPluginSearch()->getById( id.c_str() );
 
-            _Patchbay->addPlugin( p->clone() );
+            Audio::Plugin * p = plug->clone();
+
+            _Patchbay->addPlugin( p );
 
             setPortsFromJSON( p, effect );
 

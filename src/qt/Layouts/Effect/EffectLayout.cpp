@@ -8,6 +8,7 @@
 #include <Jack/PatchbayEffects.h>
 #include <Settings/Layout.h>
 
+#include <Audio/UI.h>
 
 using nlohmann::json;
 
@@ -96,11 +97,15 @@ void EffectLayout::load( json j ) {
 
             std::string id = effect["id"];
 
-            Audio::Plugin * p = _App->getPluginSearch()->getById( id.c_str() );
+            Audio::Plugin * plug = _App->getPluginSearch()->getById( id.c_str() );
 
-            _Patchbay->addPlugin( p->clone() );
+            Audio::Plugin * p = plug->clone();
+
+            _Patchbay->addPlugin( p );
 
             setPortsFromJSON( p, effect );
+
+            p->getUI()->updateDrivers();
 
         }
 

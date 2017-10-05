@@ -358,6 +358,7 @@ void Plugin::start() {
 	atom_Chunk = lilv_new_uri( world, LV2_ATOM__Chunk );
 	atom_Sequence = lilv_new_uri( world, LV2_ATOM__Sequence );
 
+
     //Bufsz
 
     bufsz_maxBlockLength = symap_map(_symap, LV2_BUF_SIZE__maxBlockLength);
@@ -1461,13 +1462,21 @@ void Plugin::setPortValueLilv(
 	float fvalue;
 
 	if (type == plugin->_forge.Float) {
+
 		fvalue = *(const float*)value;
+
 	} else if (type == plugin->_forge.Double) {
+
 		fvalue = *(const double*)value;
+
 	} else if (type == plugin->_forge.Int) {
+
 		fvalue = *(const int32_t*)value;
+
 	} else if (type == plugin->_forge.Long) {
+
 		fvalue = *(const int64_t*)value;
+
 	} else {
 
         throw std::runtime_error( "error: Preset `%s' value has bad type <%s>" );

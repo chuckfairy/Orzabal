@@ -271,6 +271,7 @@ Control::Control(PortContainer portContainer, QWidget* parent)
 }
 
 void Control::setValue(float value) {
+
     float step;
 
     if (isInteger) {
@@ -288,9 +289,7 @@ void Control::setValue(float value) {
     label->setText(getValueLabel(value));
 }
 
-    QString
-Control::getValueLabel(float value)
-{
+QString Control::getValueLabel(float value) {
     if (scaleMap[value]) {
         if (fontMetrics().width(scaleMap[value]) > CONTROL_WIDTH) {
             label->setToolTip(scaleMap[value]);
@@ -304,9 +303,7 @@ Control::getValueLabel(float value)
     return QString("%1").arg(value);
 }
 
-    void
-Control::setRange(float minRange, float maxRange)
-{
+void Control::setRange(float minRange, float maxRange) {
     min = minRange;
     max = maxRange;
 
