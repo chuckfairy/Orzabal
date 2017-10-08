@@ -1,0 +1,15 @@
+/**
+ * Pi commands for system
+ */
+#pragma once
+
+#include <json/json.hpp>
+
+using nlohmann::json;
+
+namespace Orza { namespace Pi { namespace Config {
+
+const json DEFAULT_PIN_LAYOUT = R"(
+${ORZA_PI_PIN_CONFIG_JSON})"_json;
+
+}; }; };
