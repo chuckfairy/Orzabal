@@ -31,7 +31,8 @@ qt5_add_resources(RESOURCES ./Resources.qrc)
 
 #links
 
-FIND_PACKAGE(Boost)
+#FIND_PACKAGE(Boost)
+find_package( Boost 1.45.0 COMPONENTS filesystem regex )
 
 include_directories(
     ${CMAKE_CURRENT_BINARY_DIR}
@@ -123,8 +124,6 @@ configure_file(Config/Defaults.h.in Config/Defaults.h)
 
 add_executable(orzabal.qt ${orzabal.qt_SRC} ${RESOURCES} ${MY_MOCED_FILES} )
 
-find_package( Boost 1.45.0 COMPONENTS filesystem regex )
-
 target_link_libraries( orzabal.qt
     PUBLIC
     dl
@@ -135,7 +134,7 @@ target_link_libraries( orzabal.qt
     Qt5::Core
     Qt5::Gui
     Qt5::Qml
-    Boost::regex
+    ${Boost_LIBRARIES}
 )
 
 install( TARGETS

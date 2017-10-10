@@ -34,7 +34,7 @@ foreach( octave RANGE 10 )
         set( note_name "${midi_name}${octave}" )
 
         if( ${counter} MATCHES "${ORZABAL_MIDI_NUMBER_MAX}" )
-            continue()
+            break()
         endif()
 
         set( note_definition_name "\t${note_name} = ${counter},\n" )

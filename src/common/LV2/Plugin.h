@@ -36,8 +36,6 @@
 
 #include <jack/ringbuffer.h>
 
-#include <QScrollArea>
-
 #include <Jack/Plugin.h>
 #include <Audio/PlayState.h>
 

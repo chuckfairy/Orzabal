@@ -10,10 +10,6 @@
 #include <jack/jack.h>
 #include <jack/ringbuffer.h>
 
-#include <QtWidgets/QMainWindow>
-#include <QApplication>
-#include <QScrollArea>
-
 #include <Audio/UI.h>
 #include <Audio/UIDriver.h>
 
@@ -87,12 +83,6 @@ class UI : public Audio::UI {
          */
 
         void createUI();
-
-        void createQt();
-
-        void createNativeUI();
-
-        QWidget * createControlWidget();
 
 
         /**

@@ -10,6 +10,7 @@ set( CMAKE_CXX_STANDARD 11 )
 set( CMAKE_C_STANDARD 11 )
 
 set(CMAKE_CXX_FLAGS "-std=c++11 ${CMAKE_CXX_FLAGS} -g -ftest-coverage -fprofile-arcs")
+set(CMAKE_C_FLAGS "-std=c11 ${CMAKE_C_FLAGS}")
 
 
 # RPATH

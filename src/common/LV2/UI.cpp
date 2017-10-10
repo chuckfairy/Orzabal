@@ -8,18 +8,6 @@
 #include <lilv/lilv.h>
 #include <suil/suil.h>
 
-#include <QWindow>
-#include <QGuiApplication>
-#include <QApplication>
-#include <QScrollArea>
-#include <QWidget>
-#include <QLayout>
-#include <QGroupBox>
-#include <QStyle>
-#include <QPushButton>
-#include <QDial>
-#include <QLabel>
-
 #include "Port.h"
 #include "UI/PresetDropdown.h"
 #include "UI.h"
