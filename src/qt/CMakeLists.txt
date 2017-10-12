@@ -17,6 +17,9 @@ file(GLOB orzabal.qt_UIS
     Pi/PiTab.ui
     Widget/PatchBay.ui
     Widget/PatchBayItem.ui
+    Control/Control.ui
+    Control/ControlPort.ui
+    Control/ControlPortValue.ui
 )
 
 #file(GLOB common-ladspa ../common/LADSPA/*.cpp)

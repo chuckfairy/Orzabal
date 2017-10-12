@@ -72,8 +72,6 @@ void PluginPreset::loadPresets() {
 
     LilvWorld * world = Resource::World::getResource();
 
-    std::cout << "PRESET SETTING";
-
 	LILV_FOREACH( nodes, i, lilvPresets ) {
 
         Preset * audioPreset = new Preset;
@@ -110,8 +108,6 @@ void PluginPreset::loadPresets() {
         audioPreset->lilvPreset = preset;
 
         _presets.push_back( (Audio::Preset*) audioPreset );
-
-        std::cout << audioPreset->name;
 
         lilv_nodes_free( labels );
 
