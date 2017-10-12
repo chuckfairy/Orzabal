@@ -41,9 +41,9 @@ void PatchbayEffects::addEffect( Audio::Plugin * p ) {
 
     _Repo->add( (Plugin*) p );
 
-    connectEffectPorts();
-
     setActive( true );
+
+    connectEffectPorts();
 
 };
 
@@ -148,7 +148,7 @@ void PatchbayEffects::connectEffectPorts() {
 
         } else {
 
-            vector<jack_port_t*> lastOutputs = lastPlugin->getInputJackPorts();
+            vector<jack_port_t*> lastOutputs = lastPlugin->getOutputJackPorts();
 
             connectJackPort(
                 jack_port_name( lastOutputs[0] ),
