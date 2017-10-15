@@ -1,6 +1,9 @@
 /**
  * Patchbay effects impl
  */
+#include <Util/Vector.h>
+#include <Audio/Plugin.h>
+
 #include "Plugin.h"
 #include "Server.h"
 #include "PatchbayEffects.h"
@@ -74,6 +77,32 @@ void PatchbayEffects::pauseEffect( Audio::Plugin * p ) {
     connectEffectPorts();
 
 };
+
+/**
+ * Get control ports of active plugins
+ */
+
+vector<Audio::Port*> PatchbayEffects::getControlPorts() {
+
+    vector<Audio::Port*> ports;
+
+    vector<Plugin*>::iterator it;
+
+    vector<Plugin*> _ActiveEffects = _Repo->getAll();
+
+    for( it = _ActiveEffects.begin(); it != _ActiveEffects.end(); ++ it ) {
+
+        Audio::Plugin * p = (Audio::Plugin*) (*it);
+
+        vector<Audio::Port*> pluginPorts = p->getPortsFromIndex( p->getControlPorts() );
+
+        Util::Vector::append( &ports, pluginPorts );
+
+    };
+
+    return ports;
+
+}
 
 
 /**

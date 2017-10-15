@@ -8,7 +8,13 @@
 
 #include <Audio/Port.h>
 
+#include <Midi/Control.h>
+#include <Jack/Midi.h>
+
 #include <ui_ControlPort.h>
+
+#include "ControlPortValue.h"
+
 
 /**
  * Forwarding
@@ -30,7 +36,18 @@ class ControlPort : public QWidget {
 
     public:
 
-        ControlPort( Audio::Port * );
+        ControlPort( MainWindow *, Jack::MidiControlPort * );
+
+
+        /**
+         * Getters
+         */
+
+        QWidget * getWidget() {
+
+            return _WidgetContent;
+
+        };
 
 
     public slots:
@@ -39,9 +56,27 @@ class ControlPort : public QWidget {
 
     private:
 
+        /**
+         * Internal
+         */
+
+        MainWindow * _App;
+
         Ui_ControlPort _UI;
 
         QWidget * _WidgetContent;
+
+        Jack::MidiControlPort * _ControlPort;
+
+        /**
+         * Port value and dropdown
+         */
+
+        vector<Audio::Port*> _ControlPorts;
+
+        vector<ControlPortValue*> _UIPortValues;
+
+        void updateDropdown();
 
 };
 

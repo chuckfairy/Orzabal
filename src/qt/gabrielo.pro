@@ -23,7 +23,10 @@ FORMS    += MainWindow.ui \
     UI/SettingsForm.ui \
     Widget/PatchBay.ui \
     Widget/PatchBayItem.ui \
-    Widget/SingleInstrument.ui
+    Widget/SingleInstrument.ui \
+    MidiControl/Control.ui \
+    MidiControl/ControlPort.ui \
+    MidiControl/ControlPortValue.ui
 
 DISTFILES += \
     About.ui.qml \

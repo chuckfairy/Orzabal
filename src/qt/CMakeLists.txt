@@ -17,9 +17,9 @@ file(GLOB orzabal.qt_UIS
     Pi/PiTab.ui
     Widget/PatchBay.ui
     Widget/PatchBayItem.ui
-    Control/Control.ui
-    Control/ControlPort.ui
-    Control/ControlPortValue.ui
+    MidiControl/Control.ui
+    MidiControl/ControlPort.ui
+    MidiControl/ControlPortValue.ui
 )
 
 #file(GLOB common-ladspa ../common/LADSPA/*.cpp)
@@ -72,6 +72,7 @@ file(
     Layouts/*.cpp
     Settings/*.cpp
     Settings/Events/*.cpp
+    MidiControl/*.cpp
 )
 
 
@@ -91,6 +92,9 @@ FILE( GLOB moc_files
     Settings/OutputDropdown.h
     Settings/Layout.h
     MainWindow.h
+    MidiControl/Control.h
+    MidiControl/ControlPort.h
+    MidiControl/ControlPortValue.h
 )
 
 QT5_WRAP_CPP( MY_MOCED_FILES ${moc_files} )

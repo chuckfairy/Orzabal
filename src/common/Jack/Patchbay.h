@@ -98,6 +98,20 @@ class Patchbay :
 
 
         /**
+         * Get control ports for current plugins
+         */
+
+        vector<Audio::Port*> getControlPorts();
+
+
+        /**
+         * @TODO move to instrument type patchbay effects
+         */
+
+        vector<Audio::Port*> getInstrumentControlPorts();
+
+
+        /**
          * Connectors
          */
 

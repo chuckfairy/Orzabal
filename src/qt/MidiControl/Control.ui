@@ -55,6 +55,11 @@
         <height>242</height>
        </rect>
       </property>
+      <layout class="QVBoxLayout" name="verticalLayout_3">
+       <item>
+        <layout class="QVBoxLayout" name="scroll_layout"/>
+       </item>
+      </layout>
      </widget>
     </widget>
    </item>

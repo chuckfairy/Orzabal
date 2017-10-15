@@ -38,6 +38,13 @@ namespace Orza {
 
         };
 
+        namespace MidiControl {
+
+            class ControlTab;
+
+        };
+
+
         namespace Settings {
 
             class Layout;
@@ -54,6 +61,8 @@ using Orza::App::Settings::Layout;
 using Orza::PluginSearch::LoadedPlugins;
 
 using Orza::App::Layouts::LayoutLoader;
+
+using Orza::App::MidiControl::ControlTab;
 
 
 /**
@@ -157,6 +166,13 @@ class MainWindow : public QMainWindow {
      */
 
     Layout * _SettingsLayout;
+
+    /**
+     * Control tab
+     */
+
+    ControlTab * _ControlTab;
+
 
     /**
      * Layout loader

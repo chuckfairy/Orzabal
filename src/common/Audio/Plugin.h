@@ -200,6 +200,12 @@ class Plugin {
 
         };
 
+        vector<long> * getControlPorts() {
+
+            return &_controlPorts;
+
+        };
+
         vector<long> * getAudioPorts() {
 
             return &_audioPorts;
@@ -215,6 +221,27 @@ class Plugin {
         vector<long> * getOutputPorts() {
 
             return &_outputs;
+
+        };
+
+
+        /**
+         * Getter helper for port index
+         */
+
+        vector<Port*> getPortsFromIndex( vector<long> * ports ) {
+
+            vector<long>::iterator it;
+
+            vector<Port*> output;
+
+            for( it = ports->begin(); it != ports->end(); ++ it ) {
+
+                output.push_back( getPort( (*it) ) );
+
+            }
+
+            return output;
 
         };
 

@@ -66,6 +66,13 @@ class PatchbayEffects :
 
 
         /**
+         * Get control ports of active plugins
+         */
+
+        vector<Audio::Port*> getControlPorts();
+
+
+        /**
          * Audio effects related
          */
 

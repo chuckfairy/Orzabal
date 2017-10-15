@@ -80,7 +80,14 @@
           <item row="1" column="0" colspan="2">
            <layout class="QHBoxLayout" name="horizontalLayout">
             <item>
-             <widget class="QComboBox" name="port_add_dropdown"/>
+             <widget class="QComboBox" name="port_add_dropdown">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+             </widget>
             </item>
             <item>
              <widget class="QPushButton" name="port_add_btn">

@@ -17,6 +17,7 @@
 #include "MainWindow.h"
 #include "Settings/MidiDeviceDropdown.h"
 #include "Resource/Icons.h"
+#include "MidiControl/ControlTab.h"
 
 
 using Orza::App::Layouts::LayoutLoader;
@@ -70,12 +71,16 @@ MainWindow::MainWindow( QApplication * app, QWidget * parent, Qt::WindowFlags fl
     midiDevices = new MidiDeviceDropdown( this );
 
 
-    //@TODO Move to layout picker
+    //Midi control
 
-    _SettingsLayout = new Layout( this );
+    _ControlTab = new ControlTab( this );
+
+
+    //@TODO Move to layout picker
 
     _LayoutLoader = new LayoutLoader( this );
 
+    _SettingsLayout = new Layout( this );
 
 
     //Icon

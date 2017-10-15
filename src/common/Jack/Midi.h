@@ -8,9 +8,16 @@
 #include <jack/jack.h>
 #include <jack/types.h>
 
+#include <Midi/Control.h>
+
+#include "Port.h"
+
 #include "Host.h"
 
 using std::vector;
+
+using Orza::Midi::ControlPort;
+using Orza::Midi::ControlNumber;
 
 
 namespace Jack {
@@ -21,21 +28,20 @@ namespace Jack {
 
 class Server;
 
+struct MidiControlPort : public ControlPort<Port> {
+
+    MidiControlPort( Port * p, ControlNumber num ) :
+        ControlPort( p, num )
+    {};
+
+};
+
 
 /**
  * Main class
  */
 
 class Midi : public Host {
-
-    private:
-
-        Server * _Server;
-
-        vector<const jack_port_t*> _inputPorts;
-
-        vector<const jack_port_t*> _outputPorts;
-
 
     public:
 
@@ -48,12 +54,15 @@ class Midi : public Host {
 
         vector<Port> getMidiPorts();
 
+        vector<MidiControlPort*> getMidiControlPorts();
+
 
         /**
          * Main port setters
          */
 
         void addInput( const jack_port_t * );
+
         void addOutput( const jack_port_t * );
 
 
@@ -62,6 +71,15 @@ class Midi : public Host {
          */
 
         void connectDefaults();
+
+
+    private:
+
+        Server * _Server;
+
+        vector<const jack_port_t*> _inputPorts;
+
+        vector<const jack_port_t*> _outputPorts;
 
 };
 

@@ -280,6 +280,7 @@ vector<Port> Host::getPortsByType(
 
         Port p;
 
+        p.nameString = portName;
         p.name = portName;
         p.jack_port = jack_port_by_name(_jackClient, portName );
 

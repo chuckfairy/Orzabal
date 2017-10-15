@@ -4,6 +4,9 @@
 set( counter 21 )
 set( ORZABAL_MIDI_NUMBER_MAX 150 )
 
+set( ORZABAL_MIDI_CONTROL_MIN 14 )
+set( ORZABAL_MIDI_CONTROL_MAX 31 )
+
 set( ORZABAL_MIDI_LETER_NAMES
     "A"
     "As"
@@ -57,3 +60,18 @@ configure_file( Note.h.in Note.h)
 set( ORZABAL_FREQUENCY_DEFAULT_A4 "440" )
 
 configure_file( Config/Frequency.h.in Config/Frequency.h)
+
+
+# Midi Control config
+
+set( ORZABAL_MIDI_CONTROLS_DEFINITION "" )
+
+foreach( control_num RANGE ${ORZABAL_MIDI_CONTROL_MIN} ${ORZABAL_MIDI_CONTROL_MAX} )
+
+    set( control_definition_name "\tCONTROL_${control_num} = ${control_num},\n" )
+
+    set( ORZABAL_MIDI_CONTROLS_DEFINITION "${ORZABAL_MIDI_CONTROLS_DEFINITION}${control_definition_name}" )
+
+endforeach()
+
+configure_file( Control.h.in Control.h)

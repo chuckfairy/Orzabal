@@ -5,6 +5,8 @@
 #include <vector>
 #include <jack/jack.h>
 
+#include <Util/Vector.h>
+
 #include "Server.h"
 #include "Patchbay.h"
 #include "Midi.h"
@@ -16,7 +18,9 @@
 #include "Events/LatencyEvent.h"
 #include "Events/BufferEvent.h"
 
+
 using std::vector;
+
 
 namespace Jack {
 
@@ -123,6 +127,46 @@ PatchbayEffects * Patchbay::getEffects() {
 
 };
 
+/**
+ * Get control ports for current plugins
+ */
+
+vector<Audio::Port*> Patchbay::getControlPorts() {
+
+    vector<Audio::Port*> ports;
+
+    Util::Vector::append( &ports, getInstrumentControlPorts() );
+
+    Util::Vector::append( &ports, _PatchbayEffects->getControlPorts() );
+
+    return ports;
+
+};
+
+
+/**
+ * @TODO move to instrument type patchbay effects
+ */
+
+vector<Audio::Port*> Patchbay::getInstrumentControlPorts() {
+
+    vector<Audio::Port*> ports;
+
+    vector<Audio::Plugin*>::iterator it;
+
+    for( it = _ActivePlugins.begin(); it != _ActivePlugins.end(); ++ it ) {
+
+        Plugin * p = (Plugin*) (*it);
+
+        vector<Audio::Port*> pluginPorts = p->getPortsFromIndex( p->getControlPorts() );
+
+        Util::Vector::append( &ports, pluginPorts );
+
+    };
+
+    return ports;
+
+};
 
 /**
  * Plugin port connector to server audio
