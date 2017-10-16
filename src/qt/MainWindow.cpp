@@ -78,9 +78,9 @@ MainWindow::MainWindow( QApplication * app, QWidget * parent, Qt::WindowFlags fl
 
     //@TODO Move to layout picker
 
-    _LayoutLoader = new LayoutLoader( this );
-
     _SettingsLayout = new Layout( this );
+
+    _LayoutLoader = new LayoutLoader( this );
 
 
     //Icon
