@@ -1,7 +1,11 @@
 /**
  * ControlPort widget editor
  */
+#include <Audio/Port.h>
+
 #include <Jack/Patchbay.h>
+
+#include <QMessageBox>
 
 #include <MainWindow.h>
 
@@ -43,7 +47,22 @@ ControlPort::ControlPort( MainWindow * app, Jack::MidiControlPort * p ) :
 
 void ControlPort::addControlPortValue() {
 
-    std::cout << "PORT VALUE CONTROL " << _UI.port_add_dropdown->currentIndex() << "\n";
+    //No plugins loaded
+
+    if( _UI.port_add_dropdown->currentIndex() == -1 ) {
+
+        QMessageBox Msgbox;
+        Msgbox.setText( "No plugins loaded" );
+        Msgbox.exec();
+
+        return;
+
+    }
+
+
+    //load new control value
+
+    Audio::Port * port = _ControlPorts[ _UI.port_add_dropdown->currentIndex() ];
 
 };
 

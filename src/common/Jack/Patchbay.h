@@ -41,7 +41,6 @@ class Patchbay :
 
         /**
          * Control methods
-         * @TODO start and stop maybe
          */
 
         void start() {};
@@ -109,6 +108,13 @@ class Patchbay :
          */
 
         vector<Audio::Port*> getInstrumentControlPorts();
+
+
+        /**
+         * Get all active plugins fro effects
+         */
+
+        vector<Audio::Plugin*> getAllPlugins();
 
 
         /**

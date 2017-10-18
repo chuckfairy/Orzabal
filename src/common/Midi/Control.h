@@ -55,6 +55,15 @@ const uint8_t CONTROL_VALUE_MAX = 127;
 
 
 /**
+ * Control range
+ */
+
+enum ControlRange {
+    RANGE_LINEAR,
+    RANGE_LOG
+};
+
+/**
  * Midi Control port
  */
 

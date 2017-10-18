@@ -51,6 +51,38 @@ class Repository : public Dispatcher {
 
         };
 
+
+        /**
+         * Param type for vector
+         */
+
+        template<typename Param>
+
+            vector<Param*> getAll() {
+
+                typename vector<T*>::iterator it;
+
+                vector<T*> items = this->getAll();
+
+                vector<Param*> output;
+
+                for( it = items.begin(); it != items.end(); ++ it ) {
+
+                    Param * p = (*it);
+
+                    output.push_back( p );
+
+                }
+
+                return output;
+
+            };
+
+
+        /**
+         * Size proxy
+         */
+
         unsigned int size() {
 
             return _items.size();
