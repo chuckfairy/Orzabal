@@ -24,7 +24,7 @@ configure_file(Config/Config.h.in Config/Config.h)
 
 ## Building
 # create orzabal-gui library
-add_library(orzabal-common-audio SHARED ${ORZABAL_AUDIO_INCLUDE_FILES} )
+add_library(orzabal-common-audio STATIC ${ORZABAL_AUDIO_INCLUDE_FILES} )
 
 set_target_properties(orzabal-common-audio PROPERTIES LINKER_LANGUAGE CXX)
 

@@ -47,6 +47,7 @@ add_executable(orzabal_gpio_config ${SRC_FILES} )
 target_link_libraries(orzabal_gpio_config
     PUBLIC
     wiringPi
+    pthread
 )
 
 target_include_directories(

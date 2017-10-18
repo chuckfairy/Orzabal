@@ -18,7 +18,7 @@ file( GLOB
 
 ## Building
 # create orzabal-backend-common library
-add_library( orzabal-common-jack SHARED ${ORZABAL_JACK_INCLUDE_FILES} )
+add_library( orzabal-common-jack STATIC ${ORZABAL_JACK_INCLUDE_FILES} )
 
 
 target_link_libraries( orzabal-common-jack PUBLIC
