@@ -1,4 +1,5 @@
-# Pi exec startup
+# Pi / Single Board exec startup
+find_package( ODROID )
 
 # VNC
 
@@ -27,9 +28,15 @@ configure_file( Config/Commands.h.in Config/Commands.h )
 
 # Defaults
 
-file( STRINGS "./Resource/effect_pin_layout.json" ORZA_PI_PIN_CONFIG_JSON
-    NEWLINE_CONSUME
-)
+if( ${IS_ODROID} )
+    file( STRINGS "./Resource/odroid-c2_800x600.json" ORZA_PI_PIN_CONFIG_JSON
+        NEWLINE_CONSUME
+    )
+else()
+    file( STRINGS "./Resource/effect_pin_layout.json" ORZA_PI_PIN_CONFIG_JSON
+        NEWLINE_CONSUME
+    )
+endif()
 
 configure_file( Config/Defaults.h.in Config/Defaults.h )
 

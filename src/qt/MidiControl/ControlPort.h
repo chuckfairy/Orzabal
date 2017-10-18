@@ -54,6 +54,7 @@ class ControlPort : public QWidget {
 
         void addControlPortValue();
 
+
     private:
 
         /**
@@ -70,7 +71,10 @@ class ControlPort : public QWidget {
 
         /**
          * Port value and dropdown
+         * @TODO remove double vector
          */
+
+        vector<Audio::Plugin*> _Plugins;
 
         vector<Audio::Port*> _ControlPorts;
 

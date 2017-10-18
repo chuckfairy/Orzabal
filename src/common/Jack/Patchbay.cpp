@@ -5,6 +5,7 @@
 #include <vector>
 #include <jack/jack.h>
 
+#include <Util/Repository.h>
 #include <Util/Vector.h>
 
 #include "Server.h"
@@ -13,6 +14,7 @@
 #include "Port.h"
 #include "Plugin.h"
 #include "PatchbayEffects.h"
+#include "PluginRepository.h"
 
 #include "Events/UpdateEvent.h"
 #include "Events/LatencyEvent.h"
@@ -165,6 +167,22 @@ vector<Audio::Port*> Patchbay::getInstrumentControlPorts() {
     };
 
     return ports;
+
+};
+
+
+/**
+ * Get all active plugins fro effects
+ */
+
+vector<Audio::Plugin*> Patchbay::getAllPlugins() {
+
+    vector<Audio::Plugin*> output;
+
+    Util::Vector::append( &output, _ActivePlugins );
+    Util::Vector::append( &output, _PatchbayEffects->getRepo()->getAll<Audio::Plugin>() );
+
+    return output;
 
 };
 
