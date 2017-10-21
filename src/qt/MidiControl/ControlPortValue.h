@@ -7,6 +7,10 @@
 #include <QWidget>
 
 #include <Audio/Port.h>
+#include <Audio/PluginPortContainer.h>
+
+#include <Midi/Control.h>
+#include <Jack/Midi.h>
 
 #include <ui_ControlPortValue.h>
 
@@ -24,7 +28,7 @@ class ControlPortValue : public QWidget {
 
     public:
 
-        ControlPortValue( Audio::Port *, Audio::Port * effectPort );
+        explicit ControlPortValue( Jack::MidiControlPort *, Audio::PluginPortContainer * );
 
         void setRange( float start, float end );
 
@@ -32,9 +36,22 @@ class ControlPortValue : public QWidget {
 
     private:
 
+        /**
+         * UI
+         */
+
         Ui_ControlPortValue _UI;
 
         QWidget * _WidgetContent;
+
+
+        /**
+         * Server ports
+         */
+
+        Jack::MidiControlPort * _ControlPort;
+
+        Audio::PluginPortContainer * _PortContainer;
 
         void updateRange();
 

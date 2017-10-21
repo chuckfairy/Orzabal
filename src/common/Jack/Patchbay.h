@@ -8,6 +8,7 @@
 
 #include <Audio/Patchbay.h>
 #include <Audio/ControlInterface.h>
+#include <Audio/PluginPortContainer.h>
 
 #include "Host.h"
 #include "ServerStandalone.h"
@@ -101,6 +102,8 @@ class Patchbay :
          */
 
         vector<Audio::Port*> getControlPorts();
+
+        vector<Audio::PluginPortContainer*> getPluginPortContainers();
 
 
         /**

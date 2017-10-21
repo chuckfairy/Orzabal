@@ -10,8 +10,13 @@ namespace Orza { namespace App { namespace MidiControl {
  * Main class
  */
 
-ControlPortValue::ControlPortValue( Audio::Port * u, Audio::Port * effectPort ) :
-    _WidgetContent( new QWidget() )
+ControlPortValue::ControlPortValue(
+    Jack::MidiControlPort * midiPort,
+    Audio::PluginPortContainer * container
+) :
+    _WidgetContent( new QWidget() ),
+    _ControlPort( midiPort ),
+    _PortContainer( container )
 {
 
     _UI.setupUi( _WidgetContent );

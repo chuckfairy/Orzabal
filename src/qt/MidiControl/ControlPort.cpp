@@ -62,7 +62,13 @@ void ControlPort::addControlPortValue() {
 
     //load new control value
 
-    Audio::Port * port = _ControlPorts[ _UI.port_add_dropdown->currentIndex() ];
+    Audio::PluginPortContainer * port = _PortContainers[
+        _UI.port_add_dropdown->currentIndex()
+    ];
+
+    ControlPortValue * portValue = new ControlPortValue( _ControlPort, port );
+
+    _UIPortValues.push_back( portValue );
 
 };
 
@@ -73,14 +79,14 @@ void ControlPort::addControlPortValue() {
 
 void ControlPort::updateDropdown() {
 
-    _ControlPorts = _App->getServer()
-        ->getPatchbay()->getControlPorts();
+    _PortContainers = _App->getServer()
+        ->getPatchbay()->getPluginPortContainers();
 
-    vector<Audio::Port*>::iterator it;
+    vector<Audio::PluginPortContainer*>::iterator it;
 
-    for( it = _ControlPorts.begin(); it != _ControlPorts.end(); ++ it ) {
+    for( it = _PortContainers.begin(); it != _PortContainers.end(); ++ it ) {
 
-        _UI.port_add_dropdown->addItem( (*it)->name );
+        _UI.port_add_dropdown->addItem( (*it)->plugin->getName() );
 
     }
 
