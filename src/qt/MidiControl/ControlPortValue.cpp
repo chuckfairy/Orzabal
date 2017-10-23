@@ -21,6 +21,8 @@ ControlPortValue::ControlPortValue(
 
     _UI.setupUi( _WidgetContent );
 
+    _UI.label->setText( _PortContainer->getName() );
+
 
     //Events
 

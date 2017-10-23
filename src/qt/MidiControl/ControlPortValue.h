@@ -32,7 +32,15 @@ class ControlPortValue : public QWidget {
 
         void setRange( float start, float end );
 
+        QWidget * getWidget() {
+
+            return _WidgetContent;
+
+        };
+
+
     public slots:
+
 
     private:
 

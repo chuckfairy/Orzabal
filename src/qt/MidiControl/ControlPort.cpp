@@ -68,6 +68,8 @@ void ControlPort::addControlPortValue() {
 
     ControlPortValue * portValue = new ControlPortValue( _ControlPort, port );
 
+    _UI.scroll_layout->addWidget( portValue->getWidget() );
+
     _UIPortValues.push_back( portValue );
 
 };
@@ -86,7 +88,9 @@ void ControlPort::updateDropdown() {
 
     for( it = _PortContainers.begin(); it != _PortContainers.end(); ++ it ) {
 
-        _UI.port_add_dropdown->addItem( (*it)->plugin->getName() );
+        Audio::PluginPortContainer * container = (*it);
+
+        _UI.port_add_dropdown->addItem( container->getName() );
 
     }
 
