@@ -165,64 +165,15 @@ Control::Control(PortContainer portContainer, QWidget* parent)
     const LilvPort* lilvPort = port->lilv_port;
     LilvWorld* world = portContainer.ui->getPlugin()->getLilvWorld();
 
-    LilvNode* lv2_integer = lilv_new_uri(world, LV2_CORE__integer);
-    LilvNode* lv2_toggled = lilv_new_uri(world, LV2_CORE__toggled);
-    LilvNode* lv2_enumeration = lilv_new_uri(world, LV2_CORE__enumeration);
-    LilvNode* logarithmic = lilv_new_uri(world, LV2_PORT_PROPS__logarithmic);
-    LilvNode* rangeSteps = lilv_new_uri(world, LV2_PORT_PROPS__rangeSteps);
     LilvNode* rdfs_comment = lilv_new_uri(world, LILV_NS_RDFS "comment");
 
-    LilvNode* nmin;
-    LilvNode* nmax;
-    LilvNode* ndef;
-    lilv_port_get_range(plugin, lilvPort, &ndef, &nmin, &nmax);
+    setRange( port->controlRange[0], port->controlRange[1] );
 
-    if (lilv_port_has_property(plugin, lilvPort, rangeSteps)) {
-        steps = lilv_node_as_int(rangeSteps);
-    } else {
-        steps = DIAL_STEPS;
-    }
+    setValue( port->control );
 
-    // Fill scalePoints Map
-    LilvScalePoints* sp = lilv_port_get_scale_points(plugin, lilvPort);
-    if (sp) {
-        LILV_FOREACH(scale_points, s, sp) {
-            const LilvScalePoint* p   = lilv_scale_points_get(sp, s);
-            const LilvNode*       val = lilv_scale_point_get_value(p);
-            if (!lilv_node_is_float(val) && !lilv_node_is_int(val)) {
-                continue;
-            }
-
-            const float f = lilv_node_as_float(val);
-            scalePoints.push_back(f);
-            scaleMap[f] = lilv_node_as_string(lilv_scale_point_get_label(p));
-        }
-
-        lilv_scale_points_free(sp);
-    }
-
-    // Check port properties
-    isLogarithmic = lilv_port_has_property(plugin, lilvPort, logarithmic);
-    isInteger     = lilv_port_has_property(plugin, lilvPort, lv2_integer);
-    isEnum        = lilv_port_has_property(plugin, lilvPort, lv2_enumeration);
-
-    if (lilv_port_has_property(plugin, lilvPort, lv2_toggled)) {
-        isInteger = true;
-
-        if (!scaleMap[0]) {
-            scaleMap[0] = "Off";
-        }
-        if (!scaleMap[1]) {
-            scaleMap[1] = "On" ;
-        }
-    }
-
-    // Find and set min, max and default values for port
-    float defaultValue = ndef ? lilv_node_as_float(ndef) : port->control;
-    setRange(lilv_node_as_float(nmin), lilv_node_as_float(nmax));
-    setValue(defaultValue);
-
-    if( isInteger || isEnum ) {
+    if( port->controlValueType == Audio::CONTROL_VALUE_INT
+        || port->controlValueType == Audio::CONTROL_VALUE_ENUM
+    ) {
         dial->setNotchesVisible( true );
     }
 
@@ -258,31 +209,23 @@ Control::Control(PortContainer portContainer, QWidget* parent)
 
     connect(dial, SIGNAL(valueChanged(int)), this, SLOT(dialChanged(int)));
 
-    lilv_node_free(nmin);
-    lilv_node_free(nmax);
-    lilv_node_free(ndef);
-    lilv_node_free(nname);
-    lilv_node_free(lv2_integer);
-    lilv_node_free(lv2_toggled);
-    lilv_node_free(lv2_enumeration);
-    lilv_node_free(logarithmic);
-    lilv_node_free(rangeSteps);
     lilv_node_free(comment);
+
 }
 
 void Control::setValue(float value) {
 
     float step;
 
-    if (isInteger) {
+    if (port->controlValueType == Audio::CONTROL_VALUE_INT) {
         step = value;
-    } else if (isEnum) {
-        step = (std::find(scalePoints.begin(), scalePoints.end(), value)
-                - scalePoints.begin());
-    } else if (isLogarithmic) {
-        step = steps * std::log(value / min) / log(max / min);
+    } else if (port->controlValueType == Audio::CONTROL_VALUE_ENUM) {
+        step = (std::find(port->scalePoints.begin(), port->scalePoints.end(), value)
+                - port->scalePoints.begin());
+    } else if (port->controlValueType == Audio::CONTROL_VALUE_LOG) {
+        step = port->steps * std::log(value / min) / log(max / min);
     } else {
-        step = value * steps;
+        step = value * port->steps;
     }
 
     dial->setValue(step);
@@ -290,14 +233,14 @@ void Control::setValue(float value) {
 }
 
 QString Control::getValueLabel(float value) {
-    if (scaleMap[value]) {
-        if (fontMetrics().width(scaleMap[value]) > CONTROL_WIDTH) {
-            label->setToolTip(scaleMap[value]);
-            return fontMetrics().elidedText(QString(scaleMap[value]),
+    if (port->scaleMap[value]) {
+        if (fontMetrics().width(port->scaleMap[value]) > CONTROL_WIDTH) {
+            label->setToolTip(port->scaleMap[value]);
+            return fontMetrics().elidedText(QString(port->scaleMap[value]),
                     Qt::ElideRight,
                     CONTROL_WIDTH);
         }
-        return scaleMap[value];
+        return port->scaleMap[value];
     }
 
     return QString("%1").arg(value);
@@ -307,29 +250,29 @@ void Control::setRange(float minRange, float maxRange) {
     min = minRange;
     max = maxRange;
 
-    if (isLogarithmic) {
+    if (port->controlValueType == Audio::CONTROL_VALUE_LOG) {
         minRange = 1;
-        maxRange = steps;
-    } else if (isEnum) {
+        maxRange = port->steps;
+    } else if (port->controlValueType == Audio::CONTROL_VALUE_ENUM) {
         minRange = 0;
-        maxRange = scalePoints.size() - 1;
-    } else if (!isInteger) {
-        minRange *= steps;
-        maxRange *= steps;
+        maxRange = port->scalePoints.size() - 1;
+    } else if (port->controlValueType != Audio::CONTROL_VALUE_INT) {
+        minRange *= port->steps;
+        maxRange *= port->steps;
     }
 
     dial->setRange(minRange, maxRange);
 }
 
 float Control::getValue() {
-    if (isEnum) {
-        return scalePoints[dial->value()];
-    } else if (isInteger) {
+    if (port->controlValueType == Audio::CONTROL_VALUE_ENUM) {
+        return port->scalePoints[dial->value()];
+    } else if (port->controlValueType == Audio::CONTROL_VALUE_INT) {
         return dial->value();
-    } else if (isLogarithmic) {
-        return min * pow(max / min, (float)dial->value() / steps);
+    } else if (port->controlValueType == Audio::CONTROL_VALUE_LOG) {
+        return min * pow(max / min, (float)dial->value() / port->steps);
     } else {
-        return (float)dial->value() / steps;
+        return (float)dial->value() / port->steps;
     }
 }
 

@@ -22,6 +22,8 @@
 #include <jack/metadata.h>
 #include <jack/ringbuffer.h>
 
+#include <Audio/Port.h>
+
 #include <Jack/Resource/Client.h>
 
 #include "Resource/World.h"
@@ -296,6 +298,7 @@ Audio::Port * Plugin::createPort( int long portNum ) {
 		longest_sym = len;
 
 	}
+
 
     return port;
 
@@ -623,6 +626,107 @@ const char * Plugin::getType() {
 
 
 /**
+ * Port range
+ */
+
+void Plugin::setControlPortValues( Port * port ) {
+
+    const LilvPort* lilvPort = port->lilv_port;
+    LilvWorld* world = getLilvWorld();
+
+    LilvNode* lv2_integer = lilv_new_uri(world, LV2_CORE__integer);
+    LilvNode* lv2_toggled = lilv_new_uri(world, LV2_CORE__toggled);
+    LilvNode* lv2_enumeration = lilv_new_uri(world, LV2_CORE__enumeration);
+    LilvNode* logarithmic = lilv_new_uri(world, LV2_PORT_PROPS__logarithmic);
+    LilvNode* rangeSteps = lilv_new_uri(world, LV2_PORT_PROPS__rangeSteps);
+    LilvNode* rdfs_comment = lilv_new_uri(world, LILV_NS_RDFS "comment");
+
+    LilvNode* nmin;
+    LilvNode* nmax;
+    LilvNode* ndef;
+    lilv_port_get_range(
+        _lilvPlugin,
+        lilvPort,
+        &ndef,
+        &nmin,
+        &nmax
+    );
+
+    if (lilv_port_has_property(_lilvPlugin, lilvPort, rangeSteps)) {
+        port->steps = lilv_node_as_int(rangeSteps);
+    } else {
+        port->steps = DIAL_STEPS;
+    }
+
+    // Fill scalePoints Map
+    LilvScalePoints* sp = lilv_port_get_scale_points(_lilvPlugin, lilvPort);
+
+    if (sp) {
+        LILV_FOREACH(scale_points, s, sp) {
+            const LilvScalePoint* p   = lilv_scale_points_get(sp, s);
+            const LilvNode*       val = lilv_scale_point_get_value(p);
+            if (!lilv_node_is_float(val) && !lilv_node_is_int(val)) {
+                continue;
+            }
+
+            const float f = lilv_node_as_float(val);
+            port->scalePoints.push_back(f);
+            port->scaleMap[f] = lilv_node_as_string(lilv_scale_point_get_label(p));
+        }
+
+        lilv_scale_points_free(sp);
+
+    }
+
+
+    // Check port properties
+    bool isLogarithmic = lilv_port_has_property(_lilvPlugin, lilvPort, logarithmic);
+    bool isInteger = lilv_port_has_property(_lilvPlugin, lilvPort, lv2_integer);
+    bool isEnum = lilv_port_has_property(_lilvPlugin, lilvPort, lv2_enumeration);
+
+    if (lilv_port_has_property(_lilvPlugin, lilvPort, lv2_toggled)) {
+        isInteger = true;
+
+        if (!port->scaleMap[0]) {
+            port->scaleMap[0] = "Off";
+        }
+        if (!port->scaleMap[1]) {
+            port->scaleMap[1] = "On" ;
+        }
+    }
+
+    if( isInteger ) {
+
+        port->controlValueType = Audio::CONTROL_VALUE_INT;
+
+    } else if( isEnum ) {
+
+        port->controlValueType = Audio::CONTROL_VALUE_ENUM;
+
+    } else if( isLogarithmic ) {
+
+        port->controlValueType = Audio::CONTROL_VALUE_LOG;
+
+    } else {
+
+        port->controlValueType = Audio::CONTROL_VALUE_BOOL;
+
+    }
+
+
+    // Find and set min, max and default values for port
+    float defaultValue = ndef ? lilv_node_as_float( ndef ) : port->control;
+    port->control = defaultValue;
+
+    port->controlRange.clear();
+
+    port->controlRange.push_back( lilv_node_as_float( nmin ) );
+    port->controlRange.push_back( lilv_node_as_float( nmax ) );
+
+};
+
+
+/**
  * Port activations
  */
 
@@ -752,6 +856,15 @@ void Plugin::activatePort( long portNum ) {
 		lilv_node_free(name);
 
 	}
+
+
+    //Set control port values
+
+    if( port->type == Audio::TYPE_CONTROL ) {
+
+        setControlPortValues( port );
+
+    }
 
 };
 

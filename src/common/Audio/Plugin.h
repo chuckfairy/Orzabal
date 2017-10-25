@@ -168,7 +168,25 @@ class Plugin {
          * Set port value virtual
          */
 
-        virtual void setPortValue( Port * p, float value ) {};
+        virtual void setPortValue( Port *, float ) {};
+
+
+        /**
+         * Port range
+         */
+
+        virtual vector<float> getPortRange( Port * ) {
+
+            vector<float> a;
+            return a;
+
+        };
+
+        vector<float> getPortRange( unsigned int index ) {
+
+            return getPortRange( _ports[ index ] );
+
+        };
 
 
         /**
