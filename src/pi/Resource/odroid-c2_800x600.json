@@ -2,16 +2,12 @@
     "type": "effect-default",
     "pins": [
         {
-            "pin": 8,
+            "pin": 247,
             "pin_type": "LED"
         },
         {
-            "pin": 7,
+            "pin": 239,
             "pin_type": "RESTART"
-        },
-        {
-            "pin": 9,
-            "pin_type": "SHUTDOWN"
         }
     ]
 }
