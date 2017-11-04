@@ -38,8 +38,12 @@ class ControlPortValue : public QWidget {
 
         };
 
+        static unsigned int PERCISION;
+
 
     public slots:
+
+        void handleUpdateRange();
 
 
     private:
@@ -63,6 +67,11 @@ class ControlPortValue : public QWidget {
 
         void updateRange();
 
+        void setValue();
+
+        float fromVal = .0;
+
+        float toVal = .0;
 
 };
 

@@ -348,6 +348,13 @@ void Patchbay::setServerCallbacks() {
 
 void Patchbay::updateJack( jack_nframes_t nframes ) {
 
+    //@TODO maybe move
+
+    _Server->getMidi()->update( nframes );
+
+
+    //Check if even active
+
     if( ! isActive() ) { return; }
 
 

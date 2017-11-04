@@ -7,6 +7,7 @@
 
 #include <jack/jack.h>
 #include <jack/types.h>
+#include <jack/midiport.h>
 
 #include <Midi/Control.h>
 
@@ -33,6 +34,9 @@ struct MidiControlPort : public ControlPort<Port> {
     MidiControlPort( Port * p, ControlNumber num ) :
         ControlPort( p, num )
     {};
+
+    float fromVal = .0;
+    float toVal = .0;
 
 };
 
@@ -61,9 +65,9 @@ class Midi : public Host {
          * Main port setters
          */
 
-        void addInput( const jack_port_t * );
+        void addInput( jack_port_t * );
 
-        void addOutput( const jack_port_t * );
+        void addOutput( jack_port_t * );
 
 
         /**
@@ -72,14 +76,20 @@ class Midi : public Host {
 
         void connectDefaults();
 
+        void update( jack_nframes_t );
+
+        void updateEvents( jack_nframes_t );
+
+        void updateEventPort( jack_nframes_t, jack_port_t * );
+
 
     private:
 
         Server * _Server;
 
-        vector<const jack_port_t*> _inputPorts;
+        vector<jack_port_t*> _inputPorts;
 
-        vector<const jack_port_t*> _outputPorts;
+        vector<jack_port_t*> _outputPorts;
 
 };
 

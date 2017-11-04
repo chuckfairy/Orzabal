@@ -81,11 +81,11 @@ vector<MidiControlPort*> Midi::getMidiControlPorts() {
  * Main port adders
  */
 
-void Midi::addInput( const jack_port_t * port ) {
+void Midi::addInput( jack_port_t * port ) {
 
     _inputPorts.push_back( port );
 
-    vector<const jack_port_t*>::iterator it;
+    vector<jack_port_t*>::iterator it;
 
     for( it = _outputPorts.begin(); it != _outputPorts.end(); ++ it ) {
 
@@ -106,11 +106,11 @@ void Midi::addInput( const jack_port_t * port ) {
 
 };
 
-void Midi::addOutput( const jack_port_t * port ) {
+void Midi::addOutput( jack_port_t * port ) {
 
     _outputPorts.push_back( port );
 
-    vector<const jack_port_t*>::iterator it;
+    vector<jack_port_t*>::iterator it;
 
     for( it = _inputPorts.begin(); it != _inputPorts.end(); ++ it ) {
 
@@ -135,6 +135,58 @@ void Midi::connectDefaults() {
     if( ports.empty() ) { return; }
 
     addOutput( ports[1].jack_port );
+
+};
+
+
+/**
+ * Update
+ */
+
+void Midi::update( jack_nframes_t nframes ) {
+
+    updateEvents( nframes );
+
+};
+
+
+/**
+ * Update midi events and listeners
+ */
+
+void Midi::updateEvents( jack_nframes_t nframes ) {
+
+    vector<jack_port_t*>::iterator it;
+
+    for( it = _outputPorts.begin(); it != _outputPorts.end(); ++ it ) {
+
+        updateEventPort( nframes, (*it) );
+
+    }
+
+};
+
+
+/**
+ * Update midi events if any for a port
+ */
+
+void Midi::updateEventPort( jack_nframes_t nframes, jack_port_t * port ) {
+
+    void * buf = jack_port_get_buffer( port, nframes );
+
+    if( ! buf ) { return; }
+
+    for( uint32_t i = 0; i < jack_midi_get_event_count( buf ); ++ i ) {
+
+        jack_midi_event_t ev;
+        int recevied = jack_midi_event_get( &ev, buf, i );
+
+        if( recevied != 0 ) { continue; }
+
+        std::cout << ev.buffer << "\n";
+
+    }
 
 };
 

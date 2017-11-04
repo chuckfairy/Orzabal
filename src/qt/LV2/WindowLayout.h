@@ -122,8 +122,6 @@ class Control : public QGroupBox {
         float   max;
         float   min;
 
-        std::vector<float>           scalePoints;
-        std::map<float, const char*> scaleMap;
 };
 
 }; }; };
