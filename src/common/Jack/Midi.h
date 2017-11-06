@@ -9,10 +9,11 @@
 #include <jack/types.h>
 #include <jack/midiport.h>
 
+#include <Util/Dispatcher.h>
 #include <Midi/Control.h>
 
 #include "Port.h"
-
+#include "MidiEvent.h"
 #include "Host.h"
 
 using std::vector;
@@ -45,12 +46,13 @@ struct MidiControlPort : public ControlPort<Port> {
  * Main class
  */
 
-class Midi : public Host {
+class Midi : public Host, public Util::Dispatcher {
 
     public:
 
         explicit Midi( Server * );
 
+        static const char * ALL_EVENTS;
 
         /**
          * Main external port getter
@@ -90,6 +92,9 @@ class Midi : public Host {
         vector<jack_port_t*> _inputPorts;
 
         vector<jack_port_t*> _outputPorts;
+
+
+        void handleEvent( MidiEvent * );
 
 };
 

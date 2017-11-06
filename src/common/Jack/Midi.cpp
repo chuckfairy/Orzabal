@@ -28,6 +28,8 @@ Midi::Midi( Server * s ) : Host( s ) {
 };
 
 
+const char * Midi::ALL_EVENTS = "all";
+
 
 /**
  * Get ports by input type JackPortIsOutput
@@ -179,14 +181,39 @@ void Midi::updateEventPort( jack_nframes_t nframes, jack_port_t * port ) {
 
     for( uint32_t i = 0; i < jack_midi_get_event_count( buf ); ++ i ) {
 
-        jack_midi_event_t ev;
-        int recevied = jack_midi_event_get( &ev, buf, i );
+        jack_midi_event_t jackEvent;
+        int recevied = jack_midi_event_get( &jackEvent, buf, i );
+
+        //Create check event
 
         if( recevied != 0 ) { continue; }
 
-        std::cout << ev.buffer << "\n";
+
+        MidiEvent event( &jackEvent );
+
+        if( event.type == Orza::Midi::EVENT_UNKNOWN ) { continue; }
+
+
+        //Handle event
+
+        handleEvent( &event );
 
     }
+
+};
+
+
+/**
+ * Handle event
+ */
+
+void Midi::handleEvent( MidiEvent * event ) {
+
+    void * mesg = (void *) event;
+
+    dispatch( ALL_EVENTS, event );
+
+    dispatch( event->getTypeName(), event );
 
 };
 
