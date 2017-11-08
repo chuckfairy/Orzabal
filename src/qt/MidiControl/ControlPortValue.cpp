@@ -32,7 +32,10 @@ ControlPortValue::ControlPortValue(
 
     _UI.label->setText( _PortContainer->getName() );
 
+    _ControlRange = new Audio::MidiControlRange<Jack::MidiControlPort>( midiPort, container );
+
     setValue();
+
 
     //Events
 
@@ -56,9 +59,6 @@ unsigned int ControlPortValue::PERCISION = 4;
 
 void ControlPortValue::updateRange() {
 
-    _ControlPort->fromVal = fromVal;
-    _ControlPort->toVal = toVal;
-
 };
 
 
@@ -68,8 +68,8 @@ void ControlPortValue::updateRange() {
 
 void ControlPortValue::handleUpdateRange() {
 
-    fromVal = _UI.range_from->text().toDouble();
-    toVal = _UI.range_to->text().toDouble();
+    _ControlRange->setMin( _UI.range_from->text().toDouble() );
+    _ControlRange->setMax( _UI.range_to->text().toDouble() );
 
     updateRange();
 
@@ -82,13 +82,13 @@ void ControlPortValue::handleUpdateRange() {
 
 void ControlPortValue::setValue() {
 
-    fromVal = _PortContainer->port->controlRange[0];
-    toVal = _PortContainer->port->controlRange[1];
+    _ControlRange->setMin( _PortContainer->port->controlRange[0] );
+    _ControlRange->setMax( _PortContainer->port->controlRange[1] );
 
-    QValidator * dv = new QDoubleValidator( fromVal, toVal, PERCISION );
+    //QValidator * dv = new QDoubleValidator( fromVal, toVal, PERCISION );
 
-    string from = Util::String::fromFloat( fromVal, PERCISION );
-    string toString = Util::String::fromFloat( toVal, PERCISION );
+    string from = Util::String::fromFloat( _ControlRange->getMin(), PERCISION );
+    string toString = Util::String::fromFloat( _ControlRange->getMax(), PERCISION );
 
     _UI.range_from->setText( from.c_str() );
     _UI.range_to->setText( toString.c_str() );
@@ -96,8 +96,6 @@ void ControlPortValue::setValue() {
     //_UI.range_from->setValidator( dv );
     //_UI.range_to->setValidator( dv );
 
-    _ControlPort->fromVal = fromVal;
-    _ControlPort->toVal = toVal;
 
 };
 

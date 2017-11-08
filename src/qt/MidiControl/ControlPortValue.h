@@ -12,6 +12,8 @@
 #include <Midi/Control.h>
 #include <Jack/Midi.h>
 
+#include <Audio/MidiControlRange.h>
+
 #include <ui_ControlPortValue.h>
 
 
@@ -65,13 +67,11 @@ class ControlPortValue : public QWidget {
 
         Audio::PluginPortContainer * _PortContainer;
 
+        Audio::MidiControlRange<Jack::MidiControlPort> * _ControlRange;
+
         void updateRange();
 
         void setValue();
-
-        float fromVal = .0;
-
-        float toVal = .0;
 
 };
 

@@ -36,9 +36,6 @@ struct MidiControlPort : public ControlPort<Port> {
         ControlPort( p, num )
     {};
 
-    float fromVal = .0;
-    float toVal = .0;
-
 };
 
 
