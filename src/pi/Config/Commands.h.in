@@ -9,4 +9,6 @@ const char * SHUTDOWN_COMMAND = "${ORZA_PI_SHUTDOWN_CMD}";
 
 const char * RESTART_COMMAND = "${ORZA_PI_RESTART_CMD}";
 
+const char * KEYBOARD_COMMAND = "${ORZA_PI_KEYBOARD_CMD}";
+
 }; }; };

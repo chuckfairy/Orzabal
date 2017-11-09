@@ -66,7 +66,11 @@ void ControlPort::addControlPortValue() {
         _UI.port_add_dropdown->currentIndex()
     ];
 
-    ControlPortValue * portValue = new ControlPortValue( _ControlPort, port );
+    ControlPortValue * portValue = new ControlPortValue(
+        _App->getServer()->getMidi(),
+        _ControlPort,
+        port
+    );
 
     _UI.scroll_layout->addWidget( portValue->getWidget() );
 

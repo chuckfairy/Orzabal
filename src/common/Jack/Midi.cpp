@@ -198,6 +198,8 @@ void Midi::updateEventPort( jack_nframes_t nframes, jack_port_t * port ) {
 
         handleEvent( &event );
 
+        dispatch( jack_port_name( port ), (void*) (&event) );
+
     }
 
 };

@@ -14,7 +14,12 @@
 
 #include <Audio/MidiControlRange.h>
 
+#include <Midi/Events.h>
+#include <Midi/Events/EventMessage.h>
+
 #include <ui_ControlPortValue.h>
+
+#include <Jack/Midi.h>
 
 
 namespace Orza { namespace App { namespace MidiControl {
@@ -30,7 +35,7 @@ class ControlPortValue : public QWidget {
 
     public:
 
-        explicit ControlPortValue( Jack::MidiControlPort *, Audio::PluginPortContainer * );
+        explicit ControlPortValue( Jack::Midi *, Jack::MidiControlPort *, Audio::PluginPortContainer * );
 
         void setRange( float start, float end );
 
@@ -41,6 +46,8 @@ class ControlPortValue : public QWidget {
         };
 
         static unsigned int PERCISION;
+
+        void onMidiMessage( Orza::Midi::Event * );
 
 
     public slots:
@@ -60,8 +67,17 @@ class ControlPortValue : public QWidget {
 
 
         /**
+         * Event
+         */
+
+        Midi::EventMessage<ControlPortValue> * _Event;
+
+
+        /**
          * Server ports
          */
+
+        Jack::Midi * _Midi;
 
         Jack::MidiControlPort * _ControlPort;
 
@@ -72,6 +88,8 @@ class ControlPortValue : public QWidget {
         void updateRange();
 
         void setValue();
+
+        void setEvents();
 
 };
 

@@ -20,10 +20,12 @@ namespace Orza { namespace App { namespace MidiControl {
  */
 
 ControlPortValue::ControlPortValue(
+    Jack::Midi * midi,
     Jack::MidiControlPort * midiPort,
     Audio::PluginPortContainer * container
 ) :
     _WidgetContent( new QWidget() ),
+    _Midi( midi ),
     _ControlPort( midiPort ),
     _PortContainer( container )
 {
@@ -33,6 +35,8 @@ ControlPortValue::ControlPortValue(
     _UI.label->setText( _PortContainer->getName() );
 
     _ControlRange = new Audio::MidiControlRange<Jack::MidiControlPort>( midiPort, container );
+
+    setEvents();
 
     setValue();
 
@@ -96,6 +100,35 @@ void ControlPortValue::setValue() {
     //_UI.range_from->setValidator( dv );
     //_UI.range_to->setValidator( dv );
 
+
+};
+
+
+/**
+ * Event midi message setting
+ */
+
+void ControlPortValue::setEvents() {
+
+    _Event = new Midi::EventMessage<ControlPortValue>( this );
+
+
+    //@TODO possibly make better naming
+
+    const char * eventName = jack_port_name( _ControlPort->port->jack_port );
+
+    _Midi->on( eventName, _Event );
+
+};
+
+
+/**
+ * Midi message update
+ */
+
+void ControlPortValue::onMidiMessage( Orza::Midi::Event * event ) {
+
+    std::cout << event->controlValue << "\n";
 
 };
 

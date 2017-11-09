@@ -12,6 +12,7 @@ add_definitions(-DPI_VNC_COMMAND=${PI_VNC_COMMAND})
 
 add_definitions(-DORZA_PI_SHUTDOWN_CMD="${ORZA_PI_SHUTDOWN_CMD}")
 add_definitions(-DORZA_PI_RESTART_CMD=${ORZA_PI_RESTART_CMD})
+add_definitions(-DORZA_PI_KEYBOARD_CMD=${ORZA_PI_KEYBOARD_CMD})
 
 
 if( "${ORZA_PI_SHUTDOWN_CMD}" STREQUAL "" )
@@ -20,7 +21,10 @@ endif()
 
 if( "${ORZA_PI_RESTART_CMD}" STREQUAL "" )
     set( ORZA_PI_RESTART_CMD "sudo reboot" )
+endif()
 
+if( "${ORZA_PI_KEYBOARD_CMD}" STREQUAL "" )
+    set( ORZA_PI_KEYBOARD_CMD "onboard" )
 endif()
 
 configure_file( Config/Commands.h.in Config/Commands.h )
