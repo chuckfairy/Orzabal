@@ -11,8 +11,6 @@
 
 #include "Layout.h"
 
-#include "TouchscreenInput.h"
-
 
 namespace Orza { namespace App { namespace Pi {
 
@@ -27,7 +25,8 @@ namespace Orza { namespace App { namespace Pi {
 
 Layout::Layout( MainWindow * app ) :
     _App( app ),
-    _WidgetContent( new QWidget() )
+    _WidgetContent( new QWidget() ),
+    _WifiPass( new Widget::BaseLineEdit )
 {
 
     _WidgetContent->setObjectName( "Pi Tab" );
@@ -38,6 +37,8 @@ Layout::Layout( MainWindow * app ) :
 
     int index = app->getUI()->tabWidget->addTab( _WidgetContent, "Pi" );
 
+    _Tab.wifi_pass_layout->addWidget( _WifiPass );
+
 
     //Events
 
@@ -46,16 +47,6 @@ Layout::Layout( MainWindow * app ) :
     connect( _Tab.restart_btn, SIGNAL( clicked() ), this, SLOT( handleRestart() ) );
 
     connect( _Tab.shutdown_btn, SIGNAL( clicked() ), this, SLOT( handleShutdown() ) );
-
-
-    //Keyboard event setting
-
-    connect(
-        _App->getUI()->save_layout_input,
-        SIGNAL( focusInEvent() ),
-        this,
-        SLOT( runKeyboardCommand() )
-    );
 
 
     //Full screen default

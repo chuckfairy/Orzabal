@@ -75,16 +75,13 @@
            </layout>
           </item>
           <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_3">
+           <layout class="QHBoxLayout" name="wifi_pass_layout">
             <item>
              <widget class="QLabel" name="label_3">
               <property name="text">
                <string>PASS</string>
               </property>
              </widget>
-            </item>
-            <item>
-             <widget class="QLineEdit" name="wifi_pass"/>
             </item>
            </layout>
           </item>

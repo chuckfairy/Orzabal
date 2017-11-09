@@ -12,15 +12,13 @@
 
 namespace Orza { namespace App { namespace Pi {
 
-void setHandlers( QWidget * widget ) {
+inline void setHandlers( QWidget * widget ) {
 
     //widget->connect(
 
 };
 
-void runKeyboardCommand() {
-
-    std::cout << "TEST\n" ;
+inline void runKeyboardCommand() {
 
     system( Orza::Pi::Config::KEYBOARD_COMMAND );
 
