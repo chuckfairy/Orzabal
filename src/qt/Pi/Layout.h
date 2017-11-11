@@ -6,6 +6,8 @@
 #include <QtCore>
 #include <QWidget>
 
+#include <Widget/BaseLineEdit.h>
+
 #include <ui_PiTab.h>
 
 /**
@@ -95,6 +97,12 @@ class Layout : public QWidget {
         Ui_PiTab _Tab;
 
         QWidget * _WidgetContent;
+
+        /**
+         * Widgets
+         */
+
+        Widget::BaseLineEdit * _WifiPass;
 
 };
 

@@ -9,6 +9,7 @@ set_package_properties( JACK PROPERTIES TYPE REQUIRED PURPOSE "Enables JACK plug
 
 file( GLOB
     ORZABAL_JACK_INCLUDE_FILES
+    "../Midi/*.cpp"
     "*.cpp"
     "*.h"
     "Events/*.cpp"

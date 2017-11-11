@@ -6,6 +6,8 @@
 #include <string>
 #include <sstream>
 #include <vector>
+#include <iomanip>
+#include <iostream>
 
 #include <boost/regex.hpp>
 
@@ -57,6 +59,21 @@ inline vector<string> split( string inputArg, string delim ) {
     output.push_back( input );
 
     return output;
+
+};
+
+
+/**
+ * Float to string
+ */
+
+inline string fromFloat( float fl, int percision = 2 ) {
+
+    stringstream stream;
+
+    stream << std::fixed << std::setprecision( percision ) << fl;
+
+    return stream.str();
 
 };
 

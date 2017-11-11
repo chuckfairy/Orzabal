@@ -28,6 +28,8 @@ Midi::Midi( Server * s ) : Host( s ) {
 };
 
 
+const char * Midi::ALL_EVENTS = "all";
+
 
 /**
  * Get ports by input type JackPortIsOutput
@@ -81,11 +83,11 @@ vector<MidiControlPort*> Midi::getMidiControlPorts() {
  * Main port adders
  */
 
-void Midi::addInput( const jack_port_t * port ) {
+void Midi::addInput( jack_port_t * port ) {
 
     _inputPorts.push_back( port );
 
-    vector<const jack_port_t*>::iterator it;
+    vector<jack_port_t*>::iterator it;
 
     for( it = _outputPorts.begin(); it != _outputPorts.end(); ++ it ) {
 
@@ -106,11 +108,11 @@ void Midi::addInput( const jack_port_t * port ) {
 
 };
 
-void Midi::addOutput( const jack_port_t * port ) {
+void Midi::addOutput( jack_port_t * port ) {
 
     _outputPorts.push_back( port );
 
-    vector<const jack_port_t*>::iterator it;
+    vector<jack_port_t*>::iterator it;
 
     for( it = _inputPorts.begin(); it != _inputPorts.end(); ++ it ) {
 
@@ -135,6 +137,85 @@ void Midi::connectDefaults() {
     if( ports.empty() ) { return; }
 
     addOutput( ports[1].jack_port );
+
+};
+
+
+/**
+ * Update
+ */
+
+void Midi::update( jack_nframes_t nframes ) {
+
+    updateEvents( nframes );
+
+};
+
+
+/**
+ * Update midi events and listeners
+ */
+
+void Midi::updateEvents( jack_nframes_t nframes ) {
+
+    vector<jack_port_t*>::iterator it;
+
+    for( it = _outputPorts.begin(); it != _outputPorts.end(); ++ it ) {
+
+        updateEventPort( nframes, (*it) );
+
+    }
+
+};
+
+
+/**
+ * Update midi events if any for a port
+ */
+
+void Midi::updateEventPort( jack_nframes_t nframes, jack_port_t * port ) {
+
+    void * buf = jack_port_get_buffer( port, nframes );
+
+    if( ! buf ) { return; }
+
+    for( uint32_t i = 0; i < jack_midi_get_event_count( buf ); ++ i ) {
+
+        jack_midi_event_t jackEvent;
+        int recevied = jack_midi_event_get( &jackEvent, buf, i );
+
+        //Create check event
+
+        if( recevied != 0 ) { continue; }
+
+
+        MidiEvent event( &jackEvent );
+
+        if( event.type == Orza::Midi::EVENT_UNKNOWN ) { continue; }
+
+
+        //Handle event
+
+        handleEvent( &event );
+
+        dispatch( jack_port_name( port ), (void*) (&event) );
+
+    }
+
+};
+
+
+/**
+ * Handle event
+ */
+
+void Midi::handleEvent( MidiEvent * event ) {
+
+    void * mesg = (void *) event;
+
+    dispatch( ALL_EVENTS, event );
+
+    dispatch( event->getTypeName(), event );
 
 };
 

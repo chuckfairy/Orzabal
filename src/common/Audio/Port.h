@@ -4,8 +4,15 @@
  */
 #pragma once
 
+#include <map>
+#include <vector>
 #include <inttypes.h>
 #include <string>
+
+
+using std::map;
+using std::vector;
+
 
 namespace Audio {
 
@@ -33,6 +40,14 @@ enum PortValueType {
 	VALUE_INT,
 	VALUE_LONG,
 	VALUE_UNKNOWN
+};
+
+enum PortControlValueType {
+	CONTROL_VALUE_ENUM,
+	CONTROL_VALUE_LOG,
+	CONTROL_VALUE_INT,
+    CONTROL_VALUE_BOOL,
+	CONTROL_VALUE_UNKNOWN
 };
 
 
@@ -75,6 +90,21 @@ struct Port {
     float lowerBound = 0;
 
     float upperBound = 0;
+
+
+    /**
+     * Control types
+     */
+
+    PortControlValueType controlValueType = CONTROL_VALUE_UNKNOWN;
+
+    vector<float> controlRange;
+
+    map<float, const char*> scaleMap;
+
+    vector<float> scalePoints;
+
+    int steps;
 
 
     /**

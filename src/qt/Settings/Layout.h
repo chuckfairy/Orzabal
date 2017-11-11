@@ -10,6 +10,7 @@
 
 #include "OutputDropdown.h"
 #include <Widget/InputDropdown.h>
+#include <Widget/BaseLineEdit.h>
 
 
 /**
@@ -78,6 +79,8 @@ class Layout : public QWidget {
         OutputDropdown * _RightOutput;
 
         InputDropdown * _InputDropdown;
+
+        Widget::BaseLineEdit * _PresetName;
 
 
         /**

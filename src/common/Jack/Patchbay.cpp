@@ -147,6 +147,39 @@ vector<Audio::Port*> Patchbay::getControlPorts() {
 
 
 /**
+ * char
+ */
+
+vector<Audio::PluginPortContainer*> Patchbay::getPluginPortContainers() {
+
+    vector<Audio::Plugin*> plugins = getAllPlugins();
+    vector<Audio::Plugin*>::iterator it;
+
+    vector<Audio::PluginPortContainer*> output;
+
+    for( it = plugins.begin(); it != plugins.end(); ++ it ) {
+
+        Audio::Plugin * p = (Audio::Plugin*) (*it);
+
+        vector<Audio::Port*> ports = p->getPortsFromIndex( p->getControlPorts() );
+        vector<Audio::Port*>::iterator portsIt;
+
+        for( portsIt = ports.begin(); portsIt != ports.end(); ++ portsIt ) {
+
+            output.push_back(
+                new Audio::PluginPortContainer( p, (*portsIt) )
+            );
+
+        }
+
+    }
+
+    return output;
+
+};
+
+
+/**
  * @TODO move to instrument type patchbay effects
  */
 
@@ -314,6 +347,13 @@ void Patchbay::setServerCallbacks() {
  */
 
 void Patchbay::updateJack( jack_nframes_t nframes ) {
+
+    //@TODO maybe move
+
+    _Server->getMidi()->update( nframes );
+
+
+    //Check if even active
 
     if( ! isActive() ) { return; }
 

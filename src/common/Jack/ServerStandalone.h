@@ -19,7 +19,7 @@ class ServerStandalone {
          * Host client pointer
          */
 
-        jack_client_t * _jackClient = NULL;
+        jack_client_t * _jackClient = nullptr;
 
 
         /**

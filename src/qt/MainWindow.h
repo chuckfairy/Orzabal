@@ -75,123 +75,123 @@ class MainWindow : public QMainWindow {
 
     public:
 
-    //  override the constructor
+        //  override the constructor
 
-    //MainWindow(QWidget * parent = 0, ::Qt::WindowFlags flags = 0);
+        //MainWindow(QWidget * parent = 0, ::Qt::WindowFlags flags = 0);
 
-    explicit MainWindow(QApplication *, QWidget * parent = 0, ::Qt::WindowFlags flags = 0);
-
-
-    /**
-     * Qt Window UI
-     */
-
-    Ui_MainWindow UI;
+        explicit MainWindow(QApplication *, QWidget * parent = 0, ::Qt::WindowFlags flags = 0);
 
 
-    /**
-     * Getters
-     */
+        /**
+         * Qt Window UI
+         */
 
-    Jack::Server * getServer();
-
-
-    /**
-     * Plugin search getter
-     */
-
-    LoadedPlugins * getPluginSearch();
-
-    /**
-     * Settings layout
-     */
-
-    Layout * getSettingsLayout();
+        Ui_MainWindow UI;
 
 
-    /**
-     * Layout loader getter
-     */
+        /**
+         * Getters
+         */
 
-    LayoutLoader * getLayoutLoader();
-
-
-    /**
-     * Qt UI
-     */
-
-    Ui_MainWindow * getUI() {
-
-        return &UI;
-
-    };
+        Jack::Server * getServer();
 
 
-    /**
-     * Window actions
-     */
+        /**
+         * Plugin search getter
+         */
 
-    void goFullscreen();
+        LoadedPlugins * getPluginSearch();
 
-    void goWindowed();
+        /**
+         * Settings layout
+         */
+
+        Layout * getSettingsLayout();
+
+
+        /**
+         * Layout loader getter
+         */
+
+        LayoutLoader * getLayoutLoader();
+
+
+        /**
+         * Qt UI
+         */
+
+        Ui_MainWindow * getUI() {
+
+            return &UI;
+
+        };
+
+
+        /**
+         * Window actions
+         */
+
+        void goFullscreen();
+
+        void goWindowed();
 
 
     private:
 
-    /**
-     * Main audio server
-     *
-     */
+        /**
+         * Main audio server
+         *
+         */
 
-    Jack::Server * _Server;
-
-
-    /**
-     * Midi keyboard device dropdown
-     *
-     */
-
-    MidiDeviceDropdown *midiDevices;
+        Jack::Server * _Server;
 
 
-    /**
-     * Plugin search
-     */
+        /**
+         * Midi keyboard device dropdown
+         *
+         */
 
-    LoadedPlugins _PluginSearch;
-
-
-    /**
-     * Settings layout
-     */
-
-    Layout * _SettingsLayout;
-
-    /**
-     * Control tab
-     */
-
-    ControlTab * _ControlTab;
+        MidiDeviceDropdown *midiDevices;
 
 
-    /**
-     * Layout loader
-     */
+        /**
+         * Plugin search
+         */
 
-    LayoutLoader * _LayoutLoader;
-
-
-    /**
-     * Pi module
-     */
-
-    Orza::App::Pi::Layout * _Pi;
+        LoadedPlugins _PluginSearch;
 
 
-    /**
-     * Orza build config
-     */
+        /**
+         * Settings layout
+         */
 
-    const Config::BuildType BUILD_TYPE = Config::ORZA_BUILD_CONFIG;
+        Layout * _SettingsLayout;
+
+        /**
+         * Control tab
+         */
+
+        ControlTab * _ControlTab;
+
+
+        /**
+         * Layout loader
+         */
+
+        LayoutLoader * _LayoutLoader;
+
+
+        /**
+         * Pi module
+         */
+
+        Orza::App::Pi::Layout * _Pi;
+
+
+        /**
+         * Orza build config
+         */
+
+        const Config::BuildType BUILD_TYPE = Config::ORZA_BUILD_CONFIG;
 
 };

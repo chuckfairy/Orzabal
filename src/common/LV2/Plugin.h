@@ -47,6 +47,8 @@
 
 #define NS_EXT "http://lv2plug.in/ns/ext/"
 
+#define DIAL_STEPS    10000
+
 
 namespace LV2 {
 
@@ -269,6 +271,8 @@ class Plugin : public Jack::Plugin {
 
         void _clearMidiBuffers( jack_nframes_t );
 
+        void setControlPortValues( Port * port );
+
 
     protected:
 
@@ -375,6 +379,8 @@ class Plugin : public Jack::Plugin {
          */
 
         void setPortValue( Audio::Port * p, float value );
+
+        vector<float> getPortRange( Port * );
 
 
         /**

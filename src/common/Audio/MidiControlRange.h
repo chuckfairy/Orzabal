@@ -8,8 +8,9 @@
 #include "Plugin.h"
 #include "UI.h"
 #include "Port.h"
+#include "PluginPortContainer.h"
+
 #include <Midi/Control.h>
-#include <Midi/ControlPort.h>
 
 
 using Orza::Midi::ControlPort;
@@ -17,11 +18,29 @@ using Orza::Midi::ControlRange;
 
 namespace Audio {
 
+template<typename ControlPort>
 class MidiControlRange {
 
     public:
 
-        explicit MidiControlRange( Midi::ControlPort *, Plugin *, Port * );
+        explicit MidiControlRange( ControlPort * controlPort,
+            Plugin * plugin,
+            Port * port
+        ) :
+            _ControlPort( controlPort ),
+            _Plugin( plugin ),
+            _port( port )
+        {
+        };
+
+        explicit MidiControlRange( ControlPort * port, PluginPortContainer * container ) :
+            _ControlPort( port ),
+            _Plugin( container->plugin ),
+            _port( container->port )
+
+        {
+
+        };
 
         /**
          * Min and max
@@ -33,7 +52,7 @@ class MidiControlRange {
 
             truncate();
 
-        }:
+        };
 
         void setMax( float newMax ) {
 
@@ -43,6 +62,22 @@ class MidiControlRange {
 
         };
 
+
+        /**
+         * Getters
+         */
+
+        float getMin() {
+
+            return _min;
+
+        };
+
+        float getMax() {
+
+            return _max;
+
+        };
 
         /**
          * Range
@@ -80,7 +115,7 @@ class MidiControlRange {
 
             std::cout << "MIDI VALUE OUT " << output << "\n";
 
-            return output
+            return output;
 
         };
 
@@ -129,11 +164,11 @@ class MidiControlRange {
         float _min = 0.0;
         float _max = 0.0;
 
-        Midi::ControlPort * _ControlPort;
+        ControlPort * _ControlPort;
         Plugin * _Plugin;
         Port * _port;
 
-        ControlRange _rangeType = RANGE_LINEAR;
+        ControlRange _rangeType = Orza::Midi::RANGE_LINEAR;
 
 
 };

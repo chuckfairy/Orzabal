@@ -21,6 +21,24 @@ struct PluginPortContainer {
 
         Port * port;
 
+
+        /**
+         * Get name / label
+         */
+
+        char * getName() {
+
+            char * fullName = (char*) malloc(
+                sizeof( port->nameString )
+                + 255
+            );
+
+            sprintf( fullName, "%s:%s", plugin->getName(), port->nameString.c_str() );
+
+            return fullName;
+
+        };
+
 };
 
 };

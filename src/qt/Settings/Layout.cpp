@@ -29,8 +29,11 @@ namespace Orza { namespace App {  namespace Settings {
 
 Layout::Layout( MainWindow * win ) :
     _App( win ),
-    _LayoutWriter( new Orza::App::Layouts::LayoutWriter )
+    _LayoutWriter( new Orza::App::Layouts::LayoutWriter ),
+    _PresetName( new Widget::BaseLineEdit )
 {
+
+    _App->getUI()->preset_save_layout->insertWidget( 0, _PresetName );
 
     setDropdowns();
     setEvents();
@@ -131,10 +134,7 @@ void Layout::setAppUI() {
 
 void Layout::saveLayout() {
 
-    std::string layoutName = _App->getUI()
-        ->save_layout_input
-        ->text()
-        .toStdString();
+    std::string layoutName = _PresetName->text().toStdString();
 
     _LayoutWriter->writeLayoutToFile(
         layoutName,
@@ -207,7 +207,7 @@ void Layout::handleInputChange( void * data ) {
             _InputDropdown->getCurrentJackPort()
     );
 
-    std::cout << "Connected to " 
+    std::cout << "Connected to "
         <<_InputDropdown->getCurrentJackPort() << "\n";
 
 };

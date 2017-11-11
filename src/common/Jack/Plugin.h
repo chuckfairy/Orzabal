@@ -49,6 +49,13 @@ class Plugin : public Audio::Plugin {
 
         void stop() {};
 
+        virtual vector<float> getPortRange( Port * ) {
+
+            vector<float> a;
+            return a;
+
+        };
+
         Audio::Plugin * clone() {
 
             return new Plugin();

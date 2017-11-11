@@ -7,6 +7,7 @@
 #include <QWidget>
 
 #include <Audio/Port.h>
+#include <Audio/PluginPortContainer.h>
 
 #include <Midi/Control.h>
 #include <Jack/Midi.h>
@@ -74,9 +75,7 @@ class ControlPort : public QWidget {
          * @TODO remove double vector
          */
 
-        vector<Audio::Plugin*> _Plugins;
-
-        vector<Audio::Port*> _ControlPorts;
+        vector<Audio::PluginPortContainer*> _PortContainers;
 
         vector<ControlPortValue*> _UIPortValues;
 

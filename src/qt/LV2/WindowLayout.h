@@ -119,15 +119,9 @@ class Control : public QGroupBox {
 
         QLabel* label;
         QString name;
-        int     steps;
         float   max;
         float   min;
-        bool    isInteger;
-        bool    isEnum;
-        bool    isLogarithmic;
 
-        std::vector<float>           scalePoints;
-        std::map<float, const char*> scaleMap;
 };
 
 }; }; };
