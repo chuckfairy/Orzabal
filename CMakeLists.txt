@@ -87,6 +87,8 @@ add_subdirectory( src/common/LV2 )
 
 add_subdirectory( src/common/PluginSearch )
 
+add_subdirectory( src/common/Network )
+
 add_subdirectory( src/cli )
 
 if( ORZA_BUILD_TYPE STREQUAL "Pi" )
