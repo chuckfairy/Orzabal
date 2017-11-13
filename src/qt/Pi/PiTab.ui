@@ -72,6 +72,13 @@
               </property>
              </widget>
             </item>
+            <item>
+             <widget class="QPushButton" name="scan_btn">
+              <property name="text">
+               <string>Scan</string>
+              </property>
+             </widget>
+            </item>
            </layout>
           </item>
           <item>
@@ -84,6 +91,13 @@
              </widget>
             </item>
            </layout>
+          </item>
+          <item>
+           <widget class="QPushButton" name="connect_btn">
+            <property name="text">
+             <string>Connect</string>
+            </property>
+           </widget>
           </item>
          </layout>
         </widget>

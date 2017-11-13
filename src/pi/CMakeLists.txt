@@ -24,7 +24,7 @@ if( "${ORZA_PI_RESTART_CMD}" STREQUAL "" )
 endif()
 
 if( "${ORZA_PI_KEYBOARD_CMD}" STREQUAL "" )
-    set( ORZA_PI_KEYBOARD_CMD "onboard" )
+    set( ORZA_PI_KEYBOARD_CMD "nohup onboard" )
 endif()
 
 configure_file( Config/Commands.h.in Config/Commands.h )

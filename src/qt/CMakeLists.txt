@@ -136,6 +136,7 @@ target_link_libraries( orzabal.qt
     dl
     orzabal-common-jack
     orzabal-common-plugin
+    orzabal-common-network
     orzabal-cli
     Qt5::Widgets
     Qt5::Core

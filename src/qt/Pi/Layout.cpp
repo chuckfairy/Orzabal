@@ -2,6 +2,8 @@
  * Pi layout
  */
 #include <stdlib.h>
+#include <string>
+#include <vector>
 
 #include <pi/Config/Commands.h>
 
@@ -11,6 +13,9 @@
 
 #include "Layout.h"
 
+
+using std::string;
+using std::vector;
 
 namespace Orza { namespace App { namespace Pi {
 
@@ -26,7 +31,7 @@ namespace Orza { namespace App { namespace Pi {
 Layout::Layout( MainWindow * app ) :
     _App( app ),
     _WidgetContent( new QWidget() ),
-    _WifiPass( new Widget::BaseLineEdit )
+    _WifiPass( new Widget::BasePasswordEdit )
 {
 
     _WidgetContent->setObjectName( "Pi Tab" );
@@ -47,6 +52,11 @@ Layout::Layout( MainWindow * app ) :
     connect( _Tab.restart_btn, SIGNAL( clicked() ), this, SLOT( handleRestart() ) );
 
     connect( _Tab.shutdown_btn, SIGNAL( clicked() ), this, SLOT( handleShutdown() ) );
+
+
+    //Network
+
+    setNetworkManager();
 
 
     //Full screen default
@@ -134,4 +144,64 @@ void Layout::handleRestart() {
 
 };
 
-} } };
+
+void Layout::setNetworkManager() {
+
+    _Manager = new Network::Manager;
+
+    //Scan
+
+    connect(
+        _Tab.scan_btn,
+        SIGNAL( clicked() ),
+        this,
+        SLOT( updateNetworks() )
+    );
+
+    //Connect
+
+    connect(
+        _Tab.connect_btn,
+        SIGNAL( clicked() ),
+        this,
+        SLOT( connectNetwork() )
+    );
+
+};
+
+
+void Layout::updateNetworks() {
+
+    vector<string> nets = _Manager->getNetworkSSIDs();
+
+    vector<string>::const_iterator it;
+
+    _Tab.ssid_dropdown->clear();
+
+    _Tab.ssid_dropdown->addItem( "-- Select Network --" );
+
+    for( it = nets.begin(); it != nets.end(); ++ it ) {
+
+        _Tab.ssid_dropdown->addItem( (*it).c_str() );
+
+    }
+
+    _Tab.ssid_dropdown->setCurrentIndex( 0 );
+
+};
+
+
+/**
+ * Connect ssid
+ */
+
+void Layout::connectNetwork() {
+
+    _Manager->connect(
+        _Tab.ssid_dropdown->currentText().toStdString(),
+        _WifiPass->text().toStdString()
+    );
+
+};
+
+}; }; };

@@ -24,7 +24,7 @@ class BaseEdit : public QType {
 
     protected:
 
-        void focusInEvent( QFocusEvent * e ) {
+        void mousePressEvent( QMouseEvent * e ) {
 
             if( Config::ORZA_BUILD_CONFIG == Config::Pi ) {
 
@@ -42,5 +42,22 @@ class BaseEdit : public QType {
  */
 
 typedef BaseEdit<QLineEdit> BaseLineEdit;
+
+
+/**
+ * Password
+ */
+
+class BasePasswordEdit : public BaseEdit<QLineEdit> {
+
+    public:
+
+        BasePasswordEdit() {
+
+            setEchoMode( QLineEdit::Password );
+
+        };
+
+};
 
 }; }; };

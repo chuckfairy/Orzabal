@@ -6,6 +6,8 @@
 #include <QtCore>
 #include <QWidget>
 
+#include <Network/Manager.h>
+
 #include <Widget/BaseLineEdit.h>
 
 #include <ui_PiTab.h>
@@ -103,6 +105,22 @@ class Layout : public QWidget {
          */
 
         Widget::BaseLineEdit * _WifiPass;
+
+
+        /**
+         * Network
+         */
+
+        Network::Manager * _Manager;
+
+        void setNetworkManager();
+
+
+    private slots:
+
+        void updateNetworks();
+
+        void connectNetwork();
 
 };
 
