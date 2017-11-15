@@ -29,15 +29,15 @@ struct Event {
 
     EventType type = EVENT_UNKNOWN;
 
-    uint8_t channel;
+    int channel = 1;
 
-    uint8_t pitch;
+    int pitch = 0;
 
-    uint8_t velocity;
+    int velocity = 0;
 
-    uint8_t controlNumber;
+    int controlNumber = 0;
 
-    uint8_t controlValue;
+    int controlValue = 0;
 
 
     /**

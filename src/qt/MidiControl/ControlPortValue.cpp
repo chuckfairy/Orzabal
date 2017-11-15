@@ -128,7 +128,27 @@ void ControlPortValue::setEvents() {
 
 void ControlPortValue::onMidiMessage( Orza::Midi::Event * event ) {
 
-    std::cout << event->controlValue << "\n";
+    if( event->type != Midi::EVENT_CONTROL_CHANGE ) {
+
+        return;
+
+    }
+
+
+    //Check event control
+
+    if( _ControlPort->number != event->controlNumber ) {
+
+        return;
+
+    }
+
+
+    std::cout << "EVENT CHANGE VALUE " <<  event->controlValue << "\n";
+
+    std::cout << _ControlRange->getValueFromMidi( event->controlValue ) << "\n";
+
+    _ControlRange->setFromMidiValue( event->controlValue );
 
 };
 

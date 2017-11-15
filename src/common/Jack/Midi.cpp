@@ -136,7 +136,13 @@ void Midi::connectDefaults() {
 
     if( ports.empty() ) { return; }
 
-    addOutput( ports[1].jack_port );
+    int size = ports.size();
+
+    while( -- size ) {
+
+        addOutput( ports[ size ].jack_port );
+
+    }
 
 };
 
