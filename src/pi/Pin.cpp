@@ -65,7 +65,7 @@ void Pin::update() {
 
         std::cout << "COMMAND STARTING : " << Pin::getPinCommand( TYPE ) << "\n";
 
-        //system( Pin::getPinCommand( TYPE ) );
+        system( Pin::getPinCommand( TYPE ) );
 
     }
 
