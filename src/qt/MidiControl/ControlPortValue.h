@@ -8,11 +8,10 @@
 
 #include <Audio/Port.h>
 #include <Audio/PluginPortContainer.h>
+#include <Audio/MidiControlRange.h>
 
 #include <Midi/Control.h>
 #include <Jack/Midi.h>
-
-#include <Audio/MidiControlRange.h>
 
 #include <Midi/Events.h>
 #include <Midi/Events/EventMessage.h>

@@ -96,7 +96,7 @@ class MidiControlRange {
 
         void setFromMidiValue( float value ) {
 
-            _port->control = value;
+            _port->control = getValueFromMidi( value );
 
             update();
 
