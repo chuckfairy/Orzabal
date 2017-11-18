@@ -102,8 +102,6 @@ PinRepository PinRepository::loadFromDefaultConfig() {
 
         }
 
-        std::cout << type << "\n";
-
         Pin * p = new Pin( type, pinJSON["pin"].get<int>() );
 
         repo.add( p );

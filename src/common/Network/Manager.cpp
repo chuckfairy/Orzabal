@@ -120,7 +120,7 @@ void Manager::connect( string ssid, string pass ) {
         + 100
     );
 
-    sprintf( cmd, "wpa_passphrase '%s' '%s' >> sudo /etc/wpa_supplicant.conf", ssid.c_str(), pass.c_str() );
+    sprintf( cmd, "wpa_passphrase '%s' '%s' | sudo tee -a /etc/wpa_supplicant.conf", ssid.c_str(), pass.c_str() );
 
     std::cout << cmd << "\n";
 

@@ -68,3 +68,25 @@ target_include_directories(
     ../common
     "${ORZABAL_ROOT_PATH}/lib-src"
 )
+
+install( TARGETS
+   orzabal_gpio_config
+
+   RUNTIME DESTINATION bin
+   LIBRARY DESTINATION lib
+   ARCHIVE DESTINATION lib
+)
+
+install( TARGETS
+    orzabal_gpio_config
+
+    DESTINATION /etc/init.d
+)
+
+if (UNIX)
+    #install(
+        #FILES pin_startup
+        #DESTINATION /etc/init.d/
+        #PERMISSIONS OWNER_READ OWNER_EXECUTE OWNER_WRITE GROUP_EXECUTE GROUP_READ WORLD_READ WORLD_EXECUTE
+    #)
+endif()
