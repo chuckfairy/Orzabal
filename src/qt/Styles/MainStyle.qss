@@ -877,7 +877,10 @@ LV2--PresetDropdown {
 
 QScrollArea#patchbay_scroll_area,
 QScrollArea#patchbay_scroll_area > QWidget, QScrollArea#patchbay_scroll_area > QWidget > QWidget,
-QScrollArea#patchbay_scroll_area QGridLayout
+QScrollArea#patchbay_scroll_area QGridLayout,
+QScrollArea#control_scroll_area,
+QScrollArea#control_scroll_area > QWidget, QScrollArea#control_scroll_area > QWidget > QWidget,
+QScrollArea#control_scroll_area QGridLayout
 {
     padding: 0px;
     margin: 0px;

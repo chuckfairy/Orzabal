@@ -11,11 +11,20 @@ using Orza::PluginSearch::LoadedPlugins;
 namespace Orza { namespace App { namespace Widget {
 
 
+/**
+ * Construct
+ */
+
 EffectDropdown::EffectDropdown( LoadedPlugins * plugins ) :
     AbstractPluginDropdown()
 {
 
-    //connect( this, SIGNAL( currentIndexChanged( int ) ), this, SLOT( handleSelectionChanged( int ) ) );
+    QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+
+    setSizeAdjustPolicy( QComboBox::AdjustToContents );
+
+    setSizePolicy( sizePolicy );
+
 
     _plugins = plugins->getAudioEffects();
 

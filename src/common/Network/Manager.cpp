@@ -61,11 +61,17 @@ vector<Network*> Manager::getNetworks() {
         Network * net = new Network;
 
         net->ssid = result->b.essid;
+
+        result = result->next;
+
+
+        //Hide hidden
+
+        if( net->ssid.empty() ) { continue; }
+
         //net->wep = result->b.key;
 
         out.push_back( net );
-
-        result = result->next;
 
     }
 

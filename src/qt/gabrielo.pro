@@ -20,13 +20,13 @@ HEADERS  += MainWindow.h
 FORMS    += MainWindow.ui \
     UI/About.ui \
     Pi/PiTab.ui \
-    UI/SettingsForm.ui \
     Widget/PatchBay.ui \
     Widget/PatchBayItem.ui \
     Widget/SingleInstrument.ui \
     MidiControl/Control.ui \
     MidiControl/ControlPort.ui \
-    MidiControl/ControlPortValue.ui
+    MidiControl/ControlPortValue.ui \
+    Widget/PluginArea.ui
 
 DISTFILES += \
     About.ui.qml \

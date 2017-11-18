@@ -22,6 +22,8 @@
 #include <LV2/include/types.h>
 #include <LV2/Port.h>
 
+#include <ui_PluginArea.h>
+
 #include "PresetDropdown.h"
 
 
@@ -80,9 +82,11 @@ class UIDriver : public Audio::UIDriver {
 
         };
 
+
     protected:
 
         LV2::UI * _UI;
+
 
     private:
 
@@ -115,6 +119,13 @@ class UIDriver : public Audio::UIDriver {
          */
 
         vector<PortContainer> portContainer;
+
+
+        /**
+         * Ui
+         */
+
+        Ui_PluginArea _UIArea;
 
 };
 

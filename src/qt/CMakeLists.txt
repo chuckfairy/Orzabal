@@ -17,6 +17,7 @@ file(GLOB orzabal.qt_UIS
     Pi/PiTab.ui
     Widget/PatchBay.ui
     Widget/PatchBayItem.ui
+    Widget/PluginArea.ui
     MidiControl/Control.ui
     MidiControl/ControlPort.ui
     MidiControl/ControlPortValue.ui
