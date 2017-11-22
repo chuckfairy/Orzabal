@@ -70,11 +70,11 @@ void SingleInstrument::clearPlugin() {
 
 void SingleInstrument::setPlugin( Audio::Plugin * p ) {
 
-    UIDriver * driver = new UIDriver( (LV2::UI*) p->getUI() );
+    Jack::Server * server = _App->getServer();
+
+    UIDriver * driver = new UIDriver( server, (LV2::UI*) p->getUI() );
 
     p->getUI()->addDriver( driver );
-
-    Jack::Server * server = _App->getServer();
 
     server->getPatchbay()->clearPlugins();
 

@@ -34,7 +34,8 @@ PatchbayPlugin::PatchbayPlugin() :
  * Construct from audio plugin
  */
 
-PatchbayPlugin::PatchbayPlugin( Audio::Plugin * const p ) :
+PatchbayPlugin::PatchbayPlugin( Jack::Server * s, Audio::Plugin * const p ) :
+    _Server( s ),
     _Plugin( p ),
     _WidgetContent( new QWidget() )
 {
@@ -64,7 +65,7 @@ PatchbayPlugin::PatchbayPlugin( Audio::Plugin * const p ) :
     //@TODO multi plugin useage
     LV2::Plugin * plugin = (LV2::Plugin*) _Plugin;
 
-    UIDriver * driver = new UIDriver( plugin->getUI() );
+    UIDriver * driver = new UIDriver( _Server, plugin->getUI() );
 
     plugin->getUI()->addDriver( driver );
 

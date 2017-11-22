@@ -17,6 +17,8 @@
 
 #include <Audio/UIDriver.h>
 
+#include <Jack/Server.h>
+
 #include <LV2/UI.h>
 #include <LV2/Plugin.h>
 #include <LV2/include/types.h>
@@ -48,7 +50,7 @@ class UIDriver : public Audio::UIDriver {
 
     public:
 
-        UIDriver( LV2::UI * );
+        explicit UIDriver( Jack::Server *, LV2::UI * );
 
 
         /**
@@ -78,7 +80,7 @@ class UIDriver : public Audio::UIDriver {
 
         QWidget* getControlWidget() {
 
-            return _controlWidget;
+            return _pluginAreaWidget;
 
         };
 
@@ -91,6 +93,13 @@ class UIDriver : public Audio::UIDriver {
     private:
 
         /**
+         * Main obj
+         */
+
+        Jack::Server * _Server;
+
+
+        /**
          * Widget object
          */
 
@@ -101,6 +110,8 @@ class UIDriver : public Audio::UIDriver {
         QWidget* _controlWidget;
 
         PresetDropdown * _PresetDropdown;
+
+        QWidget * _pluginAreaWidget;
 
 
         /**
@@ -126,6 +137,17 @@ class UIDriver : public Audio::UIDriver {
          */
 
         Ui_PluginArea _UIArea;
+
+
+        /**
+         * Port input creation methods
+         */
+
+        void setupInputPorts();
+
+        void setupOutputPorts();
+
+        void setupMidiPorts();
 
 };
 

@@ -77,7 +77,7 @@ void Patchbay::addPlugin( Audio::Plugin * p ) {
 
     h->getEffects()->addEffect( p );
 
-    PatchbayPlugin * plugin = new PatchbayPlugin( p );
+    PatchbayPlugin * plugin = new PatchbayPlugin( _App->getServer(), p );
 
     _plugins.push_back( plugin );
 

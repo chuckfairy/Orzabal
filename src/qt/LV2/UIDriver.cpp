@@ -24,6 +24,8 @@
 #include "UIDriver.h"
 #include "WindowLayout.h"
 
+#include <Audio/Plugin.h>
+
 #include <LV2/Port.h>
 #include <LV2/Plugin.h>
 
@@ -34,11 +36,31 @@ namespace Orza { namespace App { namespace LV2UI {
  * construct
  */
 
-UIDriver::UIDriver( LV2::UI * ui ) :
-    _UI( ui )
+UIDriver::UIDriver( Jack::Server * s, LV2::UI * ui ) :
+    _Server( s ),
+    _UI( ui ),
+    _pluginAreaWidget( new QWidget )
 {
 
+    //Setup area
+
+    _UIArea.setupUi( _pluginAreaWidget );
+
+    setupInputPorts();
+
+    setupOutputPorts();
+
+    setupMidiPorts();
+
+
+    //Setup preset dropdown
+
     _PresetDropdown = new PresetDropdown( ui->getPlugin() );
+
+    _UIArea.preset_layout->addWidget( _PresetDropdown );
+
+
+    //Start if active
 
     if ( _UI->getPlugin()->isActive() ) {
 
@@ -114,6 +136,12 @@ void UIDriver::createUI() {
 
     _controlWidget = createControlWidget();
 
+    _controlWidget->setSizePolicy(
+        QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding )
+    );
+
+    _UIArea.verticalLayout->addWidget( _controlWidget );
+
 };
 
 
@@ -156,7 +184,7 @@ QWidget * UIDriver::createControlWidget() {
     _PresetDropdown->load();
 
     QHBoxLayout * dropdownLayout = new QHBoxLayout;
-    dropdownLayout->addWidget( _PresetDropdown );
+
 
     //Add items
     fullLayout->addItem( dropdownLayout );
@@ -230,5 +258,51 @@ QWidget * UIDriver::createControlWidget() {
 
 };
 
+
+/**
+ * Port group boxes setup
+ */
+
+void UIDriver::setupInputPorts() {
+
+    Audio::Plugin * p = (Audio::Plugin*) _UI->getPlugin();
+
+    if( ! p->hasInputs() ) {
+
+        _UIArea.output_groupbox->hide();
+
+        return;
+
+    }
+
+};
+
+void UIDriver::setupOutputPorts() {
+
+    Audio::Plugin * p = (Audio::Plugin*) _UI->getPlugin();
+
+    if( ! p->hasOutputs() ) {
+
+        _UIArea.output_groupbox->hide();
+
+        return;
+
+    }
+
+};
+
+void UIDriver::setupMidiPorts() {
+
+    Audio::Plugin * p = (Audio::Plugin*) _UI->getPlugin();
+
+    if( ! p->hasMidi() ) {
+
+        _UIArea.midi_groupbox->hide();
+
+        return;
+
+    }
+
+};
 
 }; }; };

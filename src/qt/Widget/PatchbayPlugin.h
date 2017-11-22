@@ -9,6 +9,8 @@
 #include <Audio/Plugin.h>
 #include <Util/Dispatcher.h>
 
+#include <Jack/Server.h>
+
 #include <ui_PatchBayItem.h>
 
 
@@ -37,7 +39,7 @@ class PatchbayPlugin : public QWidget, public Util::Dispatcher {
 
     public:
 
-        explicit PatchbayPlugin( Audio::Plugin * const );
+        explicit PatchbayPlugin( Jack::Server *, Audio::Plugin * const );
         explicit PatchbayPlugin();
 
         ~PatchbayPlugin();
@@ -101,6 +103,12 @@ class PatchbayPlugin : public QWidget, public Util::Dispatcher {
 
 
     private:
+
+        /**
+         * Main obj
+         */
+
+        Jack::Server * _Server;
 
         Audio::Plugin * _Plugin;
 

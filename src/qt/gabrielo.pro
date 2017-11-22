@@ -26,7 +26,7 @@ FORMS    += MainWindow.ui \
     MidiControl/Control.ui \
     MidiControl/ControlPort.ui \
     MidiControl/ControlPortValue.ui \
-    Widget/PluginArea.ui
+    LV2/PluginArea.ui
 
 DISTFILES += \
     About.ui.qml \
