@@ -17,13 +17,15 @@
 #include <Jack/Host.h>
 #include <Jack/Port.h>
 
+#include "AbstractIODropdown.h"
+
 
 using std::vector;
 
 using Audio::Port;
 
 
-//using Audio::Port;
+namespace Orza { namespace App { namespace Widget {
 
 
 /**
@@ -31,13 +33,9 @@ using Audio::Port;
  *
  */
 
-class OutputDropdown : public QComboBox, public Util::Dispatcher {
+class OutputDropdown : public AbstractIODropdown, public Util::Dispatcher {
 
-    Q_OBJECT
-
-    private:
-
-        Jack::Host * _Host;
+    Q_OBJECT;
 
 
     public:
@@ -97,6 +95,13 @@ class OutputDropdown : public QComboBox, public Util::Dispatcher {
 
 
         /**
+         * Current jack port from index
+         */
+
+        const char * getCurrentJackPort();
+
+
+        /**
          * has Port
          *
          * @return bool
@@ -114,4 +119,11 @@ class OutputDropdown : public QComboBox, public Util::Dispatcher {
 
         void handleSelectionChanged( int index );
 
+
+    private:
+
+        Jack::Host * _Host;
+
 };
+
+}; }; };

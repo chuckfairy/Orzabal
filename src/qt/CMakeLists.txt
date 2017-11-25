@@ -17,7 +17,7 @@ file(GLOB orzabal.qt_UIS
     Pi/PiTab.ui
     Widget/PatchBay.ui
     Widget/PatchBayItem.ui
-    Widget/PluginArea.ui
+    LV2/PluginArea.ui
     MidiControl/Control.ui
     MidiControl/ControlPort.ui
     MidiControl/ControlPortValue.ui
@@ -82,15 +82,17 @@ file(
 FILE( GLOB moc_files
     Pi/Layout.h
     "${ORZABAL_ROOT_PATH}/lib-src/QtAwesome/*.h"
+    Widget/AbstractDropdown.h
+    Widget/AbstractIODropdown.h
     Widget/InstrumentDropdown.h
     Widget/Patchbay.h
     Widget/PatchbayPlugin.h
     Widget/SimpleLayout.h
     Widget/SingleInstrument.h
     Widget/InputDropdown.h
+    Widget/OutputDropdown.h
     LV2/PresetDropdown.h
     LV2/WindowLayout.h
-    Settings/OutputDropdown.h
     Settings/Layout.h
     MainWindow.h
     MidiControl/Control.h

@@ -1,6 +1,8 @@
 /**
  * UI Drive impl
  */
+#include <vector>
+
 #include <jack/jack.h>
 #include <jack/midiport.h>
 
@@ -16,6 +18,9 @@
 #include <QDial>
 #include <QLabel>
 
+#include <Widget/InputDropdown.h>
+#include <Widget/OutputDropdown.h>
+
 #include "PresetDropdown.h"
 #include "WindowLayout.h"
 #include "WindowLayout.h"
@@ -29,6 +34,7 @@
 #include <LV2/Port.h>
 #include <LV2/Plugin.h>
 
+using std::vector;
 
 namespace Orza { namespace App { namespace LV2UI {
 
@@ -46,11 +52,6 @@ UIDriver::UIDriver( Jack::Server * s, LV2::UI * ui ) :
 
     _UIArea.setupUi( _pluginAreaWidget );
 
-    setupInputPorts();
-
-    setupOutputPorts();
-
-    setupMidiPorts();
 
 
     //Setup preset dropdown
@@ -77,6 +78,12 @@ UIDriver::UIDriver( Jack::Server * s, LV2::UI * ui ) :
  */
 
 void UIDriver::start() {
+
+    setupInputPorts();
+
+    setupOutputPorts();
+
+    setupMidiPorts();
 
     createUI();
 
@@ -269,9 +276,31 @@ void UIDriver::setupInputPorts() {
 
     if( ! p->hasInputs() ) {
 
-        _UIArea.output_groupbox->hide();
+        _UIArea.input_groupbox->hide();
 
         return;
+
+    }
+
+
+    //Setup dropdowns
+
+    vector<long> * inputs = p->getInputPorts();
+    vector<long>::iterator it;
+
+    for( it = inputs->begin(); it != inputs->end(); ++ it ) {
+
+        Audio::Port * port = p->getPort( (*it) );
+
+        QLabel * label = new QLabel;
+
+        label->setText( port->nameString.c_str() );
+
+        _UIArea.input_layout->addWidget( label );
+
+        InputDropdown * dropdown = new InputDropdown( _Server );
+
+        _UIArea.input_layout->addWidget( dropdown );
 
     }
 
@@ -286,6 +315,28 @@ void UIDriver::setupOutputPorts() {
         _UIArea.output_groupbox->hide();
 
         return;
+
+    }
+
+
+    //Setup dropdowns
+
+    vector<long> * outputs = p->getOutputPorts();
+    vector<long>::iterator it;
+
+    for( it = outputs->begin(); it != outputs->end(); ++ it ) {
+
+        Audio::Port * port = p->getPort( (*it) );
+
+        QLabel * label = new QLabel;
+
+        label->setText( port->nameString.c_str() );
+
+        _UIArea.output_layout->addWidget( label );
+
+        OutputDropdown * dropdown = new OutputDropdown( _Server );
+
+        _UIArea.output_layout->addWidget( dropdown );
 
     }
 

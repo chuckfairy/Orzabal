@@ -13,12 +13,17 @@
 using std::vector;
 
 
+namespace Orza { namespace App { namespace Widget {
+
+
 /**
  * Constructor test
  *
  */
 
-InputDropdown::InputDropdown( Jack::Server * server ) {
+InputDropdown::InputDropdown( Jack::Server * server ) :
+    AbstractIODropdown()
+{
 
     connect(
         this,
@@ -69,15 +74,6 @@ void InputDropdown::updateOptions() {
 };
 
 
-/**
- * Constructor widget override
- *
- */
-
-InputDropdown::InputDropdown( QWidget * parent ) : QComboBox( parent ) {
-
-};
-
 
 /**
  * Events
@@ -110,3 +106,5 @@ void InputDropdown::handleSelectionChanged( int index ) {
     dispatch( CHANGE_EVENT, (void*) (intptr_t) index );
 
 };
+
+}; }; };

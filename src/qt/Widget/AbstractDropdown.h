@@ -5,6 +5,8 @@
 
 #include <QtCore>
 
+#include <QListView>
+
 namespace Orza { namespace App { namespace Widget {
 
 class AbstractDropdown : public QComboBox {

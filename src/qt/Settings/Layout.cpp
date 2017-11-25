@@ -15,6 +15,8 @@
 #include "Events/InputChangeEvent.h"
 #include "Layout.h"
 
+using Orza::App::Widget::InputDropdown;
+using Orza::App::Widget::OutputDropdown;
 
 using std::string;
 using std::vector;

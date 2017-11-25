@@ -8,10 +8,12 @@
 
 #include <Layouts/LayoutWriter.h>
 
-#include "OutputDropdown.h"
+#include <Widget/OutputDropdown.h>
 #include <Widget/InputDropdown.h>
 #include <Widget/BaseLineEdit.h>
 
+using Orza::App::Widget::InputDropdown;
+using Orza::App::Widget::OutputDropdown;
 
 /**
  * Forwading

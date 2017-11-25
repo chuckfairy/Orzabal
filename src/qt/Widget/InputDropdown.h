@@ -16,13 +16,14 @@
 #include <Jack/Host.h>
 #include <Jack/Port.h>
 
+#include "AbstractIODropdown.h"
 
 using std::vector;
 
 using Audio::Port;
 
 
-//using Audio::Port;
+namespace Orza { namespace App { namespace Widget {
 
 
 /**
@@ -30,7 +31,7 @@ using Audio::Port;
  *
  */
 
-class InputDropdown : public QComboBox, public Util::Dispatcher {
+class InputDropdown : public AbstractIODropdown, public Util::Dispatcher {
 
     Q_OBJECT
 
@@ -127,3 +128,4 @@ class InputDropdown : public QComboBox, public Util::Dispatcher {
 
 };
 
+}; }; };
