@@ -1,6 +1,8 @@
 /**
  * IO Port changer ui
  */
+#include <vector>
+
 #include <QLabel>
 #include <QWidget>
 #include <QVBoxLayout>
@@ -11,6 +13,12 @@
 #include <Jack/Host.h>
 
 #include "IOPortChanger.h"
+
+using std::vector;
+
+using Orza::App::Widget::InputDropdown;
+using Orza::App::Widget::OutputDropdown;
+
 
 namespace Orza { namespace App { namespace LV2UI {
 
@@ -36,9 +44,9 @@ IOPortChanger::IOPortChanger( Jack::Server * s, Jack::Port * port ) :
 
 void IOPortChanger::createUI() {
 
-    _Dropdown = _port->isInput
-        ? (QComboBox*) new InputDropdown( _Server )
-        : (QComboBox*) new OutputDropdown( _Server );
+    _Dropdown = _port->flow == Audio::FLOW_INPUT
+        ? (Widget::AbstractIODropdown*) new InputDropdown( _Server )
+        : (Widget::AbstractIODropdown*) new OutputDropdown( _Server );
 
     QLabel * label = new QLabel;
 
@@ -52,6 +60,15 @@ void IOPortChanger::createUI() {
 
     _MainWidget->setLayout( layout );
 
+    setDefaultConnected();
+
+    connect(
+        _Dropdown,
+        SIGNAL( currentIndexChanged( int ) ),
+        this,
+        SLOT( handleSelectionChanged( int ) )
+    );
+
 };
 
 
@@ -59,9 +76,9 @@ void IOPortChanger::createUI() {
  * Slot for selection change
  */
 
-void IOPortChanger::handleSelectionChanged() {
+void IOPortChanger::handleSelectionChanged( int index ) {
 
-    connect();
+    connectPort();
 
 };
 
@@ -70,11 +87,53 @@ void IOPortChanger::handleSelectionChanged() {
  * Main connect
  */
 
-void IOPortChanger::connect() {
+void IOPortChanger::connectPort() {
 
-    _Server->getAudio()->disconnectJackPort( _port->jack_port );
+    _Server->getPatchbay()->disconnectJackPort( _port->jack_port );
+
+    const char * port = _Dropdown->getCurrentJackPort();
+
+    const char * thisPort = jack_port_name( _port->jack_port );
+
+    if( _port->flow == Audio::FLOW_INPUT ) {
+
+        _Server->getPatchbay()->connectJackPort(
+            port,
+            thisPort
+        );
+
+    } else {
+
+        _Server->getPatchbay()->connectJackPort(
+            thisPort,
+            port
+        );
+
+    }
+
+};
 
 
+/**
+ * Default connected checker
+ * @TODO check from jack port connection event
+ */
+
+void IOPortChanger::setDefaultConnected() {
+
+    vector<const char *> connections = _Server->getPatchbay()->getConnectedPorts( _port );
+
+    if( connections.empty() ) {
+
+        return;
+
+    }
+
+
+    //Set default from 0
+    //@TODO support multi
+
+    std::cout << connections[ 0 ] << " port connected !\n";
 
 };
 

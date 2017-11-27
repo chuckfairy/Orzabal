@@ -34,6 +34,11 @@ OutputDropdown::OutputDropdown( Jack::Server * server ) :
 
     setHost( server->getAudio() );
 
+    Jack::Port blank;
+    blank.name = "-- None --";
+
+    addOutput( blank );
+
     updateOptions();
 
 };
@@ -73,7 +78,7 @@ void OutputDropdown::addOutput( Jack::Port port, const int order ) {
 
     addItem( port.name );
 
-    //Outputs.push_back( device );
+    _ports.push_back( port );
 
 };
 
@@ -85,6 +90,17 @@ void OutputDropdown::addOutput( Jack::Port port, const int order ) {
 void OutputDropdown::handleSelectionChanged( int index ) {
 
     dispatch( CHANGE_EVENT, (void*) (intptr_t) index );
+
+};
+
+
+/**
+ * Get jack port name
+ */
+
+const char * OutputDropdown::getCurrentJackPort() {
+
+    return _ports[ currentIndex() ].name;
 
 };
 

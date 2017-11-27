@@ -32,7 +32,7 @@ namespace Jack {
  */
 
 Patchbay::Patchbay( Server * s ) :
-    ServerStandalone( s->getJackClient() ),
+    StereoHostInterface( s->getJackClient() ),
     _Server( s ),
     _PatchbayEffects( new PatchbayEffects( s ) )
 {

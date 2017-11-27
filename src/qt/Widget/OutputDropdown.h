@@ -43,7 +43,7 @@ class OutputDropdown : public AbstractIODropdown, public Util::Dispatcher {
         OutputDropdown( QWidget * parent );
         explicit OutputDropdown( Jack::Server * );
 
-        virtual ~OutputDropdown() {};
+        ~OutputDropdown() {};
 
 
         /**
@@ -123,6 +123,8 @@ class OutputDropdown : public AbstractIODropdown, public Util::Dispatcher {
     private:
 
         Jack::Host * _Host;
+
+        vector<Jack::Port> _ports;
 
 };
 

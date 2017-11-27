@@ -4,6 +4,7 @@
 #pragma once
 
 #include <QtCore>
+#include <QComboBox>
 
 #include "AbstractDropdown.h"
 
@@ -20,7 +21,9 @@ class AbstractIODropdown : public AbstractDropdown {
         virtual const char * getCurrentJackPort() { return nullptr; };
 
 
-    protected:
+    public:
+
+        AbstractIODropdown( QWidget * parent );
 
         AbstractIODropdown() : AbstractDropdown() {};
 

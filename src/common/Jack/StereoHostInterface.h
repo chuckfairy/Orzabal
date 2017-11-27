@@ -10,7 +10,10 @@
 
 #include "ServerStandalone.h"
 
+#include "Port.h"
+
 using std::vector;
+using std::string;
 
 /**
  * char
@@ -139,6 +142,13 @@ class StereoHostInterface : public ServerStandalone {
         void clearInputs();
 
         void clearOutputs();
+
+
+        /**
+         * Port methods
+         */
+
+        vector<const char *> getConnectedPorts( Jack::Port * );
 
 
     protected:

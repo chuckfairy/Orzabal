@@ -753,7 +753,7 @@ void Plugin::activatePort( long portNum ) {
     port->nameString = nameChar;
     port->name = port->nameString.c_str();
 
-    std::cout << "\n ACTIVATE PORT " << port->name << "\n";
+    //std::cout << "\n ACTIVATE PORT " << port->name << "\n";
 
 
 	//Connect unsupported ports to NULL (known to be optional by this point)

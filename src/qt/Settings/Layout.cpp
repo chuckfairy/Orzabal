@@ -54,7 +54,8 @@ void Layout::setDropdowns() {
     _LeftOutput = new OutputDropdown( _App->getServer() );
     _RightOutput = new OutputDropdown( _App->getServer() );
 
-    _RightOutput->setCurrentIndex( 1 );
+    _LeftOutput->setCurrentIndex( 1 );
+    _RightOutput->setCurrentIndex( 2 );
 
     _InputDropdown = new InputDropdown( _App->getServer() );
 

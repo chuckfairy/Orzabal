@@ -82,8 +82,6 @@ void SingleInstrument::setPlugin( Audio::Plugin * p ) {
 
     HAS_PLUGIN = true;
 
-    p->run();
-
     _UI.singleinstrument_scroll_area
         ->setWidget(
             driver->getControlWidget()

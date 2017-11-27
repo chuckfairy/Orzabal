@@ -11,7 +11,7 @@
 #include <Audio/PluginPortContainer.h>
 
 #include "Host.h"
-#include "ServerStandalone.h"
+#include "StereoHostInterface.h"
 
 
 namespace Jack {
@@ -32,7 +32,7 @@ class PatchbayEffects;
 class Patchbay :
     public Audio::Patchbay,
     public Audio::ControlInterface,
-    public ServerStandalone
+    public StereoHostInterface
 {
 
     public:

@@ -34,7 +34,14 @@
 #include <LV2/Port.h>
 #include <LV2/Plugin.h>
 
+#include "IOPortChanger.h"
+
+
 using std::vector;
+
+using Orza::App::Widget::InputDropdown;
+using Orza::App::Widget::OutputDropdown;
+
 
 namespace Orza { namespace App { namespace LV2UI {
 
@@ -292,15 +299,12 @@ void UIDriver::setupInputPorts() {
 
         Audio::Port * port = p->getPort( (*it) );
 
-        QLabel * label = new QLabel;
+        IOPortChanger * changer = new IOPortChanger(
+            _Server,
+            (Jack::Port*) port
+        );
 
-        label->setText( port->nameString.c_str() );
-
-        _UIArea.input_layout->addWidget( label );
-
-        InputDropdown * dropdown = new InputDropdown( _Server );
-
-        _UIArea.input_layout->addWidget( dropdown );
+        _UIArea.input_layout->addWidget( changer->getWidget() );
 
     }
 
@@ -328,15 +332,12 @@ void UIDriver::setupOutputPorts() {
 
         Audio::Port * port = p->getPort( (*it) );
 
-        QLabel * label = new QLabel;
+        IOPortChanger * changer = new IOPortChanger(
+            _Server,
+            (Jack::Port*) port
+        );
 
-        label->setText( port->nameString.c_str() );
-
-        _UIArea.output_layout->addWidget( label );
-
-        OutputDropdown * dropdown = new OutputDropdown( _Server );
-
-        _UIArea.output_layout->addWidget( dropdown );
+        _UIArea.output_layout->addWidget( changer->getWidget() );
 
     }
 
@@ -346,13 +347,13 @@ void UIDriver::setupMidiPorts() {
 
     Audio::Plugin * p = (Audio::Plugin*) _UI->getPlugin();
 
-    if( ! p->hasMidi() ) {
+    //if( ! p->hasMidi() ) {
 
         _UIArea.midi_groupbox->hide();
 
         return;
 
-    }
+    //}
 
 };
 

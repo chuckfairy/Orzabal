@@ -7,15 +7,24 @@
 
 #include <QtCore>
 #include <QtGui>
+#include <QWidget>
+#include <QComboBox>
 
 #include <Jack/Server.h>
 #include <Jack/Port.h>
 
+#include <Widget/AbstractIODropdown.h>
+
+
 namespace Orza { namespace App { namespace LV2UI {
 
-class IOPortChanger {
+class IOPortChanger : public QWidget {
+
+    Q_OBJECT;
 
     public:
+
+        IOPortChanger( QWidget * );
 
         explicit IOPortChanger( Jack::Server *, Jack::Port * );
 
@@ -33,7 +42,7 @@ class IOPortChanger {
 
     public slots:
 
-        void handleSelectionChanged();
+        void handleSelectionChanged( int );
 
 
     private:
@@ -42,7 +51,7 @@ class IOPortChanger {
 
         Jack::Port * _port;
 
-        QComboBox * _Dropdown;
+        Widget::AbstractIODropdown * _Dropdown;
 
         QWidget * _MainWidget;
 
@@ -58,7 +67,14 @@ class IOPortChanger {
          * Main connect
          */
 
-        void connect();
+        void connectPort();
+
+
+        /**
+         * Check port connection
+         */
+
+        void setDefaultConnected();
 
 };
 

@@ -1,8 +1,13 @@
 /**
  * Stereo interface impl
  */
+#include <string.h>
+#include <vector>
 
 #include "StereoHostInterface.h"
+
+using std::vector;
+using std::string;
 
 namespace Jack {
 
@@ -220,6 +225,38 @@ void StereoHostInterface::redirectInputPort(
     //Buffer copy redirection
 
     memcpy( outBuffer, inBuffer, bufSize );
+
+};
+
+
+/**
+ * Port methods
+ */
+
+vector<const char *> StereoHostInterface::getConnectedPorts( Jack::Port * port ) {
+
+    vector<const char *> out;
+
+    const char ** connections = jack_port_get_connections( port->jack_port );
+
+    if( ! connections ) {
+
+        return out;
+
+    }
+
+    int i = 0;
+
+    while( connections[ i ] ) {
+
+        std::cout << connections[ i ] << " CONNECTION\n";
+        out.push_back( connections[ i ] );
+
+        ++ i;
+
+    }
+
+    return out;
 
 };
 
