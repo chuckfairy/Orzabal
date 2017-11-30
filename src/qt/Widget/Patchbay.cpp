@@ -21,6 +21,8 @@ Patchbay::Patchbay( MainWindow * app ) :
     _Dropdown( new EffectDropdown( app->getPluginSearch() ) )
 {
 
+    _Spacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+
     _UI.setupUi( _WidgetContent );
 
     _UI.horizontalLayout->insertWidget( 0, _Dropdown );
@@ -84,11 +86,9 @@ void Patchbay::addPlugin( Audio::Plugin * p ) {
 
     if( _Spacer != nullptr ) {
 
-        delete _Spacer;
+        _Layout->removeItem( _Spacer );
 
     }
-
-    _Spacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
     _Layout->addItem( _Spacer );
 
