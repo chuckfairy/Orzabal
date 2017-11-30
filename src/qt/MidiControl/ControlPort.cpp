@@ -1,15 +1,22 @@
 /**
  * ControlPort widget editor
  */
+#include <QMessageBox>
+
 #include <Audio/Port.h>
 
 #include <Jack/Patchbay.h>
 
-#include <QMessageBox>
-
 #include <MainWindow.h>
+#include <Resource/Icons.h>
+
+#include <Widget/Events/RemoveClickEvent.h>
 
 #include "ControlPort.h"
+
+
+using Orza::App::Resource::Icons;
+using Orza::App::Widget::RemoveClickEvent;
 
 
 namespace Orza { namespace App { namespace MidiControl {
@@ -21,24 +28,45 @@ namespace Orza { namespace App { namespace MidiControl {
 
 ControlPort::ControlPort( MainWindow * app, Jack::MidiControlPort * p ) :
     _App( app ),
-    _ControlPort( p ),
-    _WidgetContent( new QWidget() )
+    _ControlPort( p )
 {
 
-    _UI.setupUi( _WidgetContent );
+    _UI.setupUi( this );
 
     _UI.label->setText( _ControlPort->getName() );
+
+
+    //Button setup
+
+    setViewButton( _UI.view_btn, _UI.scrollArea );
+
+    setDeleteButton( _UI.delete_btn );
+
 
     //Events
 
     connect( _UI.port_add_btn, SIGNAL( clicked() ), this, SLOT( addControlPortValue() ) );
 
-    //connect( _UI.view_btn, SIGNAL( clicked() ), this, SLOT( toggleView() ) );
-    //connect( _UI.delete_btn, SIGNAL( clicked() ), this, SLOT( remove() ) );
 
     updateDropdown();
 
 };
+
+
+/**
+ * deletion
+ */
+
+ControlPort::~ControlPort() {
+
+};
+
+
+/**
+ * Remove event char
+ */
+
+const char * ControlPort::REMOVE_EVENT = "REMOVE";
 
 
 /**
@@ -72,9 +100,11 @@ void ControlPort::addControlPortValue() {
         port
     );
 
-    _UI.scroll_layout->addWidget( portValue->getWidget() );
+    _UI.scroll_layout->addWidget( portValue );
 
     _UIPortValues.push_back( portValue );
+
+    addNode( portValue );
 
 };
 
@@ -101,4 +131,3 @@ void ControlPort::updateDropdown() {
 };
 
 } } };
-

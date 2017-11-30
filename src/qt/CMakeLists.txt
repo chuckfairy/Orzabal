@@ -91,6 +91,7 @@ FILE( GLOB moc_files
     Widget/SingleInstrument.h
     Widget/InputDropdown.h
     Widget/OutputDropdown.h
+    Widget/TreeNode.h
     LV2/IOPortChanger.h
     LV2/PresetDropdown.h
     LV2/WindowLayout.h

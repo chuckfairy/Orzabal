@@ -8,6 +8,8 @@
 #include <QtCore>
 #include <QWidget>
 
+#include <Util/Repository.h>
+
 #include <Jack/Midi.h>
 
 #include <ui_Control.h>
@@ -56,6 +58,8 @@ class Control : public QWidget {
 
         };
 
+        void handleRemoveClick( ControlPort * );
+
 
     public slots:
 
@@ -81,7 +85,7 @@ class Control : public QWidget {
 
         vector<Jack::MidiControlPort*> _Ports;
 
-        vector<ControlPort*> _UIPorts;
+        Util::Repository<ControlPort> _UIPorts;
 
         void updateDropdown();
 

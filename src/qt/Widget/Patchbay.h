@@ -92,6 +92,7 @@ class Patchbay : public QWidget {
 
         vector<PatchbayPlugin*> _plugins;
 
+        QSpacerItem * _Spacer = nullptr;
 
 };
 

@@ -75,6 +75,7 @@ Server::Server() {
 /**
  * Static sets
  */
+
 const char * Server::JACK_CLIENT_NAME = "orzabal-client";
 
 const char * Server::UPDATE_EVENT = "update";

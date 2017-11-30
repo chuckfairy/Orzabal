@@ -16,6 +16,8 @@
 #include <Midi/Events.h>
 #include <Midi/Events/EventMessage.h>
 
+#include <Widget/TreeNode.h>
+
 #include <ui_ControlPortValue.h>
 
 #include <Jack/Midi.h>
@@ -28,7 +30,7 @@ namespace Orza { namespace App { namespace MidiControl {
  * Main class
  */
 
-class ControlPortValue : public QWidget {
+class ControlPortValue : public Widget::TreeNode {
 
     Q_OBJECT;
 
@@ -37,12 +39,6 @@ class ControlPortValue : public QWidget {
         explicit ControlPortValue( Jack::Midi *, Jack::MidiControlPort *, Audio::PluginPortContainer * );
 
         void setRange( float start, float end );
-
-        QWidget * getWidget() {
-
-            return _WidgetContent;
-
-        };
 
         static unsigned int PERCISION;
 
@@ -61,8 +57,6 @@ class ControlPortValue : public QWidget {
          */
 
         Ui_ControlPortValue _UI;
-
-        QWidget * _WidgetContent;
 
 
         /**
@@ -93,4 +87,3 @@ class ControlPortValue : public QWidget {
 };
 
 } } };
-

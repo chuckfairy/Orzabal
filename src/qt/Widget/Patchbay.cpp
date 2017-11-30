@@ -33,6 +33,7 @@ Patchbay::Patchbay( MainWindow * app ) :
 
     _LayoutWidget->setLayout( _Layout );
 
+
     _UI.patchbay_scroll_area->setWidget( _LayoutWidget );
 
     connect(
@@ -79,9 +80,19 @@ void Patchbay::addPlugin( Audio::Plugin * p ) {
 
     PatchbayPlugin * plugin = new PatchbayPlugin( _App->getServer(), p );
 
-    _plugins.push_back( plugin );
-
     _Layout->addWidget( plugin->getWidget() );
+
+    if( _Spacer != nullptr ) {
+
+        delete _Spacer;
+
+    }
+
+    _Spacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+
+    _Layout->addItem( _Spacer );
+
+    _plugins.push_back( plugin );
 
 
     //Set plugin events
@@ -144,7 +155,5 @@ void Patchbay::clearPlugins() {
     }
 
 }
-
-
 
 } } };

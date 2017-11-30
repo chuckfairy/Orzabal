@@ -12,18 +12,18 @@
 namespace Orza { namespace App { namespace Widget {
 
 template <class Interface, class Cast>
-class RemoveClickEvent : public Util::Event {
+class NodeRemoveEvent : public Util::Event {
 
     public:
 
-        explicit RemoveClickEvent( Interface * i ) : _Host( i ) {
+        explicit NodeRemoveEvent( Interface * i ) : _Host( i ) {
 
         };
 
 
         void run( void * data ) {
 
-            _Host->handleRemoveClick( (Cast*) data );
+            _Host->remove( (Cast*) data );
 
         };
 
@@ -35,3 +35,4 @@ class RemoveClickEvent : public Util::Event {
 };
 
 } } };
+

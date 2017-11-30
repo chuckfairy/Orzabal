@@ -6,11 +6,15 @@
 #include <QtCore>
 #include <QWidget>
 
+#include <Util/Dispatcher.h>
+
 #include <Audio/Port.h>
 #include <Audio/PluginPortContainer.h>
 
 #include <Midi/Control.h>
 #include <Jack/Midi.h>
+
+#include <Widget/TreeNode.h>
 
 #include <ui_ControlPort.h>
 
@@ -31,24 +35,21 @@ namespace Orza { namespace App { namespace MidiControl {
  * Main class
  */
 
-class ControlPort : public QWidget {
+class ControlPort : public Widget::TreeNode {
 
     Q_OBJECT;
 
     public:
 
         ControlPort( MainWindow *, Jack::MidiControlPort * );
+        ~ControlPort();
 
 
         /**
-         * Getters
+         * Event
          */
 
-        QWidget * getWidget() {
-
-            return _WidgetContent;
-
-        };
+        static const char * REMOVE_EVENT;
 
 
     public slots:

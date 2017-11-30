@@ -24,17 +24,24 @@ ControlPortValue::ControlPortValue(
     Jack::MidiControlPort * midiPort,
     Audio::PluginPortContainer * container
 ) :
-    _WidgetContent( new QWidget() ),
     _Midi( midi ),
     _ControlPort( midiPort ),
     _PortContainer( container )
 {
 
-    _UI.setupUi( _WidgetContent );
+    _UI.setupUi( this );
 
     _UI.label->setText( _PortContainer->getName() );
 
     _ControlRange = new Audio::MidiControlRange<Jack::MidiControlPort>( midiPort, container );
+
+
+    //Node
+
+    setDeleteButton( _UI.delete_btn );
+
+
+    //Sets
 
     setEvents();
 

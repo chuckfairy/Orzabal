@@ -37,7 +37,7 @@ const char * Midi::ALL_EVENTS = "all";
 
 vector<Port> Midi::getMidiPorts() {
 
-    return getPortsByType( JackPortIsOutput, JACK_DEFAULT_MIDI_TYPE );
+    return _Server->getAudio()->getPortsByType( JackPortIsOutput, JACK_DEFAULT_MIDI_TYPE );
 
 };
 

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>PatchBay</class>
- <widget class="QWidget" name="content">
+ <widget class="QWidget" name="PatchBay">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -27,6 +27,12 @@
    </item>
    <item row="1" column="0">
     <widget class="QScrollArea" name="patchbay_scroll_area">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
      <property name="widgetResizable">
       <bool>true</bool>
      </property>
