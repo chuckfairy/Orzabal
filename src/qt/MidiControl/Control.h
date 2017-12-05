@@ -14,6 +14,8 @@
 
 #include <ui_Control.h>
 
+#include <Widget/TreeNode.h>
+
 #include "ControlPort.h"
 
 
@@ -31,16 +33,12 @@ class MainWindow;
 
 namespace Orza { namespace App { namespace MidiControl {
 
-/**
- * Forwarding
- */
-
 
 /**
  * Main class
  */
 
-class Control : public QWidget {
+class Control : public Widget::TreeNode {
 
     Q_OBJECT;
 
@@ -57,8 +55,6 @@ class Control : public QWidget {
             return _WidgetContent;
 
         };
-
-        void handleRemoveClick( ControlPort * );
 
 
     public slots:
@@ -85,11 +81,8 @@ class Control : public QWidget {
 
         vector<Jack::MidiControlPort*> _Ports;
 
-        Util::Repository<ControlPort> _UIPorts;
-
         void updateDropdown();
 
 };
 
 } } };
-

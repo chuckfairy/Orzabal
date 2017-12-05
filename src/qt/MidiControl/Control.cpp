@@ -5,22 +5,14 @@
 
 #include <MainWindow.h>
 
-#include <Widget/Events/RemoveClickEvent.h>
-
 #include "ControlPort.h"
 
 #include "Control.h"
 
 using Jack::MidiControlPort;
 
-using Orza::App::Widget::RemoveClickEvent;
-
 
 namespace Orza { namespace App { namespace MidiControl {
-
-/**
- * Forwarding
- */
 
 
 /**
@@ -58,23 +50,10 @@ void Control::addControlPort() {
 
     _UI.scroll_layout->addWidget( uiPort );
 
-    _UIPorts.add( uiPort );
-
 
     //set events
 
-    Util::Event * e = new RemoveClickEvent<Control, ControlPort>( this );
-
-    uiPort->on( Widget::TreeNode::DELETE_EVENT, e );
-
-};
-
-
-void Control::handleRemoveClick( ControlPort * port ) {
-
-    _UIPorts.remove( port );
-
-    delete port;
+    addNode( uiPort );
 
 };
 

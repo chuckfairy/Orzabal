@@ -184,6 +184,8 @@ class Server : public Audio::Server {
 
         static void JackOnShutdown( void *o );
 
+        static void JackOnPortConnect( void *o );
+
 
         /**
          * Port registered or unregistered

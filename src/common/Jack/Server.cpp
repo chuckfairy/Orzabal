@@ -53,6 +53,12 @@ Server::Server() {
         (void*)(this)
     );
 
+    //jack_set_port_connect_callback(
+        //_client,
+        //Server::JackOnPortConnect,
+        //(void*)(this)
+    //);
+
 
     //Register host classes
 

@@ -144,6 +144,8 @@ void Layout::saveLayout() {
         _App->getServer()->getPatchbay()
     );
 
+    _App->getUI()->load_layout_dropdown->addItem( layoutName.c_str() );
+
 };
 
 
