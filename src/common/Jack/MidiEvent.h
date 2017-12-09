@@ -13,9 +13,7 @@ namespace Jack {
 
 struct MidiEvent : public Orza::Midi::Event {
 
-    explicit MidiEvent( jack_midi_event_t * event ) :
-        jackEvent( event )
-    {
+    explicit MidiEvent( jack_midi_event_t * jackEvent ) {
 
         uint8_t intJackType = jackEvent->buffer[0] & 0xf0;
         channel = jackEvent->buffer[0] & 0xf;
@@ -51,8 +49,6 @@ struct MidiEvent : public Orza::Midi::Event {
         }
 
     };
-
-    jack_midi_event_t * jackEvent;
 
 };
 

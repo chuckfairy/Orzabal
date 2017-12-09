@@ -195,16 +195,16 @@ void Midi::updateEventPort( jack_nframes_t nframes, jack_port_t * port ) {
         if( recevied != 0 ) { continue; }
 
 
-        MidiEvent event( &jackEvent );
+        MidiEvent * event = new MidiEvent( &jackEvent );
 
-        if( event.type == Orza::Midi::EVENT_UNKNOWN ) { continue; }
+        if( event->type == Orza::Midi::EVENT_UNKNOWN ) { continue; }
 
 
         //Handle event
 
-        handleEvent( &event );
+        handleEvent( event );
 
-        dispatch( jack_port_name( port ), (void*) (&event) );
+        dispatch( jack_port_name( port ), (void*) (event) );
 
     }
 

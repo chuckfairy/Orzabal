@@ -233,7 +233,7 @@ void Control::setValue(float value) {
 }
 
 QString Control::getValueLabel(float value) {
-    if (port->scaleMap[value]) {
+    if ( port->scaleMap.count( value ) ) {
         if (fontMetrics().width(port->scaleMap[value]) > CONTROL_WIDTH) {
             label->setToolTip(port->scaleMap[value]);
             return fontMetrics().elidedText(QString(port->scaleMap[value]),
