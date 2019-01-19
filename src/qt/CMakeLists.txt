@@ -60,6 +60,7 @@ file(
     GLOB
     orzabal.qt_SRC
     "${ORZABAL_ROOT_PATH}/lib-src/QtAwesome/*.cpp"
+	${orzabal.qt_UIS}
     Pi/*.cpp
     Resource/*.cpp
     MainWindow.cpp
