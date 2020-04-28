@@ -83,6 +83,18 @@ install( TARGETS
     DESTINATION /etc/init.d
 )
 
+
+# Vnc Setup
+set(NO_VNC_REPO "")
+set(NO_VNC_LOCATION "${ORZABAL_ROOT_PATH}/lib-src/novnc")
+
+configure_file( vnc_install.sh.in vnc_install.sh )
+configure_file( vnc_startup.sh.in vnc_startup.sh )
+
+# Vnc Install
+execute_process("./vnc_install.sh")
+
+
 if (UNIX)
     #install(
         #FILES pin_startup

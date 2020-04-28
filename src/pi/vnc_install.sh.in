@@ -1,0 +1,8 @@
+#!/bin/bash
+
+sudo apt install x11vnc
+
+git clone ${NO_VNC_REPO} ${NO_VNC_LOCATION}
+
+cd ${NO_VNC_LOCATION}
+npm i
