@@ -6,7 +6,7 @@
 #include <vector>
 
 #include <common/Config/Config.h>
-#include <common/Config/PluginTypes.h>
+#include <Config/PluginTypes.h>
 #include <Util/String.h>
 
 #include "PluginList.h"
@@ -97,7 +97,7 @@ void App::displayHeader() {
 
     std::cout << App::NAME_ASCII << "\n";
     std::cout << App::VERSION_PADDING
-        << Orza::Config::VERSION
+        << Orza::Bal::VERSION
         << "\n";
 
 };
@@ -134,7 +134,7 @@ void App::displayList() {
 void App::displayPluginTypes() {
 
     std::cout << App::NAME << " Version "
-        << Orza::Config::VERSION << "\n"
+        << Orza::Bal::VERSION << "\n"
         << "Plugin Types:\n";
 
     vector<string> types = Util::String::split(

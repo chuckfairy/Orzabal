@@ -5,16 +5,16 @@
 
 int main( int argc, char **argv ) {
 
-    Orza::CLI::App * cli = new Orza::CLI::App( argc, argv );
+	Orza::CLI::App * cli = new Orza::CLI::App( argc, argv );
 
-    cli->displayDefault();
+	cli->displayDefault();
 
-    if( cli->isMainProgram() ) {
+	if( cli->isMainProgram() ) {
 
-        cli->displayHelp();
+		cli->displayHelp();
 
-    }
+	}
 
-    return 0;
+	return 0;
 
 };

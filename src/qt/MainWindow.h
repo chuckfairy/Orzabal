@@ -13,8 +13,8 @@
 
 #include "Config/BuildType.h"
 
-#include "Widget/InstrumentDropdown.h"
-#include "Widget/EffectsList.h"
+#include <Widget/InstrumentDropdown.h>
+#include <Widget/EffectsList.h>
 
 #include "Settings/MidiDeviceDropdown.h"
 

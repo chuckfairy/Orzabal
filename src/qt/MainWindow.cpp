@@ -13,11 +13,14 @@
 #include "Layouts/LayoutLoader.h"
 
 #include "Settings/Layout.h"
+
+
 #include "Pi/Layout.h"
+
 #include "MainWindow.h"
 #include "Settings/MidiDeviceDropdown.h"
-#include "Resource/Icons.h"
-#include "MidiControl/ControlTab.h"
+#include <Resource/Icons.h>
+#include <MidiControl/ControlTab.h>
 
 
 using Orza::App::Layouts::LayoutLoader;

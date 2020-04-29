@@ -1,0 +1,13 @@
+/**
+ * Common config
+ */
+#pragma once
+
+namespace Orza { namespace Bal {
+
+const char * VERSION = "${ORZABAL_VERSION}";
+
+//const char * DataDirectory = "${ORZA_DATA_PATH}";
+
+}; };
+
