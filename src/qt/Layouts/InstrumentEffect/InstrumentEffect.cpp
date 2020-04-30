@@ -14,11 +14,10 @@
 
 using nlohmann::json;
 
-using Orza::App::Widget::Patchbay;
-using Orza::App::Widget::SingleInstrument;
+using Orza::Widget::SingleInstrument;
 
 
-namespace Orza { namespace App { namespace Layouts {
+namespace Orza { namespace Layouts {
 
 /**
  * Construct
@@ -26,8 +25,8 @@ namespace Orza { namespace App { namespace Layouts {
 
 InstrumentEffect::InstrumentEffect( MainWindow * app ) :
     _App( app ),
-    _SingleInstrument( new SingleInstrument( app ) ),
-    _Patchbay( new Patchbay( app ) )
+    _SingleInstrument( new SingleInstrument( app->getServer() ) ),
+    _Patchbay( new Orza::Widget::Patchbay( app->getServer() ) )
 {
 };
 
@@ -67,7 +66,7 @@ void InstrumentEffect::takedown() {
 
 void InstrumentEffect::load( json j ) {
 
-    Jack::Patchbay * host = _App->getServer()->getPatchbay();
+    Audio::Patchbay * host = _App->getServer()->getPatchbay();
 
     host->setActive( false );
 
@@ -121,4 +120,4 @@ void InstrumentEffect::load( json j ) {
 
 };
 
-}; }; };
+}; };

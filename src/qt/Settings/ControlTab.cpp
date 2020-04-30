@@ -11,20 +11,20 @@
 
 class MainWindow;
 
-namespace Orza { namespace App { namespace MidiControl {
+namespace Orza { namespace MidiControl {
 
 /**
  * Construct
  */
 
 ControlTab::ControlTab( MainWindow * app ) :
-    _App( app ),
-    _Control( new Control( app ) )
+	_App( app ),
+	_Control( new Control( app->getServer() ) )
 {
 
-    _App->getUI()
-        ->tabWidget->insertTab( 0, _Control->getWidget(), "Control" );
+	_App->getUI()
+		->tabWidget->insertTab( 0, _Control->getWidget(), "Control" );
 
 };
 
-}; }; };
+}; };

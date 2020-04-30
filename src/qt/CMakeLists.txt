@@ -23,12 +23,7 @@ file(GLOB orzabal.qt_UIS
 	MidiControl/ControlPortValue.ui
 )
 
-#file(GLOB common-ladspa ../common/LADSPA/*.cpp)
-
 qt5_wrap_ui(orzabal.qt_UIS ${orzabal.qt_UIS} )
-
-#list(APPEND QML_DIRS "Styles")
-#set(QML_IMPORT_PATH "${QML_DIRS}" CACHE STRING "Qt Creator extra qml import paths")
 
 qt5_add_resources(RESOURCES ./Resources.qrc)
 
@@ -80,7 +75,6 @@ file(
 	Layouts/**/*.cpp
 	Layouts/*.cpp
 	Settings/*.cpp
-	Settings/Events/*.cpp
 	MidiControl/*.cpp
 )
 

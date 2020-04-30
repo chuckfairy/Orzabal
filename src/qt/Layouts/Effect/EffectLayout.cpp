@@ -12,10 +12,9 @@
 
 using nlohmann::json;
 
-using Orza::App::Widget::Patchbay;
 
+namespace Orza { namespace Layouts {
 
-namespace Orza { namespace App { namespace Layouts {
 
 /**
  * Construct
@@ -23,7 +22,7 @@ namespace Orza { namespace App { namespace Layouts {
 
 EffectLayout::EffectLayout( MainWindow * app ) :
     _App( app ),
-    _Patchbay( new Patchbay( app ) )
+    _Patchbay( new Orza::Widget::Patchbay( app->getServer() ) )
 {
 
     _name = "effect";
@@ -80,7 +79,7 @@ void EffectLayout::takedown() {
 
 void EffectLayout::load( json j ) {
 
-    Jack::Patchbay * host = _App->getServer()->getPatchbay();
+    Audio::Patchbay * host = _App->getServer()->getPatchbay();
 
     host->setActive( false );
 
@@ -115,4 +114,4 @@ void EffectLayout::load( json j ) {
 
 };
 
-}; }; };
+}; };

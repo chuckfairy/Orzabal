@@ -16,7 +16,12 @@
 #include <Widget/InstrumentDropdown.h>
 #include <Widget/EffectsList.h>
 
+#include <Layouts/LayoutLoader.h>
+#include <Layouts/LayoutWriter.h>
+
 #include "Settings/MidiDeviceDropdown.h"
+
+#include <liborza-qt/src/Settings/Layout.h>
 
 
 /**
@@ -24,45 +29,32 @@
  */
 namespace Orza {
 
-    namespace App { namespace Pi {
+#ifdef IS_PI
+	namespace App { namespace Pi {
 
-        class Layout;
+		class Layout;
 
-    }; };
+	}; };
+#endif
 
-    namespace App {
+	namespace MidiControl {
 
-        namespace Layouts {
+		class ControlTab;
 
-            class LayoutLoader;
-
-        };
-
-        namespace MidiControl {
-
-            class ControlTab;
-
-        };
-
-
-        namespace Settings {
-
-            class Layout;
-
-        };
-    };
+	};
 
 };
 
 
 using namespace Orza::App;
-using Orza::App::Settings::Layout;
+using Orza::Settings::Layout;
 
 using Orza::PluginSearch::LoadedPlugins;
 
-using Orza::App::Layouts::LayoutLoader;
+using Orza::Layouts::LayoutLoader;
+using Orza::Layouts::LayoutWriter;
 
-using Orza::App::MidiControl::ControlTab;
+using Orza::MidiControl::ControlTab;
 
 
 /**
@@ -71,127 +63,129 @@ using Orza::App::MidiControl::ControlTab;
 
 class MainWindow : public QMainWindow {
 
-    Q_OBJECT;
+	Q_OBJECT;
 
-    public:
+	public:
 
-        //  override the constructor
+		//	override the constructor
 
-        //MainWindow(QWidget * parent = 0, ::Qt::WindowFlags flags = 0);
+		//MainWindow(QWidget * parent = 0, ::Qt::WindowFlags flags = 0);
 
-        explicit MainWindow(QApplication *, QWidget * parent = 0, ::Qt::WindowFlags flags = 0);
-
-
-        /**
-         * Qt Window UI
-         */
-
-        Ui_MainWindow UI;
+		explicit MainWindow(QApplication *, QWidget * parent = 0, ::Qt::WindowFlags flags = 0);
 
 
-        /**
-         * Getters
-         */
+		/**
+		 * Qt Window UI
+		 */
 
-        Jack::Server * getServer();
-
-
-        /**
-         * Plugin search getter
-         */
-
-        LoadedPlugins * getPluginSearch();
-
-        /**
-         * Settings layout
-         */
-
-        Layout * getSettingsLayout();
+		Ui_MainWindow UI;
 
 
-        /**
-         * Layout loader getter
-         */
+		/**
+		 * Getters
+		 */
 
-        LayoutLoader * getLayoutLoader();
-
-
-        /**
-         * Qt UI
-         */
-
-        Ui_MainWindow * getUI() {
-
-            return &UI;
-
-        };
+		Jack::Server * getServer();
 
 
-        /**
-         * Window actions
-         */
+		/**
+		 * Plugin search getter
+		 */
 
-        void goFullscreen();
+		LoadedPlugins * getPluginSearch();
 
-        void goWindowed();
+		/**
+		 * Settings layout
+		 */
 
-
-    private:
-
-        /**
-         * Main audio server
-         *
-         */
-
-        Jack::Server * _Server;
+		Layout * getSettingsLayout();
 
 
-        /**
-         * Midi keyboard device dropdown
-         *
-         */
+		/**
+		 * Layout loader getter
+		 */
 
-        MidiDeviceDropdown *midiDevices;
-
-
-        /**
-         * Plugin search
-         */
-
-        LoadedPlugins _PluginSearch;
+		LayoutLoader * getLayoutLoader();
 
 
-        /**
-         * Settings layout
-         */
+		/**
+		 * Qt UI
+		 */
 
-        Layout * _SettingsLayout;
+		Ui_MainWindow * getUI() {
 
-        /**
-         * Control tab
-         */
+			return &UI;
 
-        ControlTab * _ControlTab;
+		};
 
 
-        /**
-         * Layout loader
-         */
+		/**
+		 * Window actions
+		 */
 
-        LayoutLoader * _LayoutLoader;
+		void goFullscreen();
 
-
-        /**
-         * Pi module
-         */
-
-        Orza::App::Pi::Layout * _Pi;
+		void goWindowed();
 
 
-        /**
-         * Orza build config
-         */
+	private:
 
-        const Config::BuildType BUILD_TYPE = Config::ORZA_BUILD_CONFIG;
+		/**
+		 * Main audio server
+		 *
+		 */
+
+		Jack::Server * _Server;
+
+
+		/**
+		 * Midi keyboard device dropdown
+		 *
+		 */
+
+		MidiDeviceDropdown *midiDevices;
+
+
+		/**
+		 * Plugin search
+		 */
+
+		LoadedPlugins _PluginSearch;
+
+
+		/**
+		 * Settings layout
+		 */
+
+		Layout * _SettingsLayout;
+
+		/**
+		 * Control tab
+		 */
+
+		ControlTab * _ControlTab;
+
+
+		/**
+		 * Layout loader
+		 */
+
+		LayoutLoader * _LayoutLoader;
+
+
+		/**
+		 * Pi module
+		 */
+
+#ifdef IS_PI
+		Orza::App::Pi::Layout * _Pi;
+#endif
+
+
+		/**
+		 * Orza build config
+		 */
+
+		const Config::BuildType BUILD_TYPE = Config::ORZA_BUILD_CONFIG;
 
 };

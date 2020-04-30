@@ -17,8 +17,7 @@
 
 using nlohmann::json;
 
-using Orza::App::Widget::Patchbay;
-using Orza::App::Widget::SingleInstrument;
+using Orza::Widget::SingleInstrument;
 
 
 /**
@@ -28,7 +27,7 @@ using Orza::App::Widget::SingleInstrument;
 class MainWindow;
 
 
-namespace Orza { namespace App { namespace Layouts {
+namespace Orza { namespace Layouts {
 
 
 class InstrumentEffect : public Layout {
@@ -51,7 +50,7 @@ class InstrumentEffect : public Layout {
 
     private:
 
-        Patchbay * _Patchbay;
+        Orza::Widget::Patchbay * _Patchbay;
 
         SingleInstrument * _SingleInstrument;
 
@@ -59,4 +58,4 @@ class InstrumentEffect : public Layout {
 
 };
 
-}; }; };
+}; };

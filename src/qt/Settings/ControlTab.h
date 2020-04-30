@@ -3,7 +3,7 @@
  */
 #pragma once
 
-#include "Control.h"
+#include <MidiControl/Control.h>
 
 
 /**
@@ -13,7 +13,7 @@
 class MainWindow;
 
 
-namespace Orza { namespace App { namespace MidiControl {
+namespace Orza { namespace MidiControl {
 
 
 /**
@@ -22,17 +22,17 @@ namespace Orza { namespace App { namespace MidiControl {
 
 class ControlTab {
 
-    public:
+	public:
 
-        ControlTab( MainWindow * );
+		ControlTab( MainWindow * );
 
 
-    private:
+	private:
 
-        MainWindow * _App;
+		MainWindow * _App;
 
-        Control * _Control;
+		Control * _Control;
 
 };
 
-}; }; };
+}; };

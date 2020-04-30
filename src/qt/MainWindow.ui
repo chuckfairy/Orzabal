@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>605</width>
-    <height>559</height>
+    <width>601</width>
+    <height>501</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -60,8 +60,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>563</width>
-             <height>461</height>
+             <width>559</width>
+             <height>409</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_7">
@@ -195,7 +195,6 @@
            <zorder>groupBox_5</zorder>
            <zorder>groupBox_4</zorder>
            <zorder>groupBox_3</zorder>
-           <zorder>groupBox_2</zorder>
            <zorder>groupBox_2</zorder>
            <zorder>groupBox</zorder>
            <zorder>verticalSpacer</zorder>

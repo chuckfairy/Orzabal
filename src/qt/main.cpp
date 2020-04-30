@@ -20,9 +20,9 @@ MainWindow * win;
 
 static void signal_handler( int ignored ) {
 
-    win->goWindowed();
-    app->closeAllWindows();
-    app->quit();
+	win->goWindowed();
+	app->closeAllWindows();
+	app->quit();
 
 };
 
@@ -31,30 +31,30 @@ static void signal_handler( int ignored ) {
 
 int main( int argc, char **argv ) {
 
-    Orza::CLI::App * cli = new Orza::CLI::App( argc, argv );
+	Orza::CLI::App * cli = new Orza::CLI::App( argc, argv );
 
-    cli->displayDefault();
+	cli->displayDefault();
 
-    if( ! cli->isMainProgram() ) {
+	if( ! cli->isMainProgram() ) {
 
-        return 0;
+		return 0;
 
-    }
+	}
 
-    cli->displayHeader();
+	cli->displayHeader();
 
 
-    // Qt app
+	// Qt app
 
-    app = new QApplication(argc, argv);
+	app = new QApplication(argc, argv);
 
-    win = new MainWindow( app );
+	win = new MainWindow( app );
 
-    win->show();
+	win->show();
 
 	signal( SIGINT, signal_handler );
 	signal( SIGTERM, signal_handler );
 
-    return app->exec();
+	return app->exec();
 
 }

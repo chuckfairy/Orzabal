@@ -11,8 +11,6 @@
 
 using nlohmann::json;
 
-using Orza::App::Widget::Patchbay;
-
 
 /**
  * Forwarding
@@ -21,7 +19,8 @@ using Orza::App::Widget::Patchbay;
 class MainWindow;
 
 
-namespace Orza { namespace App { namespace Layouts {
+namespace Orza { namespace Layouts {
+
 
 class EffectLayout : public Layout {
 
@@ -42,10 +41,10 @@ class EffectLayout : public Layout {
 
     private:
 
-        Patchbay * _Patchbay;
+        Orza::Widget::Patchbay * _Patchbay;
 
         MainWindow * _App;
 
 };
 
-}; }; };
+}; };
