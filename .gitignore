@@ -15,6 +15,8 @@ doc/
 
 *.dylib
 
+build
+
 src/include
 src/qt/ui_*
 src/qt/example

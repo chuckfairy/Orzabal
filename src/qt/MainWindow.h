@@ -23,6 +23,9 @@
 
 #include <liborza-qt/src/Settings/Layout.h>
 
+#include <Settings/InstrumentPresetLoader.h>
+#include <Settings/InstrumentPresetWriter.h>
+
 
 /**
  * Forwarding
@@ -51,10 +54,10 @@ using Orza::Settings::Layout;
 
 using Orza::PluginSearch::LoadedPlugins;
 
-using Orza::Layouts::LayoutLoader;
-using Orza::Layouts::LayoutWriter;
-
 using Orza::MidiControl::ControlTab;
+
+using Orza::Settings::InstrumentPresetLoader;
+using Orza::Settings::InstrumentPresetWriter;
 
 
 /**
@@ -105,7 +108,7 @@ class MainWindow : public QMainWindow {
 		 * Layout loader getter
 		 */
 
-		LayoutLoader * getLayoutLoader();
+		InstrumentPresetLoader * getLayoutLoader();
 
 
 		/**
@@ -170,7 +173,13 @@ class MainWindow : public QMainWindow {
 		 * Layout loader
 		 */
 
-		LayoutLoader * _LayoutLoader;
+		InstrumentPresetLoader * _LayoutLoader;
+
+		/**
+		 * Layout loader
+		 */
+
+		InstrumentPresetWriter * _LayoutWriter;
 
 
 		/**

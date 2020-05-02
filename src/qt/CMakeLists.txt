@@ -64,7 +64,6 @@ file(
 	orzabal.qt_SRC
 	"${ORZABAL_ROOT_PATH}/lib-src/QtAwesome/*.cpp"
 	${orzabal.qt_UIS}
-	Resource/*.cpp
 	MainWindow.cpp
 	main.cpp
 	#**/moc_*.cpp

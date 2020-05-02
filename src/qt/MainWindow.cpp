@@ -23,9 +23,11 @@
 
 
 using Orza::Layouts::LayoutLoader;
-using Orza::App::Resource::Icons;
+using Orza::Resource::Icons;
 
 using Orza::MidiControl::ControlTab;
+using Orza::Settings::InstrumentPresetLoader;
+using Orza::Settings::InstrumentPresetWriter;
 
 
 /**
@@ -80,9 +82,11 @@ MainWindow::MainWindow( QApplication * app, QWidget * parent, Qt::WindowFlags fl
 	_ControlTab = new ControlTab( this );
 
 
-	//@TODO Move to layout picker
+	//preset writer and loader setup before settings
+	_LayoutLoader = new InstrumentPresetLoader( this, getServer() );
+	_LayoutWriter = new InstrumentPresetWriter();// getServer() );
 
-	//_LayoutLoader = new LayoutLoader( getServer() );
+	//Settings
 	_SettingsLayout = new Layout( getServer() );
 
 
@@ -93,7 +97,7 @@ MainWindow::MainWindow( QApplication * app, QWidget * parent, Qt::WindowFlags fl
 
 	//UI creation
 
-	QFile styleFile( ":/Styles/MainStyle.qss" );
+	QFile styleFile( ":/Styles/DarkStyle.qss" );
 	styleFile.open( QFile::ReadOnly );
 
 	// Apply the loaded stylesheet
@@ -157,7 +161,7 @@ Layout * MainWindow::getSettingsLayout() {
  * Layout @TODO use better base
  */
 
-LayoutLoader * MainWindow::getLayoutLoader() {
+InstrumentPresetLoader * MainWindow::getLayoutLoader() {
 
 	return _LayoutLoader;
 
