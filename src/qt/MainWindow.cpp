@@ -74,7 +74,8 @@ MainWindow::MainWindow( QApplication * app, QWidget * parent, Qt::WindowFlags fl
 
 	//Widget creation
 
-	midiDevices = new MidiDeviceDropdown( getServer() );
+	//@TODO
+	//midiDevices = new MidiDeviceDropdown( getServer() );
 
 
 	//Midi control
@@ -105,8 +106,10 @@ MainWindow::MainWindow( QApplication * app, QWidget * parent, Qt::WindowFlags fl
 
 	UI.centralWidget->setStyleSheet( style );
 
+	UI.settings_area->setWidget(_SettingsLayout);
+
 	//UI.horizontalLayout_3->addWidget( effects );
-	UI.horizontalLayout_6->addWidget( midiDevices );
+	//UI.horizontalLayout_6->addWidget( midiDevices ); //@TODO
 
 
 	//Main startup
