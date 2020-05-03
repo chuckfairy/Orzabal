@@ -17,7 +17,6 @@
 #endif
 
 #include "MainWindow.h"
-#include "Settings/MidiDeviceDropdown.h"
 #include <Resource/Icons.h>
 #include "Settings/ControlTab.h"
 
@@ -72,12 +71,6 @@ MainWindow::MainWindow( QApplication * app, QWidget * parent, Qt::WindowFlags fl
 	midi->connectDefaults();
 
 
-	//Widget creation
-
-	//@TODO
-	//midiDevices = new MidiDeviceDropdown( getServer() );
-
-
 	//Midi control
 
 	_ControlTab = new ControlTab( this );
@@ -109,7 +102,6 @@ MainWindow::MainWindow( QApplication * app, QWidget * parent, Qt::WindowFlags fl
 	UI.settings_area->setWidget(_SettingsLayout);
 
 	//UI.horizontalLayout_3->addWidget( effects );
-	//UI.horizontalLayout_6->addWidget( midiDevices ); //@TODO
 
 
 	//Main startup

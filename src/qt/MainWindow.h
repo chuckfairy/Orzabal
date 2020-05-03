@@ -19,8 +19,6 @@
 #include <Layouts/LayoutLoader.h>
 #include <Layouts/LayoutWriter.h>
 
-#include "Settings/MidiDeviceDropdown.h"
-
 #include <liborza-qt/src/Settings/Layout.h>
 
 #include <Settings/InstrumentPresetLoader.h>
@@ -139,14 +137,6 @@ class MainWindow : public QMainWindow {
 		 */
 
 		Jack::Server * _Server;
-
-
-		/**
-		 * Midi keyboard device dropdown
-		 *
-		 */
-
-		MidiDeviceDropdown *midiDevices;
 
 
 		/**
