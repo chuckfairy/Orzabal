@@ -26,12 +26,12 @@ class InstrumentPresetWriter : public Orza::Layouts::LayoutWriter {
 
 	public:
 
-		 InstrumentPresetWriter();
-		 ~InstrumentPresetWriter() {};
+		InstrumentPresetWriter();
+		~InstrumentPresetWriter() {};
 
-		 /**
-		  * @TODO
-		  */
+		/**
+		 * @TODO
+		 */
 		void writeLayoutToFile( string fileName, Patchbay * p );
 
 	private:
