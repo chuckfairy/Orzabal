@@ -20,6 +20,8 @@
 #include <Resource/Icons.h>
 #include "Settings/ControlTab.h"
 
+#include <common/Config/Config.h>
+
 
 using Orza::Layouts::LayoutLoader;
 using Orza::Resource::Icons;
@@ -81,31 +83,30 @@ MainWindow::MainWindow( QApplication * app, QWidget * parent, Qt::WindowFlags fl
 	_LayoutWriter = new InstrumentPresetWriter();// getServer() );
 
 	//Settings
-	_SettingsLayout = new Layout( getServer() );
+	_SettingsLayout = new Layout( getServer(), _LayoutWriter, _LayoutLoader );
 
 
 	//Icon
-
 	QIcon icon(":icon.png");
 	setWindowIcon( icon );
 
 	//UI creation
-
 	QFile styleFile( ":/Styles/DarkStyle.qss" );
 	styleFile.open( QFile::ReadOnly );
 
 	// Apply the loaded stylesheet
 	QString style( styleFile.readAll() );
-
 	UI.centralWidget->setStyleSheet( style );
 
-	UI.settings_area->setWidget(_SettingsLayout);
+	//Settings layout tab
+	UI.settings_area->layout()->addWidget(_SettingsLayout);
 
-	//UI.horizontalLayout_3->addWidget( effects );
+	//Set version text
+	string version = (string)"v" + (string)Orza::Bal::VERSION;
+	UI.version_text->setText(version.c_str());
 
 
-	//Main startup
-
+	//Main audio server startup
 	_Server->run();
 
 
@@ -149,16 +150,6 @@ LoadedPlugins * MainWindow::getPluginSearch() {
 Layout * MainWindow::getSettingsLayout() {
 
 	return _SettingsLayout;
-
-};
-
-/**
- * Layout @TODO use better base
- */
-
-InstrumentPresetLoader * MainWindow::getLayoutLoader() {
-
-	return _LayoutLoader;
 
 };
 

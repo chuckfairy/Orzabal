@@ -103,13 +103,6 @@ class MainWindow : public QMainWindow {
 
 
 		/**
-		 * Layout loader getter
-		 */
-
-		InstrumentPresetLoader * getLayoutLoader();
-
-
-		/**
 		 * Qt UI
 		 */
 

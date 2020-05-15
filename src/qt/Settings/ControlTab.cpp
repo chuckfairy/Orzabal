@@ -23,7 +23,7 @@ ControlTab::ControlTab( MainWindow * app ) :
 {
 
 	_App->getUI()
-		->tabWidget->insertTab( 0, _Control->getWidget(), "Control" );
+		->tabWidget->insertTab( 2, _Control->getWidget(), "Control" );
 
 };
 

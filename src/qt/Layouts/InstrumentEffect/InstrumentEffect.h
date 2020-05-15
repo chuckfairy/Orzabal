@@ -34,7 +34,8 @@ class InstrumentEffect : public Layout {
 
     public:
 
-        InstrumentEffect( MainWindow * );
+        InstrumentEffect( MainWindow *, SingleInstrument *, Orza::Widget::Patchbay *);
+        InstrumentEffect( MainWindow *);
 
 
         /**

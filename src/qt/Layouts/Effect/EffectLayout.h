@@ -27,6 +27,7 @@ class EffectLayout : public Layout {
     public:
 
         EffectLayout( MainWindow * );
+        EffectLayout( MainWindow *,  Orza::Widget::Patchbay * );
 
         /**
          * Virtuals

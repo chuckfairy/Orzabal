@@ -35,6 +35,7 @@ find_package( Boost 1.45.0 COMPONENTS filesystem regex )
 
 include_directories(
 	${CMAKE_CURRENT_BINARY_DIR}
+	"${CMAKE_CURRENT_BINARY_DIR}/../"
 	../common /usr/local/lib
 	"${ORZABAL_ROOT_PATH}/lib-src"
 	"${ORZABAL_ROOT_PATH}/lib-src/lilv"

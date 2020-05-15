@@ -26,6 +26,8 @@ project( orzabal )
 
 set( CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH}" "${PROJECT_SOURCE_DIR}/CMake" )
 
+set( ORZA_DATA_PATH "${PROJECT_SOURCE_DIR}/data")
+
 
 # Config
 

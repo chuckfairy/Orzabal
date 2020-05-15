@@ -24,9 +24,20 @@ namespace Orza { namespace Layouts {
  */
 
 InstrumentEffect::InstrumentEffect( MainWindow * app ) :
-    _App( app ),
-    _SingleInstrument( new SingleInstrument( app->getServer() ) ),
-    _Patchbay( new Orza::Widget::Patchbay( app->getServer() ) )
+	_App( app ),
+	_SingleInstrument( new SingleInstrument( app->getServer() ) ),
+	_Patchbay( new Orza::Widget::Patchbay( app->getServer() ) )
+{
+};
+
+InstrumentEffect::InstrumentEffect(
+		MainWindow * app,
+		SingleInstrument * inst,
+		Orza::Widget::Patchbay * patch
+	) :
+	_App( app ),
+	_SingleInstrument( inst ),
+	_Patchbay( patch )
 {
 };
 
@@ -37,26 +48,26 @@ InstrumentEffect::InstrumentEffect( MainWindow * app ) :
 
 void InstrumentEffect::setup() {
 
-    //Patchbay setup
+	//Patchbay setup
 
-    _App->getUI()
-        ->tabWidget->insertTab( 0, _SingleInstrument->getWidgetContainer(), "Instruments" );
+	_App->getUI()
+		->tabWidget->widget(0)->show();
 
-    _App->getUI()
-        ->tabWidget->insertTab( 1, _Patchbay->getWidgetContainer(), "Effects" );
+	_App->getUI()
+		->tabWidget->widget(1)->show();
 
-    _App->getUI()->tabWidget->setCurrentIndex( 0 );
+	_App->getUI()->tabWidget->setCurrentIndex( 0 );
 
 };
 
 
 void InstrumentEffect::takedown() {
 
-    _App->getUI()
-        ->tabWidget->removeTab( 0 );
+	_App->getUI()
+		->tabWidget->widget(0)->hide();
 
-    _App->getUI()
-        ->tabWidget->removeTab( 0 );
+	_App->getUI()
+		->tabWidget->widget(1)->hide();
 
 };
 
@@ -66,57 +77,57 @@ void InstrumentEffect::takedown() {
 
 void InstrumentEffect::load( json j ) {
 
-    Audio::Patchbay * host = _App->getServer()->getPatchbay();
+	Audio::Patchbay * host = _App->getServer()->getPatchbay();
 
-    host->setActive( false );
-
-
-    if( ! j["instruments"].empty() ) {
-
-        json instrument = j["instruments" ][ 0 ];
-
-        std::string id = instrument["id"];
-
-        Audio::Plugin * p = _App->getPluginSearch()->getById( id.c_str() );
-        Audio::Plugin * clone = (Audio::Plugin*) p->clone();
-
-        _SingleInstrument->setPlugin( clone );
-
-        setPortsFromJSON( clone, instrument );
-
-        clone->getUI()->updateDrivers();
-
-    }
+	host->setActive( false );
 
 
+	if( ! j["instruments"].empty() ) {
 
-    // Plugin effects
+		json instrument = j["instruments" ][ 0 ];
 
-    _Patchbay->clearPlugins();
+		std::string id = instrument["id"];
 
-    if( ! j["effects"].empty() ) {
+		Audio::Plugin * p = _App->getPluginSearch()->getById( id.c_str() );
+		Audio::Plugin * clone = (Audio::Plugin*) p->clone();
 
-        for( json::iterator it = j["effects"].begin(); it != j["effects"].end(); ++it ) {
+		_SingleInstrument->setPlugin( clone );
 
-            json effect = *it;
+		setPortsFromJSON( clone, instrument );
 
-            std::string id = effect["id"];
+		clone->getUI()->updateDrivers();
 
-            Audio::Plugin * plug = _App->getPluginSearch()->getById( id.c_str() );
+	}
 
-            Audio::Plugin * p = plug->clone();
 
-            _Patchbay->addPlugin( p );
 
-            setPortsFromJSON( p, effect );
+	// Plugin effects
 
-            p->getUI()->updateDrivers();
+	_Patchbay->clearPlugins();
 
-        }
+	if( ! j["effects"].empty() ) {
 
-    }
+		for( json::iterator it = j["effects"].begin(); it != j["effects"].end(); ++it ) {
 
-    host->setActive( true );
+			json effect = *it;
+
+			std::string id = effect["id"];
+
+			Audio::Plugin * plug = _App->getPluginSearch()->getById( id.c_str() );
+
+			Audio::Plugin * p = plug->clone();
+
+			_Patchbay->addPlugin( p );
+
+			setPortsFromJSON( p, effect );
+
+			p->getUI()->updateDrivers();
+
+		}
+
+	}
+
+	host->setActive( true );
 
 };
 
