@@ -85,6 +85,10 @@ MainWindow::MainWindow( QApplication * app, QWidget * parent, Qt::WindowFlags fl
 	//Settings
 	_SettingsLayout = new Layout( getServer(), _LayoutWriter, _LayoutLoader );
 
+	//Setup current layout settings
+	//@TODO load default if no preset passed through
+	_LayoutLoader->setup();
+
 
 	//Icon
 	QIcon icon(":icon.png");

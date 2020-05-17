@@ -45,12 +45,11 @@ EffectLayout::EffectLayout( MainWindow * app, Orza::Widget::Patchbay * patch ) :
 
 void EffectLayout::setup() {
 
-
 	_App->getUI()
-		->tabWidget->widget(0)->hide();
+		->tabWidget->removeTab(0);
 
-	_App->getUI()
-		->tabWidget->widget(1)->show();
+	//_App->getUI()
+		//->tabWidget->widget(1)->show();
 
 	_App->getUI()->tabWidget->setCurrentIndex( 0 );
 

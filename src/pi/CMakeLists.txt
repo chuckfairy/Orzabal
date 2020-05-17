@@ -2,9 +2,7 @@
 find_package( ODROID )
 
 # VNC
-
 add_definitions(-DPI_USE_VNC=${PI_USE_VNC})
-
 add_definitions(-DPI_VNC_COMMAND=${PI_VNC_COMMAND})
 
 
@@ -59,6 +57,9 @@ target_link_libraries(orzabal_gpio_config
     PUBLIC
     wiringPi
     pthread
+	rt
+	crypt
+	iw
 )
 
 target_include_directories(
@@ -67,6 +68,8 @@ target_include_directories(
     ${CMAKE_CURRENT_BINARY_DIR}
     ../common
     "${ORZABAL_ROOT_PATH}/lib-src"
+    "${ORZABAL_ROOT_PATH}/lib-src/liborza/lib-src"
+    "${ORZABAL_ROOT_PATH}/lib-src/liborza/src"
 )
 
 install( TARGETS
@@ -92,7 +95,7 @@ configure_file( vnc_install.sh.in vnc_install.sh )
 configure_file( vnc_startup.sh.in vnc_startup.sh )
 
 # Vnc Install
-execute_process("./vnc_install.sh")
+execute_process(COMMAND "${CMAKE_CURRENT_LIST_DIR}/vnc_install.sh")
 
 
 if (UNIX)

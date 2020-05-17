@@ -149,6 +149,17 @@ void Layout::setNetworkManager() {
 
     _Manager = new Network::Manager;
 
+	//Set interfaces
+	vector<string> interfaces = _Manager->getInterfaces();
+
+	for(int i = 0; i < interfaces.size(); ++i) {
+		if(i == 0) {
+			_Manager->setInterface(interfaces[i].c_str());
+		}
+
+		_Tab.interface_dropdown->addItem(interfaces[i].c_str());
+	}
+
     //Scan
 
     connect(
@@ -172,7 +183,13 @@ void Layout::setNetworkManager() {
 
 void Layout::updateNetworks() {
 
-    vector<string> nets = _Manager->getNetworkSSIDs();
+	vector<string> nets;
+
+	try {
+		nets = _Manager->getNetworkSSIDs();
+	} catch(std::runtime_error e) {
+		std::cout << "NETWORK GRAB ERROR " << e.what() << "\n";
+	}
 
     vector<string>::const_iterator it;
 

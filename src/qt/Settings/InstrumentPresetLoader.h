@@ -34,6 +34,7 @@ class InstrumentPresetLoader : public Orza::Layouts::PresetLoader {
 
 		void load( json settings );
 
+		void setup();
 
 	private:
 

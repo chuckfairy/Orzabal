@@ -82,7 +82,7 @@ add_subdirectory( src/cli )
 
 if( ORZA_BUILD_TYPE STREQUAL "Pi" )
 	add_subdirectory( src/pi )
-	add_compile_definitions(IS_PI)
+	add_definitions( -DIS_PI )
 endif()
 
 add_subdirectory( src/qt )

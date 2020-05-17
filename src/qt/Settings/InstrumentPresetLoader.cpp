@@ -46,8 +46,6 @@ InstrumentPresetLoader::InstrumentPresetLoader(
 	win->getUI()->tab_instrument->layout()->addWidget(_SingleInstrument->getWidgetContainer());
 	win->getUI()->tab_effects->layout()->addWidget(_Patchbay->getWidgetContainer());
 
-	defaultLayout->setup();
-
 	_CurrentLayout = defaultLayout;
 
 	//_Repo.add( defaultLayout );
@@ -56,8 +54,15 @@ InstrumentPresetLoader::InstrumentPresetLoader(
 
 void InstrumentPresetLoader::load( json j ) {
 
+	_CurrentLayout->setup();
 	Orza::Layouts::PresetLoader::load(j);
 
 };
+
+void InstrumentPresetLoader::setup() {
+
+	_CurrentLayout->setup();
+
+}
 
 }; };

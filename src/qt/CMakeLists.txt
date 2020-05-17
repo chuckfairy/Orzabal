@@ -155,7 +155,7 @@ target_link_libraries( orzabal.qt
 	liborza-common-jack
 	liborza-qt
 	liborza-common-plugin
-	orzabal-common-network
+	liborza-common-network
 	orzabal-cli
 	Qt5::Widgets
 	Qt5::Core
@@ -163,6 +163,14 @@ target_link_libraries( orzabal.qt
 	Qt5::Qml
 	${Boost_LIBRARIES}
 )
+
+# Pi specific linking
+if( ORZA_BUILD_TYPE STREQUAL "Pi" )
+	target_link_libraries( orzabal.qt
+		PUBLIC
+		iw
+	)
+endif()
 
 install( TARGETS
 	orzabal.qt
