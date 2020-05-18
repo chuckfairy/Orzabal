@@ -1,0 +1,5 @@
+#!/bin/bash
+
+killall x11vnc
+
+#${NO_VNC_REPO}/utils/launch.sh --vnc localhost:5900

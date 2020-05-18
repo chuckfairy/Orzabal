@@ -1,8 +1,24 @@
 #!/bin/bash
 
-sudo apt install x11vnc
+source $HOME/.bash_profile
 
-git clone ${NO_VNC_REPO} ${NO_VNC_LOCATION}
 
-cd ${NO_VNC_LOCATION}
-npm i
+#x11 vnc
+if ! [ -x "$(command -v x11vnc)" ]; then
+	sudo apt-get install x11vnc
+fi
+
+# Install vnc project
+if [ ! -d "${NO_VNC_LOCATION}" ]; then
+	echo "Cloning ${NO_VNC_REPO} to ${NO_VNC_LOCATION}"
+	git clone ${NO_VNC_REPO} ${NO_VNC_LOCATION}
+fi
+
+# Npm install
+if [ ! -d "${NO_VNC_LOCATION}/node_modules" ]; then
+	echo "NODE VERSION"
+	node --version
+	cd ${NO_VNC_LOCATION}
+	echo "Install node modules ${NO_VNC_LOCATION}"
+	npm i
+fi

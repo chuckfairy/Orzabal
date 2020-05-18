@@ -25,8 +25,6 @@ if( "${ORZA_PI_KEYBOARD_CMD}" STREQUAL "" )
     set( ORZA_PI_KEYBOARD_CMD "nohup onboard" )
 endif()
 
-configure_file( Config/Commands.h.in Config/Commands.h )
-
 
 # Defaults
 
@@ -88,15 +86,34 @@ install( TARGETS
 
 
 # Vnc Setup
-set(NO_VNC_REPO "")
+set(NO_VNC_REPO "https://github.com/novnc/noVNC")
 set(NO_VNC_LOCATION "${ORZABAL_ROOT_PATH}/lib-src/novnc")
+
+
+add_definitions(-DVNC_STARTUP_LOCATION="${CMAKE_CURRENT_BINARY_DIR}/vnc_startup.sh")
+add_definitions(-DVNC_STOP_LOCATION="${CMAKE_CURRENT_BINARY_DIR}/vnc_stop.sh")
 
 configure_file( vnc_install.sh.in vnc_install.sh )
 configure_file( vnc_startup.sh.in vnc_startup.sh )
+configure_file( vnc_stop.sh.in vnc_stop.sh )
+
+
 
 # Vnc Install
-execute_process(COMMAND "${CMAKE_CURRENT_LIST_DIR}/vnc_install.sh")
+set(vnc_install_cmd "${CMAKE_CURRENT_BINARY_DIR}/vnc_install.sh")
+message(STATUS "Executing ${vnc_install_cmd}")
 
+execute_process(
+	COMMAND "${vnc_install_cmd}"
+	ERROR_VARIABLE vnc_install_error
+)
+
+if (NOT vnc_install_error STREQUAL "")
+	message(SEND_ERROR ${vnc_install_error})
+endif()
+
+# Config setup
+configure_file( Config/Commands.h.in Config/Commands.h )
 
 if (UNIX)
     #install(

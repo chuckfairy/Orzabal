@@ -9,6 +9,8 @@ CTestTestfile.cmake
 CMakeScripts
 compile_commands.json
 
+lib-src/novnc
+
 CPack*
 
 doc/

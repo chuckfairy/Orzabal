@@ -26,6 +26,19 @@ static void signal_handler( int ignored ) {
 
 };
 
+#ifdef IS_PI
+
+#include <pi/Config/Commands.h>
+
+static void startVNC() {
+	system(Orza::Pi::Config::VNC_STARTUP);
+}
+
+static void stopVNC() {
+	system(Orza::Pi::Config::VNC_STOP);
+}
+#endif
+
 
 //Main startup using MainWindow
 
@@ -46,6 +59,10 @@ int main( int argc, char **argv ) {
 
 	// Qt app
 
+#ifdef IS_PI
+	startVNC();
+#endif
+
 	app = new QApplication(argc, argv);
 
 	win = new MainWindow( app );
@@ -55,6 +72,12 @@ int main( int argc, char **argv ) {
 	signal( SIGINT, signal_handler );
 	signal( SIGTERM, signal_handler );
 
-	return app->exec();
+	int out = app->exec();
+
+#ifdef IS_PI
+	stopVNC();
+#endif
+
+	return out;
 
 }

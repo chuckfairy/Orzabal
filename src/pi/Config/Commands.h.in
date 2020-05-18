@@ -11,4 +11,9 @@ static const char * RESTART_COMMAND = "${ORZA_PI_RESTART_CMD}";
 
 static const char * KEYBOARD_COMMAND = "${ORZA_PI_KEYBOARD_CMD}";
 
+//#ifndef US_VNC
+static const char * VNC_STARTUP = "${VNC_STARTUP_LOCATION}";
+static const char * VNC_STOP = "${VNC_KILL_LOCATION}";
+//
+
 }; }; };
