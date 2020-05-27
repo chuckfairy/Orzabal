@@ -112,9 +112,11 @@ if (NOT vnc_install_error STREQUAL "")
 	message(SEND_ERROR ${vnc_install_error})
 endif()
 
+
 # Config setup
 configure_file( Config/Commands.h.in Config/Commands.h )
 
+# Pins
 if (UNIX)
     #install(
         #FILES pin_startup

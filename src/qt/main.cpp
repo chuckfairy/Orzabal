@@ -26,6 +26,8 @@ static void signal_handler( int ignored ) {
 
 };
 
+
+//Pi extra setup
 #ifdef IS_PI
 
 #include <pi/Config/Commands.h>
@@ -37,6 +39,7 @@ static void startVNC() {
 static void stopVNC() {
 	system(Orza::Pi::Config::VNC_STOP);
 }
+
 #endif
 
 
@@ -57,12 +60,12 @@ int main( int argc, char **argv ) {
 	cli->displayHeader();
 
 
-	// Qt app
-
+	//Pi vnc setup
 #ifdef IS_PI
 	startVNC();
 #endif
 
+	// Qt app
 	app = new QApplication(argc, argv);
 
 	win = new MainWindow( app );
@@ -74,6 +77,7 @@ int main( int argc, char **argv ) {
 
 	int out = app->exec();
 
+	//Pi stop
 #ifdef IS_PI
 	stopVNC();
 #endif
