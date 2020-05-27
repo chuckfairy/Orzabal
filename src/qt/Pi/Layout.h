@@ -117,6 +117,8 @@ class Layout : public QWidget {
 
 		void setNetworkManager();
 
+		void managerDisplayUpdate();
+
 
 	private slots:
 

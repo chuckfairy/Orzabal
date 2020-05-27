@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# VNC kill
 killall x11vnc
 
-#${NO_VNC_REPO}/utils/launch.sh --vnc localhost:5900
+#Client kill
+kill $(cat ${VNC_PID_FILE})
+rm ${VNC_PID_FILE}

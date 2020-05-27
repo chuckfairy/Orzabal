@@ -1,6 +1,5 @@
 #!/bin/bash
-
-source $HOME/.bash_profile
+# Cmake pre build install
 
 
 #x11 vnc

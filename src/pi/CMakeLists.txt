@@ -90,9 +90,15 @@ set(NO_VNC_REPO "https://github.com/novnc/noVNC")
 set(NO_VNC_LOCATION "${ORZABAL_ROOT_PATH}/lib-src/novnc")
 
 
-add_definitions(-DVNC_STARTUP_LOCATION="${CMAKE_CURRENT_BINARY_DIR}/vnc_startup.sh")
-add_definitions(-DVNC_STOP_LOCATION="${CMAKE_CURRENT_BINARY_DIR}/vnc_stop.sh")
+set(VNC_STARTUP_LOCATION "${CMAKE_CURRENT_BINARY_DIR}/vnc_startup.sh")
+set(VNC_STOP_LOCATION "${CMAKE_CURRENT_BINARY_DIR}/vnc_stop.sh")
 
+set(VNC_PORT "5900")
+set(VNC_HTML_PORT "6080")
+
+set(VNC_PID_FILE "/tmp/.Orzabal")
+
+# VNC command configures
 configure_file( vnc_install.sh.in vnc_install.sh )
 configure_file( vnc_startup.sh.in vnc_startup.sh )
 configure_file( vnc_stop.sh.in vnc_stop.sh )

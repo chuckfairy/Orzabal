@@ -33,10 +33,12 @@ static void signal_handler( int ignored ) {
 #include <pi/Config/Commands.h>
 
 static void startVNC() {
+	std::cout << "VNC STARTING " << Orza::Pi::Config::VNC_STARTUP << "\n";
 	system(Orza::Pi::Config::VNC_STARTUP);
 }
 
 static void stopVNC() {
+	std::cout << "VNC STOPING\n";
 	system(Orza::Pi::Config::VNC_STOP);
 }
 

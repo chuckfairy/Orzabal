@@ -1,5 +1,11 @@
 #!/bin/bash
+# Startup for VNC and client
 
-x11vnc -display :0 -usepw -forever -noxrecord -noxfixes -noxdamage
+# VNC client
+x11vnc -display :0 -usepw -forever -noxrecord -noxfixes -noxdamage -rfbport ${VNC_PORT} &
 
-${NO_VNC_REPO}/utils/launch.sh --vnc localhost:5900
+# No VNC Client
+${NO_VNC_LOCATION}/utils/launch.sh --listen ${VNC_HTML_PORT} --vnc localhost:${VNC_PORT} &
+
+# Save PID for noVNC
+echo $! > ${VNC_PID_FILE}

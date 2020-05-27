@@ -58,6 +58,9 @@ Layout::Layout( MainWindow * app ) :
 
 	setNetworkManager();
 
+	//VNC and url display updates
+	managerDisplayUpdate();
+
 
 	//Full screen default
 
@@ -155,6 +158,7 @@ void Layout::setNetworkManager() {
 	for(int i = 0; i < interfaces.size(); ++i) {
 		if(i == 0) {
 			_Manager->setInterface(interfaces[i].c_str());
+			managerDisplayUpdate();
 		}
 
 		_Tab.interface_dropdown->addItem(interfaces[i].c_str());
@@ -189,8 +193,12 @@ void Layout::setNetworkManager() {
 };
 
 void Layout::handleInterfaceChange(int index) {
+
 	string s = (string)_Tab.interface_dropdown->itemText(index).toUtf8();
 	_Manager->setInterface(s);
+
+	managerDisplayUpdate();
+
 }
 
 void Layout::updateNetworks() {
@@ -218,6 +226,21 @@ void Layout::updateNetworks() {
 	_Tab.ssid_dropdown->setCurrentIndex( 0 );
 
 };
+
+void Layout::managerDisplayUpdate() {
+
+	//VNC display
+	string vncPortDisplay = _Manager->getIP() + ":" + (string)Orza::Pi::Config::VNC_PORT;
+	_Tab.vnc_port_display->setText(vncPortDisplay.c_str());
+
+	//VNC display
+	string vncClientDisplay = _Manager->getIP() + ":" + (string)Orza::Pi::Config::VNC_HTML_PORT
+		//@TODO maybe redirect
+		+ "/vnc.html";
+	_Tab.vnc_client_display->setText(vncClientDisplay.c_str());
+
+
+}
 
 
 /**
