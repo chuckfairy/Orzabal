@@ -13,7 +13,7 @@ static const char * KEYBOARD_COMMAND = "${ORZA_PI_KEYBOARD_CMD}";
 
 //#ifndef USE_VNC
 static const char * VNC_STARTUP = "${VNC_STARTUP_LOCATION}";
-static const char * VNC_STOP = "${VNC_KILL_LOCATION}";
+static const char * VNC_STOP = "${VNC_STOP_LOCATION}";
 
 static const char * VNC_PORT = "${VNC_PORT}";
 static const char * VNC_HTML_PORT = "${VNC_HTML_PORT}";

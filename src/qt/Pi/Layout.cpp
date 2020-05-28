@@ -239,7 +239,6 @@ void Layout::managerDisplayUpdate() {
 		+ "/vnc.html";
 	_Tab.vnc_client_display->setText(vncClientDisplay.c_str());
 
-
 }
 
 
