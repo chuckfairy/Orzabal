@@ -4,7 +4,11 @@
 
 #x11 vnc
 if ! [ -x "$(command -v x11vnc)" ]; then
+	echo "Installing X11VNC"
 	sudo apt-get install x11vnc
+
+	echo "Creating password for VNC"
+	x11vnc --storepasswd
 fi
 
 # Install vnc project
