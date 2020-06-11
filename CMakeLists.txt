@@ -32,6 +32,7 @@ set( ORZA_DATA_PATH "${PROJECT_SOURCE_DIR}/data")
 # Config
 
 set( ORZABAL_VERSION "0.7.0" )
+set( ORZABAL_RELEASE_NAME "Mad World" )
 
 set( ORZABAL_ROOT_PATH "${PROJECT_SOURCE_DIR}" )
 

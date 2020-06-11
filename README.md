@@ -4,6 +4,7 @@
 
 Currently will load [lv2](http://lv2plug.in/) plugins. Plans for mac and windows vst support soon.
 
+
 # Install
 
 ## Requires
@@ -18,10 +19,10 @@ Currently will load [lv2](http://lv2plug.in/) plugins. Plans for mac and windows
 
 If creating a linux / pi device
 - [WiringPi](https://github.com/WiringPi/WiringPi)
-- `node` # for VNC
+- `node` # for VNC client
 
 
-## Mac
+## Mac Specific
 
 ```shell
 # Install Qt from https://qt.io
@@ -41,10 +42,12 @@ brew install boost lv2
 ```
 
 
-## Cmake Install
+## Cmake Install and Building
 
 ```shell
 # Make sure to have latest lv2 core
+
+git submodule update --init
 
 # Also in ./bin/build_*
 cd build
@@ -69,6 +72,8 @@ make -j4 # -j<NumberofCores>
 ```shell
 sudo apt-get install wiringPi
 #sudo apt-get install x11vncserver #will also be installed during cmake
+#you can configure the server and ill write instructions later
+#./src/pi/CMakeLists.txt
 ```
 
 Tested on usb audio device. Use `./bin/build_pi.sh` for a full screen use. Other build types with default startups.
@@ -119,9 +124,9 @@ Set a midi control port as an input and set multiple values to be controlled wit
 
 - Run in startup at full screen
 - Connect to wifi
-- Control from another computer (and in the browser [noVNC](github.com/novnc/noVNC))
+- Control from another computer (and in the browser [noVNC](https://github.com/novnc/noVNC))
 
 
 # Thanks
 
-- drobilla
+- [drobilla](https://github.com/drobilla)
