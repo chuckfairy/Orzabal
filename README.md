@@ -105,7 +105,7 @@ Control individual inputs and outputs allowing to setup a vocoder or anysidechai
 
 ![Midi Control UI](https://raw.githubusercontent.com/chuckfairy/Orzabal/master/screenshots/orzabal-midi-control.png)
 
-![OrzaPad Demo](https://raw.githubusercontent.com/chuckfairy/Orzabal/master/screenshots/orzabal-control-demo.gif)
+![OrzaPad Demo](https://raw.githubusercontent.com/chuckfairy/Orzabal/master/screenshots/orzapad-control-demo.gif)
 
 Set a midi control port as an input and set multiple values to be controlled within the app. This gif example uses the [OrzaPad](https://github.com/chuckfairy/OrzaPad) as the input
 
