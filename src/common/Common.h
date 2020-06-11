@@ -1,4 +1,0 @@
-/**
- * Common lib all header
- *
- */

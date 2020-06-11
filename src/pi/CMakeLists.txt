@@ -2,9 +2,7 @@
 find_package( ODROID )
 
 # VNC
-
 add_definitions(-DPI_USE_VNC=${PI_USE_VNC})
-
 add_definitions(-DPI_VNC_COMMAND=${PI_VNC_COMMAND})
 
 
@@ -26,8 +24,6 @@ endif()
 if( "${ORZA_PI_KEYBOARD_CMD}" STREQUAL "" )
     set( ORZA_PI_KEYBOARD_CMD "nohup onboard" )
 endif()
-
-configure_file( Config/Commands.h.in Config/Commands.h )
 
 
 # Defaults
@@ -59,6 +55,9 @@ target_link_libraries(orzabal_gpio_config
     PUBLIC
     wiringPi
     pthread
+	rt
+	crypt
+	iw
 )
 
 target_include_directories(
@@ -67,6 +66,8 @@ target_include_directories(
     ${CMAKE_CURRENT_BINARY_DIR}
     ../common
     "${ORZABAL_ROOT_PATH}/lib-src"
+    "${ORZABAL_ROOT_PATH}/lib-src/liborza/lib-src"
+    "${ORZABAL_ROOT_PATH}/lib-src/liborza/src"
 )
 
 install( TARGETS
@@ -83,6 +84,45 @@ install( TARGETS
     DESTINATION /etc/init.d
 )
 
+
+# Vnc Setup
+set(NO_VNC_REPO "https://github.com/novnc/noVNC")
+set(NO_VNC_LOCATION "${ORZABAL_ROOT_PATH}/lib-src/novnc")
+
+
+set(VNC_STARTUP_LOCATION "${CMAKE_CURRENT_BINARY_DIR}/vnc_startup.sh")
+set(VNC_STOP_LOCATION "${CMAKE_CURRENT_BINARY_DIR}/vnc_stop.sh")
+
+set(VNC_PORT "5900")
+set(VNC_HTML_PORT "6080")
+
+set(VNC_PID_FILE "/tmp/.Orzabal")
+
+# VNC command configures
+configure_file( vnc_install.sh.in vnc_install.sh )
+configure_file( vnc_startup.sh.in vnc_startup.sh )
+configure_file( vnc_stop.sh.in vnc_stop.sh )
+
+
+
+# Vnc Install
+set(vnc_install_cmd "${CMAKE_CURRENT_BINARY_DIR}/vnc_install.sh")
+message(STATUS "Executing ${vnc_install_cmd}")
+
+execute_process(
+	COMMAND "${vnc_install_cmd}"
+	ERROR_VARIABLE vnc_install_error
+)
+
+if (NOT vnc_install_error STREQUAL "")
+	message(SEND_ERROR ${vnc_install_error})
+endif()
+
+
+# Config setup
+configure_file( Config/Commands.h.in Config/Commands.h )
+
+# Pins
 if (UNIX)
     #install(
         #FILES pin_startup

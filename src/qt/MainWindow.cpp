@@ -10,18 +10,25 @@
 
 #include <Jack/Midi.h>
 
-#include "Layouts/LayoutLoader.h"
 
-#include "Settings/Layout.h"
+//Pi
+#ifdef IS_PI
 #include "Pi/Layout.h"
+#endif
+
 #include "MainWindow.h"
-#include "Settings/MidiDeviceDropdown.h"
-#include "Resource/Icons.h"
-#include "MidiControl/ControlTab.h"
+#include <Resource/Icons.h>
+#include "Settings/ControlTab.h"
+
+#include <common/Config/Config.h>
 
 
-using Orza::App::Layouts::LayoutLoader;
-using Orza::App::Resource::Icons;
+using Orza::Layouts::LayoutLoader;
+using Orza::Resource::Icons;
+
+using Orza::MidiControl::ControlTab;
+using Orza::Settings::InstrumentPresetLoader;
+using Orza::Settings::InstrumentPresetWriter;
 
 
 /**
@@ -30,92 +37,92 @@ using Orza::App::Resource::Icons;
  * @Override
  */
 MainWindow::MainWindow( QApplication * app, QWidget * parent, Qt::WindowFlags flags ) :
-    QMainWindow( parent, 0 ),
-    _PluginSearch()
+	QMainWindow( parent, 0 ),
+	_PluginSearch()
 {
 
-    //Main plugins loader
+	//Main plugins loader
 
-    LoadedPlugins::load();
-
-
-    //Icons setup
-
-    Icons::setResource( app );
+	LoadedPlugins::load();
 
 
-    //QT ui from creator
+	//Icons setup
 
-    UI.setupUi( this );
-
-    setWindowTitle( "Orzabal" );
+	Icons::setResource( app );
 
 
-    //Jack Startup
+	//QT ui from creator
 
-    _Server = new Jack::Server();
+	UI.setupUi( this );
 
-    _Server->start();
-
-    _Server->connectDefault();
+	setWindowTitle( "Orzabal" );
 
 
-    //Midi setup
+	//Jack Startup
 
-    Jack::Midi * midi = _Server->getMidi();
-    midi->connectDefaults();
+	_Server = new Jack::Server();
 
+	_Server->start();
 
-    //Widget creation
-
-    midiDevices = new MidiDeviceDropdown( this );
+	_Server->connectDefault();
 
 
-    //Midi control
+	//Midi setup
 
-    _ControlTab = new ControlTab( this );
-
-
-    //@TODO Move to layout picker
-
-    _SettingsLayout = new Layout( this );
-
-    _LayoutLoader = new LayoutLoader( this );
+	Jack::Midi * midi = _Server->getMidi();
+	midi->connectDefaults();
 
 
-    //Icon
+	//Midi control
 
-    QIcon icon(":icon.png");
-    setWindowIcon( icon );
-
-    //UI creation
-
-    QFile styleFile( ":/Styles/MainStyle.qss" );
-    styleFile.open( QFile::ReadOnly );
-
-    // Apply the loaded stylesheet
-    QString style( styleFile.readAll() );
-
-    UI.centralWidget->setStyleSheet( style );
-
-    //UI.horizontalLayout_3->addWidget( effects );
-    UI.horizontalLayout_6->addWidget( midiDevices );
+	_ControlTab = new ControlTab( this );
 
 
-    //Main startup
+	//preset writer and loader setup before settings
+	_LayoutLoader = new InstrumentPresetLoader( this, getServer() );
+	_LayoutWriter = new InstrumentPresetWriter();// getServer() );
 
-    _Server->run();
+	//Settings
+	_SettingsLayout = new Layout( getServer(), _LayoutWriter, _LayoutLoader );
+
+	//Setup current layout settings
+	//@TODO load default if no preset passed through
+	_LayoutLoader->setup();
 
 
-    //Pi full screen startup
+	//Icon
+	QIcon icon(":icon.png");
+	setWindowIcon( icon );
 
-    if( BUILD_TYPE == Config::Pi ) {
+	//UI creation
+	QFile styleFile( ":/Styles/DarkStyle.qss" );
+	styleFile.open( QFile::ReadOnly );
 
-        _Pi = new Orza::App::Pi::Layout( this );
+	// Apply the loaded stylesheet
+	QString style( styleFile.readAll() );
+	UI.centralWidget->setStyleSheet( style );
 
-        //QTimer::singleShot( 1000, this, SLOT( goFullscreen() ) );
+	//Settings layout tab
+	UI.settings_area->layout()->addWidget(_SettingsLayout);
 
-    }
+	//Set version text
+	string version = (string)"v" + (string)Orza::Bal::VERSION;
+	UI.version_text->setText(version.c_str());
+
+
+	//Main audio server startup
+	_Server->run();
+
+
+	//Pi full screen startup
+
+#ifdef IS_PI
+
+	new Orza::App::Pi::Layout( this );
+
+	//QTimer::singleShot( 1000, this, SLOT( goFullscreen() ) );
+
+#endif
 
 };
 
@@ -125,7 +132,7 @@ MainWindow::MainWindow( QApplication * app, QWidget * parent, Qt::WindowFlags fl
 
 Jack::Server * MainWindow::getServer() {
 
-    return _Server;
+	return _Server;
 
 };
 
@@ -136,7 +143,7 @@ Jack::Server * MainWindow::getServer() {
 
 LoadedPlugins * MainWindow::getPluginSearch() {
 
-    return &_PluginSearch;
+	return &_PluginSearch;
 
 };
 
@@ -146,17 +153,7 @@ LoadedPlugins * MainWindow::getPluginSearch() {
 
 Layout * MainWindow::getSettingsLayout() {
 
-    return _SettingsLayout;
-
-};
-
-/**
- * Layout @TODO use better base
- */
-
-LayoutLoader * MainWindow::getLayoutLoader() {
-
-    return _LayoutLoader;
+	return _SettingsLayout;
 
 };
 
@@ -167,22 +164,22 @@ LayoutLoader * MainWindow::getLayoutLoader() {
 
 void MainWindow::goFullscreen() {
 
-    setWindowFlags( Qt::CustomizeWindowHint );
-    setWindowFlags( Qt::FramelessWindowHint );
+	setWindowFlags( Qt::CustomizeWindowHint );
+	setWindowFlags( Qt::FramelessWindowHint );
 
-    showFullScreen();
+	showFullScreen();
 
 };
 
 void MainWindow::goWindowed() {
 
-    Qt::WindowFlags flag = windowFlags();
-    flag = flag & (~Qt::CustomizeWindowHint) & (~Qt::FramelessWindowHint);
+	Qt::WindowFlags flag = windowFlags();
+	flag = flag & (~Qt::CustomizeWindowHint) & (~Qt::FramelessWindowHint);
 
-    setWindowFlags( flag );
+	setWindowFlags( flag );
 
-    show();
+	show();
 
-    showNormal();
+	showNormal();
 
 };

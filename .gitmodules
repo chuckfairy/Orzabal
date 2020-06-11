@@ -1,0 +1,6 @@
+[submodule "lib-src/liborza"]
+	path = lib-src/liborza
+	url = git@github.com:chuckfairy/liborza
+[submodule "lib-src/liborza-qt"]
+	path = lib-src/liborza-qt
+	url = git@github.com:chuckfairy/liborza-qt

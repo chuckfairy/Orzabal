@@ -1,0 +1,8 @@
+#!/bin/bash
+
+# VNC kill
+killall x11vnc
+
+#Client kill
+kill $(cat ${VNC_PID_FILE})
+rm ${VNC_PID_FILE}

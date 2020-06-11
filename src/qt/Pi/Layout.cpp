@@ -29,39 +29,42 @@ namespace Orza { namespace App { namespace Pi {
  */
 
 Layout::Layout( MainWindow * app ) :
-    _App( app ),
-    _WidgetContent( new QWidget() ),
-    _WifiPass( new Widget::BasePasswordEdit )
+	_App( app ),
+	_WidgetContent( new QWidget() ),
+	_WifiPass( new Widget::BasePasswordEdit )
 {
 
-    _WidgetContent->setObjectName( "Pi Tab" );
+	_WidgetContent->setObjectName( "Pi Tab" );
 
-    _Tab.setupUi( _WidgetContent );
+	_Tab.setupUi( _WidgetContent );
 
-    QHBoxLayout * layout = new QHBoxLayout( _WidgetContent );
+	QHBoxLayout * layout = new QHBoxLayout( _WidgetContent );
 
-    int index = app->getUI()->tabWidget->addTab( _WidgetContent, "Pi" );
+	int index = app->getUI()->tabWidget->addTab( _WidgetContent, "Pi" );
 
-    _Tab.wifi_pass_layout->addWidget( _WifiPass );
-
-
-    //Events
-
-    connect( _Tab.windowed, SIGNAL( clicked() ), this, SLOT( toggleFullscreen() ) );
-
-    connect( _Tab.restart_btn, SIGNAL( clicked() ), this, SLOT( handleRestart() ) );
-
-    connect( _Tab.shutdown_btn, SIGNAL( clicked() ), this, SLOT( handleShutdown() ) );
+	_Tab.wifi_pass_layout->addWidget( _WifiPass );
 
 
-    //Network
+	//Events
 
-    setNetworkManager();
+	connect( _Tab.windowed, SIGNAL( clicked() ), this, SLOT( toggleFullscreen() ) );
+
+	connect( _Tab.restart_btn, SIGNAL( clicked() ), this, SLOT( handleRestart() ) );
+
+	connect( _Tab.shutdown_btn, SIGNAL( clicked() ), this, SLOT( handleShutdown() ) );
 
 
-    //Full screen default
+	//Network
 
-    goFullscreen();
+	setNetworkManager();
+
+	//VNC and url display updates
+	managerDisplayUpdate();
+
+
+	//Full screen default
+
+	goFullscreen();
 
 };
 
@@ -72,13 +75,13 @@ Layout::Layout( MainWindow * app ) :
 
 void Layout::shutdown() {
 
-    system( Orza::Pi::Config::SHUTDOWN_COMMAND );
+	system( Orza::Pi::Config::SHUTDOWN_COMMAND );
 
 };
 
 void Layout::restart() {
 
-    system( Orza::Pi::Config::RESTART_COMMAND );
+	system( Orza::Pi::Config::RESTART_COMMAND );
 
 };
 
@@ -89,9 +92,9 @@ void Layout::restart() {
 
 void Layout::goFullscreen() {
 
-    _App->goFullscreen();
+	_App->goFullscreen();
 
-    FULLSCREEN = true;
+	FULLSCREEN = true;
 
 };
 
@@ -102,9 +105,9 @@ void Layout::goFullscreen() {
 
 void Layout::goWindowed() {
 
-    _App->goWindowed();
+	_App->goWindowed();
 
-    FULLSCREEN = false;
+	FULLSCREEN = false;
 
 };
 
@@ -115,15 +118,15 @@ void Layout::goWindowed() {
 
 void Layout::toggleFullscreen() {
 
-    if( FULLSCREEN ) {
+	if( FULLSCREEN ) {
 
-        goWindowed();
+		goWindowed();
 
-    } else {
+	} else {
 
-        goFullscreen();
+		goFullscreen();
 
-    }
+	}
 
 };
 
@@ -134,61 +137,109 @@ void Layout::toggleFullscreen() {
 
 void Layout::handleShutdown() {
 
-    shutdown();
+	shutdown();
 
 };
 
 void Layout::handleRestart() {
 
-    restart();
+	restart();
 
 };
 
 
 void Layout::setNetworkManager() {
 
-    _Manager = new Network::Manager;
+	_Manager = new Network::Manager;
 
-    //Scan
+	//Set interfaces
+	vector<string> interfaces = _Manager->getInterfaces();
 
-    connect(
-        _Tab.scan_btn,
-        SIGNAL( clicked() ),
-        this,
-        SLOT( updateNetworks() )
-    );
+	for(int i = 0; i < interfaces.size(); ++i) {
+		if(i == 0) {
+			_Manager->setInterface(interfaces[i].c_str());
+			managerDisplayUpdate();
+		}
 
-    //Connect
+		_Tab.interface_dropdown->addItem(interfaces[i].c_str());
+	}
 
-    connect(
-        _Tab.connect_btn,
-        SIGNAL( clicked() ),
-        this,
-        SLOT( connectNetwork() )
-    );
+	//Scan
+
+	connect(
+		_Tab.scan_btn,
+		SIGNAL( clicked() ),
+		this,
+		SLOT( updateNetworks() )
+	);
+
+	connect(
+		_Tab.interface_dropdown,
+		SIGNAL(currentIndexChanged(int)),
+		this,
+		SLOT(handleInterfaceChange(int))
+	);
+
+
+	//Connect
+
+	connect(
+		_Tab.connect_btn,
+		SIGNAL( clicked() ),
+		this,
+		SLOT( connectNetwork() )
+	);
 
 };
 
+void Layout::handleInterfaceChange(int index) {
+
+	string s = (string)_Tab.interface_dropdown->itemText(index).toUtf8();
+	_Manager->setInterface(s);
+
+	managerDisplayUpdate();
+
+}
 
 void Layout::updateNetworks() {
 
-    vector<string> nets = _Manager->getNetworkSSIDs();
+	vector<string> nets;
 
-    vector<string>::const_iterator it;
+	try {
+		nets = _Manager->getNetworkSSIDs();
+	} catch(std::runtime_error e) {
+		std::cout << "NETWORK GRAB ERROR " << e.what() << "\n";
+	}
 
-    _Tab.ssid_dropdown->clear();
+	vector<string>::const_iterator it;
 
-    _Tab.ssid_dropdown->addItem( "-- Select Network --" );
+	_Tab.ssid_dropdown->clear();
 
-    for( it = nets.begin(); it != nets.end(); ++ it ) {
+	_Tab.ssid_dropdown->addItem( "-- Select Network --" );
 
-        _Tab.ssid_dropdown->addItem( (*it).c_str() );
+	for( it = nets.begin(); it != nets.end(); ++ it ) {
 
-    }
+		_Tab.ssid_dropdown->addItem( (*it).c_str() );
 
-    _Tab.ssid_dropdown->setCurrentIndex( 0 );
+	}
+
+	_Tab.ssid_dropdown->setCurrentIndex( 0 );
 
 };
+
+void Layout::managerDisplayUpdate() {
+
+	//VNC display
+	string vncPortDisplay = _Manager->getIP() + ":" + (string)Orza::Pi::Config::VNC_PORT;
+	_Tab.vnc_port_display->setText(vncPortDisplay.c_str());
+
+	//VNC display
+	string vncClientDisplay = _Manager->getIP() + ":" + (string)Orza::Pi::Config::VNC_HTML_PORT
+		//@TODO maybe redirect
+		+ "/vnc.html";
+	_Tab.vnc_client_display->setText(vncClientDisplay.c_str());
+
+}
 
 
 /**
@@ -197,10 +248,10 @@ void Layout::updateNetworks() {
 
 void Layout::connectNetwork() {
 
-    _Manager->connect(
-        _Tab.ssid_dropdown->currentText().toStdString(),
-        _WifiPass->text().toStdString()
-    );
+	_Manager->connect(
+		_Tab.ssid_dropdown->currentText().toStdString(),
+		_WifiPass->text().toStdString()
+	);
 
 };
 

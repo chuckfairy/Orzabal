@@ -9,11 +9,15 @@ CTestTestfile.cmake
 CMakeScripts
 compile_commands.json
 
+lib-src/novnc
+
 CPack*
 
 doc/
 
 *.dylib
+
+build
 
 src/include
 src/qt/ui_*

@@ -32,95 +32,99 @@ namespace Orza { namespace App { namespace Pi {
 
 class Layout : public QWidget {
 
-    Q_OBJECT;
+	Q_OBJECT;
 
-    public:
+	public:
 
-        Layout( MainWindow * );
-
-
-        /**
-         * Fullscreen Getter
-         */
-
-        bool isFullscreen() {
-
-            return FULLSCREEN;
-
-        };
+		Layout( MainWindow * );
 
 
-        /**
-         * Hardware commands
-         */
+		/**
+		 * Fullscreen Getter
+		 */
 
-        void shutdown();
+		bool isFullscreen() {
 
-        void restart();
+			return FULLSCREEN;
 
-
-    public slots:
-
-        /**
-         * Window actions
-         */
-
-        void goFullscreen();
-
-        void goWindowed();
+		};
 
 
-        /**
-         * Main toggle method
-         */
+		/**
+		 * Hardware commands
+		 */
 
-        void toggleFullscreen();
+		void shutdown();
 
-
-        /**
-         * Hardware command slots
-         */
-
-        void handleShutdown();
-
-        void handleRestart();
+		void restart();
 
 
-    private:
+	public slots:
 
-        /**
-         * Fullscreen flag
-         */
+		/**
+		 * Window actions
+		 */
 
-        bool FULLSCREEN = false;
+		void goFullscreen();
 
-        MainWindow * _App;
+		void goWindowed();
 
-        Ui_PiTab _Tab;
-
-        QWidget * _WidgetContent;
-
-        /**
-         * Widgets
-         */
-
-        Widget::BaseLineEdit * _WifiPass;
+		void handleInterfaceChange(int);
 
 
-        /**
-         * Network
-         */
+		/**
+		 * Main toggle method
+		 */
 
-        Network::Manager * _Manager;
-
-        void setNetworkManager();
+		void toggleFullscreen();
 
 
-    private slots:
+		/**
+		 * Hardware command slots
+		 */
 
-        void updateNetworks();
+		void handleShutdown();
 
-        void connectNetwork();
+		void handleRestart();
+
+
+	private:
+
+		/**
+		 * Fullscreen flag
+		 */
+
+		bool FULLSCREEN = false;
+
+		MainWindow * _App;
+
+		Ui_PiTab _Tab;
+
+		QWidget * _WidgetContent;
+
+		/**
+		 * Widgets
+		 */
+
+		Widget::BaseLineEdit * _WifiPass;
+
+
+		/**
+		 * Network
+		 */
+
+		Network::Manager * _Manager;
+
+		void setNetworkManager();
+
+		void managerDisplayUpdate();
+
+
+	private slots:
+
+		void updateNetworks();
+
+		void connectNetwork();
 
 };
 
