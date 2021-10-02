@@ -58,7 +58,6 @@ include_directories(
 	${Boost_INCLUDE_DIR}
 )
 
-
 # tell CMake to compile every .cpp file in this directory and add it to an executable named `orzabal.qt`
 file(
 	GLOB
@@ -163,6 +162,16 @@ target_link_libraries( orzabal.qt
 	Qt5::Qml
 	${Boost_LIBRARIES}
 )
+
+# Orzapad
+if( USE_ORZAPAD )
+	include_directories(
+		"${ORZABAL_ROOT_PATH}/lib-src/orzapad/src"
+	)
+
+	target_link_libraries( orzabal.qt PUBLIC orzapad-widget )
+endif()
+
 
 # Pi specific linking
 if( ORZA_BUILD_TYPE STREQUAL "Pi" )

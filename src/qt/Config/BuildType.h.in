@@ -16,4 +16,6 @@ enum BuildType {
 
 static BuildType ORZA_BUILD_CONFIG = ${ORZABAL_QT_BUILD_TYPE};
 
+//static bool USE_ORZAPAD = ${USE_ORZAPAD};
+
 } } };

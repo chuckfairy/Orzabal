@@ -36,6 +36,9 @@ set( ORZABAL_RELEASE_NAME "Mad World" )
 
 set( ORZABAL_ROOT_PATH "${PROJECT_SOURCE_DIR}" )
 
+set( LIBORZA_ROOT_PATH "${PROJECT_SOURCE_DIR}/lib-src/liborza/" )
+set( LIBORZA_QT_ROOT_PATH "${PROJECT_SOURCE_DIR}/lib-src/liborza-qt/" )
+
 set( ORZABAL_SRC_PATH "${PROJECT_SOURCE_DIR}/src" )
 
 set( ORZABAL_LIB_PATH "${CMAKE_MODULE_PATH}" "${PROJECT_SOURCE_DIR}/lib" )
@@ -45,6 +48,8 @@ set( ORZABAL_LIB_PATH "${CMAKE_MODULE_PATH}" "${PROJECT_SOURCE_DIR}/lib" )
 # Linux default
 
 add_definitions(-DORZA_BUILD_TYPE=${ORZA_BUILD_TYPE})
+
+add_definitions(-DUSE_ORZAPAD=${USE_ORZAPAD})
 
 if( ORZA_BUILD_TYPE STREQUAL "" )
 	set( ORZA_BUILD_TYPE "Linux" )
@@ -74,6 +79,11 @@ ENDIF()
 
 add_subdirectory( lib-src/liborza )
 add_subdirectory( lib-src/liborza-qt )
+
+if( USE_ORZAPAD )
+	set( ORZAPAD_BUILD_APP "false" )
+	add_subdirectory( lib-src/orzapad )
+endif()
 
 
 # Src
