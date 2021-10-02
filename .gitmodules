@@ -4,3 +4,6 @@
 [submodule "lib-src/liborza-qt"]
 	path = lib-src/liborza-qt
 	url = git@github.com:chuckfairy/liborza-qt
+[submodule "lib-src/orzapad"]
+	path = lib-src/orzapad
+	url = https://git.chuckfairy.com/orza/OrzaPad
