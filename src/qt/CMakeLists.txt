@@ -167,6 +167,7 @@ target_link_libraries( orzabal.qt
 if( USE_ORZAPAD )
 	include_directories(
 		"${ORZABAL_ROOT_PATH}/lib-src/orzapad/src"
+		"${ORZABAL_ROOT_PATH}/lib-src/orzapad/src/padwidget"
 	)
 
 	target_link_libraries( orzabal.qt PUBLIC orzapad-widget )

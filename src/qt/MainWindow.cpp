@@ -10,6 +10,7 @@
 
 #include <Jack/Midi.h>
 
+#include <OrzaPad.h>
 
 //Pi
 #ifdef IS_PI
@@ -73,8 +74,11 @@ MainWindow::MainWindow( QApplication * app, QWidget * parent, Qt::WindowFlags fl
 	midi->connectDefaults();
 
 
-	//Midi control
+	//OrzaPad
+	UI.tabWidget->insertTab( 2, new OrzaPad(_Server), "Pad" );
 
+
+	//Midi control
 	_ControlTab = new ControlTab( this );
 
 

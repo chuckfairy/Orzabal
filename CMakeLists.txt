@@ -82,6 +82,7 @@ add_subdirectory( lib-src/liborza-qt )
 
 if( USE_ORZAPAD )
 	set( ORZAPAD_BUILD_APP "false" )
+	set( LIBORZA_BUILD false )
 	add_subdirectory( lib-src/orzapad )
 endif()
 
