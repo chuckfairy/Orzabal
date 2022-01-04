@@ -75,7 +75,9 @@ MainWindow::MainWindow( QApplication * app, QWidget * parent, Qt::WindowFlags fl
 
 
 	//OrzaPad
-	UI.tabWidget->insertTab( 2, new OrzaPad(_Server), "Pad" );
+	OrzaPad * pad = new OrzaPad(_Server);
+	UI.tabWidget->insertTab( 4, pad, "Pad" );
+	_Server->getMidi()->addOutput(pad->getOutputPort());
 
 
 	//Midi control
