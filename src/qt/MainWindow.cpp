@@ -74,10 +74,12 @@ MainWindow::MainWindow( QApplication * app, QWidget * parent, Qt::WindowFlags fl
 	midi->connectDefaults();
 
 
+#ifdef USE_ORZAPAD
 	//OrzaPad
 	OrzaPad * pad = new OrzaPad(_Server);
 	UI.tabWidget->insertTab( 4, pad, "Pad" );
 	_Server->getMidi()->addOutput(pad->getOutputPort());
+#endif
 
 
 	//Midi control
