@@ -15,63 +15,63 @@ namespace Orza { namespace CLI {
 
 class App {
 
-    public:
+	public:
 
-        explicit App( int argc, char **argv );
+		explicit App( int argc, char **argv );
 
-        /**
-         * Static program specific
-         */
+		/**
+		 * Static program specific
+		 */
 
-        static const char * NAME;
+		static const char * NAME;
 
-        static const char * NAME_ASCII;
+		static const char * NAME_ASCII;
 
-        static const char * DESCRIPTION;
+		static const char * DESCRIPTION;
 
-        static const char * VERSION_PADDING;
-
-
-        /**
-         * Display bases
-         */
-
-        void displayDefault();
-
-        void displayHeader();
-
-        void displayHelp();
-
-        void displayList();
-
-        void displayPluginTypes();
-
-        void runPlugin();
+		static const char * VERSION_PADDING;
 
 
-        /**
-         * Bool interface
-         */
+		/**
+		 * Display bases
+		 */
 
-        const bool isHelp() const;
+		void displayDefault();
 
-        const bool isList() const;
+		void displayHeader();
 
-        const bool isPluginTypes() const;
+		void displayHelp();
 
-        const bool isPluginRun() const;
+		void displayList();
 
-        const bool isMainProgram() const;
+		void displayPluginTypes();
+
+		void runPlugin();
 
 
-    private:
+		/**
+		 * Bool interface
+		 */
 
-        /**
-         * cxxopts usage
-         */
+		const bool isHelp() const;
 
-        cxxopts::Options _Options;
+		const bool isList() const;
 
+		const bool isPluginTypes() const;
+
+		const bool isPluginRun() const;
+
+		const bool isMainProgram() const;
+
+
+	private:
+
+		/**
+		 * cxxopts usage
+		 */
+
+		cxxopts::Options _Options;
+		cxxopts::ParseResult _Results;
 };
 
 }; };

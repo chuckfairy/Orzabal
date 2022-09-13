@@ -56,7 +56,7 @@ App::App( int argc, char **argv ) :
         ( "load", "Load JSON setting", cxxopts::value<std::string>() )
     ;
 
-    _Options.parse( argc, argv );
+    _Results = _Options.parse( argc, argv );
 
 };
 
@@ -159,7 +159,7 @@ void App::displayPluginTypes() {
 
 void App::runPlugin() {
 
-    PluginLoader( _Options["run"].as<string>().c_str() );
+    PluginLoader( _Results["run"].as<string>().c_str() );
 
 }
 
@@ -170,25 +170,25 @@ void App::runPlugin() {
 
 const bool App::isHelp() const {
 
-    return _Options["help"].as<bool>();
+    return _Results["help"].as<bool>();
 
 };
 
 const bool App::isList() const {
 
-    return _Options["list"].as<bool>();
+    return _Results["list"].as<bool>();
 
 };
 
 const bool App::isPluginTypes() const {
 
-    return _Options["plugin-types"].as<bool>();
+    return _Results["plugin-types"].as<bool>();
 
 };
 
 const bool App::isPluginRun() const {
 
-    return ! _Options["run"].as<string>().empty();
+    return ! _Results["run"].as<string>().empty();
 
 };
 
