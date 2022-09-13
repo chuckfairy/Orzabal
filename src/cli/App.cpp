@@ -52,8 +52,8 @@ App::App( int argc, char **argv ) :
         ( "l,list", "List of plugins" )
         ( "p,plugin-types", "Plugin Types Installed" )
         ( "h,help", "Display this message" )
-        ( "run", "Run raw midi instrument from CLI", cxxopts::value<std::string>() )
-        ( "load", "Load JSON setting", cxxopts::value<std::string>() )
+        ( "run", "Run raw midi instrument from CLI", cxxopts::value<std::string>()->default_value(""))
+        ( "load", "Load JSON setting", cxxopts::value<std::string>()->default_value("") )
     ;
 
     _Results = _Options.parse( argc, argv );
