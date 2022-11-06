@@ -9,8 +9,6 @@
  * Forwarding
  */
 
-class MainWindow;
-
 namespace Orza { namespace MidiControl {
 
 /**
@@ -22,6 +20,7 @@ ControlTab::ControlTab( MainWindow * app ) :
 	_Control( new Control( app->getServer() ) )
 {
 
+	_App->acceptDrops();
 	_App->getUI()
 		->tabWidget->insertTab( 2, _Control->getWidget(), "Control" );
 

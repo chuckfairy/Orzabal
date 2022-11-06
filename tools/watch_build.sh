@@ -2,4 +2,4 @@
 
 # Requires entr
 
-find . -name '*.cpp' | entr sh -c 'make -j8'
+find ./src ./lib-src -name '*.[chq]*'  | entr sh -c 'cd build; make -j8'

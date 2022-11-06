@@ -901,3 +901,8 @@ QScrollArea#control_scroll_area QGridLayout
 }
 
 
+/** OrzaPad **/
+QWidget#PadControl, QWidget#Ui--OrzaPad {
+	background: #232629;
+	background-color: #232629;
+}

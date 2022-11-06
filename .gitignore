@@ -40,3 +40,5 @@ data/*
 *.bak
 *.[ao]
 *.qt
+*.gcno
+.cache

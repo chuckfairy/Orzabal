@@ -19,7 +19,6 @@ set( CMAKE_MACOSX_RPATH 1 )
 set( CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE )
 
 
-
 # Main setup
 
 project( orzabal )
