@@ -42,3 +42,4 @@ data/*
 *.qt
 *.gcno
 .cache
+.ccls-cache

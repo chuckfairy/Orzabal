@@ -33,6 +33,7 @@ Layout::Layout( MainWindow * app ) :
 	_WidgetContent( new QWidget() ),
 	_WifiPass( new Widget::BasePasswordEdit )
 {
+	_W->test();
 
 	_WidgetContent->setObjectName( "Pi Tab" );
 
